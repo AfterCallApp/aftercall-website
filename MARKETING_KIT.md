@@ -240,7 +240,602 @@ Use sparingly. Once per surface, max.
 
 ---
 
-For the full kit (sections 6–14 — hook archetypes, headline library,
-CTA library, visual system, claims policy, design specs, founder voice
-templates, and the Canva/Claude Design execution prompt) see the rest
-of this file at HEAD.
+## 6. The seven hook archetypes
+
+Every piece of marketing has to land on one of these. Pick the hook
+first; write the design around it.
+
+| # | Hook | Use it for | Lead line |
+|---|------|------------|-----------|
+| 1 | **The drive back to quarters** | Founder-voice video, long IG, LinkedIn | _You ran the call. You documented. You cleared. Nobody asked how you were holding up._ |
+| 2 | **The narrative writes itself** | AI feature push, App Store frame, Reels | _You already logged the call. AfterCall writes the narrative._ |
+| 3 | **The skills nobody is tracking** | Career-growth angle, Pro upsell | _Every IV, every tube, every med you push — finally counted._ |
+| 4 | **Built by one of you** | Trust posts, founder LinkedIn, press one-pager | _Built by an EMS provider. Not for us. By us._ |
+| 5 | **3am is real** | Dark mode, lifestyle reels | _Dark mode for the call you log at 3am, when staring into a flashlight isn't an option._ |
+| 6 | **The crew that actually gets it** | Community feature, station-targeted posts | _Your station. Your partner. Your peer support. One private space._ |
+| 7 | **EMS Week 2026** | Countdown, urgency, waitlist push | _EMS Week is coming. Be first through the door._ |
+
+---
+
+## 7. Headline library (drop-in ready)
+
+Each line can stand alone on a static post or stretch over a 2-line
+hero. They all match Section 4 voice. Use freely.
+
+**Capture / log**
+- Your calls, captured.
+- The whole call, in eight steps.
+- One log per call. A career, organized.
+- The call doesn't end at "cleared."
+
+**Carry / wellness**
+- After the call comes the rest of the shift.
+- The hardest minute of the call wasn't always the call.
+- Process what you carry.
+- Nobody asks. We do.
+- Some calls don't clear with the radio.
+
+**Skill / growth**
+- Every IV. Every tube. Every med. Counted.
+- Your reps, finally tracked.
+- A career, charted.
+- See the clinician you're becoming.
+
+**AI**
+- The narrative writes itself.
+- Eight steps in. Full narrative out.
+- AfterCall AI — trained on the call you actually ran.
+
+**Crew**
+- Your station. Your partner. Your space.
+- Built for the way crews actually talk.
+
+**Founder / origin**
+- Built by an EMS provider. Not for us. By us.
+- I built this because nobody else was going to.
+
+**Launch / urgency**
+- Launching EMS Week 2026.
+- Be first through the door.
+- The waitlist closes when the doors open.
+
+**Dark mode**
+- Made for 3am.
+- Logging a call at 3am shouldn't blind you.
+
+---
+
+## 8. CTA library
+
+Vary by surface. Never invent new CTAs without checking against this
+list.
+
+- **Join the waitlist** — site, IG, X, founder LinkedIn (default)
+- **Notify me** — bottom CTA, footer
+- **Be first through the door** — hero, countdown
+- **Get on the list** — Stories, Reels overlay
+- **Start free at launch** — pricing-adjacent surfaces
+- **Try Pro free for 7 days** — Pro / AI / analytics surfaces
+- **Download EMS Week 2026** — App Store frames, post-launch
+
+The only domain on every CTA is **aftercallapp.com**. The only
+contact email is **jordan@aftercallapp.com**.
+
+---
+
+## 9. Visual system
+
+### 9.1 Color tokens
+
+Pull from these literals only.
+
+```
+Primary blue        #3379CF       (default brand color)
+Primary dark        #1F5FA3       (gradients, headers)
+Primary tint        #EEF4FD       (backgrounds, eyebrows)
+Mid tint            #B8D4F0       (dividers, soft accents)
+Ink                 #0F1923       (headlines on light)
+Text mid            #374151       (body)
+Text light          #6B7280       (captions, fine print)
+Surface (light)     #FFFFFF / #F7F9FC
+Surface (dark)      #0D1117 / #161B22
+AI accent           #8B5CF6       (only on AfterCall AI surfaces)
+```
+
+Acuity (use exactly these any time call mix or severity is shown —
+this is the literal in-app palette from `aftercall-app/constants/acuity.ts`):
+
+```
+Minor       #10B981
+Moderate    #F59E0B
+Serious     #F97316
+Critical    #DC2626
+```
+
+### 9.2 Typography
+
+- Display + UI typeface: **Inter**, weights 800–900 for headlines,
+  500–700 for UI, 400 for body.
+- Inside the app the splash uses SF Pro Display. For static marketing,
+  Inter is the canonical face. Don't introduce a third typeface.
+- Letter-spacing on headlines is **tight** — around -1.5 to -2px on
+  big sizes. Without it, the brand goes generic immediately.
+- All-caps is rare. Reserved for the footer cap and section labels.
+
+### 9.3 The motifs we own
+
+Three repeating visual elements — every design should use at least one,
+and the kit should not invent new motifs:
+
+1. **The EKG sweep line.** A clean, single-stroke heartbeat trace, drawn
+   in primary blue at low opacity behind hero content, or as a colored
+   underline beneath a number. Always one continuous path. Animated on
+   the website; static in print.
+
+2. **The phone frame.** Real iPhone screenshots from the repo, dropped
+   into a clean dark bezel (#1c1c1e) with rounded corners (radius 32–40
+   depending on size). Light shadow. Never a generic stock phone mockup.
+
+3. **The eyebrow chip.** A small pill (`background:#EEF4FD` /
+   `color:#1F5FA3`) with a subtle pulsing dot that says one of:
+   _Launching EMS Week 2026_ · _For EMS providers_ · _Built by EMS_.
+   Lives above headlines.
+
+### 9.4 What we will not put in a design
+
+- Generic medical clip-art (red cross, stethoscope, ambulance silhouette)
+- Stock-photo paramedics
+- Drop-shadows under phones in dark mode
+- Gradient text
+- Emojis as the primary visual element
+- More than three weights of Inter on one design
+- Centered-everything layouts (we left-align headlines)
+- Pastels of any kind
+- The American flag
+
+### 9.5 The screenshot map (which file is the right answer)
+
+All paths are relative to `aftercall-website/images/`. Raw URL
+template for upload:
+`https://raw.githubusercontent.com/AfterCallApp/aftercall-website/main/images/<filename>`
+
+| Use it for | File |
+|------------|------|
+| Default hero / dashboard glamour shot | `dashboard.png` |
+| Dark-mode glamour shot | `dashboard-dark.png` or `home-dark.png` |
+| "Log every call" feature | `new-call.png` |
+| Patient assessment step | `new-call-patient.png` |
+| Interventions step | `new-call-interventions.png` |
+| Call detail view | `call-detail.png` |
+| Call list view | `my-calls-list.png` |
+| Analytics (light) | `my-calls-analytics.png` |
+| Analytics (dark) | `my-calls-analytics-dark.png` |
+| Stats (light) | `my-calls-stats.png` |
+| Stats (dark) | `my-calls-stats-dark.png` |
+| Wellness / journal check-in | `journal-checkin.png` |
+| Wellness chart | `journal-wellness.png` |
+| Guided reflection | `guided-reflection.png` |
+| End-of-shift debrief | `shift-debrief.png` |
+| Shift detail | `shift-detail.png` |
+| Shift calendar | `shift-calendar.png` |
+| Community feed | `community-feed.png` |
+| Station org page | `community-org.png` |
+| Trending EMS feed | `trending.png` |
+| Skill tracking | `skills.png` |
+| Founder portrait | `founder.jpg` |
+| Logo (mark only) | `logo-transparent.png` |
+
+If a design needs the AfterCall mark, use `logo-transparent.png` —
+**never** swap a screenshot for the logo to fill space.
+
+---
+
+## 10. Allowed and forbidden claims
+
+### 10.1 You can say (verbatim)
+
+- "Launching EMS Week 2026"
+- "May 17, 2026"
+- "iOS at launch"
+- "Built by EMS providers, for EMS providers"
+- "Free to start. Pro when you're ready."
+- "$5/mo (annual) · $7.99/mo · 7-day free trial"
+- "30% of EMS providers experience PTSD during their career"
+- "46% report symptoms of depression"
+- "Zero apps designed specifically for EMS provider mental wellness
+  and clinical tracking"
+- Verbatim copy from the live website
+
+### 10.2 You cannot say (until cleared by founder)
+
+- Any user count, signup count, waitlist count
+- Any testimonial, quote from a user, or named hospital/agency
+- Any star rating
+- Anything implying FDA clearance, HIPAA compliance, or PCR-equivalence
+  (AfterCall is provider-side documentation, not a billing PCR)
+- Any partnership, integration, or "as seen on" claim
+- Anything that names a specific patient case, real or composite
+- Founder claims that aren't already on the website
+
+### 10.3 Founder quotes
+
+Two surfaces are off-limits to edit:
+
+1. The founder card on the website (the italic quote that begins
+   _"I've cleared brutal calls…"_) — pull verbatim if used in
+   marketing.
+2. The "Our story" body copy on the website — pull verbatim if used.
+
+Everything else under Jordan's name should be cleared with him before
+publishing.
+
+---
+
+## 11. Deliverables — design-by-design spec
+
+Each entry is one Canva design. Sizes are exact. Copy is the
+recommended starting point — refine to fit, don't reinvent voice.
+
+### 11.1 Instagram
+
+**A1 — Feed carousel · 7 slides · 1080 × 1350**
+
+```
+S1 (hook):
+   eyebrow:  Launching EMS Week 2026
+   headline: Your calls, captured.
+   sub:      The app built for the moment after the call.
+   visual:   EKG sweep on light background, mark bottom-right.
+
+S2 (problem):
+   headline: Nobody asked how you were holding up.
+   body:     EMS providers carry more than equipment. AfterCall is the
+             tool nobody built — until one of us did.
+
+S3 (Log Every Call):
+   headline: The whole call, in eight steps.
+   body:     Acuity. Vitals. Interventions. Outcome. AfterCall builds
+             the narrative from what you logged.
+   visual:   new-call.png in phone frame, blue field.
+
+S4 (Process What You Carry):
+   headline: After the call comes the rest of the shift.
+   body:     Guided reflections. End-of-shift debrief. Mood, stress,
+             energy, sleep — tracked over time.
+   visual:   journal-checkin.png in phone frame.
+
+S5 (Own Your Clinical Edge):
+   headline: Every rep. Finally counted.
+   body:     IV/IOs, airways, meds, cardioversions — tracked into a
+             skill momentum view month over month.
+   visual:   skills.png in phone frame, faint EKG sweep.
+
+S6 (AfterCall AI):
+   eyebrow:  ✦ AfterCall AI                       (color #8B5CF6)
+   headline: The narrative writes itself.
+   body:     You already logged the call. AfterCall AI takes it from
+             there.
+   visual:   call-detail.png + a small "✦" mark in purple.
+
+S7 (CTA):
+   headline: Be first through the door.
+   sub:      Launching EMS Week 2026 — May 17.
+   cta:      Join the waitlist · aftercallapp.com
+   visual:   countdown bar, EKG sweep, mark.
+```
+
+**A2 — Single-feature feed posts · 6 designs · 1080 × 1080**
+
+One per feature using Section 5.3 one-liners as the headline and the
+mapped screenshot from Section 9.5 as the dominant visual. Phone frame
+takes ~60% of the canvas. Headline above the phone, eyebrow above the
+headline, mark in the corner.
+
+**A3 — Stories pack · 5 designs · 1080 × 1920**
+
+```
+ST1 — countdown:   "<n> days until EMS Week."  + countdown numerals
+ST2 — founder:     full verbatim founder quote on dark surface, with
+                   founder.jpg as a small circular avatar.
+ST3 — log:         new-call.png glamour, "Eight steps. Full narrative."
+ST4 — wellness:    journal-checkin.png, "Process what you carry."
+ST5 — CTA:         "Get on the list", URL, mark.
+```
+
+**A4 — Reel cover · 3 variants · 1080 × 1920**
+
+Each cover uses one of the seven hooks. Phone-frame glamour, headline
+top third, hook label bottom (e.g. "EMS Week 2026 · Coming May 17").
+
+### 11.2 TikTok / Reels concept boards · 1080 × 1920
+
+Canva builds the **concept boards** (storyboard frames + on-screen
+text), not the cut video. Three boards:
+
+```
+B1 — "scroll the app" · 15s · 5 frames
+   F1 (0–2s):  hook text "After the call comes the rest of the shift."
+               over dashboard.png
+   F2 (2–5s):  cut to new-call.png + caption "Eight steps."
+   F3 (5–8s):  cut to call-detail.png + caption "Narrative — done."
+   F4 (8–11s): cut to journal-checkin.png + caption "Then check in."
+   F5 (11–15s): cut to skills.png + caption "Every rep counted."
+   end card:   "EMS Week 2026 · aftercallapp.com"
+
+B2 — founder voice · 30s · 4 frames
+   F1: founder.jpg, name + title overlay.
+   F2: pulled quote, line 1 of the verbatim founder paragraph.
+   F3: pulled quote, line 2 of the verbatim founder paragraph.
+   F4: end card, "AfterCall · Launching EMS Week 2026."
+
+B3 — day-in-the-life · 45s · 6 frames
+   06:00 logon — dashboard.png
+   09:14 call cleared — new-call.png
+   14:30 critical — call-detail.png with critical chip (#DC2626)
+   16:00 reset — guided-reflection.png
+   18:00 debrief — shift-debrief.png
+   end card — "AfterCall — your shift, captured."
+```
+
+### 11.3 X / Twitter · 1600 × 900
+
+```
+C1 — Launch announcement card
+   headline:  Your calls, captured.
+   sub:       Launching EMS Week 2026.
+   visual:    3-screenshot mosaic (dashboard, call-detail, skills)
+              + EKG sweep + mark.
+
+C2 — Feature thread visuals × 6
+   Same composition for each (parallelism is the point):
+     left:  feature one-liner from §5.3 in big Inter Black
+     right: phone frame with the mapped screenshot
+     bottom-left: "AfterCall · EMS Week 2026"
+```
+
+### 11.4 LinkedIn
+
+```
+D1 — Founder announcement · 1200 × 627
+   eyebrow:   "From the founder"
+   headline:  "I built this because nobody else was going to."
+              (verbatim founder line)
+   sub:       3-line summary in Jordan's voice (use his on-site copy
+              verbatim, broken into 3 short lines)
+   visual:    founder.jpg cropped tight, app dashboard floated to
+              the right.
+
+D2 — Square version · 1080 × 1080
+   Same content, vertical layout.
+
+D3 — "We're hiring / building for EMS" · 1200 × 627
+   Eyebrow: "Building AfterCall."
+   Headline: "Built by EMS providers. Funded by no one but us."
+   Visual: founder portrait + app glamour screenshot, EKG sweep.
+```
+
+### 11.5 YouTube
+
+```
+E1 — Channel banner · 2560 × 1440
+   Centered safe area: "AfterCall — your calls, captured."
+   Side art: dim EKG sweep + faint phone glamour.
+
+E2 — Thumbnail set · 1280 × 720 × 3
+   THUMB-1: explainer  — "Eight steps. Full narrative." + dashboard
+   THUMB-2: founder    — Jordan + "Why I built AfterCall."
+   THUMB-3: walkthrough — "Inside AfterCall AI ✦"
+```
+
+### 11.6 Cross-platform / press
+
+```
+F1 — Press one-pager · 1080 × 1350 (PDF-friendly)
+   - Mark + wordmark top-left.
+   - Tagline: "Your calls, captured."
+   - One-paragraph what-it-is.
+   - Six features: name + 1-line description (from §5.3).
+   - "Launches EMS Week 2026 · iOS first."
+   - Pricing line (from §5.5).
+   - Founder name + role + email.
+   - Three thumbnails (dashboard, call-detail, skills).
+
+F2 — Email header · 1200 × 400
+   Match the existing waitlist confirmation header (gradient
+   #1F5FA3 → #3379CF, white mark + wordmark, centered).
+
+F3 — App Store screenshot frames · 1290 × 2796 (iPhone 6.7") × 6
+   Each frame:
+     - Top: one-line headline in Inter Black, ~64pt, ink color.
+     - Below: the mapped screenshot in a clean iPhone 15 Pro frame,
+       no extra chrome.
+     - Footer: blue dot + "AfterCall · EMS Week 2026."
+   Six frames map 1:1 to the six features in §5.3. Order:
+     1. Log Every Call           (new-call.png)
+     2. Know Your Shifts         (my-calls-analytics.png)
+     3. Process What You Carry   (journal-checkin.png)
+     4. Connect With Your Crew   (community-org.png)
+     5. Stay Ahead of the Job    (trending.png)
+     6. Own Your Clinical Edge   (skills.png)
+```
+
+### 11.7 The "permission to feel" set (optional, founder-approved only)
+
+Two static posts that lean entirely on emotional truth. Run only after
+Jordan signs off.
+
+```
+P1 — 1080 × 1350
+   centered headline:  "Some calls don't clear with the radio."
+   sub:                "AfterCall is the app for the rest of the shift."
+
+P2 — 1080 × 1350
+   centered headline:  "Nobody asked. We do."
+   sub:                "AfterCall — built by EMS providers, for EMS
+                        providers."
+```
+
+---
+
+## 12. Founder voice templates (for Jordan)
+
+These are scaffolds — Jordan should personalize, not paste verbatim,
+unless explicitly noted.
+
+### 12.1 LinkedIn launch announcement (~150 words)
+
+```
+I'm Jordan. I'm an EMS provider. And in May, I'm launching the
+app I wished existed every time I cleared a tough call and drove
+back to quarters in silence.
+
+It's called AfterCall.
+
+It logs every call in eight guided steps. It writes the narrative
+for you. It tracks your skills, your shifts, your wellness — over
+months and years. It connects you to your station, your partner,
+your peer support.
+
+It is built by one of us. Not for us. By us.
+
+AfterCall LLC is independent. No corporate backing. Just a deep
+belief that the people who run toward emergencies deserve a tool
+that's genuinely on their side.
+
+Launching EMS Week — May 17, 2026. iOS at launch.
+
+Get on the waitlist: aftercallapp.com
+
+#EMS #Paramedic #EMT
+```
+
+### 12.2 Short Instagram caption (~60 words)
+
+```
+Built by EMS. For EMS.
+
+You ran the call. You documented. You cleared.
+Nobody asked how you were holding up.
+
+AfterCall is the app for the moment after the call. Log it.
+Process it. Track it. Carry less of it home with you.
+
+EMS Week 2026 — May 17.
+Get on the list: aftercallapp.com
+```
+
+### 12.3 X/Twitter announcement (under 280 chars)
+
+```
+Built AfterCall because nobody else was going to.
+
+The app for EMS providers — log calls, write narratives, track
+skills, hold the wellness work, connect your crew.
+
+iOS. EMS Week 2026. May 17.
+
+Waitlist: aftercallapp.com
+```
+
+### 12.4 Reels script (30s, founder talking-head)
+
+```
+[0–4s]   "I'm Jordan. I'm an EMS provider."
+[4–9s]   "I've cleared tough calls and driven back to quarters in
+          silence. Nobody waiting on the other side. No record of
+          what I did. No space to process it."
+[9–18s]  "The tools we have were built around us, not for us. So I
+          built one that is."
+[18–25s] "It's called AfterCall. Log every call. Write the narrative.
+          Track your skills. Hold the wellness work."
+[25–30s] "Launching EMS Week. May seventeenth. iOS first.
+          Get on the list — aftercallapp.com."
+```
+
+---
+
+## 13. The Canva / Claude Design execution prompt
+
+This is the single prompt to paste into a Claude session that has
+both the Canva (Claude Design) MCP and the GitHub MCP, signed in with
+an `@aftercallapp.com` email so the brand-protection check passes.
+
+It assumes this `MARKETING_KIT.md` file lives at the root of
+`aftercallapp/aftercall-website` on `main`.
+
+```text
+You are producing the AfterCall EMS Week 2026 launch marketing kit.
+Use the Canva tools (Claude Design) for every design and the GitHub
+MCP for source material. Do not invent voice, do not invent stats,
+do not generate fake screenshots.
+
+STEP 1 — Read the kit:
+Pull `MARKETING_KIT.md` from the `main` branch of
+`aftercallapp/aftercall-website`. It is the source of truth for
+voice, color, type, claims, and design specs. If anything in this
+prompt and the kit conflict, the kit wins.
+
+STEP 2 — Read the live site for context:
+Pull `aftercall-website/index.html` (only the section copy, ignore
+the inline CSS). Use it to verify the kit's claims and to lift any
+copy that needs to be exact.
+
+STEP 3 — Read the in-app palette:
+Pull `aftercall-app/constants/acuity.ts`. Confirm the four acuity
+hex values match Section 9.1 of the kit and use them anywhere
+acuity / call severity is shown.
+
+STEP 4 — Upload the screenshot library to Canva:
+For each filename in Section 9.5 of the kit, upload from
+`https://raw.githubusercontent.com/AfterCallApp/aftercall-website/main/images/<filename>`
+using upload-asset-from-url. Do this once. Reuse the assets across
+designs.
+
+STEP 5 — Build a Canva folder:
+Name it "AfterCall — EMS Week 2026 Launch Kit".
+
+STEP 6 — For every deliverable in Section 11 of the kit:
+Create the design at the exact size specified, place the mapped
+screenshots from Section 9.5 in the correct slots, use the verbatim
+copy where the kit gives copy, and respect Sections 4 (voice), 9
+(visual system), and 10 (claims).
+
+STEP 7 — Self-audit before returning:
+Confirm every design:
+  - uses one of the seven hooks from Section 6
+  - uses the mark `images/logo-transparent.png` only as a logo, never
+    as a phone-screen image
+  - uses the exact acuity colors anywhere severity appears
+  - leaves founder quotes byte-for-byte unedited
+  - uses Inter (no other typeface)
+  - has its CTA pointing to aftercallapp.com
+  - does not contain any forbidden claim from Section 10.2
+  - pairs at least one light/dark screenshot in the carousel and
+    on the App Store frame set
+
+STEP 8 — Return a single report:
+For each design, list:
+  - design name (matches a Section 11 ID, e.g. A1, F3-thumb-2)
+  - canvas size
+  - Canva URL
+  - which screenshots and copy block it pulled from
+  - which audience / platform it serves
+
+Tone for the report: dry inventory, not a pitch. The kit is the
+pitch.
+```
+
+---
+
+## 14. Process
+
+1. Source of truth is this file. Update it before changing live copy.
+2. Anyone designing a surface reads Section 11 first, then Section 4.
+3. Founder owns: any new claim, any user-facing testimonial, any
+   change to the founder section copy.
+4. When pricing, launch date, or acuity colors change in code,
+   update Sections 1, 5.5, 5.6, and 9.1 of this kit in the same PR.
+5. Re-run the Section 13 prompt against an `@aftercallapp.com`-signed-
+   in Claude session whenever the kit version changes.
+
+— end of kit · v1.0 —
