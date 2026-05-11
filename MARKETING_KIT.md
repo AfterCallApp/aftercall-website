@@ -1,1 +1,0 @@
-$(cat /home/user/aftercall-website/MARKETING_KIT.md)
