@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AfterCall — Your calls, captured.</title>
-  <meta name="description" content="AfterCall is the app built for EMS providers to log every call, track clinical skills, protect mental wellness, and connect with your crew. Launching EMS Week 2026." />
+  <meta name="description" content="AfterCall is the app built for EMS providers to log every call, track clinical skills, protect mental wellness, and connect with your crew. Now available on the App Store." />
   <meta property="og:title" content="AfterCall — Your calls, captured." />
-  <meta property="og:description" content="The app built for EMS providers. Log calls, track skills, protect your wellness. Launching EMS Week 2026." />
+  <meta property="og:description" content="The app built for EMS providers. Log calls, track skills, protect your wellness. Now on iOS." />
   <meta property="og:url" content="https://aftercallapp.com" />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
@@ -73,6 +73,98 @@
     .btn-white:hover { background: #f0f7ff; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
     .btn-full { width: 100%; text-align: center; display: block; }
 
+    /* ─── APP STORE DOWNLOAD BUTTON ─── */
+    .app-store-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1d1d1f 100%);
+      color: #ffffff; text-decoration: none;
+      padding: 16px 28px 16px 22px;
+      border-radius: 16px;
+      font-family: inherit;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      box-shadow:
+        0 14px 38px rgba(0,0,0,0.28),
+        0 0 0 1px rgba(255,255,255,0.06) inset,
+        0 1px 0 rgba(255,255,255,0.12) inset;
+    }
+    .app-store-btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 22px 52px rgba(0,0,0,0.34),
+        0 0 0 1px rgba(255,255,255,0.08) inset,
+        0 1px 0 rgba(255,255,255,0.14) inset;
+    }
+    .app-store-btn .apple-glyph {
+      width: 32px; height: 32px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 2;
+    }
+    .app-store-btn .apple-glyph svg { width: 100%; height: 100%; fill: #ffffff; }
+    .app-store-btn .ast {
+      display: flex; flex-direction: column; line-height: 1;
+      position: relative; z-index: 2;
+    }
+    .app-store-btn .ast-small {
+      font-size: 12px; opacity: 0.86;
+      letter-spacing: 0.2px; margin-bottom: 5px;
+      font-weight: 500;
+    }
+    .app-store-btn .ast-big {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.4px;
+    }
+    .app-store-btn::after {
+      content: ''; position: absolute;
+      top: -50%; bottom: -50%; width: 55%;
+      left: -75%;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+      transform: skewX(-18deg);
+      animation: shine 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shine {
+      0% { left: -75%; }
+      55% { left: -75%; }
+      100% { left: 175%; }
+    }
+    .app-store-btn.lg { padding: 20px 36px 20px 30px; border-radius: 20px; }
+    .app-store-btn.lg .apple-glyph { width: 40px; height: 40px; }
+    .app-store-btn.lg .ast-small { font-size: 13px; }
+    .app-store-btn.lg .ast-big { font-size: 27px; }
+    .app-store-btn.on-blue {
+      background: #ffffff; color: #0a0a0a;
+      box-shadow:
+        0 14px 38px rgba(0,0,0,0.22),
+        0 0 0 1px rgba(0,0,0,0.04) inset;
+    }
+    .app-store-btn.on-blue .apple-glyph svg { fill: #0a0a0a; }
+    .app-store-btn.on-blue:hover {
+      background: #f5f5f7;
+      box-shadow: 0 22px 52px rgba(0,0,0,0.28);
+    }
+
+    /* "Live" eyebrow — green pulsing dot for post-launch state */
+    .hero-eyebrow.is-live {
+      background: rgba(16,185,129,0.12);
+      color: #047857;
+    }
+    .hero-eyebrow.is-live .eyebrow-dot {
+      background: #10B981;
+    }
+
+    .download-cta-row {
+      display: flex; align-items: center; gap: 22px;
+      flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .download-cta-row .secondary-link {
+      color: var(--text-mid); font-weight: 600; font-size: 15px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+      transition: color 0.2s;
+    }
+    .download-cta-row .secondary-link:hover { color: var(--blue); }
+    .download-cta-row .secondary-link .arrow { transition: transform 0.2s; display: inline-block; }
+    .download-cta-row .secondary-link:hover .arrow { transform: translateX(3px); }
+
     /* ─── NAV ─── */
     nav {
       position: fixed; top: 0; width: 100%;
@@ -127,24 +219,7 @@
       font-size: 19px; color: var(--text-mid);
       line-height: 1.68; margin-bottom: 36px; max-width: 480px;
     }
-    .waitlist-form { display: flex; gap: 10px; margin-bottom: 14px; }
-    .waitlist-form input[type="email"] {
-      flex: 1; padding: 14px 18px;
-      border: 2px solid var(--border); border-radius: 12px;
-      font-size: 16px; font-family: inherit; outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      color: var(--text-dark);
-    }
-    .waitlist-form input[type="email"]:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(51,121,207,0.15);
-    }
     .hero-trust { font-size: 13px; color: var(--text-light); }
-    .form-success {
-      display: none; background: #d1fae5; color: #065f46;
-      padding: 14px 18px; border-radius: 10px;
-      font-weight: 600; font-size: 15px;
-    }
 
     /* Phone Mockup */
     .phone-wrap { display: flex; justify-content: center; align-items: flex-start; }
@@ -460,21 +535,7 @@
       font-size: 19px; color: rgba(255,255,255,0.82);
       line-height: 1.65; margin: 0 auto 40px; max-width: 520px;
     }
-    .cta-form { display: flex; gap: 10px; max-width: 480px; margin: 0 auto 14px; }
-    .cta-form input[type="email"] {
-      flex: 1; padding: 15px 18px;
-      border: none; border-radius: 12px;
-      font-size: 16px; font-family: inherit; outline: none;
-      color: var(--text-dark);
-    }
     .cta-note { font-size: 13px; color: rgba(255,255,255,0.55); }
-    .cta-success {
-      display: none; background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white; padding: 16px 24px;
-      border-radius: 12px; font-weight: 600;
-      font-size: 16px; max-width: 480px; margin: 0 auto;
-    }
 
     /* ─── FOOTER ─── */
     footer {
@@ -498,33 +559,6 @@
       font-size: 12px; font-weight: 700; color: var(--blue);
       letter-spacing: 0.5px; margin-bottom: 4px;
     }
-
-    /* ─── COUNTDOWN ─── */
-    .countdown-section {
-      background: linear-gradient(135deg, var(--blue-dark) 0%, #1a3a5c 100%);
-      padding: 56px 24px; text-align: center;
-    }
-    .countdown-label {
-      font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.6);
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
-    }
-    .countdown-title {
-      font-size: 22px; font-weight: 700; color: white; margin-bottom: 32px;
-    }
-    .countdown-title span { color: #93c5fd; }
-    .countdown-grid {
-      display: inline-flex; gap: 16px; align-items: center; justify-content: center;
-    }
-    .countdown-unit {
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px; padding: 18px 22px; min-width: 84px; text-align: center;
-    }
-    .countdown-num {
-      font-size: 48px; font-weight: 900; color: white; line-height: 1;
-      font-variant-numeric: tabular-nums; margin-bottom: 6px;
-    }
-    .countdown-unit-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-    .countdown-sep { font-size: 36px; font-weight: 900; color: rgba(255,255,255,0.3); margin-top: -10px; }
 
     /* ─── FEATURES WIDE CARD ─── */
     .feature-card-wide {
@@ -881,7 +915,7 @@
       .hero .phone-wrap { display: flex; justify-content: center; margin-top: 32px; }
       .phone { width: 220px; }
       .hero-sub { max-width: none; margin-left: auto; margin-right: auto; }
-      .waitlist-form { flex-direction: column; }
+      .download-cta-row { justify-content: center; }
       .problem-grid { grid-template-columns: 1fr; gap: 48px; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .features-grid { grid-template-columns: 1fr; }
@@ -889,7 +923,6 @@
       .steps::before { display: none; }
       .founder-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-      .cta-form { flex-direction: column; }
       .footer-inner { flex-direction: column; text-align: center; gap: 24px; }
       .footer-links { flex-wrap: wrap; justify-content: center; }
       .footer-right { text-align: center; }
@@ -901,9 +934,8 @@
       .darkmode-phones { justify-content: center; }
       .feature-card-wide { grid-template-columns: 1fr; }
       .feature-card-wide .feature-phone-wrap { display: none; }
-      .countdown-grid { gap: 8px; }
-      .countdown-num { font-size: 36px; }
-      .countdown-unit { min-width: 68px; padding: 14px 12px; }
+      .app-store-btn.lg { padding: 18px 28px 18px 24px; }
+      .app-store-btn.lg .ast-big { font-size: 22px; }
       .compare-wrap { overflow: visible; border-radius: 16px; }
       .compare-table { min-width: 0; width: 100%; }
       /* Hide Paper Notes and PCR columns on tablet/mobile - show AfterCall comparison only */
@@ -939,7 +971,6 @@
       .steps { grid-template-columns: 1fr; gap: 32px; }
       .steps::before { display: none; }
       /* compare-table: responsive on mobile */
-      .countdown-sep { font-size: 24px; }
     }
   </style>
 </head>
@@ -962,7 +993,7 @@
       <li><a href="#pricing">Pricing</a></li>
     </ul>
 
-    <a href="#waitlist" class="btn">Join the Waitlist</a>
+    <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="btn">Download</a>
   </div>
 </nav>
 
@@ -979,22 +1010,27 @@
   <div class="hero">
     <div class="hero-left">
       <img src="images/logo-transparent.png" class="hero-logo" alt="AfterCall" />
-      <div class="hero-eyebrow">
+      <div class="hero-eyebrow is-live">
         <span class="eyebrow-dot"></span>
-        Launching EMS Week — May 2026
+        Now live on the App Store
       </div>
       <h1>Your calls,<br><em>captured.</em></h1>
       <p class="hero-sub">
         AfterCall is the app built for EMS providers. Log every call, track your clinical skills, protect your mental health, and connect with your crew. Built by EMS providers, for EMS providers.
       </p>
-      <form class="waitlist-form" id="hero-form" onsubmit="submitForm(event,'hero-form','hero-success')">
-        <input type="email" name="email" placeholder="Enter your email" required autocomplete="email" />
-        <button type="submit" class="btn btn-lg">Join the Waitlist</button>
-      </form>
-      <div class="form-success" id="hero-success">
-        🚑 You're in! Check your email — a confirmation is on its way.
+      <div class="download-cta-row">
+        <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn lg" aria-label="Download AfterCall on the App Store">
+          <span class="apple-glyph" aria-hidden="true">
+            <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          </span>
+          <span class="ast">
+            <span class="ast-small">Download on the</span>
+            <span class="ast-big">App Store</span>
+          </span>
+        </a>
+        <a href="#features" class="secondary-link">See what's inside <span class="arrow">→</span></a>
       </div>
-      <p class="hero-trust">Free to join. Be first in your station. Early access drops EMS Week 2026.</p>
+      <p class="hero-trust">Free to download · iOS 16+ · Pro with 7-day free trial</p>
     </div>
 
     <div class="phone-wrap">
@@ -1016,37 +1052,7 @@
 ══════════════════════════════════════════ -->
 <div class="trust-bar">
   <div class="container">
-    <p>Built for <span>EMTs, Paramedics & EMS Providers</span> &nbsp;·&nbsp; Launches <span>EMS Week 2026</span> &nbsp;·&nbsp; Available on <span>iOS</span></p>
-  </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════
-     EMS WEEK COUNTDOWN
-══════════════════════════════════════════ -->
-<div class="countdown-section">
-  <div class="countdown-label">🚑 EMS Week 2026</div>
-  <div class="countdown-title">AfterCall launches in <span id="countdown-headline">38 days</span></div>
-  <div class="countdown-grid">
-    <div class="countdown-unit">
-      <div class="countdown-num" id="cd-days">38</div>
-      <div class="countdown-unit-label">Days</div>
-    </div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-unit">
-      <div class="countdown-num" id="cd-hours">00</div>
-      <div class="countdown-unit-label">Hours</div>
-    </div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-unit">
-      <div class="countdown-num" id="cd-mins">00</div>
-      <div class="countdown-unit-label">Minutes</div>
-    </div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-unit">
-      <div class="countdown-num" id="cd-secs">00</div>
-      <div class="countdown-unit-label">Seconds</div>
-    </div>
+    <p>Built for <span>EMTs, Paramedics & EMS Providers</span> &nbsp;·&nbsp; <span>Live now</span> &nbsp;·&nbsp; Available on <span>iOS</span></p>
   </div>
 </div>
 
@@ -1749,7 +1755,7 @@
           <li class="locked"><span class="check">✕</span> PDF export</li>
           <li class="locked"><span class="check">✕</span> 12-month call history</li>
         </ul>
-        <a href="#waitlist" class="btn btn-full" style="background:var(--bg-alt); color:var(--text-dark); border:2px solid var(--border);">Join Free</a>
+        <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="btn btn-full" style="background:var(--bg-alt); color:var(--text-dark); border:2px solid var(--border);">Download Free</a>
       </div>
 
       <div class="pricing-card pro">
@@ -1773,7 +1779,7 @@
           <li><span class="check">✓</span> Advanced skill momentum tracking</li>
           <li><span class="check">✓</span> Priority support &amp; early feature access</li>
         </ul>
-        <a href="#waitlist" class="btn btn-full" id="pro-cta">Start Free Trial</a>
+        <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="btn btn-full" id="pro-cta">Start Free Trial</a>
       </div>
 
     </div>
@@ -1784,18 +1790,22 @@
 <!-- ══════════════════════════════════════════
      CTA
 ══════════════════════════════════════════ -->
-<section class="cta-section" id="waitlist">
-  <h2>EMS Week is coming.<br>Be first through the door.</h2>
-  <p>Join providers already on the list. Early access. Real updates. Be first through the door when we launch on EMS Week.</p>
+<section class="cta-section" id="download">
+  <h2>It's here.<br>AfterCall is on the App Store.</h2>
+  <p>Built by EMS, for EMS. Free to download. Pro is one tap away.</p>
 
-  <form class="cta-form" id="cta-form" onsubmit="submitForm(event,'cta-form','cta-success')">
-    <input type="email" name="email" placeholder="Your email address" required autocomplete="email" />
-    <button type="submit" class="btn btn-white btn-lg">Notify Me</button>
-  </form>
-  <div class="cta-success" id="cta-success">
-    🚑 You're in! Check your email — a confirmation is on its way.
+  <div style="display:flex; justify-content:center; margin: 8px auto 18px;">
+    <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn lg on-blue" aria-label="Download AfterCall on the App Store">
+      <span class="apple-glyph" aria-hidden="true">
+        <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+      </span>
+      <span class="ast">
+        <span class="ast-small">Download on the</span>
+        <span class="ast-big">App Store</span>
+      </span>
+    </a>
   </div>
-  <p class="cta-note">No spam. Unsubscribe anytime. Early access guaranteed.</p>
+  <p class="cta-note">iOS 16+ · Free tier, no card required · Pro with 7-day free trial</p>
 </section>
 
 
@@ -1834,80 +1844,6 @@
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script>
-  // ── Waitlist form submission via Supabase Edge Function
-  // Emails are stored in Supabase `waitlist` table.
-  // Confirmation emails sent via Resend (add RESEND_API_KEY to Supabase secrets to enable).
-  const EDGE_FN_URL = 'https://scjjcyurnjlpmkayglfn.supabase.co/functions/v1/waitlist-signup';
-
-  async function submitForm(e, formId, successId) {
-    e.preventDefault();
-    const form = document.getElementById(formId);
-    const success = document.getElementById(successId);
-    const btn = form.querySelector('button[type="submit"]');
-    const originalLabel = formId === 'hero-form' ? 'Join the Waitlist' : 'Notify Me';
-    const email = form.querySelector('input[type="email"]').value.trim();
-
-    btn.textContent = 'Sending...';
-    btn.disabled = true;
-
-    try {
-      const res = await fetch(EDGE_FN_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok && data.success) {
-        form.style.display = 'none';
-        success.style.display = 'block';
-        success.textContent = data.duplicate
-          ? "🚑 You're already on the list — confirmation resent."
-          : "🚑 You're in! Check your email — a confirmation is on its way.";
-        const trust = document.querySelector('.hero-trust');
-        if (trust) trust.style.display = 'none';
-        return;
-      }
-
-      // Soft-failure: signup stored but email could not be sent.
-      if (data && data.stored) {
-        form.style.display = 'none';
-        success.style.display = 'block';
-        success.textContent = "🚑 You're on the list. (Confirmation email failed — we'll still notify you at launch.)";
-        return;
-      }
-
-      throw new Error(data.error || 'Signup failed');
-    } catch (err) {
-      btn.textContent = originalLabel;
-      btn.disabled = false;
-      alert('Something went wrong. Please email jordan@aftercallapp.com to join the waitlist.');
-    }
-  }
-
-  // ── EMS Week Countdown (May 17, 2026)
-  function updateCountdown() {
-    const target = new Date('2026-05-17T00:00:00');
-    const now = new Date();
-    const diff = target - now;
-    if (diff <= 0) {
-      document.querySelector('.countdown-section').innerHTML = '<div style="color:white;font-size:22px;font-weight:700;text-align:center;">🚑 AfterCall is LIVE — Download now!</div>';
-      return;
-    }
-    const days  = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-    const mins  = Math.floor((diff % (1000*60*60)) / (1000*60));
-    const secs  = Math.floor((diff % (1000*60)) / 1000);
-    const pad = n => String(n).padStart(2, '0');
-    document.getElementById('cd-days').textContent  = pad(days);
-    document.getElementById('cd-hours').textContent = pad(hours);
-    document.getElementById('cd-mins').textContent  = pad(mins);
-    document.getElementById('cd-secs').textContent  = pad(secs);
-    document.getElementById('countdown-headline').textContent = days === 1 ? '1 day' : `${days} days`;
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
   // ── Pricing Toggle
   function setPricing(plan) {
     const monthly = plan === 'monthly';
