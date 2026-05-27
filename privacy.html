@@ -85,43 +85,45 @@
 
 <div class="banner">
   <h1>Privacy Policy</h1>
-  <p class="meta">Effective Date: <span>April 17, 2026</span> &nbsp;·&nbsp; Last Updated: <span>April 17, 2026</span></p>
+  <p class="meta">Effective Date: <span>May 27, 2026</span> &nbsp;·&nbsp; Last Updated: <span>May 27, 2026</span></p>
 </div>
 
 <div class="content-wrap">
   <div class="prose">
 <h1>AfterCall Privacy Policy</h1>
-
-<p><strong>Effective Date:</strong> April 17, 2026</p>
-<p><strong>Last Updated:</strong> April 17, 2026</p>
-
+<p><strong>Effective Date:</strong> May 27, 2026</p>
+<p><strong>Last Updated:</strong> May 27, 2026</p>
+<p><strong>What changed in this version (1.1.1):</strong> Added disclosures for voice transcription (on-device only — your audio never leaves your device), the new voice call logging telemetry table (counts only — no transcript content stored), persisted reactions on shared calls and communities, and the post-author Reactions detail screen. See Sections 1.4 and 4.1 for the new sections.</p>
 <p>AfterCall LLC ("AfterCall," "we," "us," or "our") respects your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use the AfterCall mobile application and related services (the "Service").</p>
-
 <h2>1. Information We Collect</h2>
-
 <h3>1.1 Information You Provide</h3>
 <ul>
 <li><strong>Account Information:</strong> Email address, password (encrypted), display name, optional profile information (certification level, agency name)</li>
 <li><strong>Call Logs:</strong> Information you enter about calls, including category, acuity, interventions, vital signs, and clinical notes</li>
 <li><strong>Journal Entries:</strong> Reflections, mood/stress/energy ratings, free-text content</li>
 <li><strong>Wellness Data:</strong> Self-reported wellness metrics</li>
-<li><strong>Community Content:</strong> Posts, comments, messages, and other content you share</li>
+<li><strong>Community Content:</strong> Posts, comments, reactions, messages, and other content you share</li>
+<li><strong>Voice Transcripts (transient):</strong> When you use voice dictation or voice call logging, your speech is transcribed to text on your device. The resulting text is held in memory only for the active session; it is not written to your device's persistent storage and is not transmitted to AfterCall's servers. Only the structured fields you choose to save (e.g., parsed call type, vitals, interventions) are persisted as part of your call log.</li>
+<li><strong>CAD Paste Text (transient):</strong> When you paste CAD dispatch text into the call flow, the raw text is held in memory only for parsing and is then discarded. Only the structured fields extracted by the parser are persisted.</li>
+<li><strong>Reactions:</strong> When you react to a shared call on the public feed or to a post in a community, your reaction is stored with your user id so it persists across devices and so the post's author can see who reacted.</li>
 </ul>
-
 <h3>1.2 Automatically Collected Information</h3>
 <ul>
 <li><strong>Device Information:</strong> Device type, operating system, app version, unique device identifiers</li>
 <li><strong>Usage Data:</strong> Features used, time spent, interaction patterns</li>
 <li><strong>Log Data:</strong> IP address, access times, error logs</li>
+<li><strong>Voice Feature Telemetry:</strong> For voice call logging, lightweight counts only — whether you completed the flow, how many fields the parser missed, the duration of your review session, the length of the (already-scrubbed) transcript in characters, and the number of PHI redactions applied. <strong>No transcript content is recorded.</strong></li>
 </ul>
-
 <h3>1.3 Information from Third Parties</h3>
 <ul>
 <li><strong>Subscription Information:</strong> Payment status from Apple App Store or Google Play Store via RevenueCat (we do not receive or store credit card information)</li>
 </ul>
-
+<h3>1.4 Information Processed On-Device Only (Not Collected by AfterCall)</h3>
+<ul>
+<li><strong>Voice audio:</strong> When you use any voice feature, your raw audio is transcribed to text by your device's built-in speech recognizer (Apple's SFSpeechRecognizer on iOS) with the on-device-only flag enabled. <strong>AfterCall does not record, upload, store, or transmit your raw voice audio at any point.</strong> If your device cannot perform on-device recognition, the recognition request fails rather than falling back to a network service.</li>
+<li><strong>CAD paste text (raw):</strong> Pasted CAD dispatch text is held in app memory only while the parser runs; we never persist or transmit the raw text. The scrubbed (PHI-redacted) version is the only thing sent to the AI parser, and only the parsed structured fields are saved.</li>
+</ul>
 <h2>2. How We Use Information</h2>
-
 <p>We use your information to:</p>
 <ul>
 <li>Provide, maintain, and improve the Service</li>
@@ -133,23 +135,18 @@
 <li>Detect and prevent fraud or abuse</li>
 <li>Comply with legal obligations</li>
 </ul>
-
 <h2>3. AI Features and Third-Party Processing</h2>
-
 <p>When you use AI features, your input data may be processed by third-party AI services (currently Google's Gemini API). These services have their own privacy policies and data handling practices. We do not control how third-party AI services use data sent to them, though we configure these services to minimize data retention where possible.</p>
-
-<p class="bold-notice">You should not enter PHI or other sensitive identifying information into the Service, as it may be transmitted to third-party AI providers.</p>
-
+<p>For voice call logging and CAD dispatch parsing, your input passes through an on-device pattern-based PHI scrubber <strong>before</strong> any text is sent to the AI parser. The scrubber redacts names, addresses, phone numbers, MRN-shaped strings, specific dates and times, and other identifiers; only the scrubbed text reaches the AI. This is a defense-in-depth measure and is not a substitute for your own responsibility to avoid entering identifying information. Raw voice audio is never sent to AI — only the on-device-transcribed text after scrubbing.</p>
+<p class="bold-notice">You should not enter PHI or other sensitive identifying information into the Service, as scrubbed text may still be transmitted to third-party AI providers and our scrubber cannot guarantee 100% detection.</p>
 <h2>4. How We Share Information</h2>
-
 <p>We do NOT sell your personal information. We may share information in the following circumstances:</p>
-
 <h3>4.1 With Other Users</h3>
 <ul>
 <li>Content you choose to share publicly or with communities is visible to other users</li>
 <li>Profile information you choose to make public</li>
+<li><strong>Reactions you make on shared calls and community posts</strong> are visible in aggregate to other viewers (counts by type). The author of a post can additionally see the specific list of users who reacted and which reaction each user selected, via a per-post Reactions detail screen visible only to the author.</li>
 </ul>
-
 <h3>4.2 With Service Providers</h3>
 <ul>
 <li>Cloud hosting (Supabase)</li>
@@ -157,17 +154,12 @@
 <li>Payment processing (Apple, Google, RevenueCat)</li>
 <li>Analytics and crash reporting</li>
 </ul>
-
 <p>These providers are bound by confidentiality obligations and may use your information only to provide services to AfterCall.</p>
-
 <h3>4.3 Legal Requirements</h3>
 <p>We may disclose information when required by law, court order, or legal process, or to protect the rights, property, or safety of AfterCall, our users, or others.</p>
-
 <h3>4.4 Business Transfers</h3>
 <p>In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity.</p>
-
 <h2>5. Data Security</h2>
-
 <p>We implement reasonable technical and organizational measures to protect your information, including:</p>
 <ul>
 <li>Encryption in transit (HTTPS/TLS)</li>
@@ -175,17 +167,11 @@
 <li>Access controls and authentication</li>
 <li>Row-level security policies on user data</li>
 </ul>
-
 <p>However, no method of transmission or storage is 100% secure. We cannot guarantee the absolute security of your information.</p>
-
 <p>In addition to the above, AfterCall operates an automated content safeguard system to reduce the risk of PHI being submitted, stored, or transmitted through the Service. This system includes pattern-based text scanning, AI-assisted moderation (via Google's Gemini API), an administrative review queue for flagged content, and user-initiated reporting. Content flagged by these systems may be reviewed by AfterCall administrators solely for the purpose of enforcing these Terms and our PHI prohibition. Flagged content snippets may be retained in a secure internal log for a limited period to support moderation decisions and compliance. This processing is described in more detail in Section 6.1 of our Terms of Service.</p>
-
 <h2>6. Data Retention</h2>
-
 <p>We retain your information for as long as your account is active or as needed to provide the Service. You may request deletion of your account at any time. Some information may be retained after deletion for legitimate operational purposes (backups, fraud prevention, legal compliance) for a limited period.</p>
-
 <h2>7. Your Rights and Choices</h2>
-
 <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
 <ul>
 <li>Access to your information</li>
@@ -195,39 +181,25 @@
 <li>Objection to certain processing</li>
 <li>Withdrawal of consent</li>
 </ul>
-
 <p>To exercise these rights, contact us at jordan@aftercallapp.com.</p>
-
 <h3>7.1 California Residents (CCPA)</h3>
 <p>California residents have additional rights under the California Consumer Privacy Act, including the right to know what personal information we collect, the right to request deletion, and the right not to be discriminated against for exercising these rights.</p>
-
 <h3>7.2 European Residents (GDPR)</h3>
 <p>If you are located in the European Economic Area, you have rights under the General Data Protection Regulation, including the rights listed above and the right to lodge a complaint with a supervisory authority.</p>
-
 <h2>8. Children's Privacy</h2>
-
 <p>The Service is not intended for use by individuals under 18 years of age. We do not knowingly collect information from children. If you believe we have collected information from a child, please contact us immediately.</p>
-
 <h2>9. International Users</h2>
-
 <p>The Service is operated from the United States. If you access the Service from outside the United States, your information will be transferred to and processed in the United States, which may have different data protection laws than your country of residence.</p>
-
 <h2>10. Changes to This Privacy Policy</h2>
-
 <p>We may update this Privacy Policy from time to time. We will notify you of material changes through the Service or by email. Your continued use of the Service after changes become effective constitutes acceptance of the updated policy.</p>
-
 <h2>11. Contact Us</h2>
-
 <p>If you have questions about this Privacy Policy or our data practices, contact us:</p>
-
 <p class="bold-notice">AfterCall LLC</p>
 <p>Email: jordan@aftercallapp.com</p>
 <p>Website: aftercallapp.com</p>
-
 <hr>
-
 <p class="bold-notice">By using AfterCall, you acknowledge that you have read and understood this Privacy Policy.</p>
-  </div>
+    </div>
 </div>
 
 <footer>
@@ -241,7 +213,7 @@
     <a href="terms.html">Terms of Service</a> &nbsp;·&nbsp;
     <a href="mailto:jordan@aftercallapp.com">Contact</a>
   </p>
-  <p style="margin-top:12px;">© Apri AfterCall LLC. All rights reserved.</p>
+  <p style="margin-top:12px;">© 2026 AfterCall LLC. All rights reserved.</p>
 </footer>
 
 </body>

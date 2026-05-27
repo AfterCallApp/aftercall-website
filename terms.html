@@ -85,22 +85,18 @@
 
 <div class="banner">
   <h1>Terms of Service</h1>
-  <p class="meta">Effective Date: <span>April 17, 2026</span> &nbsp;·&nbsp; Last Updated: <span>April 17, 2026</span></p>
+  <p class="meta">Effective Date: <span>May 27, 2026</span> &nbsp;·&nbsp; Last Updated: <span>May 27, 2026</span></p>
 </div>
 
 <div class="content-wrap">
   <div class="prose">
 <h1>AfterCall Terms of Service</h1>
-
-<p><strong>Effective Date:</strong> April 17, 2026</p>
-<p><strong>Last Updated:</strong> April 17, 2026</p>
-
+<p><strong>Effective Date:</strong> May 27, 2026</p>
+<p><strong>Last Updated:</strong> May 27, 2026</p>
+<p><strong>What changed in this version (1.1.1):</strong> Disclosures added for the new voice dictation and voice call logging features (on-device transcription, audio never leaves the device), the new CAD dispatch paste-and-parse feature (PHI scrubbed locally before AI processing), persisted reactions on shared calls (now visible to other feed viewers), and the post-author Reactions detail screen (post authors can see who reacted to their shared posts). No changes to dispute resolution, arbitration, payment terms, or limitation of liability.</p>
 <h2>1. Agreement to Terms</h2>
-
 <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and AfterCall LLC, a California limited liability company ("AfterCall," "we," "us," or "our"), governing your access to and use of the AfterCall mobile application, website, and related services (collectively, the "Service").</p>
-
 <p>By creating an account, accessing, or using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you must not access or use the Service.</p>
-
 <p class="bold-notice">IMPORTANT NOTICES:</p>
 <ul>
 <li><strong>The Service is NOT a substitute for professional medical advice, diagnosis, or treatment.</strong></li>
@@ -108,9 +104,7 @@
 <li><strong>The Service is NOT a mental health crisis intervention tool.</strong> If you or someone you know is in crisis, call 988 (Suicide and Crisis Lifeline) or 911 immediately.</li>
 <li><strong>You must not enter Protected Health Information (PHI) about patients into the Service.</strong></li>
 </ul>
-
 <h2>2. Eligibility</h2>
-
 <p>To use the Service, you must:</p>
 <ul>
 <li>Be at least 18 years of age</li>
@@ -118,14 +112,10 @@
 <li>Not be barred from using the Service under applicable laws</li>
 <li>Provide accurate, current, and complete information during registration</li>
 </ul>
-
 <p>The Service is intended primarily for emergency medical services (EMS) professionals, including paramedics, emergency medical technicians (EMTs), advanced EMTs, and related healthcare providers. However, use of the Service does not require professional credentials, and we do not verify professional licensure.</p>
-
 <h2>3. Account Registration and Security</h2>
-
 <h3>3.1 Account Creation</h3>
 <p>You may create an account using an email address and password, or through anonymous authentication. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
-
 <h3>3.2 Account Security</h3>
 <p>You agree to:</p>
 <ul>
@@ -135,14 +125,10 @@
 <li>Notify us immediately of any unauthorized access to your account</li>
 <li>Accept responsibility for all activities under your account</li>
 </ul>
-
 <h3>3.3 Account Termination</h3>
 <p>We reserve the right to suspend or terminate your account at any time, with or without notice, for any reason, including but not limited to violation of these Terms.</p>
-
 <h2>4. Description of Service</h2>
-
 <p>AfterCall is a personal wellness, journaling, and reflection tool designed for EMS professionals. The Service includes features such as:</p>
-
 <ul>
 <li>Personal call logging for the user's own reference</li>
 <li>Wellness journaling and reflection</li>
@@ -151,7 +137,6 @@
 <li>AI-powered features (the "AfterCall AI") that generate insights, summaries, and reflections (Pro subscription required)</li>
 <li>Optional document export</li>
 </ul>
-
 <h3>4.1 Service is for Personal Use Only</h3>
 <p>The Service is designed for personal reflection, wellness tracking, and informal documentation. <strong>The Service is NOT:</strong></p>
 <ul>
@@ -162,11 +147,19 @@
 <li>A substitute for your employer's official documentation systems</li>
 <li>A replacement for professional mental health care</li>
 </ul>
-
 <p>You agree to use the Service only as a personal reflection and wellness tool, not as a clinical or operational record.</p>
-
+<h3>4.2 Voice Features (Voice Dictation, Voice Call Logging, Pasted CAD Parsing)</h3>
+<p>The Service includes optional voice and text-paste features:</p>
+<ul>
+<li><strong>Voice dictation</strong> lets you tap a microphone icon on selected text inputs (journal entries, reflections, call narratives) to speak your entry instead of typing it.</li>
+<li><strong>Voice call logging (Pro)</strong> lets you record a verbal description of a call and have it parsed into structured fields.</li>
+<li><strong>CAD dispatch parsing (Pro)</strong> lets you paste raw CAD dispatch text and have it parsed into structured fields.</li>
+</ul>
+<p><strong>How voice transcription works.</strong> When you tap the microphone, your device's built-in speech recognition (Apple's SFSpeechRecognizer on iOS) transcribes your speech to text. We pass the on-device-only flag to the operating system, which means your audio is processed entirely on your device — <strong>AfterCall does not record, upload, store, or transmit your raw voice audio at any point</strong>. If your device cannot perform on-device recognition for any reason, the request fails rather than sending audio to a remote server.</p>
+<p><strong>How the parsing works.</strong> For voice call logging and CAD paste, the transcribed text (not the audio) is then passed through an on-device pattern-based PHI scrubber to redact patient names, addresses, phone numbers, dates, times, and other identifiers. The scrubbed text is then sent to a third-party AI service (currently Google's Gemini API) to extract structured fields. Pasted CAD text and recorded transcripts are held in app memory only — they are never written to your device's persistent storage or to AfterCall's servers. Only the extracted structured fields (e.g., call type, vitals, interventions) are saved as part of your call log.</p>
+<p><strong>Permissions.</strong> The first time you tap the microphone, your device asks for microphone and speech recognition permission. You may revoke these permissions at any time through your device settings. Voice features require both permissions to function; revoking either disables them.</p>
+<p class="bold-notice">Telemetry.<strong> For the voice call logging feature, AfterCall records lightweight usage counts (whether you completed the flow, the number of fields the parser missed, the duration of your review session, the length of the scrubbed transcript in characters, and the number of redactions applied). These counts help us measure parser quality and improve the feature. </strong>No transcript content is ever stored in telemetry.</p>
 <h2>5. NOT MEDICAL ADVICE — IMPORTANT DISCLAIMER</h2>
-
 <p><strong>THE SERVICE DOES NOT PROVIDE MEDICAL ADVICE.</strong> All content, features, AI-generated outputs, and information available through the Service, including but not limited to:</p>
 <ul>
 <li>AI-generated narratives, summaries, insights, and reflections</li>
@@ -175,17 +168,11 @@
 <li>Wellness recommendations and guided reflections</li>
 <li>Community discussions and shared content</li>
 </ul>
-
 <p>are provided for <strong>informational, educational, and personal reflection purposes only</strong> and do NOT constitute medical advice, diagnosis, treatment recommendations, or professional consultation.</p>
-
 <p><strong>You must NOT rely on the Service for clinical decision-making.</strong> Always consult with qualified healthcare professionals, your medical director, your employer's protocols, and established clinical guidelines for any clinical question, treatment decision, or patient care matter.</p>
-
 <p>The Service is not intended to diagnose, treat, cure, or prevent any disease or medical condition.</p>
-
 <h2>6. PROTECTED HEALTH INFORMATION (PHI) — STRICTLY PROHIBITED</h2>
-
 <p class="bold-notice">You agree NOT to enter, upload, transmit, or share any Protected Health Information (PHI) through the Service.</p>
-
 <p>PHI includes, but is not limited to:</p>
 <ul>
 <li>Patient names, addresses, dates of birth, or other identifying information</li>
@@ -195,17 +182,11 @@
 <li>Photographs or biometric identifiers of patients</li>
 <li>Any information that could reasonably identify an individual patient</li>
 </ul>
-
 <p>When logging calls or reflections, you should use only general descriptions, demographic categories (e.g., "adult," "geriatric"), and non-identifying details. References to patients should be entirely anonymous.</p>
-
 <p><strong>AfterCall is NOT a HIPAA-covered entity and the Service is NOT HIPAA-compliant.</strong> Entering PHI into the Service may violate HIPAA, state privacy laws, your employer's policies, and these Terms.</p>
-
 <p>You are solely responsible for ensuring that any information you enter into the Service complies with all applicable privacy laws, professional obligations, and employer policies. You agree to indemnify and hold AfterCall harmless from any claims arising from your entry of PHI or other prohibited information.</p>
-
 <h3>6.1 Automated PHI Detection and Content Moderation</h3>
-
 <p>To help enforce the prohibition on PHI, AfterCall employs a layered, automated content safeguard system that applies to content submitted through community features, shared call narratives, and AI-assisted inputs. By using the Service, you acknowledge and consent to the operation of these systems, which include:</p>
-
 <ul>
 <li><strong>Pattern-based scanning:</strong> Automated analysis of submitted text to identify common PHI patterns, including names, dates of birth, phone numbers, addresses, medical record numbers, and other identifiable data formats.</li>
 <li><strong>AI-assisted moderation:</strong> Content submitted to community features may be analyzed by AI moderation systems (currently powered by Google's Gemini API) to detect probable PHI before the content is published or shared.</li>
@@ -213,20 +194,13 @@
 <li><strong>User reporting:</strong> Other users may report content they believe contains PHI or violates these Terms. Content that receives multiple reports may be automatically withheld pending administrator review.</li>
 <li><strong>AI input guardrails:</strong> Inputs to AfterCall AI features are subject to PHI screening before being transmitted to third-party AI providers. Inputs identified as probable PHI may be blocked from AI processing.</li>
 </ul>
-
 <p>These systems are designed to reduce PHI exposure but <strong>are not a substitute for your own responsibility</strong> to avoid entering PHI. Automated systems may produce false positives (flagging non-PHI content) or false negatives (failing to detect all PHI). AfterCall makes no guarantee that all PHI will be detected or prevented from transmission.</p>
-
 <p>Content determined by AfterCall administrators to contain PHI or to violate these Terms may be removed without notice. Repeated violations may result in account suspension or termination pursuant to Section 10.3.</p>
-
 <p><strong>New accounts</strong> (those less than seven days old) are subject to enhanced moderation: community posts from new accounts default to a pending review state and are not publicly visible until approved by an administrator.</p>
-
 <h2>7. MENTAL HEALTH AND CRISIS DISCLAIMER</h2>
-
 <p>The Service includes wellness, journaling, and reflection features intended for general personal wellness. <strong>The Service is NOT a substitute for professional mental health care, therapy, counseling, or crisis intervention.</strong></p>
-
 <h3>7.1 Not a Crisis Service</h3>
 <p>If you are experiencing a mental health emergency, suicidal thoughts, thoughts of self-harm, or thoughts of harming others, <strong>DO NOT use the Service for help.</strong> Instead, contact emergency services immediately:</p>
-
 <ul>
 <li><strong>Call or text 988</strong> (Suicide and Crisis Lifeline) — United States</li>
 <li><strong>Call 911</strong> for immediate emergencies — United States</li>
@@ -234,58 +208,41 @@
 <li><strong>Code Green Campaign:</strong> codegreencampaign.org — EMS mental health resources</li>
 <li><strong>International:</strong> Contact your local emergency services or crisis hotline</li>
 </ul>
-
 <h3>7.2 AI Limitations</h3>
 <p>AI-generated content, including AfterCall AI insights, reflections, and chat responses, is generated by automated systems and may contain inaccuracies, errors, or inappropriate suggestions. AI features are not equivalent to interaction with a qualified mental health professional, peer support specialist, or crisis counselor.</p>
-
 <h3>7.3 Peer Support Disclaimer</h3>
 <p>Community features that allow you to connect with other users, including peer support functionality, are facilitated by other users who may not have professional mental health credentials. Peer support conversations through the Service are NOT confidential in the legal or therapeutic sense and should not be relied upon for crisis intervention or professional mental health care.</p>
-
 <h3>7.4 Recommendation to Seek Professional Help</h3>
 <p>We strongly encourage all EMS professionals to seek qualified professional mental health support, especially after critical incidents, traumatic calls, or periods of elevated stress. The Service is designed to complement, not replace, professional care.</p>
-
 <h2>8. Subscription and Payment Terms</h2>
-
 <h3>8.1 Free and Paid Tiers</h3>
 <p>AfterCall offers a free tier with basic features and a paid "AfterCall Pro" subscription tier with additional features. The specific features available in each tier are described in the Service and may change at our discretion with reasonable notice.</p>
-
 <h3>8.2 Subscription Pricing</h3>
 <ul>
 <li><strong>AfterCall Pro Monthly:</strong> $7.99 per month (or local equivalent)</li>
 <li><strong>AfterCall Pro Annual:</strong> $59.99 per year (or local equivalent)</li>
 </ul>
-
 <p>Prices are subject to change with notice. Local taxes may apply.</p>
-
 <h3>8.3 Auto-Renewal</h3>
 <p><strong>SUBSCRIPTIONS AUTOMATICALLY RENEW.</strong> Your AfterCall Pro subscription will automatically renew at the end of each subscription period unless you cancel at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.</p>
-
 <h3>8.4 Payment Processing</h3>
 <p>Subscriptions are processed through the Apple App Store (for iOS users) or Google Play Store (for Android users). Payment will be charged to your iTunes or Google Play account at confirmation of purchase.</p>
-
 <h3>8.5 Cancellation</h3>
 <p>You may cancel your subscription at any time:</p>
 <ul>
 <li><strong>iOS:</strong> Manage subscriptions in your Apple ID settings</li>
 <li><strong>Android:</strong> Manage subscriptions in the Google Play Store</li>
 </ul>
-
 <p>Cancellation will take effect at the end of the current billing period. You will retain Pro access until that time. <strong>No refunds or credits are provided for partial months or unused time.</strong></p>
-
 <h3>8.6 Refunds</h3>
 <p>Refund requests are handled by Apple or Google according to their respective policies. AfterCall does not directly process refunds for subscription purchases.</p>
-
 <h3>8.7 Free Trials and Promotional Offers</h3>
 <p>We may offer free trials or promotional pricing from time to time. If a free trial is offered, you will be charged the regular subscription fee at the end of the trial unless you cancel before the trial ends.</p>
-
 <h3>8.8 Price Changes</h3>
 <p>We reserve the right to change subscription prices at any time. Price changes will not affect your current subscription period but will apply to subsequent renewals. We will provide reasonable notice of any price changes.</p>
-
 <h2>9. User Content and License</h2>
-
 <h3>9.1 Your Content</h3>
 <p>"User Content" includes any information, text, journal entries, call logs, reflections, photos, or other materials you submit to the Service. You retain all ownership rights in your User Content.</p>
-
 <h3>9.2 License to AfterCall</h3>
 <p>By submitting User Content to the Service, you grant AfterCall a worldwide, non-exclusive, royalty-free, sublicensable, and transferable license to use, reproduce, modify, adapt, publish, transmit, display, and distribute your User Content solely for the purposes of:</p>
 <ul>
@@ -294,17 +251,14 @@
 <li>Synchronizing your data across your devices</li>
 <li>Enforcing these Terms</li>
 </ul>
-
 <p>This license terminates when you delete your User Content or your account, except where retention is required by law or for legitimate operational purposes (e.g., backups, fraud prevention).</p>
-
 <h3>9.3 Community Content</h3>
 <p>Content you choose to share publicly or with communities (including shared calls, posts, comments, and chat messages) may be visible to other users. You are solely responsible for content you choose to share, and you should never share PHI or content that violates the privacy rights of others.</p>
-
 <p>When you share content to communities or the public feed, you grant other users a license to view, comment on, and interact with that content within the Service.</p>
-
+<h3>9.3.1 Reactions and Author Visibility</h3>
+<p>When you react to a shared call on the public feed or a post in a community, your reaction (and the type — "Been there," "Solid," "Tough one," "Take care") is associated with your account and persists across devices. <strong>The author of the post can see which specific users reacted to their post and which reaction each user selected</strong>, via a per-post Reactions detail screen visible only to the author. Other community members or feed viewers may also see aggregated reaction counts. Reaction events do not generate push notifications by default unless the recipient has notifications enabled. If you post anonymously, your name is hidden from public views, but reactions you make on other people's posts are still attributed to your account.</p>
 <h3>9.4 Anonymous Sharing</h3>
 <p>If you choose to share content anonymously, your name will not be displayed alongside the content. However, anonymity is not guaranteed against technical, legal, or forensic analysis. Do not assume anonymous sharing provides absolute privacy.</p>
-
 <h3>9.5 AI-Generated Content</h3>
 <p>Content generated by AfterCall AI features (narratives, insights, summaries, suggested questions, etc.) is owned by you for personal use. However, you acknowledge that:</p>
 <ul>
@@ -313,11 +267,8 @@
 <li>AfterCall makes no guarantees about the quality, accuracy, or fitness for any particular purpose of AI-generated content</li>
 <li>AI-generated content is created using third-party AI services (currently Google's Gemini API), and your input data is processed by these services subject to their respective terms and privacy policies</li>
 </ul>
-
 <h2>10. Acceptable Use Policy</h2>
-
 <p>You agree NOT to:</p>
-
 <h3>10.1 Prohibited Conduct</h3>
 <ul>
 <li>Use the Service for any unlawful purpose or in violation of any applicable laws</li>
@@ -334,7 +285,6 @@
 <li>Resell, redistribute, or commercially exploit the Service without permission</li>
 <li>Use the Service in a way that could damage, disable, or impair the Service</li>
 </ul>
-
 <h3>10.2 Community Standards</h3>
 <p>When using community features, you agree to:</p>
 <ul>
@@ -344,26 +294,18 @@
 <li>Not engage in harassment, bullying, or discriminatory behavior</li>
 <li>Report inappropriate content or behavior to AfterCall</li>
 </ul>
-
 <h3>10.3 Consequences of Violations</h3>
 <p>Violation of this Acceptable Use Policy may result in immediate suspension or termination of your account, removal of content, and may be reported to law enforcement or other authorities where appropriate.</p>
-
 <h2>11. Intellectual Property</h2>
-
 <h3>11.1 AfterCall Property</h3>
 <p>The Service, including all software, designs, logos, trademarks, content (excluding User Content), and other intellectual property, is owned by AfterCall LLC or its licensors and is protected by copyright, trademark, and other intellectual property laws.</p>
-
 <h3>11.2 Limited License</h3>
 <p>Subject to your compliance with these Terms, AfterCall grants you a limited, non-exclusive, non-transferable, revocable license to download, install, and use the Service for your personal, non-commercial use.</p>
-
 <h3>11.3 Trademarks</h3>
 <p>"AfterCall," "AfterCall AI," the AfterCall logo, and related marks are trademarks of AfterCall LLC. You may not use these marks without our prior written permission.</p>
-
 <h3>11.4 Feedback</h3>
 <p>If you provide AfterCall with feedback, suggestions, or ideas about the Service ("Feedback"), you grant us a perpetual, irrevocable, worldwide, royalty-free license to use, modify, and incorporate your Feedback into the Service without any obligation or compensation to you.</p>
-
 <h2>12. Third-Party Services</h2>
-
 <p>The Service integrates with and uses third-party services, including but not limited to:</p>
 <ul>
 <li>Apple App Store and Google Play Store (for distribution and payment processing)</li>
@@ -372,27 +314,18 @@
 <li>RevenueCat (for subscription management)</li>
 <li>Expo (for app development infrastructure)</li>
 </ul>
-
 <p>Your use of these third-party services is subject to their respective terms and privacy policies. AfterCall is not responsible for the availability, accuracy, or content of third-party services.</p>
-
 <h2>13. Data and Privacy</h2>
-
 <p>Your privacy is important to us. Our collection, use, and disclosure of personal information is governed by our Privacy Policy, which is incorporated into these Terms by reference. By using the Service, you consent to our Privacy Policy.</p>
-
 <h3>13.1 Data Storage</h3>
 <p>Your data is stored on cloud infrastructure (currently provided by Supabase). While we implement reasonable security measures, no method of electronic storage is 100% secure.</p>
-
 <h3>13.2 Data Backup</h3>
 <p>You are responsible for maintaining your own backups of important data. AfterCall is not responsible for any loss of data.</p>
-
 <h3>13.3 Data Deletion</h3>
 <p>You may request deletion of your account and associated data at any time through the Service settings or by contacting support. Some data may be retained for legitimate operational purposes (backups, fraud prevention, legal compliance) for a limited period after deletion.</p>
-
 <h2>14. Disclaimers</h2>
-
 <h3>14.1 As-Is Service</h3>
 <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ACCURACY.</p>
-
 <h3>14.2 No Guarantees</h3>
 <p>AFTERCALL DOES NOT WARRANT THAT:</p>
 <ul>
@@ -401,17 +334,12 @@
 <li>ANY ERRORS IN THE SERVICE WILL BE CORRECTED</li>
 <li>AI-GENERATED CONTENT WILL BE ACCURATE, COMPLETE, OR FIT FOR ANY PARTICULAR PURPOSE</li>
 </ul>
-
 <h3>14.3 No Professional Advice</h3>
 <p>NOTHING IN THE SERVICE CONSTITUTES MEDICAL, LEGAL, FINANCIAL, OR PROFESSIONAL ADVICE. YOU ASSUME FULL RESPONSIBILITY FOR ANY USE OF INFORMATION OBTAINED FROM THE SERVICE.</p>
-
 <h3>14.4 Third-Party Content</h3>
 <p>WE ARE NOT RESPONSIBLE FOR CONTENT POSTED BY OTHER USERS OR FOR THIRD-PARTY CONTENT ACCESSIBLE THROUGH THE SERVICE.</p>
-
 <h2>15. Limitation of Liability</h2>
-
 <p>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW:</p>
-
 <h3>15.1 Exclusion of Damages</h3>
 <p>IN NO EVENT SHALL AFTERCALL, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR LICENSORS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION:</p>
 <ul>
@@ -422,19 +350,15 @@
 <li>DAMAGES RESULTING FROM AI-GENERATED CONTENT</li>
 <li>DAMAGES RESULTING FROM ANY MEDICAL OR HEALTH-RELATED DECISION MADE IN RELIANCE ON THE SERVICE</li>
 </ul>
-
 <h3>15.2 Cap on Liability</h3>
 <p>AFTERCALL'S TOTAL LIABILITY FOR ANY CLAIMS ARISING OUT OF OR RELATED TO THESE TERMS OR THE SERVICE SHALL NOT EXCEED THE GREATER OF:</p>
 <ul>
 <li>THE AMOUNT YOU PAID TO AFTERCALL IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR</li>
 <li>ONE HUNDRED DOLLARS ($100 USD)</li>
 </ul>
-
 <h3>15.3 Basis of the Bargain</h3>
 <p>YOU ACKNOWLEDGE THAT THESE LIMITATIONS OF LIABILITY ARE A FUNDAMENTAL BASIS OF THE BARGAIN BETWEEN YOU AND AFTERCALL AND THAT WITHOUT THESE LIMITATIONS, AFTERCALL WOULD NOT PROVIDE THE SERVICE.</p>
-
 <h2>16. Indemnification</h2>
-
 <p>You agree to indemnify, defend, and hold harmless AfterCall LLC, its officers, directors, employees, agents, licensors, and suppliers from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to:</p>
 <ul>
 <li>Your violation of these Terms</li>
@@ -444,23 +368,16 @@
 <li>Your entry of PHI or other prohibited information into the Service</li>
 <li>Any decisions you make based on information from the Service</li>
 </ul>
-
 <h2>17. Modifications to the Service and Terms</h2>
-
 <h3>17.1 Service Modifications</h3>
 <p>We reserve the right to modify, suspend, or discontinue the Service (or any part of it) at any time, with or without notice. We will not be liable to you or any third party for any such modification, suspension, or discontinuation.</p>
-
 <h3>17.2 Terms Modifications</h3>
 <p>We may revise these Terms from time to time. The most current version will be posted in the Service and on our website. If a revision is material, we will provide reasonable notice (such as through the app or by email). Your continued use of the Service after the effective date of any changes constitutes acceptance of those changes.</p>
-
 <h2>18. Termination</h2>
-
 <h3>18.1 Termination by You</h3>
 <p>You may stop using the Service and delete your account at any time through the Service settings.</p>
-
 <h3>18.2 Termination by AfterCall</h3>
 <p>We may suspend or terminate your access to the Service at any time, for any reason, with or without notice, including for violations of these Terms.</p>
-
 <h3>18.3 Effect of Termination</h3>
 <p>Upon termination:</p>
 <ul>
@@ -468,20 +385,14 @@
 <li>We may delete your User Content and account information, subject to our data retention policies</li>
 <li>Sections of these Terms that by their nature should survive termination will survive (including ownership provisions, warranty disclaimers, indemnification, and limitations of liability)</li>
 </ul>
-
 <h2>19. Dispute Resolution</h2>
-
 <h3>19.1 Informal Resolution</h3>
 <p>Before filing any formal claim, you agree to attempt to resolve any dispute by contacting us at jordan@aftercallapp.com and describing the issue. We will attempt to resolve the dispute informally within thirty (30) days.</p>
-
 <h3>19.2 Binding Arbitration</h3>
 <p class="bold-notice">Please read this section carefully — it affects your legal rights.</p>
-
 <p>Any dispute, claim, or controversy arising out of or relating to these Terms or the Service that cannot be resolved informally shall be settled by binding arbitration administered by the American Arbitration Association under its Consumer Arbitration Rules. The arbitration shall be conducted in San Francisco County, California, or another mutually agreed location, in English.</p>
-
 <h3>19.3 Class Action Waiver</h3>
 <p class="bold-notice">YOU AND AFTERCALL AGREE THAT EACH MAY BRING CLAIMS AGAINST THE OTHER ONLY IN YOUR OR ITS INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING.</p>
-
 <h3>19.4 Exceptions</h3>
 <p>The arbitration agreement does not apply to:</p>
 <ul>
@@ -489,51 +400,34 @@
 <li>Small claims court actions (if eligible)</li>
 <li>Intellectual property disputes</li>
 </ul>
-
 <h3>19.5 Opt-Out</h3>
 <p>You may opt out of the arbitration agreement by sending written notice to jordan@aftercallapp.com within thirty (30) days of first accepting these Terms. The notice must include your name, account email, and a clear statement that you wish to opt out of arbitration.</p>
-
 <h2>20. Governing Law</h2>
-
 <p>These Terms are governed by the laws of the State of California, without regard to its conflict of laws principles. Any legal action not subject to arbitration shall be brought exclusively in the state or federal courts located in San Francisco County, California.</p>
-
 <h2>21. General Provisions</h2>
-
 <h3>21.1 Entire Agreement</h3>
 <p>These Terms, together with the Privacy Policy, constitute the entire agreement between you and AfterCall regarding the Service and supersede all prior agreements.</p>
-
 <h3>21.2 Severability</h3>
 <p>If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.</p>
-
 <h3>21.3 No Waiver</h3>
 <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights.</p>
-
 <h3>21.4 Assignment</h3>
 <p>You may not assign or transfer these Terms without our prior written consent. We may assign these Terms without restriction.</p>
-
 <h3>21.5 Force Majeure</h3>
 <p>We will not be liable for any failure to perform our obligations under these Terms due to circumstances beyond our reasonable control, including natural disasters, war, terrorism, riots, pandemics, government actions, or infrastructure failures.</p>
-
 <h3>21.6 Notices</h3>
-<p>Notices to you may be provided through the Service, by email to your registered email address, or by posting on our website. Notices to AfterCall should be sent to jordan@aftercallapp.com or to AfterCall LLC at California.</p>
-
+<p>Notices to you may be provided through the Service, by email to your registered email address, or by posting on our website. Notices to AfterCall should be sent to jordan@aftercallapp.com or to AfterCall LLC at California, United States.</p>
 <h3>21.7 Headings</h3>
 <p>Section headings in these Terms are for convenience only and have no legal effect.</p>
-
 <h2>22. Contact Information</h2>
-
 <p>If you have any questions about these Terms, please contact us:</p>
-
 <p class="bold-notice">AfterCall LLC</p>
 <p>Email: jordan@aftercallapp.com</p>
 <p>Website: aftercallapp.com</p>
-
 <hr>
-
 <p class="bold-notice">By using AfterCall, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
-
 <hr>
-  </div>
+    </div>
 </div>
 
 <footer>
@@ -547,7 +441,7 @@
     <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
     <a href="mailto:jordan@aftercallapp.com">Contact</a>
   </p>
-  <p style="margin-top:12px;">© Apri AfterCall LLC. All rights reserved.</p>
+  <p style="margin-top:12px;">© 2026 AfterCall LLC. All rights reserved.</p>
 </footer>
 
 </body>
