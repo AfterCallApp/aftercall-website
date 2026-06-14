@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AfterCall — Your calls, captured.</title>
-  <meta name="description" content="AfterCall is the app built for EMS providers to log every call, track clinical skills, protect mental wellness, and connect with your crew. Now available on the App Store." />
+  <meta name="description" content="AfterCall is the app built for EMS providers to log every call by hand, voice, or CAD paste, track clinical skills, protect mental wellness, and connect with your crew. Now on the App Store and Google Play." />
   <meta property="og:title" content="AfterCall — Your calls, captured." />
-  <meta property="og:description" content="The app built for EMS providers. Log calls, track skills, protect your wellness. Now on iOS." />
+  <meta property="og:description" content="The app built for EMS providers. Log calls, track skills, protect your wellness. Now on iOS and Android." />
   <meta property="og:url" content="https://aftercallapp.com" />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
@@ -142,6 +142,15 @@
       background: #f5f5f7;
       box-shadow: 0 22px 52px rgba(0,0,0,0.28);
     }
+    /* Google Play glyph — mirrors the Apple glyph for a consistent store button */
+    .app-store-btn .play-glyph {
+      width: 32px; height: 32px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 2;
+    }
+    .app-store-btn .play-glyph svg { width: 100%; height: 100%; fill: #ffffff; }
+    .app-store-btn.lg .play-glyph { width: 40px; height: 40px; }
+    .app-store-btn.on-blue .play-glyph svg { fill: #0a0a0a; }
 
     /* "Live" eyebrow — green pulsing dot for post-launch state */
     .hero-eyebrow.is-live {
@@ -993,7 +1002,7 @@
       <li><a href="#pricing">Pricing</a></li>
     </ul>
 
-    <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="btn">Download</a>
+    <a href="#download" class="btn">Download</a>
   </div>
 </nav>
 
@@ -1012,11 +1021,11 @@
       <img src="images/logo-transparent.png" class="hero-logo" alt="AfterCall" />
       <div class="hero-eyebrow is-live">
         <span class="eyebrow-dot"></span>
-        Now live on the App Store
+        Now on the App Store &amp; Google Play
       </div>
       <h1>Your calls,<br><em>captured.</em></h1>
       <p class="hero-sub">
-        AfterCall is the app built for EMS providers. Log every call, track your clinical skills, protect your mental health, and connect with your crew. Built by EMS providers, for EMS providers.
+        AfterCall is the app built for EMS providers. Log every call — by hand, by voice, or straight from your CAD dispatch — track your clinical skills, protect your mental health, and connect with your crew. Built by EMS providers, for EMS providers.
       </p>
       <div class="download-cta-row">
         <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn lg" aria-label="Download AfterCall on the App Store">
@@ -1028,9 +1037,18 @@
             <span class="ast-big">App Store</span>
           </span>
         </a>
+        <a href="https://play.google.com/store/apps/details?id=com.aftercallapp.android&amp;pcampaignid=web_share" target="_blank" rel="noopener" class="app-store-btn lg" aria-label="Get AfterCall on Google Play">
+          <span class="play-glyph" aria-hidden="true">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l220.7-221.3 60.1 60.1L104.6 499z"/></svg>
+          </span>
+          <span class="ast">
+            <span class="ast-small">GET IT ON</span>
+            <span class="ast-big">Google Play</span>
+          </span>
+        </a>
         <a href="#features" class="secondary-link">See what's inside <span class="arrow">→</span></a>
       </div>
-      <p class="hero-trust">Free to download · iOS 16+ · Pro with 7-day free trial</p>
+      <p class="hero-trust">Free to download · iOS &amp; Android · Pro with 7-day free trial</p>
     </div>
 
     <div class="phone-wrap">
@@ -1052,7 +1070,7 @@
 ══════════════════════════════════════════ -->
 <div class="trust-bar">
   <div class="container">
-    <p>Built for <span>EMTs, Paramedics & EMS Providers</span> &nbsp;·&nbsp; <span>Live now</span> &nbsp;·&nbsp; Available on <span>iOS</span></p>
+    <p>Built for <span>EMTs, Paramedics & EMS Providers</span> &nbsp;·&nbsp; <span>Live now</span> &nbsp;·&nbsp; Available on <span>iOS & Android</span></p>
   </div>
 </div>
 
@@ -1132,7 +1150,7 @@
             <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
           </div>
           <h3>Log Every Call</h3>
-          <p>An 8-step guided entry captures chief complaint, acuity, vitals, interventions, GCS, and outcome — built into a structured, clinical narrative.</p>
+          <p>An 8-step guided entry captures chief complaint, acuity, vitals, interventions, GCS, and outcome. Type it, speak it, or paste your CAD dispatch — AfterCall builds it into a structured, clinical narrative.</p>
           <div class="feature-mini" aria-hidden="true">
             <div class="mini-label">Today's calls by acuity <span style="color:var(--text-light); font-weight:700;">12 total</span></div>
             <div class="acuity-stack" role="img" aria-label="Acuity breakdown: 5 Minor, 4 Moderate, 2 Serious, 1 Critical">
@@ -1150,7 +1168,8 @@
           </div>
           <div class="feature-tags">
             <span class="tag">8-Step Call Flow</span>
-            <span class="tag">Call Logging</span>
+            <span class="tag">Voice Logging</span>
+            <span class="tag">CAD Dispatch Paste</span>
             <span class="tag">PDF Export</span>
           </div>
         </div>
@@ -1451,10 +1470,13 @@
       <div class="ai-text">
         <p class="section-label">✦ AfterCall AI</p>
         <h2>The narrative writes itself. Because you already logged the call.</h2>
-        <p>Fill in the 8-step call flow — patient, vitals, acuity, interventions, GCS, outcome. <span class="ai-purple">AfterCall AI</span> turns it into a <strong>tight, clinically accurate</strong> narrative in seconds. No filler. No template copy-paste.</p>
-        <p>The same <span class="ai-purple">AfterCall AI</span> powers your end-of-shift debrief, reading across your calls and journal to surface <strong>feedback that actually means something.</strong></p>
+        <p>Fill in the 8-step call flow — patient, vitals, acuity, interventions, GCS, outcome. Or just <strong>speak the call</strong> or <strong>paste your CAD dispatch</strong> and let it fill the fields. <span class="ai-purple">AfterCall AI</span> turns it into a <strong>tight, clinically accurate</strong> narrative in seconds. No filler. No template copy-paste.</p>
+        <p>The same <span class="ai-purple">AfterCall AI</span> powers your end-of-shift debrief and a private chat that reads across your calls and journal to surface <strong>feedback that actually means something.</strong></p>
         <div style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px;">
           <span class="ai-purple-pill">✦ Call Narrative</span>
+          <span class="ai-purple-pill">✦ Voice Logging</span>
+          <span class="ai-purple-pill">✦ CAD Paste</span>
+          <span class="ai-purple-pill">✦ AI Chat</span>
           <span class="ai-purple-pill">✦ Shift Debrief</span>
           <span class="ai-purple-pill">✦ Wellness Insights</span>
         </div>
@@ -1748,14 +1770,15 @@
           <li><span class="check">✓</span> Call logging (unlimited)</li>
           <li><span class="check">✓</span> Basic shift summary</li>
           <li><span class="check">✓</span> Journal &amp; wellness check-ins</li>
-          <li><span class="check">✓</span> Community feed &amp; peer support</li>
+          <li><span class="check">✓</span> Community, peer support &amp; messaging</li>
+          <li><span class="check">✓</span> Share de-identified calls to your crew</li>
           <li><span class="check">✓</span> 30-day call history heatmap</li>
-          <li class="locked"><span class="check">✕</span> Call narrative generation</li>
-          <li class="locked"><span class="check">✕</span> Smart shift debrief &amp; insights</li>
+          <li class="locked"><span class="check">✕</span> AfterCall AI &amp; call narratives</li>
+          <li class="locked"><span class="check">✕</span> Voice &amp; CAD dispatch logging</li>
           <li class="locked"><span class="check">✕</span> PDF export</li>
           <li class="locked"><span class="check">✕</span> 12-month call history</li>
         </ul>
-        <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="btn btn-full" style="background:var(--bg-alt); color:var(--text-dark); border:2px solid var(--border);">Download Free</a>
+        <a href="#download" class="btn btn-full" style="background:var(--bg-alt); color:var(--text-dark); border:2px solid var(--border);">Download Free</a>
       </div>
 
       <div class="pricing-card pro">
@@ -1767,19 +1790,22 @@
         <p class="pricing-desc">The full AfterCall experience. AI that actually understands EMS: clinically specific, never generic.</p>
         <ul class="pricing-features">
           <li><span class="check">✓</span> Everything in Free</li>
+          <li><span class="check">✓</span> AfterCall AI — chat, insights &amp; analysis</li>
+          <li><span class="check">✓</span> Voice call logging <span class="check" style="font-weight:600; color:var(--text-light);">(beta)</span></li>
+          <li><span class="check">✓</span> CAD dispatch paste &amp; auto-fill</li>
           <li><span class="check">✓</span> Call narrative generation</li>
           <li><span class="check">✓</span> Guided shift debrief &amp; summary</li>
-          <li><span class="check">✓</span> Personalized wellness insights</li>
-          <li><span class="check">✓</span> Guided reflection expansion</li>
-          <li><span class="check">✓</span> PDF call report export</li>
-          <li><span class="check">✓</span> Full 12-month call history &amp; analytics</li>
-          <li><span class="check">✓</span> AfterCall AI wellness chat</li>
-          <li><span class="check">✓</span> Trending EMS article deep dives</li>
+          <li><span class="check">✓</span> AI journal &amp; wellness insights</li>
+          <li><span class="check">✓</span> Guided reflections tailored to your calls</li>
+          <li><span class="check">✓</span> Advanced analytics — heatmaps &amp; trends</li>
+          <li><span class="check">✓</span> Full 12-month call history</li>
+          <li><span class="check">✓</span> Trending in EMS deep dives</li>
+          <li><span class="check">✓</span> PDF call &amp; shift export</li>
+          <li><span class="check">✓</span> Skill momentum tracking</li>
           <li><span class="check">✓</span> Full dark mode</li>
-          <li><span class="check">✓</span> Advanced skill momentum tracking</li>
           <li><span class="check">✓</span> Priority support &amp; early feature access</li>
         </ul>
-        <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="btn btn-full" id="pro-cta">Start Free Trial</a>
+        <a href="#download" class="btn btn-full" id="pro-cta">Start Free Trial</a>
       </div>
 
     </div>
@@ -1791,10 +1817,10 @@
      CTA
 ══════════════════════════════════════════ -->
 <section class="cta-section" id="download">
-  <h2>It's here.<br>AfterCall is on the App Store.</h2>
+  <h2>It's here.<br>AfterCall is on iOS &amp; Android.</h2>
   <p>Built by EMS, for EMS. Free to download. Pro is one tap away.</p>
 
-  <div style="display:flex; justify-content:center; margin: 8px auto 18px;">
+  <div style="display:flex; justify-content:center; align-items:center; gap:16px; flex-wrap:wrap; margin: 8px auto 18px;">
     <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn lg on-blue" aria-label="Download AfterCall on the App Store">
       <span class="apple-glyph" aria-hidden="true">
         <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
@@ -1804,8 +1830,17 @@
         <span class="ast-big">App Store</span>
       </span>
     </a>
+    <a href="https://play.google.com/store/apps/details?id=com.aftercallapp.android&amp;pcampaignid=web_share" target="_blank" rel="noopener" class="app-store-btn lg on-blue" aria-label="Get AfterCall on Google Play">
+      <span class="play-glyph" aria-hidden="true">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l220.7-221.3 60.1 60.1L104.6 499z"/></svg>
+      </span>
+      <span class="ast">
+        <span class="ast-small">GET IT ON</span>
+        <span class="ast-big">Google Play</span>
+      </span>
+    </a>
   </div>
-  <p class="cta-note">iOS 16+ · Free tier, no card required · Pro with 7-day free trial</p>
+  <p class="cta-note">iOS &amp; Android · Free tier, no card required · Pro with 7-day free trial</p>
 </section>
 
 
