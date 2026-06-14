@@ -127,7 +127,7 @@
       55% { left: -75%; }
       100% { left: 175%; }
     }
-    .app-store-btn.lg { padding: 20px 36px 20px 30px; border-radius: 20px; }
+    .app-store-btn.lg { padding: 20px 36px 20px 30px; border-radius: 20px; min-width: 280px; box-sizing: border-box; }
     .app-store-btn.lg .apple-glyph { width: 40px; height: 40px; }
     .app-store-btn.lg .ast-small { font-size: 13px; }
     .app-store-btn.lg .ast-big { font-size: 27px; }
@@ -148,7 +148,8 @@
       display: flex; align-items: center; justify-content: center;
       position: relative; z-index: 2;
     }
-    .app-store-btn .play-glyph svg { width: 100%; height: 100%; fill: #ffffff; }
+    /* Square Play triangle scaled to ~85% so its optical mass matches the taller, narrower Apple mark */
+    .app-store-btn .play-glyph svg { width: 85%; height: 85%; fill: #ffffff; }
     .app-store-btn.lg .play-glyph { width: 40px; height: 40px; }
     .app-store-btn.on-blue .play-glyph svg { fill: #0a0a0a; }
 
@@ -943,7 +944,7 @@
       .darkmode-phones { justify-content: center; }
       .feature-card-wide { grid-template-columns: 1fr; }
       .feature-card-wide .feature-phone-wrap { display: none; }
-      .app-store-btn.lg { padding: 18px 28px 18px 24px; }
+      .app-store-btn.lg { padding: 18px 28px 18px 24px; min-width: 240px; }
       .app-store-btn.lg .ast-big { font-size: 22px; }
       .compare-wrap { overflow: visible; border-radius: 16px; }
       .compare-table { min-width: 0; width: 100%; }
