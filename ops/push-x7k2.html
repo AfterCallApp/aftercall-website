@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>AfterCall — Push Console</title>
+<style>
+  :root { --blue:#3379CF; --blue-dark:#1F5FA3; --ink:#111827; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:600px; margin:0 auto; padding:28px 18px 64px; }
+  .card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:22px; }
+  h1 { font-size:20px; margin:0 0 2px; }
+  .sub { color:var(--muted); font-size:13px; margin:0 0 20px; }
+  label { display:block; font-size:13px; font-weight:600; margin:16px 0 6px; }
+  input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--border);
+    border-radius:9px; font-size:15px; font-family:inherit; background:#fff; }
+  textarea { resize:vertical; min-height:70px; }
+  .row { display:flex; gap:10px; }
+  .row > * { flex:1; }
+  .count { font-size:12px; color:var(--muted); text-align:right; margin-top:4px; }
+  .btns { display:flex; gap:10px; margin-top:22px; }
+  button { flex:1; padding:12px; border:0; border-radius:10px; font-size:15px; font-weight:700;
+    cursor:pointer; }
+  .secondary { background:#EEF2F7; color:var(--blue-dark); }
+  .primary { background:var(--blue); color:#fff; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .out { margin-top:18px; padding:12px 14px; border-radius:10px; font-size:14px; display:none; }
+  .ok { background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0; }
+  .err { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
+  .hint { font-size:12px; color:var(--muted); margin-top:4px; }
+  .hidden { display:none; }
+  .preview { border-left:3px solid var(--blue); background:#F8FAFC; padding:10px 12px; border-radius:8px;
+    margin-top:12px; font-size:14px; }
+  .preview b { display:block; }
+</style></head>
+<body><div class="wrap"><div class="card">
+  <h1>AfterCall Push Console</h1>
+  <p class="sub">Send to individuals, a group, or everyone. Always preview the audience first.</p>
+
+  <label>Admin password</label>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••"/>
+
+  <label>Audience</label>
+  <select id="segment">
+    <option value="all">Everyone with the app</option>
+    <option value="free">Free users only</option>
+    <option value="pro">Pro users only</option>
+    <option value="profession">By profession</option>
+    <option value="community">By community</option>
+    <option value="inactive">Inactive (no calls in N days)</option>
+    <option value="users">Specific user IDs</option>
+  </select>
+
+  <div id="p_profession" class="hidden">
+    <label>Profession</label>
+    <input id="profession" placeholder="e.g. EMT, Paramedic, Firefighter"/>
+  </div>
+  <div id="p_community" class="hidden">
+    <label>Community ID (uuid)</label>
+    <input id="community_id" placeholder="00000000-0000-0000-0000-000000000000"/>
+  </div>
+  <div id="p_inactive" class="hidden">
+    <label>Days of inactivity</label>
+    <input id="days" type="number" value="7" min="1"/>
+  </div>
+  <div id="p_users" class="hidden">
+    <label>User IDs</label>
+    <textarea id="user_ids" placeholder="One uuid per line (or comma-separated)"></textarea>
+  </div>
+
+  <label>Title <span class="hint">(≤ 30 chars works best)</span></label>
+  <input id="title" maxlength="80"/>
+  <div class="count"><span id="tcount">0</span>/30</div>
+
+  <label>Body <span class="hint">(≤ 90 chars works best)</span></label>
+  <textarea id="body" maxlength="240"></textarea>
+  <div class="count"><span id="bcount">0</span>/90</div>
+
+  <label>Deep link on tap</label>
+  <select id="deeplink">
+    <option value="home">Home (default)</option>
+    <option value="paywall">Paywall (upgrade)</option>
+  </select>
+
+  <label>When</label>
+  <div class="row">
+    <select id="when">
+      <option value="now">Send now</option>
+      <option value="later">Schedule for…</option>
+    </select>
+    <input id="schedule_at" type="datetime-local" class="hidden"/>
+  </div>
+
+  <div class="preview hidden" id="preview"></div>
+
+  <div class="btns">
+    <button class="secondary" id="previewBtn">Preview audience</button>
+    <button class="primary" id="sendBtn">Send</button>
+  </div>
+
+  <div class="out" id="out"></div>
+</div></div>
+
+<script>
+  // The HTML lives on aftercallapp.com (a host that serves real text/html);
+  // it talks to the password-gated Supabase Edge Function for all actions.
+  const API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/admin-push-console';
+  const $ = (id) => document.getElementById(id);
+  const segParams = { profession:'p_profession', community:'p_community', inactive:'p_inactive', users:'p_users' };
+  function syncSegment() {
+    const s = $('segment').value;
+    Object.values(segParams).forEach((id) => $(id).classList.add('hidden'));
+    if (segParams[s]) $(segParams[s]).classList.remove('hidden');
+  }
+  function syncWhen() {
+    $('schedule_at').classList.toggle('hidden', $('when').value !== 'later');
+    $('sendBtn').textContent = $('when').value === 'later' ? 'Schedule' : 'Send';
+  }
+  $('segment').addEventListener('change', syncSegment);
+  $('when').addEventListener('change', syncWhen);
+  $('title').addEventListener('input', () => $('tcount').textContent = $('title').value.length);
+  $('body').addEventListener('input', () => $('bcount').textContent = $('body').value.length);
+  syncSegment(); syncWhen();
+
+  function buildParams() {
+    const s = $('segment').value;
+    if (s === 'profession') return { profession: $('profession').value.trim() };
+    if (s === 'community') return { community_id: $('community_id').value.trim() };
+    if (s === 'inactive') return { days: Number($('days').value) || 7 };
+    if (s === 'users') {
+      const ids = $('user_ids').value.split(/[\s,]+/).map((x) => x.trim()).filter(Boolean);
+      return { user_ids: ids };
+    }
+    return {};
+  }
+  function show(el, cls, msg) { el.className = 'out ' + cls; el.textContent = msg; el.style.display = 'block'; }
+
+  async function call(action) {
+    const out = $('out'); out.style.display = 'none';
+    const payload = {
+      action,
+      password: $('pw').value,
+      segment: $('segment').value,
+      params: buildParams(),
+      title: $('title').value,
+      body: $('body').value,
+      deeplink: $('deeplink').value,
+      schedule_at: $('when').value === 'later' ? $('schedule_at').value : null,
+    };
+    try {
+      const res = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (!res.ok) return show(out, 'err', data.error || 'Request failed');
+      if (action === 'count') {
+        $('preview').classList.remove('hidden');
+        $('preview').innerHTML = '<b>' + data.count + ' recipient' + (data.count===1?'':'s') + '</b> will receive this (only users with push enabled).';
+        out.style.display = 'none';
+        return;
+      }
+      if (data.scheduled_for) return show(out, 'ok', 'Scheduled for ' + data.scheduled_for + '.');
+      show(out, 'ok', 'Sent to ' + (data.sent ?? 0) + ' recipient' + ((data.sent===1)?'':'s') + '.');
+    } catch (e) { show(out, 'err', String(e)); }
+  }
+  $('previewBtn').addEventListener('click', () => call('count'));
+  $('sendBtn').addEventListener('click', () => {
+    const verb = $('when').value === 'later' ? 'schedule' : 'send';
+    if (confirm('Really ' + verb + ' this push?')) call($('when').value === 'later' ? 'schedule' : 'send');
+  });
+</script>
+</body></html>
