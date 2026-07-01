@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>AfterCall — Analytics</title>
+<style>
+  :root { --blue:#3379CF; --blue-dark:#1F5FA3; --ink:#111827; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:28px 18px 64px; }
+  .card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; }
+  h1 { font-size:20px; margin:0 0 2px; }
+  h2 { font-size:15px; margin:0 0 14px; color:var(--blue-dark); }
+  .sub { color:var(--muted); font-size:13px; margin:0 0 20px; }
+  label { display:block; font-size:13px; font-weight:600; margin:14px 0 6px; }
+  input, select { width:100%; padding:10px 12px; border:1px solid var(--border);
+    border-radius:9px; font-size:15px; font-family:inherit; background:#fff; }
+  .row { display:flex; gap:10px; }
+  .row > * { flex:1; }
+  button { width:100%; margin-top:18px; padding:12px; border:0; border-radius:10px; font-size:15px;
+    font-weight:700; cursor:pointer; background:var(--blue); color:#fff; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .out { margin-top:16px; padding:12px 14px; border-radius:10px; font-size:14px; display:none; }
+  .err { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
+  .warn { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+  .stats { display:flex; gap:12px; flex-wrap:wrap; }
+  .stat { flex:1; min-width:150px; background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .stat .n { font-size:26px; font-weight:800; color:var(--ink); }
+  .stat .l { font-size:12px; color:var(--muted); margin-top:2px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--border); }
+  th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .bar { height:8px; border-radius:5px; background:var(--blue); }
+  .barwrap { background:#EEF2F7; border-radius:5px; }
+  .muted { color:var(--muted); }
+  .hidden { display:none; }
+  .daybars { display:flex; align-items:flex-end; gap:3px; height:120px; }
+  .daybar { flex:1; background:var(--blue); border-radius:3px 3px 0 0; min-height:2px; }
+  .daylabels { display:flex; gap:3px; margin-top:6px; }
+  .daylabel { flex:1; font-size:9px; color:var(--muted); text-align:center; overflow:hidden; white-space:nowrap; }
+</style></head>
+<body><div class="wrap">
+
+  <div class="card">
+    <h1>AfterCall Analytics</h1>
+    <p class="sub">Passive product usage — which screens people use and for how long. Aggregates only; no journal or call content is ever stored or shown.</p>
+    <div class="row">
+      <div style="flex:2">
+        <label>Admin password</label>
+        <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••"/>
+      </div>
+      <div style="flex:1">
+        <label>Window</label>
+        <select id="days">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="365">Last year</option>
+        </select>
+      </div>
+    </div>
+    <button id="load">Load analytics</button>
+    <div id="err" class="out err"></div>
+    <div id="capwarn" class="out warn"></div>
+  </div>
+
+  <div id="results" class="hidden">
+    <div class="card">
+      <h2>Overview</h2>
+      <div class="stats">
+        <div class="stat"><div class="n" id="s_users">–</div><div class="l">Active users</div></div>
+        <div class="stat"><div class="n" id="s_views">–</div><div class="l">Screen views</div></div>
+        <div class="stat"><div class="n" id="s_events">–</div><div class="l">Total events</div></div>
+      </div>
+      <p class="muted" id="genat" style="font-size:12px;margin-top:14px"></p>
+    </div>
+
+    <div class="card">
+      <h2>Activity by day</h2>
+      <div class="daybars" id="daybars"></div>
+      <div class="daylabels" id="daylabels"></div>
+    </div>
+
+    <div class="card">
+      <h2>Screens — usage &amp; dwell time</h2>
+      <table>
+        <thead><tr>
+          <th>Screen</th>
+          <th class="num">Views</th>
+          <th class="num">Users</th>
+          <th class="num">Avg time</th>
+          <th style="width:22%">Share</th>
+        </tr></thead>
+        <tbody id="screens"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Events</h2>
+      <table>
+        <thead><tr><th>Event</th><th class="num">Count</th></tr></thead>
+        <tbody id="events"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<script>
+  // Same Supabase project / functions host as the push console.
+  const API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/admin-analytics';
+
+  const $ = (id) => document.getElementById(id);
+  const fmtInt = (n) => (n ?? 0).toLocaleString();
+
+  function fmtDuration(ms) {
+    if (!ms || ms < 0) return '—';
+    const s = Math.round(ms / 1000);
+    if (s < 60) return s + 's';
+    const m = Math.floor(s / 60), r = s % 60;
+    return m + 'm ' + (r < 10 ? '0' : '') + r + 's';
+  }
+
+  function showErr(msg) {
+    const el = $('err'); el.textContent = msg; el.style.display = 'block';
+  }
+
+  function render(d) {
+    $('results').classList.remove('hidden');
+    $('s_users').textContent = fmtInt(d.totals.activeUsers);
+    $('s_views').textContent = fmtInt(d.totals.screenViews);
+    $('s_events').textContent = fmtInt(d.totals.events);
+    $('genat').textContent =
+      'Window: last ' + d.range.sinceDays + ' days · generated ' + new Date(d.generatedAt).toLocaleString();
+
+    if (d.capped) {
+      const c = $('capwarn');
+      c.textContent = 'Note: result set hit the row cap — figures reflect the most recent events only. Narrow the window for exact totals.';
+      c.style.display = 'block';
+    } else {
+      $('capwarn').style.display = 'none';
+    }
+
+    // Daily bars
+    const daily = d.daily || [];
+    const maxDay = Math.max(1, ...daily.map((x) => x.events));
+    $('daybars').innerHTML = daily
+      .map((x) => '<div class="daybar" style="height:' + Math.round((x.events / maxDay) * 100) + '%" title="' +
+        x.day + ': ' + x.events + ' events, ' + x.users + ' users"></div>')
+      .join('') || '<span class="muted">No activity in this window.</span>';
+    $('daylabels').innerHTML = daily
+      .map((x, i) => '<div class="daylabel">' + (daily.length <= 31 || i % 7 === 0 ? x.day.slice(5) : '') + '</div>')
+      .join('');
+
+    // Screens table
+    const screens = d.screens || [];
+    const maxViews = Math.max(1, ...screens.map((s) => s.views));
+    $('screens').innerHTML = screens
+      .map((s) =>
+        '<tr><td>' + escapeHtml(s.screen) + '</td>' +
+        '<td class="num">' + fmtInt(s.views) + '</td>' +
+        '<td class="num">' + fmtInt(s.users) + '</td>' +
+        '<td class="num">' + fmtDuration(s.avgDwellMs) + '</td>' +
+        '<td><div class="barwrap"><div class="bar" style="width:' + Math.round((s.views / maxViews) * 100) + '%"></div></div></td>' +
+        '</tr>')
+      .join('') || '<tr><td colspan="5" class="muted">No screen views yet.</td></tr>';
+
+    // Events table
+    $('events').innerHTML = (d.events || [])
+      .map((e) => '<tr><td>' + escapeHtml(e.name) + '</td><td class="num">' + fmtInt(e.count) + '</td></tr>')
+      .join('') || '<tr><td colspan="2" class="muted">No events yet.</td></tr>';
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  async function load() {
+    $('err').style.display = 'none';
+    const password = $('pw').value.trim();
+    const sinceDays = Number($('days').value);
+    if (!password) { showErr('Enter the admin password.'); return; }
+    const btn = $('load'); btn.disabled = true; btn.textContent = 'Loading…';
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, sinceDays }),
+      });
+      const data = await res.json();
+      if (!res.ok) { showErr(data.error || ('Request failed (' + res.status + ')')); return; }
+      render(data);
+    } catch (e) {
+      showErr('Network error: ' + (e && e.message ? e.message : e));
+    } finally {
+      btn.disabled = false; btn.textContent = 'Load analytics';
+    }
+  }
+
+  $('load').addEventListener('click', load);
+  $('pw').addEventListener('keydown', (e) => { if (e.key === 'Enter') load(); });
+</script>
+</body></html>
