@@ -357,6 +357,45 @@
       color: var(--blue-dark); background: var(--blue-light);
       padding: 4px 10px; border-radius: 100px; letter-spacing: 0.1px;
     }
+    /* ─── WHAT'S NEW (release highlight) ─── */
+    .whatsnew {
+      background: linear-gradient(135deg, #eef4fd 0%, #dbeafe 100%);
+      border: 1px solid var(--blue-mid);
+      border-radius: 22px;
+      padding: 32px 34px;
+      margin-bottom: 44px;
+      display: flex; flex-direction: column; gap: 15px;
+    }
+    .whatsnew-pill {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--blue); color: white;
+      font-size: 11px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 12px; border-radius: 100px;
+    }
+    .whatsnew-pill::before {
+      content: ""; width: 7px; height: 7px;
+      border-radius: 50%; background: white;
+    }
+    .whatsnew h3 {
+      font-size: 27px; font-weight: 900; letter-spacing: -0.5px;
+      color: var(--text-dark); margin: 0;
+    }
+    .whatsnew h3 span { color: var(--blue-dark); }
+    .whatsnew p {
+      font-size: 16px; color: var(--text-mid); line-height: 1.6;
+      max-width: 620px; margin: 0;
+    }
+    .whatsnew-chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin: 4px 0 0; padding: 0; list-style: none;
+    }
+    .whatsnew-chips .tag { background: white; }
+    @media (max-width: 640px) {
+      .whatsnew { padding: 26px 22px; }
+      .whatsnew h3 { font-size: 22px; }
+    }
     /* Fixed-height phone zone so all cards show identical phone sizes */
     .feature-phone-wrap {
       height: 340px; padding: 0 28px 24px;
@@ -1141,6 +1180,19 @@
     <p class="section-label">What AfterCall does</p>
     <h2>Six features.<br>One app. Built for EMS.</h2>
     <p class="section-sub">From the moment you clear a call to the end of a career — AfterCall covers every part of the job that matters.</p>
+
+    <!-- What's new — release highlight (v1.2) -->
+    <div class="whatsnew" role="region" aria-label="What's new in AfterCall 1.2">
+      <span class="whatsnew-pill">New in 1.2</span>
+      <h3>Meet your <span>Wellness Score</span></h3>
+      <p>Your call load and check-ins, combined into one score that catches buildup before burnout — so a heavy stretch shows up here before it catches you off guard.</p>
+      <ul class="whatsnew-chips" aria-label="Also new in this release">
+        <li class="tag">10 languages</li>
+        <li class="tag">Home-screen widgets &amp; Live Activity</li>
+        <li class="tag">Voice input everywhere</li>
+        <li class="tag">Post-shift check-ins</li>
+      </ul>
+    </div>
 
     <div class="features-grid">
 
