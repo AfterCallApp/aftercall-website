@@ -85,15 +85,16 @@
 
 <div class="banner">
   <h1>Privacy Policy</h1>
-  <p class="meta">Effective Date: <span>May 27, 2026</span> &nbsp;·&nbsp; Last Updated: <span>May 27, 2026</span></p>
+  <p class="meta">Effective Date: <span>May 27, 2026</span> &nbsp;·&nbsp; Last Updated: <span>July 15, 2026</span></p>
 </div>
 
 <div class="content-wrap">
   <div class="prose">
 <h1>AfterCall Privacy Policy</h1>
 <p><strong>Effective Date:</strong> May 27, 2026</p>
-<p><strong>Last Updated:</strong> May 27, 2026</p>
+<p><strong>Last Updated:</strong> July 15, 2026</p>
 <p><strong>What changed in this version (1.1.1):</strong> Added disclosures for voice transcription (on-device only — your audio never leaves your device), the new voice call logging telemetry table (counts only — no transcript content stored), persisted reactions on shared calls and communities, and the post-author Reactions detail screen. Also clarified that an optional profile photo is among the account information you may provide (Section 1.1). See Sections 1.4 and 4.1 for the new sections.</p>
+<p><strong>Clarifying updates (July 15, 2026):</strong> Added disclosure of optional product-analytics collection — on by default, and you can turn it off anytime in Profile → Privacy &amp; Legal — which records account-linked usage events only and never the content of your journals, calls, messages, or any PHI (Sections 1.2 and 7.3). Also clarified that your wellness score is computed on your device and is informational only, that reminder notifications and home-screen widget / Live Activity data stay on your device (Section 1.4), and that some AI insights are generated from de-identified aggregate statistics (Section 3).</p>
 <p>AfterCall LLC ("AfterCall," "we," "us," or "our") respects your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use the AfterCall mobile application and related services (the "Service").</p>
 <h2>1. Information We Collect</h2>
 <h3>1.1 Information You Provide</h3>
@@ -110,7 +111,7 @@
 <h3>1.2 Automatically Collected Information</h3>
 <ul>
 <li><strong>Device Information:</strong> Device type, operating system, app version, unique device identifiers</li>
-<li><strong>Usage Data:</strong> Features used, time spent, interaction patterns</li>
+<li><strong>Usage Data (Product Analytics):</strong> Passive product-analytics events — screen views, time spent on screens, and coarse feature events (for example, that a call or journal entry was saved) — linked to your account identifier and sent to our backend (Supabase) in batches, to help us understand how the app is used and improve it. <strong>We never include the content of your journals, call logs, or messages, or any PHI, in analytics — only that an action occurred.</strong> Product analytics are on by default; you can turn them off at any time in Profile → Privacy &amp; Legal (see Section 7.3).</li>
 <li><strong>Log Data:</strong> IP address, access times, error logs</li>
 <li><strong>Voice Feature Telemetry:</strong> For voice call logging, lightweight counts only — whether you completed the flow, how many fields the parser missed, the duration of your review session, the length of the (already-scrubbed) transcript in characters, and the number of PHI redactions applied. <strong>No transcript content is recorded.</strong></li>
 </ul>
@@ -122,6 +123,9 @@
 <ul>
 <li><strong>Voice audio:</strong> When you use any voice feature, your raw audio is transcribed to text by your device's built-in speech recognizer (Apple's SFSpeechRecognizer on iOS) with the on-device-only flag enabled. <strong>AfterCall does not record, upload, store, or transmit your raw voice audio at any point.</strong> If your device cannot perform on-device recognition, the recognition request fails rather than falling back to a network service.</li>
 <li><strong>CAD paste text (raw):</strong> Pasted CAD dispatch text is held in app memory only while the parser runs; we never persist or transmit the raw text. The scrubbed (PHI-redacted) version is the only thing sent to the AI parser, and only the parsed structured fields are saved.</li>
+<li><strong>Wellness score:</strong> Your wellness score is calculated entirely on your device from your own check-in history and call metadata. The score is provided for informational purposes only, is not medical advice, and is not itself sent to or stored by AfterCall.</li>
+<li><strong>Reminder notifications:</strong> Shift reminders, post-shift check-ins, and daily wellness-score reminders are scheduled locally on your device. Scheduling them does not send any additional information to AfterCall.</li>
+<li><strong>Home-screen widgets and Live Activity:</strong> Home-screen widgets and the on-shift Live Activity display your own app data on your device's home or lock screen through a private on-device app group container. This data stays on your device and is not additionally collected or shared.</li>
 </ul>
 <h2>2. How We Use Information</h2>
 <p>We use your information to:</p>
