@@ -71,7 +71,7 @@
       <h2>Overview</h2>
       <div class="stats">
         <div class="stat"><div class="n" id="s_users">–</div><div class="l">Active users</div></div>
-        <div class="stat"><div class="n" id="s_views">–</div><div class="l">Screen views</div></div>
+        <div class="stat"><div class="n" id="s_views">–</div><div class="l">Screen visits</div></div>
         <div class="stat"><div class="n" id="s_events">–</div><div class="l">Total events</div></div>
       </div>
       <p class="muted" id="genat" style="font-size:12px;margin-top:14px"></p>
@@ -85,13 +85,15 @@
 
     <div class="card">
       <h2>Screens — usage &amp; dwell time</h2>
+      <p class="muted" style="font-size:12px;margin:-8px 0 12px">Aggregated per day on-device (visits + dwell), ranked by total time.</p>
       <table>
         <thead><tr>
           <th>Screen</th>
-          <th class="num">Views</th>
+          <th class="num">Visits</th>
           <th class="num">Users</th>
           <th class="num">Avg time</th>
-          <th style="width:22%">Share</th>
+          <th class="num">Total time</th>
+          <th style="width:22%">Share of time</th>
         </tr></thead>
         <tbody id="screens"></tbody>
       </table>
@@ -153,18 +155,19 @@
       .map((x, i) => '<div class="daylabel">' + (daily.length <= 31 || i % 7 === 0 ? x.day.slice(5) : '') + '</div>')
       .join('');
 
-    // Screens table
+    // Screens table — ranked by total dwell time (attention), share bar too.
     const screens = d.screens || [];
-    const maxViews = Math.max(1, ...screens.map((s) => s.views));
+    const maxDwell = Math.max(1, ...screens.map((s) => s.totalDwellMs || 0));
     $('screens').innerHTML = screens
       .map((s) =>
         '<tr><td>' + escapeHtml(s.screen) + '</td>' +
         '<td class="num">' + fmtInt(s.views) + '</td>' +
         '<td class="num">' + fmtInt(s.users) + '</td>' +
         '<td class="num">' + fmtDuration(s.avgDwellMs) + '</td>' +
-        '<td><div class="barwrap"><div class="bar" style="width:' + Math.round((s.views / maxViews) * 100) + '%"></div></div></td>' +
+        '<td class="num">' + fmtDuration(s.totalDwellMs) + '</td>' +
+        '<td><div class="barwrap"><div class="bar" style="width:' + Math.round(((s.totalDwellMs || 0) / maxDwell) * 100) + '%"></div></div></td>' +
         '</tr>')
-      .join('') || '<tr><td colspan="5" class="muted">No screen views yet.</td></tr>';
+      .join('') || '<tr><td colspan="6" class="muted">No screen activity yet.</td></tr>';
 
     // Events table
     $('events').innerHTML = (d.events || [])
