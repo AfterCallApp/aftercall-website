@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>AfterCall — Ambassador Ops</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png?v=2" />
+  <style>
+    :root {
+      --blue:#3379CF; --blue-dark:#1F5FA3;
+      --ink:#111827; --muted:#6B7280;
+      --border:#E5E7EB; --bg:#F9FAFB;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+    .wrap { max-width:1100px; margin:0 auto; padding:28px 18px 64px; }
+    h1 { font-size:22px; font-weight:800; margin-bottom:4px; }
+    .sub { color:var(--muted); font-size:13px; margin-bottom:22px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; }
+    .card h2 { font-size:15px; font-weight:800; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.6px; color:var(--muted); }
+    label { display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:5px; }
+    input[type=password], input[type=text] { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:14px; font-family:inherit; }
+    .row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; }
+    .row > div { flex:1; min-width:180px; }
+    button { background:var(--blue); color:#fff; border:none; border-radius:10px; padding:11px 20px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; }
+    button:hover { background:var(--blue-dark); }
+    button:disabled { opacity:.6; cursor:default; }
+    button.small { padding:6px 12px; font-size:12px; border-radius:8px; }
+    button.ghost { background:#fff; color:var(--blue-dark); border:1px solid var(--border); }
+    button.ghost:hover { background:#F3F7FC; }
+    button.danger { background:#DC2626; }
+    button.danger:hover { background:#B91C1C; }
+    .err { display:none; background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; border-radius:10px; padding:11px 14px; font-size:13px; font-weight:600; margin-top:12px; }
+    .ok { display:none; background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0; border-radius:10px; padding:11px 14px; font-size:13px; font-weight:600; margin-top:12px; }
+    .warn { display:none; background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; border-radius:10px; padding:11px 14px; font-size:13px; font-weight:600; margin-top:12px; }
+    .hidden { display:none; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; }
+    .stat { background:#F8FAFC; border:1px solid var(--border); border-radius:12px; padding:14px; }
+    .stat .n { font-size:24px; font-weight:800; color:var(--blue-dark); }
+    .stat .l { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-top:2px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); padding:8px 10px; border-bottom:2px solid var(--border); white-space:nowrap; }
+    td { padding:9px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+    td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+    .code { font-weight:800; color:var(--blue-dark); letter-spacing:0.5px; }
+    .pill { display:inline-block; padding:2px 9px; border-radius:100px; font-size:11px; font-weight:700; }
+    .pill.active, .pill.approved { background:#ECFDF5; color:#065F46; }
+    .pill.paused, .pill.waitlisted, .pill.reviewing { background:#FFFBEB; color:#92400E; }
+    .pill.terminated, .pill.rejected { background:#FEF2F2; color:#991B1B; }
+    .pill.new { background:#EEF4FD; color:#1F5FA3; }
+    .tablewrap { overflow-x:auto; }
+    .appdetail { background:#F8FAFC; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#374151; line-height:1.7; white-space:pre-wrap; }
+    .muted { color:var(--muted); }
+    .actions { display:flex; gap:6px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Ambassador Ops</h1>
+    <div class="sub">Signups, conversions, payouts, and application review. Private — do not share this URL.</div>
+
+    <div class="card">
+      <div class="row">
+        <div style="flex:2;">
+          <label for="pw">Admin password</label>
+          <input type="password" id="pw" autocomplete="current-password" />
+        </div>
+        <div style="flex:0;"><button id="loadBtn">Load</button></div>
+      </div>
+      <div class="err" id="err"></div>
+      <div class="ok" id="okmsg"></div>
+      <div class="warn" id="warn"></div>
+    </div>
+
+    <div id="results" class="hidden">
+
+      <div class="card">
+        <h2>Overview</h2>
+        <div class="stats" id="stats"></div>
+      </div>
+
+      <div class="card">
+        <h2>Applications <span id="appCounts" style="text-transform:none;letter-spacing:0;font-weight:600;"></span></h2>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Received</th><th>Name</th><th>Contact</th><th>Role</th><th class="num">Reach</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="appRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="card">
+        <h2>Ambassadors</h2>
+        <div class="tablewrap"><table>
+          <thead><tr>
+            <th>Code</th><th>Name</th><th>Tier</th><th class="num">Comm %</th><th>Status</th>
+            <th class="num">Signups</th><th class="num">Trials</th><th class="num">Conversions</th>
+            <th class="num">Annual</th><th class="num">Monthly</th>
+            <th>Milestone</th><th class="num">Owed</th><th class="num">Paid</th><th>Last payout</th><th></th>
+          </tr></thead>
+          <tbody id="ambRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="card">
+        <h2>Pending payouts (&ge; $25 threshold)</h2>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Code</th><th>Name</th><th>Method</th><th>Handle</th><th class="num">Conversions</th><th class="num">Owed</th></tr></thead>
+          <tbody id="pendingRows"></tbody>
+        </table></div>
+      </div>
+
+      <div class="card">
+        <h2>Payout history</h2>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Paid at</th><th>Code</th><th>Period</th><th class="num">Attributions</th><th class="num">Total</th><th>Reference</th></tr></thead>
+          <tbody id="payoutRows"></tbody>
+        </table></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    var API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/admin-ambassadors';
+    var $ = function (id) { return document.getElementById(id); };
+    var applications = [];
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+    function fmtInt(n) { return Number(n || 0).toLocaleString(); }
+    function fmtUsd(n) { return '$' + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function fmtDate(s) { return s ? new Date(s).toLocaleDateString() : '—'; }
+    function show(id, msg) { var el = $(id); el.textContent = msg; el.style.display = 'block'; }
+    function hideMsgs() { ['err','okmsg','warn'].forEach(function (id) { $(id).style.display = 'none'; }); }
+
+    function post(body) {
+      body.password = $('pw').value.trim();
+      return fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).then(function (res) {
+        return res.json().then(function (data) {
+          if (!res.ok) throw new Error(data.error || ('Request failed (' + res.status + ')'));
+          return data;
+        });
+      });
+    }
+
+    function load() {
+      hideMsgs();
+      if (!$('pw').value.trim()) { show('err', 'Enter the admin password.'); return; }
+      var btn = $('loadBtn');
+      btn.disabled = true; btn.textContent = 'Loading…';
+      Promise.all([ post({ action: 'overview' }), post({ action: 'applications' }) ])
+        .then(function (results) {
+          render(results[0], results[1].applications || []);
+          $('results').classList.remove('hidden');
+          if (results[0].capped) show('warn', 'Row cap hit — totals may undercount. Time to paginate.');
+        })
+        .catch(function (e) { show('err', e.message); })
+        .finally(function () { btn.disabled = false; btn.textContent = 'Load'; });
+    }
+
+    function render(d, apps) {
+      applications = apps;
+      var t = d.totals || {};
+      $('stats').innerHTML = [
+        { n: fmtInt(t.activeAmbassadors), l: 'Active ambassadors' },
+        { n: fmtInt(t.signups), l: 'Code signups' },
+        { n: fmtInt(t.trials), l: 'Trials started' },
+        { n: fmtInt(t.conversions), l: 'Pro conversions' },
+        { n: fmtUsd(t.owedEligible), l: 'Owed (eligible)' },
+        { n: fmtUsd(t.paidTotal), l: 'Paid to date' }
+      ].map(function (s) { return '<div class="stat"><div class="n">' + s.n + '</div><div class="l">' + s.l + '</div></div>'; }).join('');
+
+      var counts = d.applicationCounts || {};
+      $('appCounts').textContent = ' — ' + Object.keys(counts).map(function (k) { return counts[k] + ' ' + k; }).join(', ');
+
+      $('appRows').innerHTML = apps.length ? apps.map(function (a, i) {
+        var socials = [];
+        if (a.instagram_handle) socials.push('IG ' + a.instagram_handle + (a.instagram_followers ? ' (' + fmtInt(a.instagram_followers) + ')' : ''));
+        if (a.tiktok_handle) socials.push('TikTok ' + a.tiktok_handle + (a.tiktok_followers ? ' (' + fmtInt(a.tiktok_followers) + ')' : ''));
+        if (a.youtube_handle) socials.push('YT ' + a.youtube_handle + (a.youtube_followers ? ' (' + fmtInt(a.youtube_followers) + ')' : ''));
+        if (a.x_handle) socials.push('X ' + a.x_handle + (a.x_followers ? ' (' + fmtInt(a.x_followers) + ')' : ''));
+        if (a.facebook_handle) socials.push('FB ' + a.facebook_handle);
+        if (a.linkedin_handle) socials.push('LI ' + a.linkedin_handle);
+        if (a.other_channels) socials.push('Other: ' + a.other_channels);
+        var detail = [
+          socials.join('  ·  '),
+          a.content_focus ? 'Content: ' + a.content_focus : '',
+          a.why_partner ? 'Why: ' + a.why_partner : '',
+          a.heard_about ? 'Heard via: ' + a.heard_about : '',
+          a.preferred_code ? 'Wants code: ' + a.preferred_code : '',
+          a.payout_method ? 'Payout: ' + a.payout_method + ' (' + (a.payout_handle || 'no handle') + ')' : '',
+          a.review_notes ? 'Notes: ' + a.review_notes : '',
+          a.ambassador_code ? 'Issued code: ' + a.ambassador_code : ''
+        ].filter(Boolean).join('\n');
+        var pending = a.status === 'new' || a.status === 'reviewing' || a.status === 'waitlisted';
+        var actions = pending
+          ? '<div class="actions">' +
+            '<button class="small" onclick="approveApp(' + i + ')">Approve</button>' +
+            '<button class="small ghost" onclick="decideApp(' + i + ', \'waitlisted\')">Waitlist</button>' +
+            '<button class="small danger" onclick="decideApp(' + i + ', \'rejected\')">Reject</button>' +
+            '</div>'
+          : (a.ambassador_code ? '<span class="code">' + esc(a.ambassador_code) + '</span>' : '');
+        return '<tr>' +
+          '<td>' + fmtDate(a.created_at) + '</td>' +
+          '<td><strong>' + esc(a.full_name) + '</strong><br/><span class="muted">' + esc(a.location || '') + '</span></td>' +
+          '<td>' + esc(a.email) + (a.phone ? '<br/><span class="muted">' + esc(a.phone) + '</span>' : '') + '</td>' +
+          '<td>' + esc(a.profession) + (a.years_experience != null ? '<br/><span class="muted">' + a.years_experience + ' yrs</span>' : '') + '</td>' +
+          '<td class="num">' + fmtInt(a.total_reach) + '</td>' +
+          '<td><span class="pill ' + esc(a.status) + '">' + esc(a.status) + '</span></td>' +
+          '<td>' + actions + '</td>' +
+        '</tr>' +
+        '<tr><td colspan="7"><div class="appdetail">' + esc(detail) + '</div></td></tr>';
+      }).join('') : '<tr><td colspan="7" class="muted">No applications yet.</td></tr>';
+
+      $('ambRows').innerHTML = (d.ambassadors || []).length ? d.ambassadors.map(function (a) {
+        var ms = a.milestone || {};
+        var msLabel = esc(ms.reached) + (ms.nextAt ? '<br/><span class="muted">' + fmtInt(a.signups) + ' / ' + fmtInt(ms.nextAt) + ' to ' + esc(ms.next) + '</span>' : '');
+        var payBtn = Number(a.owedEligible) > 0
+          ? '<button class="small" onclick="markPaid(\'' + esc(a.code) + '\', ' + Number(a.owedEligible) + ')">Mark paid</button>'
+          : '';
+        return '<tr>' +
+          '<td class="code">' + esc(a.code) + '</td>' +
+          '<td>' + esc(a.display_name) + '<br/><span class="muted">' + esc(a.contact_email) + '</span></td>' +
+          '<td>' + esc(a.tier) + '</td>' +
+          '<td class="num">' + Number(a.commission_pct) + '%</td>' +
+          '<td><span class="pill ' + esc(a.status) + '">' + esc(a.status) + '</span></td>' +
+          '<td class="num">' + fmtInt(a.signups) + '</td>' +
+          '<td class="num">' + fmtInt(a.trials) + '</td>' +
+          '<td class="num">' + fmtInt(a.conversions) + '</td>' +
+          '<td class="num">' + fmtInt(a.conversionsAnnual) + '</td>' +
+          '<td class="num">' + fmtInt(a.conversionsMonthly) + '</td>' +
+          '<td>' + msLabel + '</td>' +
+          '<td class="num">' + fmtUsd(a.owedEligible) + '</td>' +
+          '<td class="num">' + fmtUsd(a.paidTotal) + '</td>' +
+          '<td>' + fmtDate(a.lastPayoutAt) + '</td>' +
+          '<td>' + payBtn + '</td>' +
+        '</tr>';
+      }).join('') : '<tr><td colspan="15" class="muted">No ambassadors yet. Approve an application above to create the first one.</td></tr>';
+
+      $('pendingRows').innerHTML = (d.pendingPayouts || []).length ? d.pendingPayouts.map(function (p) {
+        return '<tr>' +
+          '<td class="code">' + esc(p.code) + '</td>' +
+          '<td>' + esc(p.display_name) + '</td>' +
+          '<td>' + esc(p.payout_method) + '</td>' +
+          '<td>' + esc(p.payout_handle) + '</td>' +
+          '<td class="num">' + fmtInt(p.conversion_count) + '</td>' +
+          '<td class="num"><strong>' + fmtUsd(p.total_owed_usd) + '</strong></td>' +
+        '</tr>';
+      }).join('') : '<tr><td colspan="6" class="muted">Nobody over the $25 threshold right now.</td></tr>';
+
+      $('payoutRows').innerHTML = (d.payouts || []).length ? d.payouts.map(function (p) {
+        return '<tr>' +
+          '<td>' + fmtDate(p.paid_at) + '</td>' +
+          '<td class="code">' + esc(p.ambassador_code) + '</td>' +
+          '<td>' + esc(p.period_start) + ' → ' + esc(p.period_end) + '</td>' +
+          '<td class="num">' + fmtInt(p.attribution_count) + '</td>' +
+          '<td class="num">' + fmtUsd(p.total_owed_usd) + '</td>' +
+          '<td>' + esc(p.payment_reference || '—') + '</td>' +
+        '</tr>';
+      }).join('') : '<tr><td colspan="6" class="muted">No payouts recorded yet.</td></tr>';
+    }
+
+    window.approveApp = function (i) {
+      var a = applications[i];
+      if (!a) return;
+      var code = prompt('Ambassador code to issue (4–20 letters/numbers):', a.preferred_code || '');
+      if (!code) return;
+      code = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (!/^[A-Z0-9]{4,20}$/.test(code)) { alert('Invalid code format.'); return; }
+      var pct = prompt('Commission % of net revenue (e.g. 20 ≈ $8.40 per annual conversion, 24 ≈ $10):', '20');
+      if (pct == null) return;
+      var tier = prompt('Tier (micro / mid / mega):', 'micro');
+      if (tier == null) return;
+      if (!confirm('Approve ' + a.full_name + ' with code ' + code + ' at ' + pct + '% (' + tier + ')?\nThis creates the ambassador and emails them their code.')) return;
+      hideMsgs();
+      post({ action: 'decide', id: a.id, decision: 'approved', code: code, commissionPct: Number(pct), tier: tier.trim().toLowerCase() })
+        .then(function (r) { show('okmsg', 'Approved. Code ' + r.code + (r.emailSent ? ' — email sent.' : ' — EMAIL FAILED, follow up manually.')); load(); })
+        .catch(function (e) { show('err', e.message); });
+    };
+
+    window.decideApp = function (i, decision) {
+      var a = applications[i];
+      if (!a) return;
+      var notes = prompt('Notes (optional):', '');
+      if (notes == null) return;
+      if (!confirm(decision.charAt(0).toUpperCase() + decision.slice(1) + ' application from ' + a.full_name + '?')) return;
+      hideMsgs();
+      post({ action: 'decide', id: a.id, decision: decision, notes: notes })
+        .then(function () { show('okmsg', 'Application ' + decision + '.'); load(); })
+        .catch(function (e) { show('err', e.message); });
+    };
+
+    window.markPaid = function (code, amount) {
+      var ref = prompt('Record payout of ' + fmtUsd(amount) + ' to ' + code + '.\nPayment reference (Venmo/PayPal txn id or note):', '');
+      if (ref == null) return;
+      if (!confirm('Confirm: mark all eligible conversions for ' + code + ' as PAID (' + fmtUsd(amount) + ')?')) return;
+      hideMsgs();
+      post({ action: 'mark_paid', code: code, paymentReference: ref })
+        .then(function (r) { show('okmsg', 'Recorded ' + fmtUsd(r.total) + ' payout to ' + code + ' (' + r.count + ' conversions).'); load(); })
+        .catch(function (e) { show('err', e.message); });
+    };
+
+    $('loadBtn').addEventListener('click', load);
+    $('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
+  </script>
+</body>
+</html>
