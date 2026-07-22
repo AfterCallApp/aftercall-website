@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AfterCall Profile</title>
+  <meta name="description" content="An AfterCall profile — the app built for EMS providers to log every call, track skills, and protect their wellness." />
+  <meta property="og:title" content="AfterCall Profile" />
+  <meta property="og:description" content="See this EMS provider's AfterCall profile. Your calls, captured." />
+  <meta property="og:type" content="profile" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue:       #3379CF;
+      --blue-dark:  #1F5FA3;
+      --blue-light: #eef4fd;
+      --blue-mid:   #b8d4f0;
+      --text-dark:  #0f1923;
+      --text-mid:   #374151;
+      --text-light: #6b7280;
+      --bg:         #ffffff;
+      --bg-alt:     #f7f9fc;
+      --border:     #e2e8f0;
+      --radius:     16px;
+    }
+
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-dark);
+      background: var(--bg-alt);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── HEADER ─── */
+    header.site {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    .logo img { width: 30px; height: 30px; }
+    .logo span { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
+
+    /* ─── MAIN ─── */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 28px 18px 48px;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 6px 28px rgba(15, 25, 35, 0.06);
+      overflow: hidden;
+    }
+
+    /* Banner + avatar */
+    .banner {
+      height: 96px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+    }
+    .avatar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: -52px;
+    }
+    .avatar {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      border: 4px solid var(--bg);
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      font-weight: 800;
+      object-fit: cover;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(15, 25, 35, 0.12);
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .body { padding: 14px 26px 28px; text-align: center; }
+    .display-name {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 8px;
+    }
+    .username { color: var(--text-light); font-size: 15px; font-weight: 500; margin-top: 3px; }
+
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 999px;
+    }
+    .chip.muted { background: var(--bg-alt); color: var(--text-mid); }
+
+    .meta { margin-top: 16px; color: var(--text-light); font-size: 13.5px; font-weight: 500; }
+
+    .section-label {
+      margin-top: 24px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+    .communities { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
+    .community-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 999px;
+    }
+    .community-chip .emoji { font-size: 15px; line-height: 1; }
+
+    /* ─── CTA ─── */
+    .cta {
+      margin-top: 28px;
+      padding: 24px 22px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+      border-radius: 18px;
+      text-align: center;
+    }
+    .cta-title { color: #fff; font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
+    .cta-sub { color: rgba(255,255,255,0.85); font-size: 13.5px; font-weight: 500; margin-top: 5px; }
+    .store-row {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    /* App Store / Google Play buttons — mirror index.html conventions */
+    .app-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #0a0a0a;
+      color: #fff;
+      text-decoration: none;
+      padding: 11px 20px 11px 16px;
+      border-radius: 13px;
+      width: 100%;
+      max-width: 240px;
+      box-sizing: border-box;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .app-store-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .app-store-btn .glyph { width: 26px; height: 26px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .app-store-btn .glyph svg { width: 100%; height: 100%; fill: #fff; }
+    .app-store-btn .play-glyph svg { width: 85%; height: 85%; }
+    .app-store-btn .ast { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+    .ast-small { font-size: 11px; opacity: 0.85; }
+    .ast-big { font-size: 18px; font-weight: 700; }
+
+    .open-app {
+      display: inline-block;
+      margin-top: 16px;
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.45);
+      padding-bottom: 1px;
+    }
+    .open-app:hover { border-color: #fff; }
+
+    /* ─── STATE: loading skeleton ─── */
+    .skel { background: linear-gradient(90deg, #eef2f7 25%, #e2e8f0 37%, #eef2f7 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; border-radius: 8px; }
+    @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+    .skel-avatar { width: 104px; height: 104px; border-radius: 50%; border: 4px solid var(--bg); margin: -52px auto 0; }
+    .skel-line { height: 15px; margin: 12px auto 0; }
+
+    /* ─── STATE: message (not found / error) ─── */
+    .state-msg { text-align: center; padding: 44px 30px 40px; }
+    .state-emoji { font-size: 44px; }
+    .state-title { font-size: 20px; font-weight: 800; margin-top: 14px; letter-spacing: -0.02em; }
+    .state-text { color: var(--text-light); font-size: 14.5px; margin-top: 8px; line-height: 1.55; }
+    .state-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 26px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .state-btn:hover { background: var(--blue-dark); }
+    .state-btn.ghost { background: transparent; color: var(--blue); border: 1.5px solid var(--blue-mid); margin-left: 8px; }
+
+    /* ─── FOOTER ─── */
+    footer.site {
+      text-align: center;
+      padding: 22px 20px 30px;
+      color: var(--text-light);
+      font-size: 12.5px;
+    }
+    footer.site a { color: var(--text-mid); text-decoration: none; }
+    footer.site a:hover { color: var(--blue); }
+    .foot-links { margin-bottom: 8px; }
+    .foot-links a { margin: 0 9px; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <a href="/" class="logo" aria-label="AfterCall home">
+      <img src="/images/logo-transparent.png" alt="" />
+      <span>AfterCall</span>
+    </a>
+  </header>
+
+  <main>
+    <div class="card" id="card">
+      <!-- Loading skeleton (default) -->
+      <div id="state-loading">
+        <div class="banner"></div>
+        <div class="skel skel-avatar"></div>
+        <div class="body">
+          <div class="skel skel-line" style="width: 60%; height: 22px;"></div>
+          <div class="skel skel-line" style="width: 40%;"></div>
+          <div class="skel skel-line" style="width: 70%; height: 30px; margin-top: 20px; border-radius: 999px;"></div>
+        </div>
+      </div>
+
+      <!-- Profile (populated by JS) -->
+      <div id="state-profile" class="hidden">
+        <div class="banner"></div>
+        <div class="avatar-wrap">
+          <div class="avatar" id="avatar"></div>
+        </div>
+        <div class="body">
+          <div class="display-name" id="p-name"></div>
+          <div class="username" id="p-username"></div>
+
+          <div class="chips" id="p-chips"></div>
+          <div class="meta" id="p-meta"></div>
+
+          <div id="p-communities-wrap" class="hidden">
+            <div class="section-label">Communities</div>
+            <div class="communities" id="p-communities"></div>
+          </div>
+
+          <div class="cta">
+            <div class="cta-title">AfterCall — Your calls, captured.</div>
+            <div class="cta-sub">The app built for EMS providers. Log calls, track skills, protect your wellness.</div>
+            <div class="store-row">
+              <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn" aria-label="Download AfterCall on the App Store">
+                <span class="glyph" aria-hidden="true">
+                  <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+                </span>
+                <span class="ast"><span class="ast-small">Download on the</span><span class="ast-big">App Store</span></span>
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=com.aftercallapp.android&amp;pcampaignid=web_share" target="_blank" rel="noopener" class="app-store-btn" aria-label="Get AfterCall on Google Play">
+                <span class="glyph play-glyph" aria-hidden="true">
+                  <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l220.7-221.3 60.1 60.1L104.6 499z"/></svg>
+                </span>
+                <span class="ast"><span class="ast-small">GET IT ON</span><span class="ast-big">Google Play</span></span>
+              </a>
+            </div>
+            <a href="#" id="open-app" class="open-app">Open in the AfterCall app</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Not found -->
+      <div id="state-notfound" class="state-msg hidden">
+        <div class="state-emoji">🔍</div>
+        <div class="state-title">Profile not found</div>
+        <div class="state-text">This profile doesn't exist or isn't public.<br />Get AfterCall to create yours.</div>
+        <a href="/" class="state-btn">Get AfterCall</a>
+      </div>
+
+      <!-- Error -->
+      <div id="state-error" class="state-msg hidden">
+        <div class="state-emoji">📡</div>
+        <div class="state-title">Something went wrong</div>
+        <div class="state-text">We couldn't load this profile. Check your connection and try again.</div>
+        <button class="state-btn" id="retry-btn">Retry</button>
+        <a href="/" class="state-btn ghost">Go home</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site">
+    <div class="foot-links">
+      <a href="/">Home</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+    </div>
+    © 2026 AfterCall LLC · Your calls, captured.
+  </footer>
+
+  <script>
+    (function () {
+      // Deployed with verify_jwt=false, so NO apikey / Authorization header is
+      // needed. If that ever changes, the fetch below would need an anon key.
+      var FUNCTION_URL = 'https://scjjcyurnjlpmkayglfn.supabase.co/functions/v1/public-profile';
+
+      // Username from ?u= query param OR the path /u/<username>.
+      function getUsername() {
+        var qs = new URLSearchParams(window.location.search);
+        var u = qs.get('u');
+        if (u) return u.trim().replace(/^@/, '');
+        // Path form: /u/<username>  (also tolerate a trailing slash)
+        var parts = window.location.pathname.split('/').filter(Boolean);
+        var idx = parts.indexOf('u');
+        if (idx !== -1 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1]).trim().replace(/^@/, '');
+        return '';
+      }
+
+      var els = {
+        loading: document.getElementById('state-loading'),
+        profile: document.getElementById('state-profile'),
+        notfound: document.getElementById('state-notfound'),
+        error: document.getElementById('state-error')
+      };
+      function show(name) {
+        Object.keys(els).forEach(function (k) { els[k].classList.toggle('hidden', k !== name); });
+      }
+
+      function initials(name) {
+        var parts = String(name || '').trim().split(/\s+/).slice(0, 2);
+        var s = parts.map(function (p) { return p.charAt(0); }).join('');
+        return (s || '?').toUpperCase();
+      }
+
+      function formatMonth(ym) {
+        // ym is "YYYY-MM"
+        if (!ym || !/^\d{4}-\d{2}$/.test(ym)) return '';
+        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        var y = ym.slice(0, 4), m = parseInt(ym.slice(5, 7), 10);
+        if (m < 1 || m > 12) return '';
+        return months[m - 1] + ' ' + y;
+      }
+
+      function esc(s) {
+        var d = document.createElement('div');
+        d.textContent = String(s == null ? '' : s);
+        return d.innerHTML;
+      }
+
+      function render(p, username) {
+        // Avatar
+        var avatar = document.getElementById('avatar');
+        if (p.avatar_url) {
+          var img = document.createElement('img');
+          img.alt = '';
+          img.referrerPolicy = 'no-referrer';
+          img.onerror = function () { avatar.textContent = initials(p.display_name); };
+          img.src = p.avatar_url;
+          avatar.innerHTML = '';
+          avatar.appendChild(img);
+        } else {
+          avatar.textContent = initials(p.display_name);
+        }
+
+        document.getElementById('p-name').textContent = p.display_name || 'EMS Provider';
+        document.getElementById('p-username').textContent = '@' + (p.username || username);
+
+        // Chips: certification level + agency
+        var chips = document.getElementById('p-chips');
+        chips.innerHTML = '';
+        if (p.certification_level) {
+          var c = document.createElement('span');
+          c.className = 'chip';
+          c.textContent = p.certification_level;
+          chips.appendChild(c);
+        }
+        if (p.agency) {
+          var a = document.createElement('span');
+          a.className = 'chip muted';
+          a.textContent = p.agency;
+          chips.appendChild(a);
+        }
+
+        // Member since
+        var meta = document.getElementById('p-meta');
+        var since = formatMonth(p.member_since);
+        meta.textContent = since ? ('Member since ' + since) : '';
+
+        // Communities
+        var comms = Array.isArray(p.communities) ? p.communities : [];
+        if (comms.length) {
+          var wrap = document.getElementById('p-communities-wrap');
+          var list = document.getElementById('p-communities');
+          list.innerHTML = '';
+          comms.forEach(function (com) {
+            var chip = document.createElement('span');
+            chip.className = 'community-chip';
+            chip.innerHTML = '<span class="emoji">' + esc(com.emoji || '👥') + '</span>' + esc(com.name);
+            list.appendChild(chip);
+          });
+          wrap.classList.remove('hidden');
+        }
+
+        // Open in app deep link
+        document.getElementById('open-app').setAttribute('href', 'aftercall://profile/' + encodeURIComponent(p.username || username));
+
+        // Page title / OG
+        document.title = (p.display_name || '@' + (p.username || username)) + ' · AfterCall';
+
+        show('profile');
+      }
+
+      function load() {
+        var username = getUsername();
+        if (!username) { show('notfound'); return; }
+        show('loading');
+        fetch(FUNCTION_URL + '?username=' + encodeURIComponent(username), {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        })
+          .then(function (res) {
+            if (res.status === 404) { show('notfound'); return null; }
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            if (!data) return; // already handled (404)
+            if (data && data.ok && data.profile) { render(data.profile, username); }
+            else { show('notfound'); }
+          })
+          .catch(function () { show('error'); });
+      }
+
+      var retry = document.getElementById('retry-btn');
+      if (retry) retry.addEventListener('click', load);
+
+      load();
+    })();
+  </script>
+</body>
+</html>
