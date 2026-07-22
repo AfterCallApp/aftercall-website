@@ -1,0 +1,5 @@
+# Netlify redirect rules (aftercallapp.com)
+# Pretty public-profile URLs: /u/<username> is served by the SPA-style page
+# u/index.html, which reads the username from the path and fetches the
+# public-profile edge function. 200 = rewrite (URL stays /u/<username>).
+/u/*   /u/index.html   200
