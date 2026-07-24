@@ -40,12 +40,34 @@
   .daybar { flex:1; background:var(--blue); border-radius:3px 3px 0 0; min-height:2px; }
   .daylabels { display:flex; gap:3px; margin-top:6px; }
   .daylabel { flex:1; font-size:9px; color:var(--muted); text-align:center; overflow:hidden; white-space:nowrap; }
+  .note { font-size:12px; color:var(--muted); margin:-8px 0 12px; }
+  .tiny { font-size:11px; color:var(--muted); }
+  .scroll { overflow-x:auto; }
+  .scroll table { min-width:760px; }
+  .nowrap { white-space:nowrap; }
+  .chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+  .chip.pro { background:#EAF2FC; color:var(--blue-dark); border:1px solid #CFE0F5; }
+  .chip.free { background:#F3F4F6; color:var(--muted); border:1px solid var(--border); }
+  .chip.unk { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+  .split { display:flex; height:8px; border-radius:5px; overflow:hidden; background:#EEF2F7; }
+  .split .sp { height:100%; }
+  .split .sp.p { background:var(--blue); }
+  .split .sp.f { background:#9CB6D8; }
+  .split .sp.u { background:#E5E7EB; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:-6px 0 12px; }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; }
+  .gap td { background:#FEF2F2; color:#991B1B; }
+  .gap td:first-child { font-weight:600; }
+  .secerr { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA;
+    padding:9px 12px; border-radius:9px; font-size:13px; margin-bottom:12px; display:none; }
+  .secinfo { background:#F8FAFC; color:var(--muted); border:1px solid var(--border);
+    padding:9px 12px; border-radius:9px; font-size:13px; margin-bottom:12px; display:none; }
 </style></head>
 <body><div class="wrap">
 
   <div class="card">
     <h1>AfterCall Analytics</h1>
-    <p class="sub">Passive product usage — which screens people use and for how long. Aggregates only; no journal or call content is ever stored or shown.</p>
+    <p class="sub">Passive product usage — who's active, what they use, and what they never reach. Route names, event names and dwell time only; no journal or call content is ever stored or shown.</p>
     <div class="row">
       <div style="flex:2">
         <label>Admin password</label>
@@ -81,6 +103,97 @@
       <h2>Activity by day</h2>
       <div class="daybars" id="daybars"></div>
       <div class="daylabels" id="daylabels"></div>
+    </div>
+
+    <div class="card">
+      <h2>Who's using AfterCall</h2>
+      <p class="note">Most recently active first. Plan comes from the subscription record (server-side truth), falling back to what the app itself reported.</p>
+      <div class="secerr" id="users_err"></div>
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>User</th>
+            <th>Plan</th>
+            <th>Platform</th>
+            <th>Version</th>
+            <th>Lang</th>
+            <th>Last active</th>
+            <th class="num">Days</th>
+            <th>Top actions</th>
+            <th class="num">Minutes</th>
+          </tr></thead>
+          <tbody id="users"></tbody>
+        </table>
+      </div>
+      <p class="tiny" id="users_foot"></p>
+    </div>
+
+    <div class="card">
+      <h2>Pro vs Free — what each plan actually does</h2>
+      <p class="note">Each action split by the plan in effect when it fired.</p>
+      <div class="legend">
+        <span><i style="background:#3379CF"></i>Pro</span>
+        <span><i style="background:#9CB6D8"></i>Free</span>
+        <span><i style="background:#E5E7EB"></i>Plan unknown</span>
+      </div>
+      <div class="secerr" id="pvf_err"></div>
+      <table>
+        <thead><tr>
+          <th>Action</th>
+          <th class="num">Pro</th>
+          <th class="num">Free</th>
+          <th class="num">Pro users</th>
+          <th class="num">Free users</th>
+          <th style="width:24%">Split</th>
+        </tr></thead>
+        <tbody id="pvf"></tbody>
+      </table>
+      <p class="tiny" id="pvf_foot"></p>
+    </div>
+
+    <div class="card">
+      <h2>Widget &amp; notification adoption</h2>
+      <div class="secinfo" id="widgets_info"></div>
+      <div class="secerr" id="widgets_err"></div>
+      <p class="note" id="widgets_note"></p>
+      <table>
+        <thead><tr>
+          <th>Widget</th>
+          <th class="num">Users</th>
+          <th class="num">Share</th>
+          <th style="width:30%">Adoption</th>
+        </tr></thead>
+        <tbody id="widgets"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Adoption &amp; gaps</h2>
+      <p class="note">Share of active users who did each thing at least once, lowest first — these are the features people never reach. Rows flagged ⚠ are below 25% coverage.</p>
+      <div class="secerr" id="adopt_err"></div>
+      <table>
+        <thead><tr>
+          <th>Feature</th>
+          <th class="num">Users</th>
+          <th class="num">Reached</th>
+          <th class="num">Missing</th>
+          <th style="width:26%">Coverage</th>
+        </tr></thead>
+        <tbody id="adopt"></tbody>
+      </table>
+
+      <h2 style="margin:26px 0 10px">Least-reached screens</h2>
+      <p class="note">Screens ranked by how few distinct users opened them in this window.</p>
+      <table>
+        <thead><tr>
+          <th>Screen</th>
+          <th class="num">Users</th>
+          <th class="num">Reached</th>
+          <th class="num">Visits</th>
+          <th style="width:26%">Coverage</th>
+        </tr></thead>
+        <tbody id="adopt_screens"></tbody>
+      </table>
     </div>
 
     <div class="card">
@@ -173,6 +286,205 @@
     $('events').innerHTML = (d.events || [])
       .map((e) => '<tr><td>' + escapeHtml(e.name) + '</td><td class="num">' + fmtInt(e.count) + '</td></tr>')
       .join('') || '<tr><td colspan="2" class="muted">No events yet.</td></tr>';
+
+    // New sections — each isolated so a render hiccup in one can't blank the page.
+    [
+      ['users_err', renderUsers],
+      ['pvf_err', renderProVsFree],
+      ['widgets_err', renderWidgets],
+      ['adopt_err', renderAdoption],
+    ].forEach(([bannerId, fn]) => {
+      try { fn(d); } catch (e) { setBanner(bannerId, 'Render error: ' + (e && e.message ? e.message : e)); }
+    });
+  }
+
+  // Per-section error/info banners: one bad section must never blank the page.
+  function setBanner(id, msg) {
+    const el = $(id);
+    if (!el) return;
+    if (msg) { el.textContent = msg; el.style.display = 'block'; }
+    else { el.textContent = ''; el.style.display = 'none'; }
+  }
+
+  const pctStr = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + '%');
+
+  function planChip(isPro) {
+    if (isPro === true) return '<span class="chip pro">Pro</span>';
+    if (isPro === false) return '<span class="chip free">Free</span>';
+    return '<span class="chip unk">?</span>';
+  }
+
+  function userLabel(u) {
+    const name = u.username || u.displayName || u.email;
+    if (name) {
+      const sub = u.username && (u.displayName || u.email) ? (u.displayName || u.email) : '';
+      return '<div>' + escapeHtml(name) + '</div>' +
+        (sub ? '<div class="tiny">' + escapeHtml(sub) + '</div>' : '');
+    }
+    return '<span class="muted">' + escapeHtml(String(u.userId || '').slice(0, 8)) + '…</span>';
+  }
+
+  // ── Who's using AfterCall ──────────────────────────────────────────────────
+  function renderUsers(d) {
+    const sec = d.users;
+    if (!sec) {
+      setBanner('users_err', 'This section needs a newer admin-analytics deploy.');
+      $('users').innerHTML = '';
+      $('users_foot').textContent = '';
+      return;
+    }
+    const notes = [];
+    if (sec.error) notes.push(sec.error);
+    if (sec.identityError) notes.push('Names/emails unavailable: ' + sec.identityError);
+    if (sec.subscriptionError) notes.push('Subscription join unavailable (plan falls back to what the app reported): ' + sec.subscriptionError);
+    setBanner('users_err', notes.join(' · '));
+
+    const rows = sec.rows || [];
+    $('users').innerHTML = rows
+      .map((u) => {
+        const top = (u.topEvents || [])
+          .map((e) => escapeHtml(e.name) + ' ×' + fmtInt(e.count))
+          .join('<br/>');
+        return '<tr>' +
+          '<td>' + userLabel(u) + '</td>' +
+          '<td>' + planChip(u.isPro) + '</td>' +
+          '<td>' + escapeHtml(u.platform || '—') + '</td>' +
+          '<td class="nowrap">' + escapeHtml(u.appVersion || '—') + '</td>' +
+          '<td>' + escapeHtml(u.language || '—') + '</td>' +
+          '<td class="nowrap">' + escapeHtml(u.lastActive || '—') + '</td>' +
+          '<td class="num">' + fmtInt(u.activeDays) + '</td>' +
+          '<td class="tiny">' + (top || '<span class="muted">—</span>') + '</td>' +
+          '<td class="num">' + fmtInt(u.screenMinutes) + '</td>' +
+          '</tr>';
+      })
+      .join('') || '<tr><td colspan="9" class="muted">No active users in this window.</td></tr>';
+
+    $('users_foot').textContent = sec.truncated
+      ? 'Showing the ' + fmtInt(sec.limit) + ' most recently active of ' + fmtInt(sec.totalUsers) + ' users.'
+      : fmtInt(rows.length) + ' user' + (rows.length === 1 ? '' : 's') + ' in this window.';
+  }
+
+  // ── Pro vs Free ────────────────────────────────────────────────────────────
+  function renderProVsFree(d) {
+    const sec = d.proVsFree;
+    if (!sec) {
+      setBanner('pvf_err', 'This section needs a newer admin-analytics deploy.');
+      $('pvf').innerHTML = ''; $('pvf_foot').textContent = '';
+      return;
+    }
+    setBanner('pvf_err', sec.error || '');
+    const rows = (sec.rows || []).filter((r) => r.total > 0);
+    $('pvf').innerHTML = rows
+      .map((r) => {
+        const t = Math.max(1, r.total);
+        return '<tr>' +
+          '<td>' + escapeHtml(r.name) + '</td>' +
+          '<td class="num">' + fmtInt(r.proCount) + '</td>' +
+          '<td class="num">' + fmtInt(r.freeCount) + '</td>' +
+          '<td class="num">' + fmtInt(r.proUsers) + '</td>' +
+          '<td class="num">' + fmtInt(r.freeUsers) + '</td>' +
+          '<td><div class="split">' +
+            '<div class="sp p" style="width:' + ((r.proCount / t) * 100) + '%"></div>' +
+            '<div class="sp f" style="width:' + ((r.freeCount / t) * 100) + '%"></div>' +
+            '<div class="sp u" style="width:' + ((r.unknownCount / t) * 100) + '%"></div>' +
+          '</div></td>' +
+          '</tr>';
+      })
+      .join('') || '<tr><td colspan="6" class="muted">No feature actions recorded yet.</td></tr>';
+
+    const parts = [];
+    if (sec.proUsersInWindow != null) {
+      parts.push(fmtInt(sec.proUsersInWindow) + ' Pro · ' + fmtInt(sec.freeUsersInWindow) + ' Free · ' +
+        fmtInt(sec.unknownPlanUsers) + ' unknown plan');
+    }
+    if (sec.resolution) {
+      parts.push(fmtInt(sec.resolution.fromEventMetadata) + ' actions classified from the event itself, ' +
+        fmtInt(sec.resolution.fromSubscription) + ' from the subscription record');
+    }
+    $('pvf_foot').textContent = parts.join(' · ');
+  }
+
+  // ── Widgets + notifications ────────────────────────────────────────────────
+  function renderWidgets(d) {
+    const sec = d.widgets;
+    if (!sec) {
+      setBanner('widgets_err', 'This section needs a newer admin-analytics deploy.');
+      setBanner('widgets_info', '');
+      $('widgets').innerHTML = ''; $('widgets_note').textContent = '';
+      return;
+    }
+    setBanner('widgets_err', sec.error || '');
+
+    if (!sec.available) {
+      setBanner('widgets_info',
+        'No widget data yet — the app does not report installed widgets in this build. This fills in once the richer app_open metadata ships.');
+      $('widgets').innerHTML = '<tr><td colspan="4" class="muted">Waiting on client-side collection.</td></tr>';
+    } else {
+      setBanner('widgets_info', '');
+      const kinds = sec.kinds || [];
+      const maxPct = Math.max(1, ...kinds.map((k) => k.pct || 0));
+      $('widgets').innerHTML = kinds
+        .map((k) =>
+          '<tr><td>' + escapeHtml(k.kind) + '</td>' +
+          '<td class="num">' + fmtInt(k.users) + '</td>' +
+          '<td class="num">' + pctStr(k.pct) + '</td>' +
+          '<td><div class="barwrap"><div class="bar" style="width:' + Math.round(((k.pct || 0) / maxPct) * 100) + '%"></div></div></td>' +
+          '</tr>')
+        .join('') || '<tr><td colspan="4" class="muted">Nobody has a widget installed.</td></tr>';
+    }
+
+    const bits = [];
+    if (sec.available) {
+      bits.push(fmtInt(sec.reportingUsers) + ' of ' + fmtInt(sec.totalUsers) + ' active users report widget state · ' +
+        fmtInt(sec.noneUsers) + ' (' + pctStr(sec.nonePct) + ') have none installed');
+    }
+    const n = sec.notifications;
+    if (n && n.available) {
+      bits.push('Notifications enabled for ' + fmtInt(n.enabledUsers) + ' of ' + fmtInt(n.reportingUsers) +
+        ' reporting users (' + pctStr(n.pct) + ')');
+    } else if (n) {
+      bits.push('Notification opt-in not reported by this build yet.');
+    }
+    $('widgets_note').textContent = bits.join(' · ');
+  }
+
+  // ── Adoption & gaps ────────────────────────────────────────────────────────
+  function renderAdoption(d) {
+    const sec = d.adoption;
+    if (!sec) {
+      setBanner('adopt_err', 'This section needs a newer admin-analytics deploy.');
+      $('adopt').innerHTML = ''; $('adopt_screens').innerHTML = '';
+      return;
+    }
+    setBanner('adopt_err', sec.error || '');
+    const threshold = sec.lowCoverageThresholdPct != null ? sec.lowCoverageThresholdPct : 25;
+
+    $('adopt').innerHTML = (sec.features || [])
+      .map((f) => {
+        const low = (f.pct || 0) < threshold;
+        const label = escapeHtml(f.name) + (f.neverSeen ? ' <span class="tiny">(never fired)</span>' : '');
+        return '<tr' + (low ? ' class="gap"' : '') + '>' +
+          '<td>' + (low ? '⚠ ' : '') + label + '</td>' +
+          '<td class="num">' + fmtInt(f.users) + '</td>' +
+          '<td class="num">' + pctStr(f.pct) + '</td>' +
+          '<td class="num">' + fmtInt(f.missingUsers) + '</td>' +
+          '<td><div class="barwrap"><div class="bar" style="width:' + Math.min(100, f.pct || 0) + '%"></div></div></td>' +
+          '</tr>';
+      })
+      .join('') || '<tr><td colspan="5" class="muted">No feature events recorded yet.</td></tr>';
+
+    $('adopt_screens').innerHTML = (sec.neverVisitedScreens || [])
+      .map((s) => {
+        const low = (s.pct || 0) < threshold;
+        return '<tr' + (low ? ' class="gap"' : '') + '>' +
+          '<td>' + (low ? '⚠ ' : '') + escapeHtml(s.screen) + '</td>' +
+          '<td class="num">' + fmtInt(s.users) + '</td>' +
+          '<td class="num">' + pctStr(s.pct) + '</td>' +
+          '<td class="num">' + fmtInt(s.visits) + '</td>' +
+          '<td><div class="barwrap"><div class="bar" style="width:' + Math.min(100, s.pct || 0) + '%"></div></div></td>' +
+          '</tr>';
+      })
+      .join('') || '<tr><td colspan="5" class="muted">No screen activity yet.</td></tr>';
   }
 
   function escapeHtml(s) {
