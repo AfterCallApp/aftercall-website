@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AfterCall</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!--
+    GitHub Pages serves this file for any path that doesn't match a real file,
+    and it does so WITHOUT rewriting the URL — so client-side routing can read
+    location.pathname here.
+
+    This is what makes the shareable profile links work. The app shares
+    https://aftercallapp.com/u/<username>, but there is no `u/<username>` file
+    on disk, so Pages lands here. We bounce to /u/?u=<username>, which
+    u/index.html already understands (it reads ?u= first, then the path).
+
+    Note: the repo also contains a Netlify `_redirects` file expressing the same
+    rule as a rewrite. GitHub Pages ignores `_redirects` entirely — this file is
+    the mechanism that actually works on our host. Keep both in sync if the
+    hosting ever moves.
+  -->
+  <script>
+    (function () {
+      var parts = window.location.pathname.split('/').filter(Boolean);
+      // /u/<username> → the public profile page.
+      if (parts.length >= 2 && parts[0] === 'u') {
+        var username = parts[1].replace(/^@/, '');
+        if (/^[A-Za-z0-9._-]{1,40}$/.test(username)) {
+          window.location.replace('/u/?u=' + encodeURIComponent(username) + window.location.hash);
+          return;
+        }
+      }
+      // Anything else falls through to the static message below.
+      document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('card');
+        if (el) el.style.visibility = 'visible';
+      });
+    })();
+  </script>
+  <style>
+    :root {
+      --blue: #3379CF;
+      --blue-dark: #1F5FA3;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --bg: #f7f9fc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card {
+      /* Hidden until the router above decides this isn't a profile redirect,
+         so a redirecting visit never flashes "page not found". */
+      visibility: hidden;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 40px 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+    .logo { width: 64px; height: 64px; border-radius: 14px; margin-bottom: 18px; }
+    h1 { margin: 0 0 8px; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    p { margin: 0 0 22px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+    a.btn {
+      display: inline-block;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      transition: background 0.15s ease;
+    }
+    a.btn:hover { background: var(--blue-dark); }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <img class="logo" src="/images/logo-transparent.png" alt="AfterCall" />
+    <h1>We couldn't find that page</h1>
+    <p>The link may be out of date, or the page may have moved.</p>
+    <a class="btn" href="/">Go to AfterCall</a>
+  </div>
+</body>
+</html>
