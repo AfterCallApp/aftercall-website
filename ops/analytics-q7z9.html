@@ -481,20 +481,36 @@
       return;
     }
     setBanner('pvf_err', sec.error || '');
+
+    // A row in user_subscription_status is only ever written by the RevenueCat
+    // webhook, so a user with NO row has never had a subscription — they are
+    // Free, not "unknown". Older app builds don't tag events with the plan
+    // either, which is why almost every action landed in the unknown bucket and
+    // the Free column read as empty.
+    //
+    // This fold is only valid when the subscription lookup actually succeeded.
+    // If it errored we genuinely can't tell, so the unknown bucket stays
+    // separate rather than silently relabelling everyone as Free.
+    const subLookupOk = !(d.users && d.users.subscriptionError);
+    const freeCountOf = (r) => r.freeCount + (subLookupOk ? r.unknownCount : 0);
+    const freeUsersOf = (r) => r.freeUsers + (subLookupOk ? r.unknownUsers : 0);
+
     const rows = (sec.rows || []).filter((r) => r.total > 0);
     $('pvf').innerHTML = rows
       .map((r) => {
         const t = Math.max(1, r.total);
+        const freeC = freeCountOf(r);
         return '<tr>' +
           '<td>' + escapeHtml(r.name) + '</td>' +
           '<td class="num">' + fmtInt(r.proCount) + '</td>' +
-          '<td class="num">' + fmtInt(r.freeCount) + '</td>' +
+          '<td class="num">' + fmtInt(freeC) + '</td>' +
           '<td class="num">' + fmtInt(r.proUsers) + '</td>' +
-          '<td class="num">' + fmtInt(r.freeUsers) + '</td>' +
+          '<td class="num">' + fmtInt(freeUsersOf(r)) + '</td>' +
           '<td><div class="split">' +
             '<div class="sp p" style="width:' + ((r.proCount / t) * 100) + '%"></div>' +
-            '<div class="sp f" style="width:' + ((r.freeCount / t) * 100) + '%"></div>' +
-            '<div class="sp u" style="width:' + ((r.unknownCount / t) * 100) + '%"></div>' +
+            '<div class="sp f" style="width:' + ((freeC / t) * 100) + '%"></div>' +
+            (subLookupOk ? '' :
+              '<div class="sp u" style="width:' + ((r.unknownCount / t) * 100) + '%"></div>') +
           '</div></td>' +
           '</tr>';
       })
@@ -502,8 +518,14 @@
 
     const parts = [];
     if (sec.proUsersInWindow != null) {
-      parts.push(fmtInt(sec.proUsersInWindow) + ' Pro · ' + fmtInt(sec.freeUsersInWindow) + ' Free · ' +
-        fmtInt(sec.unknownPlanUsers) + ' unknown plan');
+      const freeUsers = sec.freeUsersInWindow + (subLookupOk ? sec.unknownPlanUsers : 0);
+      parts.push(fmtInt(sec.proUsersInWindow) + ' Pro · ' + fmtInt(freeUsers) + ' Free' +
+        (subLookupOk ? '' : ' · ' + fmtInt(sec.unknownPlanUsers) + ' unknown plan'));
+    }
+    if (subLookupOk) {
+      parts.push('Free = no subscription record (RevenueCat only writes one for a purchase or trial)');
+    } else {
+      parts.push('Subscription lookup failed, so plan could not be resolved for everyone — unknown shown separately');
     }
     if (sec.resolution) {
       parts.push(fmtInt(sec.resolution.fromEventMetadata) + ' actions classified from the event itself, ' +
