@@ -404,7 +404,12 @@
         document.getElementById('p-name').textContent = p.display_name || 'EMS Provider';
         document.getElementById('p-username').textContent = '@' + (p.username || username);
 
-        // Chips: certification level + agency
+        // Chips: certification level only.
+        // `agency` was deliberately removed from this card (and from the
+        // public-profile edge function) in 1.2.1 — this page is unauthenticated
+        // and keyed on a guessable username, and name + employer is what turns a
+        // profile card into a searchable record about a real person. Do not
+        // reintroduce an employer or location chip here.
         var chips = document.getElementById('p-chips');
         chips.innerHTML = '';
         if (p.certification_level) {
@@ -412,12 +417,6 @@
           c.className = 'chip';
           c.textContent = p.certification_level;
           chips.appendChild(c);
-        }
-        if (p.agency) {
-          var a = document.createElement('span');
-          a.className = 'chip muted';
-          a.textContent = p.agency;
-          chips.appendChild(a);
         }
 
         // Member since
