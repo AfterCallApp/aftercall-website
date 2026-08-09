@@ -85,21 +85,22 @@
 
 <div class="banner">
   <h1>Privacy Policy</h1>
-  <p class="meta">Effective Date: <span>May 27, 2026</span> &nbsp;·&nbsp; Last Updated: <span>July 15, 2026</span></p>
+  <p class="meta">Effective Date: <span>May 27, 2026</span> &nbsp;·&nbsp; Last Updated: <span>August 7, 2026</span></p>
 </div>
 
 <div class="content-wrap">
   <div class="prose">
 <h1>AfterCall Privacy Policy</h1>
 <p><strong>Effective Date:</strong> May 27, 2026</p>
-<p><strong>Last Updated:</strong> July 15, 2026</p>
+<p><strong>Last Updated:</strong> August 7, 2026</p>
 <p><strong>What changed in this version (1.1.1):</strong> Added disclosures for voice transcription (on-device only — your audio never leaves your device), the new voice call logging telemetry table (counts only — no transcript content stored), persisted reactions on shared calls and communities, and the post-author Reactions detail screen. Also clarified that an optional profile photo is among the account information you may provide (Section 1.1). See Sections 1.4 and 4.1 for the new sections.</p>
+<p><strong>Clarifying updates (August 7, 2026):</strong> Added disclosures for the 1.2.1 app update. <strong>Most important:</strong> every account with a username has a <strong>public profile page on the web</strong> at <code>aftercallapp.com/u/&lt;username&gt;</code> that anyone can view without signing in, and because the address is based on your username rather than a secret code, it can be reached even if you never share the link — Section 4.1.1 sets out exactly what it does and does not show. We have <strong>removed your agency/employer</strong> from that page. Also added: public communities and how membership appears on that page (4.1.2); the optional profile photo and bio step during signup and how your phone number is stored (1.1); more detail on what optional product analytics records, including notification status, installed widget types and subscription tier (1.2); a corrected widget disclosure (1.4); and information collected through our website, including ambassador program applications from people without an account (1.5).</p>
 <p><strong>Clarifying updates (July 15, 2026):</strong> Added disclosure of optional product-analytics collection — on by default, and you can turn it off anytime in Profile → Privacy &amp; Legal — which records account-linked usage events only and never the content of your journals, calls, messages, or any PHI (Sections 1.2 and 7.3). Also clarified that your wellness score is computed on your device and is informational only, that reminder notifications and home-screen widget / Live Activity data stay on your device (Section 1.4), and that some AI insights are generated from de-identified aggregate statistics (Section 3).</p>
 <p>AfterCall LLC ("AfterCall," "we," "us," or "our") respects your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use the AfterCall mobile application and related services (the "Service").</p>
 <h2>1. Information We Collect</h2>
 <h3>1.1 Information You Provide</h3>
 <ul>
-<li><strong>Account Information:</strong> Email address, password (encrypted), display name, optional profile information (certification level, agency name), and an optional profile photo you choose from your device. If you set a profile photo, it may be visible to other users when you participate in communities or share content.</li>
+<li><strong>Account Information:</strong> Email address, password (encrypted), display name, username, optional profile information (certification level, agency name, and a short optional bio), an optional phone number, and an optional profile photo you choose from your device. During signup you may be offered an optional final step to add a profile photo and bio; this step is entirely skippable and you can add or change both later in Profile. If you set a profile photo, it may be visible to other users when you participate in communities or share content. <strong>Your phone number is stored in a separate, owner-only record and is never shown to other users, included in your public profile page, or sent to AI providers.</strong></li>
 <li><strong>Call Logs:</strong> Information you enter about calls, including category, acuity, interventions, vital signs, and clinical notes</li>
 <li><strong>Journal Entries:</strong> Reflections, mood/stress/energy ratings, free-text content</li>
 <li><strong>Wellness Data:</strong> Self-reported wellness metrics</li>
@@ -111,7 +112,7 @@
 <h3>1.2 Automatically Collected Information</h3>
 <ul>
 <li><strong>Device Information:</strong> Device type, operating system, app version, unique device identifiers</li>
-<li><strong>Usage Data (Product Analytics):</strong> Passive product-analytics events — screen views, time spent on screens, and coarse feature events (for example, that a call or journal entry was saved) — linked to your account identifier and sent to our backend (Supabase) in batches, to help us understand how the app is used and improve it. <strong>We never include the content of your journals, call logs, or messages, or any PHI, in analytics — only that an action occurred.</strong> Product analytics are on by default; you can turn them off at any time in Profile → Privacy &amp; Legal (see Section 7.3).</li>
+<li><strong>Usage Data (Product Analytics):</strong> Passive product-analytics events — screen views, time spent on screens (aggregated on your device into a daily total per screen rather than sent per-transition), and coarse feature events (for example, that a call or journal entry was saved) — linked to your account identifier and sent to our backend (Supabase) in batches, to help us understand how the app is used and improve it. <strong>We never include the content of your journals, call logs, or messages, or any PHI, in analytics — only that an action occurred.</strong> Once per day we also record a single &ldquo;app opened&rdquo; event which includes your app version, platform, and app language, whether you currently have notifications enabled, and which AfterCall home-screen widgets you have installed (the widget <strong>types</strong> only — never their contents). Your subscription tier (free or Pro) is attached to analytics events so we can tell which features each group uses. Product analytics are on by default; you can turn them off at any time in Profile → Privacy &amp; Legal (see Section 7.3).</li>
 <li><strong>Log Data:</strong> IP address, access times, error logs</li>
 <li><strong>Voice Feature Telemetry:</strong> For voice call logging, lightweight counts only — whether you completed the flow, how many fields the parser missed, the duration of your review session, the length of the (already-scrubbed) transcript in characters, and the number of PHI redactions applied. <strong>No transcript content is recorded.</strong></li>
 </ul>
@@ -125,8 +126,15 @@
 <li><strong>CAD paste text (raw):</strong> Pasted CAD dispatch text is held in app memory only while the parser runs; we never persist or transmit the raw text. The scrubbed (PHI-redacted) version is the only thing sent to the AI parser, and only the parsed structured fields are saved.</li>
 <li><strong>Wellness score:</strong> Your wellness score is calculated entirely on your device from your own check-in history and call metadata. The score is provided for informational purposes only, is not medical advice, and is not itself sent to or stored by AfterCall.</li>
 <li><strong>Reminder notifications:</strong> Shift reminders, post-shift check-ins, and daily wellness-score reminders are scheduled locally on your device. Scheduling them does not send any additional information to AfterCall.</li>
-<li><strong>Home-screen widgets and Live Activity:</strong> Home-screen widgets and the on-shift Live Activity display your own app data on your device's home or lock screen through a private on-device app group container. This data stays on your device and is not additionally collected or shared.</li>
+<li><strong>Home-screen widgets and Live Activity:</strong> Home-screen widgets and the on-shift Live Activity display your own app data on your device's home or lock screen through a private on-device app group container. <strong>The data shown in your widgets stays on your device and is not collected or shared.</strong> One exception, for clarity: if product analytics are on, the once-daily &ldquo;app opened&rdquo; event records <em>which types</em> of AfterCall widget you have installed (for example, &ldquo;wellness&rdquo; or &ldquo;shift status&rdquo;) so we know which widgets are worth continuing to build. The information displayed inside them is never collected.</li>
 </ul>
+<h3>1.5 Information Collected Through Our Website</h3>
+<p>You do not need an AfterCall account to use our website, and simply visiting <code>aftercallapp.com</code> does not create one. Two parts of the site do collect information:</p>
+<ul>
+<li><strong>Ambassador program applications.</strong> If you apply to the AfterCall ambassador program, we collect the information you enter in the form — your name, email address, and optionally your phone number, general location, profession and years of experience, your primary social platform and approximate audience size, a description of the content you make, why you want to partner with us, and how you heard about us. We use it to evaluate your application, to email you the program rules and (if accepted) your ambassador code, and to administer the program. We store it whether or not you have an AfterCall account. To have an application deleted, email <a href="mailto:support@aftercallapp.com">support@aftercallapp.com</a>.</li>
+<li><strong>Public profile pages.</strong> Viewing a public profile page at <code>aftercallapp.com/u/&lt;username&gt;</code> does not require an account, and we do not create one for you by viewing it.</li>
+</ul>
+<p>The website itself does not use advertising trackers or third-party analytics cookies.</p>
 <h2>2. How We Use Information</h2>
 <p>We use your information to:</p>
 <ul>
@@ -152,6 +160,19 @@
 <li>Profile information you choose to make public</li>
 <li><strong>Reactions you make on shared calls and community posts</strong> are visible in aggregate to other viewers (counts by type). The author of a post can additionally see the specific list of users who reacted and which reaction each user selected, via a per-post Reactions detail screen visible only to the author.</li>
 </ul>
+<h4>4.1.1 Your Public Profile Page (on the web)</h4>
+<p>Every account with a username has a <strong>public profile page on our website</strong> at <code>aftercallapp.com/u/&lt;your-username&gt;</code>. The Share button on your profile screen copies this link so you can send it to people who do not have AfterCall.</p>
+<p>Please read the following carefully:</p>
+<ul>
+<li><strong>The page is public and does not require an account or sign-in to view.</strong> Anyone with the link can open it in a browser.</li>
+<li><strong>The address is based on your username, not a secret code.</strong> This means someone who knows or guesses your username can view the page even if you have never shared the link yourself.</li>
+<li><strong>What the page shows:</strong> your display name, username, profile photo, certification level, the month and year you joined, and the names of any <strong>public</strong> communities you have joined.</li>
+<li><strong>What the page never shows:</strong> your email address, phone number, bio, agency or employer, journal entries, call logs, wellness data, statistics, followers, private communities, or anything PHI-related.</li>
+<li>Search engines may index this page, and pages that have been viewed may remain in third-party caches for a period after any change.</li>
+</ul>
+<p>If you do not want a public profile page, you can request removal of your username by contacting <a href="mailto:support@aftercallapp.com">support@aftercallapp.com</a>, or delete your account at any time (Section 7).</p>
+<h4>4.1.2 Public Communities</h4>
+<p>AfterCall offers <strong>public communities</strong> that any signed-in user can discover and join without an invite code, alongside private communities that still require a code or an approved request. If you join a public community, <strong>your membership in it is shown on your public profile page</strong> described above, and your posts within it are visible to every member. Public communities do not include the peer-support messaging feature. You can leave any community at any time from the community's page.</p>
 <h3>4.2 With Service Providers</h3>
 <ul>
 <li>Cloud hosting (Supabase)</li>
