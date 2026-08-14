@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AfterCall Profile</title>
+  <!-- Profile cards are served unauthenticated at a username-keyed (guessable)
+       URL. Ask crawlers not to index or cache them. The public-profile edge
+       function sends a matching X-Robots-Tag header — keep the two in sync. -->
+  <meta name="robots" content="noindex, noarchive" />
   <meta name="description" content="An AfterCall profile — the app built for EMS providers to log every call, track skills, and protect their wellness." />
   <meta property="og:title" content="AfterCall Profile" />
   <meta property="og:description" content="See this EMS provider's AfterCall profile. Your calls, captured." />
@@ -114,44 +118,11 @@
     }
     .username { color: var(--text-light); font-size: 15px; font-weight: 500; margin-top: 3px; }
 
-    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--blue-light);
-      color: var(--blue-dark);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 7px 13px;
-      border-radius: 999px;
-    }
-    .chip.muted { background: var(--bg-alt); color: var(--text-mid); }
+    /* Chip / community-chip / section-label styles were removed alongside the
+       certification-level and community-membership fields (2026-08). If you are
+       re-adding a chip row here, re-read the note in render() first. */
 
     .meta { margin-top: 16px; color: var(--text-light); font-size: 13.5px; font-weight: 500; }
-
-    .section-label {
-      margin-top: 24px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-light);
-    }
-    .communities { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
-    .community-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      color: var(--text-mid);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 7px 13px;
-      border-radius: 999px;
-    }
-    .community-chip .emoji { font-size: 15px; line-height: 1; }
 
     /* ─── CTA ─── */
     .cta {
@@ -279,13 +250,7 @@
           <div class="display-name" id="p-name"></div>
           <div class="username" id="p-username"></div>
 
-          <div class="chips" id="p-chips"></div>
           <div class="meta" id="p-meta"></div>
-
-          <div id="p-communities-wrap" class="hidden">
-            <div class="section-label">Communities</div>
-            <div class="communities" id="p-communities"></div>
-          </div>
 
           <div class="cta">
             <div class="cta-title">AfterCall — Your calls, captured.</div>
@@ -380,12 +345,6 @@
         return months[m - 1] + ' ' + y;
       }
 
-      function esc(s) {
-        var d = document.createElement('div');
-        d.textContent = String(s == null ? '' : s);
-        return d.innerHTML;
-      }
-
       function render(p, username) {
         // Avatar
         var avatar = document.getElementById('avatar');
@@ -404,40 +363,24 @@
         document.getElementById('p-name').textContent = p.display_name || 'EMS Provider';
         document.getElementById('p-username').textContent = '@' + (p.username || username);
 
-        // Chips: certification level only.
-        // `agency` was deliberately removed from this card (and from the
-        // public-profile edge function) in 1.2.1 — this page is unauthenticated
-        // and keyed on a guessable username, and name + employer is what turns a
-        // profile card into a searchable record about a real person. Do not
-        // reintroduce an employer or location chip here.
-        var chips = document.getElementById('p-chips');
-        chips.innerHTML = '';
-        if (p.certification_level) {
-          var c = document.createElement('span');
-          c.className = 'chip';
-          c.textContent = p.certification_level;
-          chips.appendChild(c);
-        }
+        // This card renders name, handle, photo and join month — nothing else.
+        //
+        // Three fields were deliberately removed from both this page and the
+        // public-profile edge function, because the page is unauthenticated and
+        // keyed on a guessable username: `agency` (1.2.1), then
+        // `certification_level` and COMMUNITY MEMBERSHIPS (2026-08).
+        //
+        // Community membership is the one that matters. Public community names
+        // in a first-responder wellness app do not stay neutral — one named for
+        // line-of-duty death, substance recovery, or PTSD peer support, shown
+        // beside a real name and photo on a page anyone can load, publishes a
+        // health inference about an identifiable person. Do not reintroduce any
+        // of these three without product and legal review.
 
         // Member since
         var meta = document.getElementById('p-meta');
         var since = formatMonth(p.member_since);
         meta.textContent = since ? ('Member since ' + since) : '';
-
-        // Communities
-        var comms = Array.isArray(p.communities) ? p.communities : [];
-        if (comms.length) {
-          var wrap = document.getElementById('p-communities-wrap');
-          var list = document.getElementById('p-communities');
-          list.innerHTML = '';
-          comms.forEach(function (com) {
-            var chip = document.createElement('span');
-            chip.className = 'community-chip';
-            chip.innerHTML = '<span class="emoji">' + esc(com.emoji || '👥') + '</span>' + esc(com.name);
-            list.appendChild(chip);
-          });
-          wrap.classList.remove('hidden');
-        }
 
         // Open in app deep link
         document.getElementById('open-app').setAttribute('href', 'aftercall://profile/' + encodeURIComponent(p.username || username));
