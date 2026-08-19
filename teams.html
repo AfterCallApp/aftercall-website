@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AfterCall Teams — Peer support inside the app your crews already open</title>
+  <meta name="description" content="AfterCall Teams gives EMS agencies a private workspace, their own crisis line in-app, peer supporter routing, and aggregate-only wellness reporting — inside the app crews already use to close out calls." />
+  <meta property="og:title" content="AfterCall Teams — For EMS agencies" />
+  <meta property="og:description" content="Nobody decides to seek support. They decide to close out a call, and the rest is already on the screen. Peer support, crisis routing, and aggregate-only reporting for EMS agencies." />
+  <meta property="og:url" content="https://aftercallapp.com/teams.html" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #3379CF;
+      --blue-dark: #1F5FA3;
+      --blue-light: #eef4fd;
+      --blue-mid: #b8d4f0;
+      --text-dark: #0f1923;
+      --text-mid: #374151;
+      --text-light: #6b7280;
+      --bg: #ffffff;
+      --bg-alt: #f7f9fc;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --green: #10B981;
+      --red: #DC2626;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-dark);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    section { padding: 96px 24px; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); height: 78px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; height: 100%;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { height: 34px; width: auto; }
+    .logo-wordmark { font-size: 19px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
+    .logo-teams { font-size: 19px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-mid); font-size: 14.5px; font-weight: 600; }
+    .nav-links a:hover { color: var(--blue); }
+    .btn {
+      display: inline-block; background: var(--blue); color: #fff; text-decoration: none;
+      font-weight: 700; font-size: 14.5px; padding: 11px 22px; border-radius: 12px;
+      border: none; cursor: pointer; transition: background 0.15s ease;
+    }
+    .btn:hover { background: var(--blue-dark); }
+    .btn-lg { font-size: 16px; padding: 15px 30px; }
+    .btn-ghost { background: transparent; color: var(--blue); border: 2px solid var(--blue-mid); }
+    .btn-ghost:hover { background: var(--blue-light); }
+
+    /* ── Hero ── */
+    .hero { padding: 170px 24px 90px; background: linear-gradient(180deg, var(--blue-light) 0%, #ffffff 78%); }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; border: 1px solid var(--blue-mid); color: var(--blue-dark);
+      font-size: 12.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 999px; margin-bottom: 26px;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); animation: blink 1.6s ease-in-out infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+    h1 { font-size: 54px; font-weight: 900; letter-spacing: -2px; line-height: 1.08; max-width: 820px; }
+    .hero-sub { font-size: 19px; color: var(--text-mid); max-width: 660px; margin: 22px 0 34px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    .hero-price-note { font-size: 13.5px; color: var(--text-light); margin-top: 16px; }
+
+    .section-label {
+      font-size: 12px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 14px;
+    }
+    h2 { font-size: 40px; font-weight: 900; letter-spacing: -1.4px; line-height: 1.12; }
+    .section-sub { font-size: 17px; color: var(--text-mid); max-width: 680px; margin-top: 16px; }
+
+    /* ── Wedge (dark) ── */
+    .wedge { background: var(--text-dark); color: #fff; }
+    .wedge .section-label { color: #93c5fd; }
+    .wedge h2 { color: #fff; }
+    .wedge .section-sub { color: #cbd5e1; }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 48px; }
+    .stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius); padding: 26px 22px; }
+    .stat-num { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+    .stat-num.good { color: #6ee7b7; }
+    .stat-label { font-size: 13.5px; color: #cbd5e1; margin-top: 10px; line-height: 1.45; }
+    .wedge-note { font-size: 12.5px; color: #94a3b8; margin-top: 30px; max-width: 800px; }
+
+    /* ── Feature cards ── */
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 46px; }
+    .card {
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 24px;
+    }
+    .card-icon {
+      width: 44px; height: 44px; border-radius: 12px; background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px;
+    }
+    .card h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 8px; }
+    .card p { font-size: 14px; color: var(--text-mid); }
+    .bg-alt { background: var(--bg-alt); }
+
+    /* ── Privacy ── */
+    .privacy-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 46px; }
+    .privacy-card { border-radius: var(--radius); padding: 30px 28px; border: 1px solid var(--border); background: #fff; }
+    .privacy-card h3 { font-size: 15px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 18px; }
+    .privacy-card.never h3 { color: var(--red); }
+    .privacy-card.always h3 { color: var(--green); }
+    .privacy-card ul { list-style: none; }
+    .privacy-card li { font-size: 15px; color: var(--text-mid); padding: 9px 0; border-bottom: 1px solid var(--bg-alt); display: flex; gap: 12px; }
+    .privacy-card li:last-child { border-bottom: none; }
+    .mark-x { color: var(--red); font-weight: 800; }
+    .mark-check { color: var(--green); font-weight: 800; }
+    .flag-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 14.5px; }
+    .flag-table th, .flag-table td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--border); }
+    .flag-table th { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); }
+    .flag-table td:first-child { font-weight: 700; white-space: nowrap; }
+    .privacy-foot { font-size: 13px; color: var(--text-light); margin-top: 26px; max-width: 760px; }
+
+    /* ── Plans ── */
+    .plans { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 46px; align-items: stretch; }
+    .plan {
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 28px;
+      background: #fff; display: flex; flex-direction: column;
+    }
+    .plan.featured { border: 2px solid var(--blue); position: relative; box-shadow: 0 12px 40px rgba(51,121,207,0.14); }
+    .plan-flag {
+      position: absolute; top: -13px; left: 28px; background: var(--blue); color: #fff;
+      font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 999px;
+    }
+    .plan h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .plan-price { font-size: 40px; font-weight: 900; letter-spacing: -1.5px; margin-top: 12px; }
+    .plan-price span { font-size: 15px; font-weight: 600; color: var(--text-light); letter-spacing: 0; }
+    .plan-per { font-size: 13px; color: var(--text-light); margin-top: 4px; margin-bottom: 20px; }
+    .plan ul { list-style: none; margin-bottom: 24px; flex: 1; }
+    .plan li { font-size: 14px; color: var(--text-mid); padding: 7px 0; display: flex; gap: 10px; }
+    .plan li::before { content: '✓'; color: var(--blue); font-weight: 800; }
+    .plan .btn { text-align: center; }
+    .plans-foot { font-size: 12.5px; color: var(--text-light); margin-top: 26px; max-width: 820px; }
+
+    /* ── Pilot ── */
+    .pilot-box {
+      margin-top: 46px; border-radius: 20px; padding: 44px 40px; color: #fff;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;
+    }
+    .pilot-box h3 { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 14px; }
+    .pilot-box p { font-size: 15px; color: #dbeafe; }
+    .pilot-points { list-style: none; margin-top: 18px; }
+    .pilot-points li { font-size: 14.5px; color: #eff6ff; padding: 5px 0; display: flex; gap: 10px; }
+    .pilot-points li::before { content: '→'; font-weight: 800; color: #93c5fd; }
+    .pilot-price { text-align: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22); border-radius: var(--radius); padding: 32px 24px; }
+    .pilot-price .big { font-size: 52px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+    .pilot-price .small { font-size: 13.5px; color: #dbeafe; margin-top: 10px; }
+    .btn-white { background: #fff; color: var(--blue-dark); }
+    .btn-white:hover { background: var(--blue-light); }
+
+    /* ── CTA ── */
+    .cta-section { text-align: center; background: var(--bg-alt); }
+    .cta-section h2 { max-width: 720px; margin: 0 auto; }
+
+    /* ── Footer ── */
+    footer { background: var(--text-dark); padding: 52px 24px; color: #94a3b8; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; flex-wrap: wrap; }
+    .footer-links { list-style: none; display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 13.5px; font-weight: 600; }
+    .footer-links a:hover { color: #fff; }
+    .footer-tag { font-size: 13.5px; color: #cbd5e1; font-weight: 700; }
+    .footer-copy { font-size: 12.5px; margin-top: 6px; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      h1 { font-size: 38px; }
+      h2 { font-size: 30px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      .privacy-cols { grid-template-columns: 1fr; }
+      .plans { grid-template-columns: 1fr; }
+      .pilot-box { grid-template-columns: 1fr; padding: 32px 24px; }
+      section { padding: 64px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <img src="images/logo-transparent.png" class="logo-icon" alt="AfterCall logo" />
+        <span class="logo-wordmark">AfterCall</span>
+        <span class="logo-teams">Teams</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#crews">For your crews</a></li>
+        <li><a href="#leadership">For leadership</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#plans">Plans</a></li>
+        <li><a href="#pilot">Pilot</a></li>
+      </ul>
+      <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough" class="btn">Book a walkthrough</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>For EMS agencies</div>
+      <h1>Nobody decides to seek support. They decide to close out a call.</h1>
+      <p class="hero-sub">
+        AfterCall Teams puts your peer support team, your crisis line, and a private agency
+        workspace inside the app your crews already open — with aggregate-only reporting
+        for leadership. The rest is already on the screen.
+      </p>
+      <div class="hero-ctas">
+        <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough" class="btn btn-lg">Book a 30-minute walkthrough</a>
+        <a href="#pilot" class="btn btn-lg btn-ghost">See the 90-day pilot</a>
+      </div>
+      <p class="hero-price-note">From $3 per person per month. Teams Pro at $4.99. Purchase orders and checks accepted.</p>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       THE WEDGE
+  ══════════════════════════════════════════ -->
+  <section class="wedge">
+    <div class="container">
+      <p class="section-label">The engagement problem</p>
+      <h2>You don't need another wellness resource.<br />You need one your crews will actually open.</h2>
+      <p class="section-sub">
+        Almost every agency already offers something. Almost nobody uses it — because traditional
+        support asks a provider to recognize they're struggling, raise their hand, and ask.
+        AfterCall meets them earlier: a medic opens it to log a call, and the check-in, the
+        reflection, and peer support are already on that screen.
+      </p>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">96%</div>
+          <div class="stat-label">of agencies already offer some form of wellness support</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">15%</div>
+          <div class="stat-label">of providers use the peer support they're offered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">11.6%</div>
+          <div class="stat-label">EAP utilization at employers under 250 people</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num good">47%</div>
+          <div class="stat-label">of calls logged on AfterCall carry a voluntary post-call check-in on mood, stress, and sleep</div>
+        </div>
+      </div>
+      <p class="wedge-note">
+        Sources: 2024 EMS Trend Survey via Pulsara; AllOne Health EAP utilization analysis, Feb 2026;
+        AfterCall platform data, 2026. Platform figures describe adoption, not clinical outcomes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOR YOUR CREWS
+  ══════════════════════════════════════════ -->
+  <section id="crews">
+    <div class="container">
+      <p class="section-label">What the medic gets</p>
+      <h2>Two minutes at the end of a run.<br />Before the next tone drops.</h2>
+      <p class="section-sub">
+        Nothing changes about running the call. Log it in 8 steps — typed, spoken, or pasted from
+        CAD — get a plain-language summary, check in on how it landed, and reach a peer supporter
+        if the call warrants it. This is a journal, not a chart: no ePCR integration, no patient
+        identifiers, PHI screening on every share.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🏠</div>
+          <h3>A private agency workspace</h3>
+          <p>An invite-only room for your roster: station feeds, de-identified call sharing behind a
+          five-layer PHI screen, and crew messaging the agency never sees. One join code, day-one belonging.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <h3>Your peer supporters, by name</h3>
+          <p>Your trained peer support team in every pocket, with availability — reachable anonymously
+          if a provider would rather. Not our helpline. Yours.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📞</div>
+          <h3>Your crisis line, one tap</h3>
+          <p>Your agency's number and after-hours routing sit right in the app — beside the
+          988 Suicide &amp; Crisis Lifeline, which is present on every plan and never replaced.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⭐</div>
+          <h3>The full paid product, per seat</h3>
+          <p>On Teams Pro, every seat gets everything an individual subscriber gets: AfterCall AI,
+          voice and CAD logging, PDF export, 12-month history, and advanced analytics. Automatically, no store purchase.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📓</div>
+          <h3>A private record of the career</h3>
+          <p>Some calls stay with a provider long after the details fade. AfterCall turns the details
+          into a plain-language summary — a private history of the moments that shaped their career.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔒</div>
+          <h3>Theirs when they leave</h3>
+          <p>A member who leaves the agency keeps their entire history — calls, journals, shifts,
+          badges. The seat ends. Their account, and everything in it, stays theirs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOR LEADERSHIP
+  ══════════════════════════════════════════ -->
+  <section id="leadership" class="bg-alt">
+    <div class="container">
+      <p class="section-label">What leadership sees</p>
+      <h2>Your crews have always carried the signals.<br />Now you can see the patterns.</h2>
+      <p class="section-sub">
+        Every chart is generated by people doing their job — no survey to send, no response rate to
+        chase. Reporting is aggregate-only on every plan, and any group under five members is
+        suppressed. Signal, never content.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3>Seats deployed &amp; weekly active</h3>
+          <p>Who's onboarded and whether the tool is actually being opened — the number every other
+          wellness line-item can't show you.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📈</div>
+          <h3>Team stress &amp; check-in trends</h3>
+          <p>Average post-call stress and check-in attach rate, trended over 12 weeks. Reported only
+          when at least five members contribute.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚩</div>
+          <h3>High-impact calls &amp; peer support</h3>
+          <p>How many calls your people flagged as high-impact and how many peer support conversations
+          opened. Counts and trends — never the person.</p>
+        </div>
+      </div>
+
+      <table class="flag-table">
+        <tr><th>When a call is flagged high-impact</th><th>What they see</th></tr>
+        <tr><td>Peer supporter</td><td>The flag routes to your designated peer supporters so someone can check in.</td></tr>
+        <tr><td>Supervisor</td><td>That a flag exists. Never its content, never the journal.</td></tr>
+        <tr><td>Leadership</td><td>The count and the trend. Never the person.</td></tr>
+        <tr><td>Escalation</td><td>Follows your own critical incident policy, configured at onboarding. Not one we impose.</td></tr>
+      </table>
+      <p class="privacy-foot">
+        The Wellness Score is a wellbeing signal, not a clinical or diagnostic instrument. Some
+        analytics modules are on the near-term build plan — we'll tell you exactly which.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PRIVACY
+  ══════════════════════════════════════════ -->
+  <section id="privacy">
+    <div class="container">
+      <p class="section-label">The part we will not negotiate</p>
+      <h2>If your crews don't trust it,<br />none of the rest happens.</h2>
+      <p class="section-sub">
+        Adoption is the whole product, and adoption runs on trust. Every guarantee below is written
+        into the agreement, not the brochure — and enforced in the database, not in policy.
+      </p>
+      <div class="privacy-cols">
+        <div class="privacy-card never">
+          <h3>The agency never sees</h3>
+          <ul>
+            <li><span class="mark-x">✕</span> Any individual journal entry or reflection</li>
+            <li><span class="mark-x">✕</span> The content of any peer support conversation</li>
+            <li><span class="mark-x">✕</span> Direct messages between crew members</li>
+            <li><span class="mark-x">✕</span> Any one person's wellness, stress, or sleep score</li>
+            <li><span class="mark-x">✕</span> Who opened a peer support request</li>
+          </ul>
+        </div>
+        <div class="privacy-card always">
+          <h3>What is always true</h3>
+          <ul>
+            <li><span class="mark-check">✓</span> Wellness reporting is aggregate-only, on every plan</li>
+            <li><span class="mark-check">✓</span> Groups under five members are suppressed</li>
+            <li><span class="mark-check">✓</span> Alerts carry the signal, never the content</li>
+            <li><span class="mark-check">✓</span> A member who leaves keeps their own history</li>
+            <li><span class="mark-check">✓</span> Members can leave the workspace at any time</li>
+          </ul>
+        </div>
+      </div>
+      <p class="privacy-foot">
+        AfterCall is not an ePCR and not a patient record system. It does not write into ESO,
+        ImageTrend, or Zoll, and no patient identifier is retained — every share passes a five-layer
+        PHI screen with a signed attestation. Nothing in AfterCall may be used in discipline,
+        promotion, assignment, or a fitness-for-duty determination; we will sign that alongside your
+        labor group. AfterCall is designed to keep PHI out and therefore a BAA is not currently
+        necessary; SOC 2 Type II is on the roadmap and not in place today — we'd rather tell you
+        exactly where each item stands than imply otherwise.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PLANS
+  ══════════════════════════════════════════ -->
+  <section id="plans" class="bg-alt">
+    <div class="container">
+      <p class="section-label">Plans and the math</p>
+      <h2>$1.15 a week to support the person behind the uniform.</h2>
+      <p class="section-sub">
+        Per person, billed annually. Ten-person minimum. Volume discounts apply automatically,
+        and purchase orders and checks are accepted — which matters for municipal and parish buyers.
+      </p>
+      <div class="plans">
+        <div class="plan">
+          <h3>Essentials</h3>
+          <div class="plan-price">$3<span> /person/mo</span></div>
+          <div class="plan-per">$36 per person per year</div>
+          <ul>
+            <li>Private agency workspace and roster</li>
+            <li>Your crisis line in-app, beside 988</li>
+            <li>Agency-only feed and peer support channel</li>
+            <li>Peer supporter roster and routing</li>
+            <li>Critical incident alerts</li>
+            <li>Monthly leadership summary</li>
+          </ul>
+          <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20Essentials" class="btn btn-ghost">Talk to us</a>
+        </div>
+        <div class="plan featured">
+          <div class="plan-flag">Maximum impact</div>
+          <h3>Teams Pro</h3>
+          <div class="plan-price">$4.99<span> /person/mo</span></div>
+          <div class="plan-per">$59.88 per person per year</div>
+          <ul>
+            <li>Everything in Essentials</li>
+            <li>Full AfterCall Pro on every seat</li>
+            <li>AfterCall AI and call narratives</li>
+            <li>Voice and CAD logging, PDF export</li>
+            <li>12-month history and advanced analytics</li>
+            <li>Wellness trend dashboard for leadership</li>
+            <li>Operations, exposure and skills reporting</li>
+          </ul>
+          <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20Pro" class="btn">Talk to us</a>
+        </div>
+        <div class="plan">
+          <h3>Command</h3>
+          <div class="plan-price">Custom</div>
+          <div class="plan-per">100+ seats, quoted separately</div>
+          <ul>
+            <li>Everything in Teams Pro</li>
+            <li>SSO and SCIM provisioning</li>
+            <li>ePCR integration</li>
+            <li>BAA and custom terms</li>
+            <li>Dedicated onboarding</li>
+          </ul>
+          <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Command" class="btn btn-ghost">Talk to us</a>
+        </div>
+      </div>
+      <p class="plans-foot">
+        Prices in USD, per person, billed annually, effective 2026. Volume discounts: 2.5% at 50
+        people, 5% at 100, 8% at 150, 10% at 250, 15% at 500. Seats trued up at renewal. A Crew tier
+        at $2 per person per month is available for peer-support-only deployments. An individual pays
+        $59.99 a year for AfterCall Pro; Teams Pro provides the identical product per seat, plus the
+        agency layer. SSO, SCIM, ePCR integration, and a BAA are Command roadmap items — timing is a
+        plan, not a commitment, and anything you're counting on goes in the agreement.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PILOT
+  ══════════════════════════════════════════ -->
+  <section id="pilot">
+    <div class="container">
+      <p class="section-label">The ask</p>
+      <h2>Ninety days. One station. Then decide with your own data.</h2>
+      <div class="pilot-box">
+        <div>
+          <h3>Full Teams Pro from day one.</h3>
+          <p>
+            AfterCall Teams is new. We have adoption data and we do not have outcome data — so
+            rather than borrow someone else's numbers and dress them as ours, we'd rather generate
+            yours. We agree on what to measure before it starts:
+          </p>
+          <ul class="pilot-points">
+            <li>30, 60, and 90-day active rate against seats deployed</li>
+            <li>Post-call check-in attach rate, and whether it holds at week twelve</li>
+            <li>High-impact flags raised and peer support conversations opened</li>
+            <li>A ten-question crew survey at day zero and day ninety</li>
+          </ul>
+        </div>
+        <div class="pilot-price">
+          <div class="big">$599</div>
+          <div class="small">for a 40-provider station, for the quarter.<br />
+            Invoiced once, up front. No auto-renewal, no annual commitment.<br />
+            Every dollar credits toward year one if you continue.</div>
+          <div style="margin-top: 22px;">
+            <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%2090-day%20pilot" class="btn btn-white">Start the conversation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CTA
+  ══════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="container">
+      <p class="section-label">Next step</p>
+      <h2>Every call leaves something behind.<br />Give your crews somewhere to put it.</h2>
+      <p class="section-sub" style="margin-left: auto; margin-right: auto;">
+        Book a 30-minute walkthrough with your leadership in the room. Bring your headcount and
+        last year's turnover — we'll rebuild the math live with your numbers.
+      </p>
+      <div style="margin-top: 32px;">
+        <a href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough" class="btn btn-lg">Email jordan@aftercallapp.com</a>
+      </div>
+      <p class="hero-price-note" style="margin-top: 18px;">Built by a working EMT. AfterCall LLC is independent — no corporate backing, no investors steering it.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-tag">AFTERCALL TEAMS</div>
+        <div class="footer-copy">© 2026 AfterCall LLC · Your calls, captured.</div>
+        <div class="footer-copy">Nothing on this page is legal, tax, medical, or insurance advice.</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html">AfterCall for providers</a></li>
+        <li><a href="teams-dashboard.html">Leadership dashboard</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="mailto:jordan@aftercallapp.com">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>

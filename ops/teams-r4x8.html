@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Teams Ops — AfterCall</title>
+  <style>
+    :root { --blue: #3379CF; --blue-dark: #1F5FA3; --ink: #111827; --muted: #6B7280; --border: #E5E7EB; --bg: #F9FAFB; --green: #059669; --red: #DC2626; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+    .card h2 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+    label { font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px; }
+    input, select { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; font-family: inherit; background: #fff; }
+    .row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+    .row > div { flex: 1; min-width: 140px; }
+    button { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    button:hover { background: var(--blue-dark); }
+    button:disabled { opacity: 0.6; cursor: default; }
+    button.mini { padding: 5px 9px; font-size: 12px; }
+    button.warn { background: #fff; color: var(--red); border: 1px solid var(--red); }
+    .out { font-size: 13px; margin-top: 10px; display: none; padding: 9px 11px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; }
+    .out.err { display: block; background: #FEF2F2; color: var(--red); }
+    .out.ok { display: block; background: #ECFDF5; color: var(--green); }
+    .hidden { display: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
+    code { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; font-size: 12px; }
+    .pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+    .pill.active { background: #ECFDF5; color: var(--green); }
+    .pill.suspended { background: #FFFBEB; color: #D97706; }
+    .pill.churned { background: #FEF2F2; color: var(--red); }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tablewrap { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>AfterCall Teams — Ops</h1>
+    <div class="sub">Provision agencies, manage rosters, rotate codes and dashboard keys. Private — do not share this URL.</div>
+
+    <div class="card">
+      <h2>Access</h2>
+      <div class="row">
+        <div style="flex: 2;">
+          <label for="pw">Ops password</label>
+          <input type="password" id="pw" autocomplete="off" />
+        </div>
+        <div style="flex: 0;"><button id="loadBtn">Load agencies</button></div>
+      </div>
+      <div id="err" class="out"></div>
+      <div id="okmsg" class="out"></div>
+    </div>
+
+    <div id="results" class="hidden">
+      <div class="card">
+        <h2>Create agency</h2>
+        <div class="row">
+          <div><label>Name</label><input id="cName" placeholder="East Jefferson EMS" /></div>
+          <div><label>Slug</label><input id="cSlug" placeholder="east-jefferson-ems" /></div>
+          <div><label>Plan</label>
+            <select id="cPlan">
+              <option value="pilot" selected>pilot (90d, grants Pro)</option>
+              <option value="crew">crew</option>
+              <option value="essentials">essentials</option>
+              <option value="teams_pro">teams_pro</option>
+              <option value="command">command</option>
+            </select>
+          </div>
+          <div><label>Seats</label><input id="cSeats" type="number" value="40" /></div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div><label>Contact name</label><input id="cContact" /></div>
+          <div><label>Billing email</label><input id="cEmail" /></div>
+          <div><label>Pilot days</label><input id="cPilotDays" type="number" value="90" /></div>
+          <div style="flex: 0;"><button id="createBtn">Create</button></div>
+        </div>
+        <div id="createOut" class="out"></div>
+      </div>
+
+      <div class="card">
+        <h2>Agencies</h2>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>Agency</th><th>Plan</th><th>Status</th><th>Seats</th><th>Join code</th><th>Pilot ends</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="agencyBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card hidden" id="rosterCard">
+        <h2 id="rosterTitle">Roster</h2>
+        <div class="row" style="margin-bottom: 10px;">
+          <div><label>Member email</label><input id="mEmail" placeholder="medic@agency.org" /></div>
+          <div><label>Role</label>
+            <select id="mRole">
+              <option value="">(keep)</option>
+              <option value="member">member</option>
+              <option value="supervisor">supervisor</option>
+              <option value="admin">admin</option>
+              <option value="owner">owner</option>
+            </select>
+          </div>
+          <div><label>Peer supporter</label>
+            <select id="mPeer">
+              <option value="">(keep)</option>
+              <option value="true">yes</option>
+              <option value="false">no</option>
+            </select>
+          </div>
+          <div><label>Station</label><input id="mStation" placeholder="(keep)" /></div>
+          <div style="flex: 0;"><button id="setMemberBtn" class="mini">Apply</button></div>
+        </div>
+        <div id="rosterOut" class="out"></div>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Role</th><th>Peer</th><th>Station</th><th>Status</th><th>Joined</th><th></th></tr>
+            </thead>
+            <tbody id="rosterBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-admin';
+    var currentRosterAgency = null;
+
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+    function banner(id, cls, msg) { var e = $(id); e.className = 'out ' + cls; e.textContent = msg; e.style.display = 'block'; }
+    function clearBanner(id) { $(id).style.display = 'none'; }
+
+    function post(body) {
+      body.password = $('pw').value.trim();
+      return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        .then(function (res) { return res.json().then(function (data) {
+          if (!res.ok) throw new Error(data.error || ('Request failed (' + res.status + ')')); return data; }); });
+    }
+
+    function fmtDate(d) { return d ? String(d).slice(0, 10) : '—'; }
+
+    function renderAgencies(list) {
+      var rows = '';
+      list.forEach(function (a) {
+        rows += '<tr>'
+          + '<td><strong>' + esc(a.name) + '</strong><br /><span style="color:var(--muted);font-size:11.5px;">' + esc(a.slug) + '</span></td>'
+          + '<td>' + esc(a.plan) + '</td>'
+          + '<td><span class="pill ' + esc(a.status) + '">' + esc(a.status) + '</span></td>'
+          + '<td>' + esc(a.activeSeats) + ' / ' + esc(a.seat_limit) + '</td>'
+          + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
+          + '<td>' + esc(fmtDate(a.pilot_ends_at)) + '</td>'
+          + '<td><div class="actions">'
+          + '<button class="mini" data-act="roster" data-id="' + esc(a.id) + '" data-name="' + esc(a.name) + '">Roster</button>'
+          + '<button class="mini" data-act="plan" data-id="' + esc(a.id) + '">Plan</button>'
+          + '<button class="mini" data-act="seats" data-id="' + esc(a.id) + '">Seats</button>'
+          + '<button class="mini" data-act="rotate_code" data-id="' + esc(a.id) + '">New code</button>'
+          + '<button class="mini warn" data-act="rotate_key" data-id="' + esc(a.id) + '">New dash key</button>'
+          + '</div></td>'
+          + '</tr>';
+      });
+      $('agencyBody').innerHTML = rows || '<tr><td colspan="7" style="color:var(--muted);">No agencies yet.</td></tr>';
+    }
+
+    function load() {
+      clearBanner('err'); clearBanner('okmsg');
+      var btn = $('loadBtn'); btn.disabled = true; btn.textContent = 'Loading…';
+      post({ action: 'list_agencies' })
+        .then(function (d) { renderAgencies(d.agencies || []); $('results').classList.remove('hidden'); })
+        .catch(function (e) { banner('err', 'err', e.message); })
+        .finally(function () { btn.disabled = false; btn.textContent = 'Load agencies'; });
+    }
+
+    function createAgency() {
+      clearBanner('createOut');
+      var btn = $('createBtn'); btn.disabled = true;
+      post({
+        action: 'create_agency',
+        name: $('cName').value.trim(),
+        slug: $('cSlug').value.trim(),
+        plan: $('cPlan').value,
+        seatLimit: parseInt($('cSeats').value, 10) || 10,
+        contactName: $('cContact').value.trim(),
+        billingEmail: $('cEmail').value.trim(),
+        pilotDays: parseInt($('cPilotDays').value, 10) || 90,
+      })
+        .then(function (d) {
+          banner('createOut', 'ok',
+            'Created. SAVE THESE NOW (the dashboard key is only shown on create/rotate):\n'
+            + 'Join code: ' + d.joinCode + '\n'
+            + 'Dashboard key: ' + d.dashboardKey + '\n'
+            + 'Dashboard URL: ' + d.dashboardUrl);
+          load();
+        })
+        .catch(function (e) { banner('createOut', 'err', e.message); })
+        .finally(function () { btn.disabled = false; });
+    }
+
+    function renderRoster(members) {
+      var rows = '';
+      members.forEach(function (m) {
+        rows += '<tr>'
+          + '<td>' + esc(m.name || '—') + '</td>'
+          + '<td>' + esc(m.email || '—') + '</td>'
+          + '<td>' + esc(m.role) + '</td>'
+          + '<td>' + (m.is_peer_supporter ? 'yes' : '—') + '</td>'
+          + '<td>' + esc(m.station || '—') + '</td>'
+          + '<td><span class="pill ' + (m.status === 'active' ? 'active' : 'churned') + '">' + esc(m.status) + '</span></td>'
+          + '<td>' + esc(fmtDate(m.joined_at)) + '</td>'
+          + '<td>' + (m.status === 'active'
+            ? '<button class="mini warn" data-act="remove_member" data-uid="' + esc(m.user_id) + '">Remove</button>'
+            : '') + '</td>'
+          + '</tr>';
+      });
+      $('rosterBody').innerHTML = rows || '<tr><td colspan="8" style="color:var(--muted);">No members yet — hand out the join code.</td></tr>';
+    }
+
+    function openRoster(agencyId, name) {
+      currentRosterAgency = agencyId;
+      $('rosterTitle').textContent = 'Roster — ' + name;
+      $('rosterCard').classList.remove('hidden');
+      clearBanner('rosterOut');
+      post({ action: 'roster', agencyId: agencyId })
+        .then(function (d) { renderRoster(d.members || []); $('rosterCard').scrollIntoView({ behavior: 'smooth' }); })
+        .catch(function (e) { banner('rosterOut', 'err', e.message); });
+    }
+
+    $('agencyBody').addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn) return;
+      var act = btn.dataset.act, id = btn.dataset.id;
+      if (act === 'roster') { openRoster(id, btn.dataset.name); return; }
+      if (act === 'plan') {
+        var plan = prompt('New plan (pilot / crew / essentials / teams_pro / command):');
+        if (!plan) return;
+        post({ action: 'update_agency', agencyId: id, plan: plan.trim() })
+          .then(function () { banner('okmsg', 'ok', 'Plan updated.'); load(); })
+          .catch(function (err) { banner('err', 'err', err.message); });
+        return;
+      }
+      if (act === 'seats') {
+        var seats = prompt('New seat limit:');
+        if (!seats) return;
+        post({ action: 'update_agency', agencyId: id, seatLimit: parseInt(seats, 10) })
+          .then(function () { banner('okmsg', 'ok', 'Seat limit updated.'); load(); })
+          .catch(function (err) { banner('err', 'err', err.message); });
+        return;
+      }
+      if (act === 'rotate_code') {
+        if (!confirm('Rotate the join code? The old code stops working immediately.')) return;
+        post({ action: 'rotate_join_code', agencyId: id })
+          .then(function (d) { banner('okmsg', 'ok', 'New join code: ' + d.joinCode); load(); })
+          .catch(function (err) { banner('err', 'err', err.message); });
+        return;
+      }
+      if (act === 'rotate_key') {
+        if (!confirm('Rotate the dashboard key? The old key stops working immediately — you must re-send the new one to agency leadership.')) return;
+        post({ action: 'rotate_dashboard_key', agencyId: id })
+          .then(function (d) { banner('okmsg', 'ok', 'New dashboard key (save now): ' + d.dashboardKey); })
+          .catch(function (err) { banner('err', 'err', err.message); });
+      }
+    });
+
+    $('rosterBody').addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn || btn.dataset.act !== 'remove_member') return;
+      if (!currentRosterAgency) return;
+      if (!confirm('Remove this member? Their seat ends (and Pro with it); their account and data are untouched.')) return;
+      post({ action: 'remove_member', agencyId: currentRosterAgency, userId: btn.dataset.uid })
+        .then(function () { banner('rosterOut', 'ok', 'Member removed.'); openRoster(currentRosterAgency, $('rosterTitle').textContent.replace('Roster — ', '')); })
+        .catch(function (err) { banner('rosterOut', 'err', err.message); });
+    });
+
+    $('setMemberBtn').addEventListener('click', function () {
+      if (!currentRosterAgency) return;
+      clearBanner('rosterOut');
+      var body = { action: 'set_member', agencyId: currentRosterAgency, email: $('mEmail').value.trim() };
+      if ($('mRole').value) body.role = $('mRole').value;
+      if ($('mPeer').value) body.isPeerSupporter = $('mPeer').value === 'true';
+      if ($('mStation').value.trim()) body.station = $('mStation').value.trim();
+      post(body)
+        .then(function () { banner('rosterOut', 'ok', 'Member updated.'); openRoster(currentRosterAgency, $('rosterTitle').textContent.replace('Roster — ', '')); })
+        .catch(function (err) { banner('rosterOut', 'err', err.message); });
+    });
+
+    $('loadBtn').addEventListener('click', load);
+    $('createBtn').addEventListener('click', createAgency);
+    $('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
+  </script>
+</body>
+</html>
