@@ -88,7 +88,7 @@
         <div class="tablewrap">
           <table>
             <thead>
-              <tr><th>Agency</th><th>Plan</th><th>Status</th><th>Seats</th><th>Join code</th><th>Pilot ends</th><th>Actions</th></tr>
+              <tr><th>Agency</th><th>Plan</th><th>Status</th><th>Billing</th><th>Seats</th><th>Join code</th><th>Pilot ends</th><th>Actions</th></tr>
             </thead>
             <tbody id="agencyBody"></tbody>
           </table>
@@ -156,6 +156,7 @@
           + '<td><strong>' + esc(a.name) + '</strong><br /><span style="color:var(--muted);font-size:11.5px;">' + esc(a.slug) + '</span></td>'
           + '<td>' + esc(a.plan) + '</td>'
           + '<td><span class="pill ' + esc(a.status) + '">' + esc(a.status) + '</span></td>'
+          + '<td>' + esc(a.billing_status || 'none') + (a.billing_method && a.billing_method !== 'none' ? '<br /><span style="color:var(--muted);font-size:11px;">' + esc(a.billing_method) + '</span>' : '') + '</td>'
           + '<td>' + esc(a.activeSeats) + ' / ' + esc(a.seat_limit) + '</td>'
           + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
           + '<td>' + esc(fmtDate(a.pilot_ends_at)) + '</td>'
@@ -163,12 +164,13 @@
           + '<button class="mini" data-act="roster" data-id="' + esc(a.id) + '" data-name="' + esc(a.name) + '">Roster</button>'
           + '<button class="mini" data-act="plan" data-id="' + esc(a.id) + '">Plan</button>'
           + '<button class="mini" data-act="seats" data-id="' + esc(a.id) + '">Seats</button>'
+          + '<button class="mini" data-act="mark_invoiced" data-id="' + esc(a.id) + '">Mark invoiced</button>'
           + '<button class="mini" data-act="rotate_code" data-id="' + esc(a.id) + '">New code</button>'
           + '<button class="mini warn" data-act="rotate_key" data-id="' + esc(a.id) + '">New dash key</button>'
           + '</div></td>'
           + '</tr>';
       });
-      $('agencyBody').innerHTML = rows || '<tr><td colspan="7" style="color:var(--muted);">No agencies yet.</td></tr>';
+      $('agencyBody').innerHTML = rows || '<tr><td colspan="8" style="color:var(--muted);">No agencies yet.</td></tr>';
     }
 
     function load() {
@@ -251,6 +253,13 @@
         if (!seats) return;
         post({ action: 'update_agency', agencyId: id, seatLimit: parseInt(seats, 10) })
           .then(function () { banner('okmsg', 'ok', 'Seat limit updated.'); load(); })
+          .catch(function (err) { banner('err', 'err', err.message); });
+        return;
+      }
+      if (act === 'mark_invoiced') {
+        if (!confirm('Mark this agency as paid by invoice/PO (billing active)?')) return;
+        post({ action: 'set_billing', agencyId: id, billingStatus: 'active', billingMethod: 'invoice' })
+          .then(function () { banner('okmsg', 'ok', 'Billing marked as invoiced + active.'); load(); })
           .catch(function (err) { banner('err', 'err', err.message); });
         return;
       }

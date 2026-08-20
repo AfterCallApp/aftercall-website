@@ -141,6 +141,22 @@
         </table>
       </div>
 
+      <div class="card">
+        <h2>Billing</h2>
+        <div id="billingBanner" class="out"></div>
+        <div class="stats">
+          <div class="stat"><div class="n" id="bStatus">–</div><div class="l">billing status</div></div>
+          <div class="stat"><div class="n" id="bMethod">–</div><div class="l">payment method</div></div>
+          <div class="stat"><div class="n" id="bSeatsBilled">–</div><div class="l">seats on the plan</div></div>
+          <div class="stat"><div class="n" id="bRenews">–</div><div class="l">current period ends</div></div>
+        </div>
+        <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button id="checkoutBtn" class="hidden">Set up billing with Stripe</button>
+          <button id="portalBtn" class="hidden">Manage billing</button>
+        </div>
+        <div class="kfloor" id="billingNote" style="display: none;"></div>
+      </div>
+
       <div class="meta" id="genMeta"></div>
       <div class="meta">
         Questions, roster changes, or a rotated key: <a href="mailto:jordan@aftercallapp.com">jordan@aftercallapp.com</a>
@@ -153,6 +169,10 @@
     // is the agency's own dashboard key — checked server-side by the
     // teams-admin edge function; nothing is stored in the browser.
     var API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-admin';
+    // Billing runs through its own edge function; same key, same model — the
+    // dashboard key is checked server-side and Stripe secrets never reach the
+    // browser (this repo is public, so the page can hold no secrets at all).
+    var BILLING_API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-billing';
     var lastData = null;
 
     function $(id) { return document.getElementById(id); }
@@ -205,6 +225,64 @@
       $('results').classList.remove('hidden');
     }
 
+    function billingPost(action) {
+      return fetch(BILLING_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: action, dashboardKey: $('key').value.trim() }),
+      }).then(function (res) { return res.json().then(function (data) {
+        if (!res.ok) throw new Error(data.message || data.error || 'Request failed.');
+        return data;
+      }); });
+    }
+
+    function renderBilling(b) {
+      var s = b.billing || {};
+      $('bStatus').textContent = (s.status || 'none').replace('_', ' ');
+      $('bMethod').textContent = s.method === 'stripe' ? 'Stripe' : (s.method === 'invoice' ? 'Invoice / PO' : '—');
+      $('bSeatsBilled').textContent = s.seatLimit != null ? s.seatLimit : '—';
+      $('bRenews').textContent = s.currentPeriodEnd ? String(s.currentPeriodEnd).slice(0, 10) : '—';
+
+      var note = $('billingNote');
+      var checkout = $('checkoutBtn');
+      var portal = $('portalBtn');
+      checkout.classList.add('hidden');
+      portal.classList.add('hidden');
+      if (s.hasStripeCustomer) portal.classList.remove('hidden');
+      if (b.stripeEnabled && !(s.status === 'active' && s.method === 'stripe')) {
+        checkout.classList.remove('hidden');
+      }
+      if (!b.stripeEnabled) {
+        note.textContent = 'This agency is invoiced directly by AfterCall — purchase orders and checks '
+          + 'accepted. Questions or card payment setup: jordan@aftercallapp.com';
+        note.style.display = 'block';
+      } else {
+        note.style.display = 'none';
+      }
+    }
+
+    function loadBilling() {
+      billingPost('billing_status')
+        .then(renderBilling)
+        .catch(function () { /* billing card is best-effort; the wellness data above stands alone */ });
+    }
+
+    function redirectTo(action, btn) {
+      btn.disabled = true;
+      billingPost(action)
+        .then(function (d) {
+          if (d.url) { window.location.href = d.url; }
+          else { throw new Error('No redirect URL returned.'); }
+        })
+        .catch(function (e) {
+          var banner = $('billingBanner');
+          banner.className = 'out err';
+          banner.textContent = e.message;
+          banner.style.display = 'block';
+          btn.disabled = false;
+        });
+    }
+
     function load() {
       hideErr();
       var key = $('key').value.trim();
@@ -220,6 +298,7 @@
         .then(function (r) {
           if (!r.ok) { showErr(r.data.error || 'Request failed.'); return; }
           render(r.data);
+          loadBilling();
         })
         .catch(function () { showErr('Network error. Check your connection and try again.'); })
         .finally(function () { btn.disabled = false; btn.textContent = 'Load'; });
@@ -228,6 +307,27 @@
     $('load').addEventListener('click', load);
     $('key').addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
     $('trendMetric').addEventListener('change', function () { renderTrend(this.value); });
+    $('checkoutBtn').addEventListener('click', function () { redirectTo('create_checkout_session', this); });
+    $('portalBtn').addEventListener('click', function () { redirectTo('create_portal_session', this); });
+
+    // Back from Stripe Checkout: surface the outcome once, then clean the URL.
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var outcome = params.get('billing');
+      if (!outcome) return;
+      var e = $('err');
+      e.style.display = 'block';
+      if (outcome === 'success') {
+        e.className = 'out';
+        e.style.background = '#ECFDF5';
+        e.style.color = 'var(--green)';
+        e.textContent = 'Payment set up. Paste your dashboard key and load to see the updated billing status.';
+      } else {
+        e.className = 'out err';
+        e.textContent = 'Checkout was canceled — nothing was charged.';
+      }
+      window.history.replaceState({}, '', window.location.pathname);
+    })();
   </script>
 </body>
 </html>
