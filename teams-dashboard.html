@@ -137,6 +137,12 @@
     .kfloor { font-size: 12px; color: var(--muted); background: rgba(51,121,207,0.08);
       border: 1px solid rgba(51,121,207,0.25); border-radius: 9px; padding: 10px 12px; line-height: 1.55; }
 
+    .statgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .statgrid.vert { grid-template-columns: 1fr; }
+    .stat { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+    .stat .sv { font-size: 21px; font-weight: 900; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+    .stat .sl { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     th { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; }
@@ -162,6 +168,24 @@
     .rescard .d { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
     .rescard .meta { font-size: 12px; color: var(--ink2); margin-top: 6px; display: flex; gap: 14px; flex-wrap: wrap; }
 
+    /* segmented audience control + checkbox chips */
+    .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+    .seg button { background: transparent; border: none; color: var(--muted); font-size: 12.5px; font-weight: 700;
+      padding: 8px 14px; cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.on { background: var(--blue-soft); color: var(--s1); }
+    .picklist { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .picklist.tall { max-height: 190px; overflow-y: auto; }
+    .pick { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink2); font-weight: 600;
+      background: var(--card2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px;
+      cursor: pointer; user-select: none; margin: 0; }
+    .pick input { width: auto; margin: 0; }
+    .pick .sub { color: var(--muted); font-weight: 500; }
+    .pick.on { border-color: var(--blue); color: var(--ink); background: var(--blue-soft); }
+    .chk { display: inline-flex; align-items: center; gap: 8px; margin: 0; white-space: nowrap;
+      font-size: 12.5px; color: var(--ink2); font-weight: 600; }
+    .chk input { width: auto; }
+
     .code-display { font-size: 30px; font-weight: 900; letter-spacing: 8px; font-variant-numeric: tabular-nums;
       background: var(--bg); border: 1px dashed rgba(148,163,184,0.35); border-radius: 12px;
       padding: 16px 10px; text-align: center; margin: 8px 0 12px; }
@@ -171,7 +195,7 @@
     .footer-meta { max-width: 1240px; margin: 0 auto; padding: 8px 22px 40px; font-size: 12px; color: var(--muted); }
 
     @media (max-width: 1080px) { .kpis { grid-template-columns: repeat(3, 1fr); } .cols-2, .cols-2e, .cols-3 { grid-template-columns: 1fr; } }
-    @media (max-width: 620px) { .kpis { grid-template-columns: repeat(2, 1fr); } .topbar { gap: 8px; } .agency-chip .name { max-width: 120px; } }
+    @media (max-width: 620px) { .kpis { grid-template-columns: repeat(2, 1fr); } .topbar { gap: 8px; } .agency-chip .name { max-width: 120px; } .statgrid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -276,23 +300,67 @@
         <div class="card">
           <h3>Check-in attach rate by week</h3>
           <div class="chart-wrap" id="chAttach"></div>
-          <div class="subnote">Share of logged calls carrying a voluntary post-call check-in on stress, mood, and energy.</div>
+          <div class="subnote">Share of logged calls carrying a voluntary post-call check-in. Falling attach usually
+            comes before falling wellbeing — it means people stopped telling you.</div>
         </div>
       </div>
+
       <div class="grid cols-3 mt">
-        <div class="card kpi"><div class="lab">Avg journal mood</div><div class="val" id="kMood">—</div><div class="sub">1–5, journals in window</div></div>
         <div class="card">
-          <h3>High-impact flag lifecycle</h3>
-          <div class="chart-wrap" id="chLifecycle"></div>
+          <h3>Mood distribution — journal check-ins</h3>
+          <div class="chart-wrap" id="chMood"></div>
+          <div class="subnote" id="moodNote"></div>
         </div>
         <div class="card">
-          <h3>How suppression protects your people</h3>
-          <div class="kfloor">
-            Every wellbeing number on this page is an aggregate over at least
-            <b><span class="kmin">5</span> contributing members</b> — per window, per week, and per
-            station. Below that floor the number is withheld entirely, so a small group can never be
-            reverse-read. Adoption runs on trust; this is what keeps it.
+          <h3>Stress bands — post-call check-ins</h3>
+          <div class="chart-wrap" id="chBands" style="margin-top:22px;"></div>
+          <div class="subnote" id="bandsNote"></div>
+        </div>
+        <div class="card">
+          <h3>Journaling participation</h3>
+          <div class="chart-wrap" id="chParticipation"></div>
+          <div class="subnote">Members who journaled at least once in the window. Participation is the health of the
+            habit — every score on this page only means something while this stays high.</div>
+        </div>
+      </div>
+
+      <div class="grid cols-2 mt">
+        <div class="card">
+          <h3>High-impact flag response</h3>
+          <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+            <div class="chart-wrap" id="chLifecycle" style="flex:1 1 250px; min-width:230px;"></div>
+            <div class="statgrid vert" style="flex:1 1 190px;">
+              <div class="stat"><div class="sv" id="rMedian">—</div><div class="sl">median time to acknowledge</div></div>
+              <div class="stat"><div class="sv" id="rWithin48">—</div><div class="sl">acknowledged within 48 hours</div></div>
+              <div class="stat"><div class="sv" id="rStale">—</div><div class="sl">still open after 7 days</div></div>
+            </div>
           </div>
+          <div class="subnote">How a flag works: when a member marks a call high-impact, a flag <b>opens</b> and your
+            peer supporters get a signal-only ping — never the call, never the content. It becomes
+            <b>acknowledged</b> when a supporter picks it up and reaches out, and <b>closed</b> when the follow-up
+            is done. These three numbers are the health of that loop: if the median creeps up or flags sit open
+            past a week, the peer team needs more hands.</div>
+        </div>
+        <div class="card">
+          <h3>Peer support utilization</h3>
+          <div class="statgrid">
+            <div class="stat"><div class="sv" id="pConvos">—</div><div class="sl">peer conversations opened</div></div>
+            <div class="stat"><div class="sv" id="pAnon">—</div><div class="sl">opened anonymously</div></div>
+            <div class="stat"><div class="sv" id="pPer">—</div><div class="sl">conversations per supporter</div></div>
+          </div>
+          <div class="chart-wrap mt" id="chPeerWeekly"></div>
+          <div class="subnote">Counts only — never who, never a word of any conversation. A healthy anonymous share
+            means people trust the door; conversations-per-supporter tells you when to grow the team.</div>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <h3>How suppression protects your people</h3>
+        <div class="kfloor">
+          Every wellbeing number on this page is an aggregate over at least
+          <b><span class="kmin">5</span> contributing members</b> — per window, per week, and per
+          station. Below that floor the number is withheld entirely, so a small group can never be
+          reverse-read. Adoption runs on trust; this is what keeps it.
         </div>
       </div>
     </div>
@@ -325,10 +393,7 @@
     <div class="page" id="page-roster">
       <div class="card">
         <h3>Roster <span id="rosterCount" style="color:var(--muted); font-weight:600; text-transform:none; letter-spacing:0;"></span></h3>
-        <div class="row" style="margin-bottom: 12px;">
-          <div><input id="rosterSearch" placeholder="Filter by name, email, station…" /></div>
-          <div class="fix"><button class="btn ghost sm" id="rosterReload">Reload</button></div>
-        </div>
+        <div style="margin-bottom: 12px;"><input id="rosterSearch" placeholder="Filter by name, email, station…" /></div>
         <div id="rosterMsg" class="msg"></div>
         <div class="tablewrap">
           <table>
@@ -366,7 +431,7 @@
           </div>
           <div class="mt"><label>Description</label><textarea id="resDesc" rows="2" maxlength="280" placeholder="One line members see under the label"></textarea></div>
           <div class="mt" style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-            <label style="display:flex;align-items:center;gap:8px;margin:0;white-space:nowrap;"><input type="checkbox" id="resAfterHours" style="width:auto;" /> After-hours resource</label>
+            <label class="chk"><input type="checkbox" id="resAfterHours" /> After-hours resource</label>
             <button class="btn" id="resSave">Save resource</button>
             <button class="btn ghost sm" id="resCancel" style="display:none;">Cancel edit</button>
           </div>
@@ -385,18 +450,92 @@
             coordination. Members see them in the app under Communities. Deleting a channel deletes its posts.</div>
         </div>
         <div class="card">
-          <h3>Create a channel</h3>
+          <h3 id="chanFormTitle">Create a channel</h3>
+          <input type="hidden" id="chanId" />
           <div class="row">
             <div class="fix" style="min-width:90px;"><label>Emoji</label><input id="chanEmoji" value="🚒" maxlength="4" /></div>
             <div style="flex:2;"><label>Name</label><input id="chanName" placeholder="Station 2 — B Shift" maxlength="80" /></div>
           </div>
           <div class="mt"><label>Description</label><input id="chanDesc" placeholder="Optional one-liner" maxlength="280" /></div>
-          <div class="mt" style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-            <label style="display:flex;align-items:center;gap:8px;margin:0;white-space:nowrap;"><input type="checkbox" id="chanEnroll" checked style="width:auto;" /> Enroll everyone now</label>
-            <button class="btn" id="chanCreate">Create channel</button>
+          <div class="mt">
+            <label class="chk"><input type="checkbox" id="chanPeer" /> Peer support in this channel</label>
+            <div class="subnote" id="chanPeerNote" style="margin-top:6px;">Members of the channel can open a private,
+              optionally anonymous conversation with its peer supporters.</div>
+          </div>
+          <div class="mt" id="chanSupporterWrap" style="display:none;">
+            <label>Channel peer supporters <span style="color:var(--muted);font-weight:500;">(always enrolled)</span></label>
+            <div class="picklist" id="chanSupporters"></div>
+          </div>
+          <div class="mt" id="chanAudienceWrap">
+            <label>Who's in it</label>
+            <div class="seg" id="audSeg">
+              <button data-mode="all" class="on">Everyone</button>
+              <button data-mode="stations">By station</button>
+              <button data-mode="pick">Pick members</button>
+            </div>
+            <div id="audStations" class="picklist" style="display:none;"></div>
+            <div id="audPick" style="display:none;">
+              <input id="audSearch" placeholder="Filter members…" style="margin-top:8px;" />
+              <div class="picklist tall" id="audMembers"></div>
+            </div>
+          </div>
+          <div class="mt" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button class="btn" id="chanSave">Create channel</button>
+            <button class="btn ghost sm" id="chanCancel" style="display:none;">Cancel</button>
           </div>
           <div id="chanMsg" class="msg"></div>
         </div>
+      </div>
+
+      <div class="card mt" id="chanMembersCard" style="display:none;">
+        <h3 id="chanMembersTitle">Channel members</h3>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Member</th><th>Station</th><th>Channel role</th><th></th></tr></thead>
+            <tbody id="chanMemberBody"></tbody>
+          </table>
+        </div>
+        <div class="mt" style="border-top:1px solid var(--border); padding-top:14px;">
+          <label>Add members</label>
+          <div class="seg" id="addSeg">
+            <button data-mode="all" class="on">Everyone</button>
+            <button data-mode="stations">By station</button>
+            <button data-mode="pick">Pick members</button>
+          </div>
+          <div id="addStations" class="picklist" style="display:none;"></div>
+          <div id="addPick" style="display:none;">
+            <input id="addSearch" placeholder="Filter members…" style="margin-top:8px;" />
+            <div class="picklist tall" id="addMembers"></div>
+          </div>
+          <div class="mt" style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+            <label class="chk"><input type="checkbox" id="addAsPeer" /> add as channel peer supporters</label>
+            <button class="btn sm" id="addGo">Add to channel</button>
+          </div>
+        </div>
+        <div id="chanMembersMsg" class="msg"></div>
+        <div class="subnote" id="chanMembersNote"></div>
+      </div>
+
+      <div class="card mt">
+        <h3>Send an announcement</h3>
+        <div class="grid cols-2e">
+          <div>
+            <label>Post to</label>
+            <div class="picklist" id="annChannels"></div>
+          </div>
+          <div>
+            <label>Title (optional)</label>
+            <input id="annTitle" maxlength="120" placeholder="Shift bid closes Friday" />
+            <div class="mt"><label>Message</label><textarea id="annBody" rows="4" maxlength="2000" placeholder="What the team needs to know…"></textarea></div>
+            <div class="mt" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <button class="btn" id="annSend">Post announcement</button>
+              <span style="font-size:12px; color:var(--muted);" id="annCount"></span>
+            </div>
+            <div id="annMsg" class="msg"></div>
+          </div>
+        </div>
+        <div class="subnote">Posts as “<span id="annAuthor">your agency</span> · Announcement” in each selected channel.
+          Members get their normal channel notification, and replies stay in the channel like any other post.</div>
       </div>
     </div>
 
@@ -627,6 +766,49 @@
       bindTips(el);
     }
 
+    // Vertical direct-labeled columns (small-n distributions — no axis needed).
+    function vBars(el, items, opts) {
+      opts = opts || {};
+      const h = opts.height || 185;
+      const padT = 18, padB = 22, padL = 12, padR = 12;
+      const max = Math.max(1, ...items.map((r) => r.value));
+      const n = items.length;
+      const slot = (W - padL - padR) / n;
+      const bw = Math.min(56, slot * 0.62);
+      let svg = '';
+      items.forEach((r, i) => {
+        const bx = padL + slot * i + (slot - bw) / 2;
+        const bh = (h - padT - padB) * (r.value / max);
+        const by = h - padB - bh;
+        svg += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw}" height="${Math.max(0, bh).toFixed(1)}" rx="4" fill="${r.color}" data-tip="${esc(r.tip || `<b>${esc(r.label)}</b>: ${r.value}`)}"/>`;
+        svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${(by - 5).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="#E8EEF5">${r.value}</text>`;
+        svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${h - 6}" text-anchor="middle" font-size="10" fill="${C.muted}">${esc(r.label)}</text>`;
+      });
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}">${svg}</svg>`;
+      bindTips(el);
+    }
+
+    // Ring gauge (a single percentage).
+    function ring(el, pct, color, subLabel) {
+      if (pct == null) {
+        el.innerHTML = '<div class="kfloor" style="margin-top:4px;">No activity in this window yet.</div>';
+        return;
+      }
+      const size = 190, cx = size / 2, cy = size / 2, R = 70, sw = 18;
+      const clamped = Math.max(0, Math.min(100, pct));
+      const circ = 2 * Math.PI * R;
+      const dash = (clamped / 100) * circ;
+      el.innerHTML = `<div style="display:flex;justify-content:center;"><svg viewBox="0 0 ${size} ${size}" style="max-width:200px;">
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="rgba(148,163,184,0.15)" stroke-width="${sw}"/>
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"
+          stroke-dasharray="${dash.toFixed(1)} ${(circ - dash).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"
+          data-tip="${esc(`<b>${clamped}%</b> ${esc(subLabel)}`)}"/>
+        <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="#E8EEF5">${clamped}%</text>
+        <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(subLabel)}</text>
+      </svg></div>`;
+      bindTips(el);
+    }
+
     // Donut with center label. Parts: {label, value, color}.
     function donut(el, parts, centerBig, centerSmall) {
       const size = 200, cx = size / 2, cy = size / 2, R = 78, r = 54;
@@ -659,10 +841,24 @@
       el.innerHTML = `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round"/>`;
     }
 
+    const suppressedBlock = (kMin) =>
+      `<div class="kfloor" style="margin-top:4px;">Suppressed — fewer than ${kMin} members contributed in this
+       window. The chart appears once the group is large enough to stay anonymous.</div>`;
+
+    // Format an hour count the way a chief reads it: 9h, 36h, 3.2d.
+    function fmtDur(hours) {
+      if (hours == null) return '—';
+      if (hours < 1) return '<1h';
+      if (hours < 48) return Math.round(hours) + 'h';
+      return (Math.round(hours / 2.4) / 10) + 'd';
+    }
+
     // ── Render: analytics ──
+    const MOOD_LABELS = ['1 · Rough', '2 · Low', '3 · Okay', '4 · Good', '5 · Great'];
     function renderDashboard(d) {
       DATA = d;
       $('agencyName').textContent = d.agency.name;
+      $('annAuthor').textContent = d.agency.name;
       $('planPill').textContent = d.agency.plan.replace('_', ' ') + (d.agency.pilotEndsAt ? ' · pilot' : '');
       document.querySelectorAll('.kmin').forEach((e) => { e.textContent = d.kMin; });
       $('kminNote').textContent = d.kMin;
@@ -708,15 +904,62 @@
         { key: 'Check-in rate', color: C.s2, area: true, data: wk.map((w) => w.checkInRate) },
       ], { ymax: 100, suf: '%', fmtY: (v) => Math.round(v) + '%' });
 
-      const moodEl = $('kMood');
-      if (d.wellness.avgJournalMood == null) moodEl.innerHTML = '<span class="suppressed-val">suppressed (k&lt;' + d.kMin + ')</span>';
-      else moodEl.textContent = d.wellness.avgJournalMood;
+      // Mood distribution — the shape, not just the average.
+      const md = d.wellness.moodDist;
+      if (md) {
+        const moodTotal = md.reduce((a, b) => a + b, 0) || 1;
+        vBars($('chMood'), md.map((v, i) => ({
+          label: MOOD_LABELS[i], value: v, color: C.s3,
+          tip: `<b>${MOOD_LABELS[i]}</b><br/>${v} check-ins (${Math.round(100 * v / moodTotal)}%)`,
+        })));
+        const lowShare = Math.round(100 * (md[0] + md[1]) / moodTotal);
+        $('moodNote').innerHTML = 'Window average <b>' + fmt(d.wellness.avgJournalMood) + ' / 5</b> · <b>'
+          + lowShare + '%</b> of check-ins landed at 1–2. The shape matters more than the average — the left tail grows before the average moves.';
+      } else {
+        $('chMood').innerHTML = suppressedBlock(d.kMin);
+        $('moodNote').textContent = '';
+      }
+
+      // Stress bands — status colors, direct-labeled.
+      const sb = d.wellness.stressBands;
+      if (sb) {
+        const bandTotal = (sb.low + sb.moderate + sb.high) || 1;
+        const pctOf = (v) => Math.round(100 * v / bandTotal);
+        hBars($('chBands'), [
+          { label: 'Low (1–3)', value: sb.low, color: C.acuity.Minor, valueLabel: sb.low + ' · ' + pctOf(sb.low) + '%', tip: sb.low + ' check-ins (' + pctOf(sb.low) + '%)' },
+          { label: 'Moderate (4–6)', value: sb.moderate, color: C.acuity.Moderate, valueLabel: sb.moderate + ' · ' + pctOf(sb.moderate) + '%', tip: sb.moderate + ' check-ins (' + pctOf(sb.moderate) + '%)' },
+          { label: 'High (7–10)', value: sb.high, color: C.acuity.Critical, valueLabel: sb.high + ' · ' + pctOf(sb.high) + '%', tip: sb.high + ' check-ins (' + pctOf(sb.high) + '%)' },
+        ]);
+        $('bandsNote').innerHTML = 'The number to move is <b>High</b>: <b>' + pctOf(sb.high)
+          + '%</b> of post-call check-ins right now. Pair a rising High share with the acuity mix on Operations before assuming it is the workload.';
+      } else {
+        $('chBands').innerHTML = suppressedBlock(d.kMin);
+        $('bandsNote').textContent = '';
+      }
+
+      ring($('chParticipation'), d.wellness.journalParticipationPct, C.s2, 'of active members journaled');
 
       donut($('chLifecycle'), [
         { label: 'Open', value: d.highImpact.lifecycle.open, color: C.s4 },
         { label: 'Acknowledged', value: d.highImpact.lifecycle.acknowledged, color: C.s1 },
         { label: 'Closed', value: d.highImpact.lifecycle.closed, color: C.s2 },
       ], String(d.highImpact.total), 'flags in window');
+
+      const resp = (d.highImpact && d.highImpact.response) || {};
+      $('rMedian').textContent = fmtDur(resp.medianAckHours);
+      $('rWithin48').textContent = fmt(resp.ackWithin48Pct, '%');
+      const stale = resp.openOver7d ?? 0;
+      const staleEl = $('rStale');
+      staleEl.textContent = String(stale);
+      staleEl.style.color = stale > 0 ? 'var(--warn)' : 'var(--good)';
+
+      const ps = d.peerSupport || {};
+      $('pConvos').textContent = fmt(ps.conversationsOpened);
+      $('pAnon').textContent = fmt(ps.anonymousPct, '%');
+      $('pPer').textContent = fmt(ps.perSupporter);
+      barChart($('chPeerWeekly'), labels, [
+        { key: 'Peer conversations', color: C.s2, data: wk.map((w) => w.peerConversations) },
+      ], { height: 170 });
 
       // Acuity: reserved status colors, always direct-labeled.
       const am = d.acuityMix || {};
@@ -771,7 +1014,7 @@
     }
     function loadRoster() {
       clearMsg('rosterMsg');
-      post('leader_roster').then((d) => { ROSTER = d.members || []; renderRoster(); })
+      post('leader_roster').then((d) => { ROSTER = d.members || []; renderRoster(); renderChannelPickers(); })
         .catch((e) => flash('rosterMsg', 'err', e.message));
     }
     $('rosterBody').addEventListener('change', (ev) => {
@@ -795,7 +1038,6 @@
         .catch((e) => flash('rosterMsg', 'err', e.message));
     });
     $('rosterSearch').addEventListener('input', renderRoster);
-    $('rosterReload').addEventListener('click', loadRoster);
 
     // ── Resources ──
     function loadResources() {
@@ -851,39 +1093,269 @@
     });
 
     // ── Channels ──
-    function loadChannels() {
-      post('leader_channels').then((d) => {
-        $('chanList').innerHTML = (d.channels || []).map((c) => `
-          <div class="rescard" data-id="${esc(c.id)}">
-            <div>
-              <div class="t">${esc(c.emoji || '')} ${esc(c.name)}
-                ${c.isWorkspace ? '<span class="plan-pill" style="margin-left:6px;">workspace</span>' : ''}
-                ${c.has_peer_support ? '<span style="font-size:11px;color:var(--good);font-weight:700;margin-left:6px;">peer support on</span>' : ''}
-              </div>
-              ${c.description ? `<div class="d">${esc(c.description)}</div>` : ''}
-              <div class="meta">${c.members} member${c.members === 1 ? '' : 's'}</div>
+    let CHANNELS = [];
+    let MANAGED = null; // channelId whose members panel is open
+
+    const activePeople = () => ROSTER.filter((m) => m.status === 'active');
+    const personLabel = (m) => m.name || m.email || '—';
+
+    function pickHtml(value, label, sub, checked) {
+      return `<label class="pick${checked ? ' on' : ''}"><input type="checkbox" value="${esc(value)}"${checked ? ' checked' : ''} />`
+        + `${esc(label)}${sub ? ` <span class="sub">${esc(sub)}</span>` : ''}</label>`;
+    }
+    // Chip visual state follows its checkbox, wherever the chip lives.
+    document.addEventListener('change', (ev) => {
+      const inp = ev.target;
+      if (inp && inp.matches && inp.matches('.pick input')) {
+        inp.closest('.pick').classList.toggle('on', inp.checked);
+      }
+    });
+
+    function renderAudience(prefix) {
+      const people = activePeople();
+      const stations = [...new Set(people.map((m) => m.station || 'Unassigned'))].sort();
+      $(prefix + 'Stations').innerHTML = stations.map((s) => {
+        const count = people.filter((m) => (m.station || 'Unassigned') === s).length;
+        return pickHtml(s, s, count + (count === 1 ? ' member' : ' members'));
+      }).join('') || '<span style="font-size:12px;color:var(--muted);">No stations assigned yet — set them on the Roster tab.</span>';
+      $(prefix + 'Members').innerHTML = people.map((m) => pickHtml(m.user_id, personLabel(m), m.station || '')).join('');
+    }
+    function renderChannelPickers() {
+      const supporters = activePeople().filter((m) => m.is_peer_supporter);
+      $('chanSupporters').innerHTML = supporters.map((m) => pickHtml(m.user_id, personLabel(m), m.station || ''))
+        .join('') || '<span style="font-size:12px;color:var(--muted);">No peer supporters on the roster yet — flag them on the Roster tab first.</span>';
+      renderAudience('aud');
+      renderAudience('add');
+    }
+    function bindSeg(segId, stationsId, pickId) {
+      $(segId).addEventListener('click', (ev) => {
+        const b = ev.target.closest('button[data-mode]'); if (!b) return;
+        $(segId).querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+        $(stationsId).style.display = b.dataset.mode === 'stations' ? '' : 'none';
+        $(pickId).style.display = b.dataset.mode === 'pick' ? '' : 'none';
+      });
+    }
+    bindSeg('audSeg', 'audStations', 'audPick');
+    bindSeg('addSeg', 'addStations', 'addPick');
+    function bindPickSearch(inputId, listId) {
+      $(inputId).addEventListener('input', () => {
+        const q = $(inputId).value.trim().toLowerCase();
+        $(listId).querySelectorAll('.pick').forEach((l) => {
+          l.style.display = !q || l.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+      });
+    }
+    bindPickSearch('audSearch', 'audMembers');
+    bindPickSearch('addSearch', 'addMembers');
+    const segMode = (segId) => $(segId).querySelector('button.on').dataset.mode;
+    const checkedVals = (listId) => [...$(listId).querySelectorAll('input:checked')].map((i) => i.value);
+    function audienceBody(segId, stationsId, membersId) {
+      const mode = segMode(segId);
+      if (mode === 'all') return { all: true };
+      if (mode === 'stations') {
+        const s = checkedVals(stationsId);
+        return s.length ? { stations: s } : null;
+      }
+      const u = checkedVals(membersId);
+      return u.length ? { userIds: u } : null;
+    }
+    function resetSeg(segId, stationsId, pickWrapId, listIds) {
+      $(segId).querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === 0));
+      $(stationsId).style.display = 'none';
+      $(pickWrapId).style.display = 'none';
+      listIds.forEach((l) => $(l).querySelectorAll('input').forEach((i) => {
+        i.checked = false;
+        i.closest('.pick').classList.remove('on');
+      }));
+    }
+
+    function renderChannels() {
+      $('chanList').innerHTML = CHANNELS.map((c) => `
+        <div class="rescard" data-id="${esc(c.id)}">
+          <div>
+            <div class="t">${esc(c.emoji || '')} ${esc(c.name)}
+              ${c.isWorkspace ? '<span class="plan-pill" style="margin-left:6px;">workspace</span>' : ''}
+              ${c.has_peer_support ? '<span style="font-size:11px;color:var(--good);font-weight:700;margin-left:6px;">peer support on</span>' : ''}
             </div>
-            <div>${c.isWorkspace ? '' : '<button class="btn danger sm" data-act="delchan">Delete</button>'}</div>
-          </div>`).join('');
+            ${c.description ? `<div class="d">${esc(c.description)}</div>` : ''}
+            <div class="meta">${c.members} member${c.members === 1 ? '' : 's'}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-direction:column;">
+            <button class="btn ghost sm" data-act="manage">Manage</button>
+            ${c.isWorkspace ? '' : '<button class="btn danger sm" data-act="delchan">Delete</button>'}
+          </div>
+        </div>`).join('');
+    }
+    function loadChannels() {
+      return post('leader_channels').then((d) => {
+        CHANNELS = d.channels || [];
+        renderChannels();
+        renderAnnouncementChannels();
+        if (MANAGED && !CHANNELS.some((c) => c.id === MANAGED)) closeManage();
       }).catch((e) => flash('chanMsg', 'err', e.message));
     }
-    $('chanList').addEventListener('click', (ev) => {
-      const btn = ev.target.closest('button[data-act="delchan"]'); if (!btn) return;
-      if (!confirm('Delete this channel and all of its posts? Members keep everything personal — this only removes the shared feed.')) return;
-      post('leader_delete_channel', { channelId: ev.target.closest('.rescard').dataset.id })
-        .then(() => { flash('chanMsg', 'ok', 'Channel deleted.'); loadChannels(); })
-        .catch((e) => flash('chanMsg', 'err', e.message));
-    });
-    $('chanCreate').addEventListener('click', () => {
+    function resetChanForm() {
+      $('chanId').value = '';
+      $('chanFormTitle').textContent = 'Create a channel';
+      $('chanEmoji').value = '🚒'; $('chanName').value = ''; $('chanDesc').value = '';
+      $('chanPeer').checked = false; $('chanPeer').disabled = false;
+      $('chanPeerNote').textContent = 'Members of the channel can open a private, optionally anonymous conversation with its peer supporters.';
+      $('chanSupporterWrap').style.display = 'none';
+      $('chanAudienceWrap').style.display = '';
+      resetSeg('audSeg', 'audStations', 'audPick', ['audStations', 'audMembers']);
+      $('chanSupporters').querySelectorAll('input').forEach((i) => { i.checked = false; i.closest('.pick').classList.remove('on'); });
+      $('chanSave').textContent = 'Create channel';
+      $('chanCancel').style.display = 'none';
       clearMsg('chanMsg');
-      post('leader_create_channel', {
-        name: $('chanName').value, emoji: $('chanEmoji').value,
-        description: $('chanDesc').value, enrollAll: $('chanEnroll').checked,
-      }).then((d) => {
-        flash('chanMsg', 'ok', 'Channel created' + (d.enrolled ? ' — ' + d.enrolled + ' members enrolled.' : '.'));
-        $('chanName').value = ''; $('chanDesc').value = '';
+    }
+    function closeManage() {
+      MANAGED = null;
+      $('chanMembersCard').style.display = 'none';
+      resetChanForm();
+    }
+    function openManage(c) {
+      MANAGED = c.id;
+      $('chanId').value = c.id;
+      $('chanFormTitle').textContent = 'Edit — ' + c.name;
+      $('chanEmoji').value = c.emoji || ''; $('chanName').value = c.name; $('chanDesc').value = c.description || '';
+      $('chanPeer').checked = !!c.has_peer_support;
+      $('chanPeer').disabled = !!c.isWorkspace;
+      $('chanPeerNote').textContent = c.isWorkspace
+        ? 'Peer support always stays on in the main workspace — that is the front door for your crew.'
+        : 'Turning this on lets channel members open a private, optionally anonymous conversation with its peer supporters. Set who receives them in the member list below.';
+      $('chanSupporterWrap').style.display = 'none';
+      $('chanAudienceWrap').style.display = 'none';
+      $('chanSave').textContent = 'Save changes';
+      $('chanCancel').style.display = '';
+      $('chanMembersCard').style.display = '';
+      $('chanMembersTitle').textContent = 'Members — ' + (c.emoji ? c.emoji + ' ' : '') + c.name;
+      $('chanMembersNote').textContent = c.isWorkspace
+        ? 'Workspace membership follows the seat — remove people from the Roster tab. Roles here decide who moderates and who receives peer conversations.'
+        : 'Channel roles: members post and read, peer supporters also receive this channel’s peer conversations, admins moderate.';
+      clearMsg('chanMembersMsg');
+      loadChannelMembers();
+    }
+    $('chanCancel').addEventListener('click', closeManage);
+    $('chanPeer').addEventListener('change', () => {
+      if (!$('chanId').value) $('chanSupporterWrap').style.display = $('chanPeer').checked ? '' : 'none';
+    });
+    $('chanList').addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button[data-act]'); if (!btn) return;
+      const id = ev.target.closest('.rescard').dataset.id;
+      if (btn.dataset.act === 'manage') {
+        const c = CHANNELS.find((x) => x.id === id);
+        if (c) openManage(c);
+        return;
+      }
+      if (btn.dataset.act === 'delchan') {
+        if (!confirm('Delete this channel and all of its posts? Members keep everything personal — this only removes the shared feed.')) return;
+        post('leader_delete_channel', { channelId: id })
+          .then(() => { flash('chanMsg', 'ok', 'Channel deleted.'); if (MANAGED === id) closeManage(); loadChannels(); })
+          .catch((e) => flash('chanMsg', 'err', e.message));
+      }
+    });
+    $('chanSave').addEventListener('click', () => {
+      clearMsg('chanMsg');
+      const editing = $('chanId').value;
+      if (editing) {
+        post('leader_update_channel', {
+          channelId: editing,
+          name: $('chanName').value, emoji: $('chanEmoji').value,
+          description: $('chanDesc').value, hasPeerSupport: $('chanPeer').checked,
+        }).then(() => { flash('chanMsg', 'ok', 'Channel updated.'); loadChannels(); })
+          .catch((e) => flash('chanMsg', 'err', e.message));
+        return;
+      }
+      const aud = audienceBody('audSeg', 'audStations', 'audMembers');
+      if (!aud) { flash('chanMsg', 'err', 'Pick at least one station or member — or choose Everyone.'); return; }
+      post('leader_create_channel', Object.assign({
+        name: $('chanName').value, emoji: $('chanEmoji').value, description: $('chanDesc').value,
+        hasPeerSupport: $('chanPeer').checked,
+        supporterIds: $('chanPeer').checked ? checkedVals('chanSupporters') : [],
+      }, aud)).then((d) => {
+        flash('chanMsg', 'ok', 'Channel created — ' + (d.enrolled || 0) + ' enrolled.');
+        resetChanForm();
         loadChannels();
       }).catch((e) => flash('chanMsg', 'err', e.message));
+    });
+
+    // Channel member management
+    function loadChannelMembers() {
+      if (!MANAGED) return;
+      const isWs = (CHANNELS.find((c) => c.id === MANAGED) || {}).isWorkspace;
+      post('leader_channel_members', { channelId: MANAGED }).then((d) => {
+        $('chanMemberBody').innerHTML = (d.members || []).map((m) => {
+          const roles = ['member', 'peer_support', 'admin'];
+          if (!roles.includes(m.role)) roles.unshift(m.role);
+          return `<tr data-uid="${esc(m.userId)}">
+            <td><b>${esc(m.name || '—')}</b></td>
+            <td style="color:var(--muted);">${esc(m.station || '—')}</td>
+            <td><select data-act="chrole" style="width:auto;padding:6px 8px;font-size:12.5px;">
+              ${roles.map((r) => `<option value="${esc(r)}"${m.role === r ? ' selected' : ''}>${esc(r === 'peer_support' ? 'peer supporter' : r)}</option>`).join('')}
+            </select></td>
+            <td>${isWs ? '' : '<button class="btn danger sm" data-act="chremove">Remove</button>'}</td>
+          </tr>`;
+        }).join('') || '<tr><td colspan="4" style="color:var(--muted);">Nobody in this channel yet — add members below.</td></tr>';
+      }).catch((e) => flash('chanMembersMsg', 'err', e.message));
+    }
+    $('chanMemberBody').addEventListener('change', (ev) => {
+      const sel = ev.target.closest('select[data-act="chrole"]'); if (!sel) return;
+      post('leader_channel_set_member_role', { channelId: MANAGED, userId: ev.target.closest('tr').dataset.uid, role: sel.value })
+        .then(() => flash('chanMembersMsg', 'ok', 'Role updated.'))
+        .catch((e) => { flash('chanMembersMsg', 'err', e.message); loadChannelMembers(); });
+    });
+    $('chanMemberBody').addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button[data-act="chremove"]'); if (!btn) return;
+      if (!confirm('Remove this member from the channel? They stay on the roster and in the workspace.')) return;
+      post('leader_channel_remove_member', { channelId: MANAGED, userId: ev.target.closest('tr').dataset.uid })
+        .then(() => { flash('chanMembersMsg', 'ok', 'Removed from channel.'); loadChannelMembers(); loadChannels(); })
+        .catch((e) => flash('chanMembersMsg', 'err', e.message));
+    });
+    $('addGo').addEventListener('click', () => {
+      const aud = audienceBody('addSeg', 'addStations', 'addMembers');
+      if (!aud) { flash('chanMembersMsg', 'err', 'Pick at least one station or member — or choose Everyone.'); return; }
+      post('leader_channel_add_members', Object.assign({ channelId: MANAGED, asPeerSupport: $('addAsPeer').checked }, aud))
+        .then((d) => {
+          flash('chanMembersMsg', 'ok', (d.enrolled || 0) + ' added.');
+          $('addAsPeer').checked = false;
+          resetSeg('addSeg', 'addStations', 'addPick', ['addStations', 'addMembers']);
+          loadChannelMembers(); loadChannels();
+        })
+        .catch((e) => flash('chanMembersMsg', 'err', e.message));
+    });
+
+    // Announcements
+    function renderAnnouncementChannels() {
+      const kept = new Set(checkedVals('annChannels'));
+      $('annChannels').innerHTML = CHANNELS.map((c) =>
+        pickHtml(c.id, (c.emoji ? c.emoji + ' ' : '') + c.name, c.members + (c.members === 1 ? ' member' : ' members'), kept.has(c.id)),
+      ).join('') || '<span style="font-size:12px;color:var(--muted);">No channels yet.</span>';
+      updateAnnCount();
+    }
+    function updateAnnCount() {
+      const n = checkedVals('annChannels').length;
+      $('annCount').textContent = n ? '→ ' + n + (n === 1 ? ' channel' : ' channels') : '';
+    }
+    $('annChannels').addEventListener('change', updateAnnCount);
+    $('annSend').addEventListener('click', () => {
+      clearMsg('annMsg');
+      const ids = checkedVals('annChannels');
+      const bodyTxt = $('annBody').value.trim();
+      if (!ids.length) { flash('annMsg', 'err', 'Pick at least one channel to post to.'); return; }
+      if (bodyTxt.length < 2) { flash('annMsg', 'err', 'Write the message first.'); return; }
+      if (!confirm('Post this announcement to ' + ids.length + (ids.length === 1 ? ' channel' : ' channels')
+        + '? Members there get their normal channel notification.')) return;
+      $('annSend').disabled = true;
+      post('leader_post_announcement', { channelIds: ids, title: $('annTitle').value.trim(), body: bodyTxt })
+        .then((d) => {
+          flash('annMsg', 'ok', 'Posted to ' + d.posted + (d.posted === 1 ? ' channel' : ' channels')
+            + (d.failed ? ' · ' + d.failed + ' failed' : '') + '.');
+          $('annTitle').value = ''; $('annBody').value = '';
+          $('annChannels').querySelectorAll('input').forEach((i) => { i.checked = false; i.closest('.pick').classList.remove('on'); });
+          updateAnnCount();
+        })
+        .catch((e) => flash('annMsg', 'err', e.message))
+        .finally(() => { $('annSend').disabled = false; });
     });
 
     // ── Settings ──
@@ -937,11 +1409,16 @@
     function refreshDashboard() {
       return post('dashboard', { sinceDays: parseInt($('days').value, 10) }).then(renderDashboard);
     }
+    // One Refresh button, everything: analytics, roster, resources, channels, settings.
+    function refreshAll() {
+      refreshDashboard().catch((e) => alert(e.message));
+      loadRoster(); loadResources(); loadChannels(); loadSettings();
+      if (MANAGED) loadChannelMembers();
+    }
     function enterApp() {
       $('gate').style.display = 'none';
       $('app').style.display = 'block';
-      refreshDashboard().catch((e) => alert(e.message));
-      loadRoster(); loadResources(); loadChannels(); loadSettings();
+      refreshAll();
     }
     function tryKey(key) {
       KEY = key;
@@ -953,7 +1430,7 @@
     }
     $('enterBtn').addEventListener('click', () => { const k = $('key').value.trim(); if (k) tryKey(k); });
     $('key').addEventListener('keydown', (e) => { if (e.key === 'Enter') { const k = $('key').value.trim(); if (k) tryKey(k); } });
-    $('refreshBtn').addEventListener('click', () => { refreshDashboard().catch((e) => alert(e.message)); });
+    $('refreshBtn').addEventListener('click', refreshAll);
     $('days').addEventListener('change', () => { refreshDashboard().catch((e) => alert(e.message)); });
     $('lockBtn').addEventListener('click', () => {
       sessionStorage.removeItem('ac_teams_key'); KEY = '';
