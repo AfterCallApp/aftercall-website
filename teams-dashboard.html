@@ -35,6 +35,30 @@
       --warn: #F59E0B;
       --bad: #EF6666;
       --radius: 14px;
+      --topbar-bg: rgba(11, 20, 29, 0.9);
+      --tooltip-bg: #0d1824;
+      --tooltip-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --chip-owner: #B79AF8;
+      --chip-supervisor: #E2A33F;
+    }
+    /* Light mode — same validated palette family on a light surface. */
+    :root[data-theme="light"] {
+      --bg: #F4F7FB;
+      --card: #FFFFFF;
+      --card2: #F1F5F9;
+      --border: rgba(15, 23, 42, 0.11);
+      --ink: #0F172A;
+      --ink2: #334155;
+      --muted: #64748B;
+      --blue: #3379CF;
+      --blue-soft: rgba(51, 121, 207, 0.10);
+      --s1: #3379CF;
+      --bad: #DC2626;
+      --topbar-bg: rgba(244, 247, 251, 0.92);
+      --tooltip-bg: #FFFFFF;
+      --tooltip-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+      --chip-owner: #7C3AED;
+      --chip-supervisor: #B45309;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -80,7 +104,7 @@
     /* ── App shell ── */
     .app { display: none; min-height: 100vh; }
     .topbar {
-      position: sticky; top: 0; z-index: 40; background: rgba(11,20,29,0.9); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 40; background: var(--topbar-bg); backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border); padding: 0 22px;
       display: flex; align-items: center; gap: 16px; height: 62px;
     }
@@ -128,8 +152,8 @@
     .chart-wrap svg { display: block; width: 100%; height: auto; }
     #tooltip {
       position: fixed; z-index: 100; pointer-events: none; display: none;
-      background: #0d1824; border: 1px solid var(--border); border-radius: 9px;
-      padding: 8px 11px; font-size: 12px; color: var(--ink2); box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      background: var(--tooltip-bg); border: 1px solid var(--border); border-radius: 9px;
+      padding: 8px 11px; font-size: 12px; color: var(--ink2); box-shadow: var(--tooltip-shadow);
       max-width: 260px;
     }
     #tooltip b { color: var(--ink); }
@@ -149,9 +173,9 @@
     td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     .tablewrap { overflow-x: auto; }
     .rolechip { font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px; text-transform: capitalize; }
-    .rolechip.owner { background: rgba(139,92,246,0.16); color: #B79AF8; }
+    .rolechip.owner { background: rgba(139,92,246,0.16); color: var(--chip-owner); }
     .rolechip.admin { background: var(--blue-soft); color: var(--s1); }
-    .rolechip.supervisor { background: rgba(201,123,6,0.16); color: #E2A33F; }
+    .rolechip.supervisor { background: rgba(201,123,6,0.16); color: var(--chip-supervisor); }
     .rolechip.member { background: rgba(148,163,184,0.12); color: var(--ink2); }
     .peerdot { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--good); font-weight: 700; }
     .peerdot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--good); }
@@ -231,6 +255,7 @@
         <option value="90" selected>Last 90 days</option>
         <option value="180">Last 180 days</option>
       </select>
+      <button class="btn ghost sm" id="themeBtn" title="Switch light / dark">☀</button>
       <button class="btn ghost sm" id="refreshBtn">Refresh</button>
       <button class="btn ghost sm" id="lockBtn" title="Forget the key in this tab">Sign out</button>
     </div>
@@ -594,10 +619,20 @@
     const API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-admin';
     const BILLING_API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-billing';
 
-    // Validated categorical series (dataviz six checks, dark surface #16212E).
-    const C = { s1: '#4E8FE0', s2: '#0E9E6E', s3: '#8B5CF6', s4: '#C97B06',
-      acuity: { Minor: '#10B981', Moderate: '#F59E0B', Serious: '#F97316', Critical: '#DC2626' },
-      grid: 'rgba(148,163,184,0.12)', ink2: '#B9C7D6', muted: '#8FA3B8' };
+    // Validated categorical series (dataviz six checks) — one set per surface.
+    // Acuity/status colors are reserved and identical in both themes.
+    const THEMES = {
+      dark: { s1: '#4E8FE0', s2: '#0E9E6E', s3: '#8B5CF6', s4: '#C97B06',
+        grid: 'rgba(148,163,184,0.12)', ink: '#E8EEF5', ink2: '#B9C7D6', muted: '#8FA3B8',
+        ring: 'rgba(148,163,184,0.15)', ptStroke: '#16212E' },
+      light: { s1: '#3379CF', s2: '#0E9E6E', s3: '#8B5CF6', s4: '#C97B06',
+        grid: 'rgba(15,23,42,0.08)', ink: '#0F172A', ink2: '#334155', muted: '#64748B',
+        ring: 'rgba(15,23,42,0.10)', ptStroke: '#FFFFFF' },
+    };
+    const C = Object.assign(
+      { acuity: { Minor: '#10B981', Moderate: '#F59E0B', Serious: '#F97316', Critical: '#DC2626' } },
+      THEMES.dark,
+    );
 
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -701,7 +736,7 @@
         svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
         s.data.forEach((v, i) => {
           if (v == null) return;
-          svg += `<circle cx="${x(i)}" cy="${y(v)}" r="2.6" fill="${s.color}" stroke="#16212E" stroke-width="1.5"/>`;
+          svg += `<circle cx="${x(i)}" cy="${y(v)}" r="2.6" fill="${s.color}" stroke="${C.ptStroke}" stroke-width="1.5"/>`;
         });
       }
       // hover hit columns (bigger than the marks)
@@ -781,7 +816,7 @@
         const bh = (h - padT - padB) * (r.value / max);
         const by = h - padB - bh;
         svg += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw}" height="${Math.max(0, bh).toFixed(1)}" rx="4" fill="${r.color}" data-tip="${esc(r.tip || `<b>${esc(r.label)}</b>: ${r.value}`)}"/>`;
-        svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${(by - 5).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="#E8EEF5">${r.value}</text>`;
+        svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${(by - 5).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="${C.ink}">${r.value}</text>`;
         svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${h - 6}" text-anchor="middle" font-size="10" fill="${C.muted}">${esc(r.label)}</text>`;
       });
       el.innerHTML = `<svg viewBox="0 0 ${W} ${h}">${svg}</svg>`;
@@ -799,11 +834,11 @@
       const circ = 2 * Math.PI * R;
       const dash = (clamped / 100) * circ;
       el.innerHTML = `<div style="display:flex;justify-content:center;"><svg viewBox="0 0 ${size} ${size}" style="max-width:200px;">
-        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="rgba(148,163,184,0.15)" stroke-width="${sw}"/>
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.ring}" stroke-width="${sw}"/>
         <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"
           stroke-dasharray="${dash.toFixed(1)} ${(circ - dash).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"
           data-tip="${esc(`<b>${clamped}%</b> ${esc(subLabel)}`)}"/>
-        <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="#E8EEF5">${clamped}%</text>
+        <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="${C.ink}">${clamped}%</text>
         <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(subLabel)}</text>
       </svg></div>`;
       bindTips(el);
@@ -826,9 +861,9 @@
         svg += `<path d="${arc(a1, Math.max(a1 + 0.001, a2), frac > 0.5 ? 1 : 0)}" fill="${p.color}" data-tip="${esc(`<b>${esc(p.label)}</b>: ${p.value} (${Math.round(frac * 100)}%)`)}"/>`;
         a0 += frac * Math.PI * 2;
       }
-      svg += `<text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="26" font-weight="800" fill="#E8EEF5">${esc(centerBig)}</text>`;
+      svg += `<text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="26" font-weight="800" fill="${C.ink}">${esc(centerBig)}</text>`;
       svg += `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="10.5" fill="${C.muted}">${esc(centerSmall)}</text>`;
-      const legend = parts.map((p) => `<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:${C.ink2};font-weight:600;margin:2px 10px 2px 0;"><i style="width:9px;height:9px;border-radius:3px;background:${p.color};display:inline-block;"></i>${esc(p.label)} <b style="color:#E8EEF5">${p.value}</b></span>`).join('');
+      const legend = parts.map((p) => `<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:${C.ink2};font-weight:600;margin:2px 10px 2px 0;"><i style="width:9px;height:9px;border-radius:3px;background:${p.color};display:inline-block;"></i>${esc(p.label)} <b style="color:${C.ink}">${p.value}</b></span>`).join('');
       el.innerHTML = `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;"><svg viewBox="0 0 ${size} ${size}" style="max-width:190px;flex:0 0 auto;">${svg}</svg><div>${legend}</div></div>`;
       bindTips(el);
     }
@@ -1397,6 +1432,27 @@
     }
     $('checkoutBtn').addEventListener('click', function () { billingRedirect('create_checkout_session', this); });
     $('portalBtn').addEventListener('click', function () { billingRedirect('create_portal_session', this); });
+
+    // ── Theme ──
+    // Dark is the default command-center look; the choice persists per browser.
+    function applyTheme(mode) {
+      const light = mode === 'light';
+      document.documentElement.dataset.theme = light ? 'light' : 'dark';
+      Object.assign(C, THEMES[light ? 'light' : 'dark']);
+      try { localStorage.setItem('ac_teams_theme', light ? 'light' : 'dark'); } catch { /* private mode */ }
+      $('themeBtn').textContent = light ? '☾' : '☀';
+      $('themeBtn').title = light ? 'Switch to dark mode' : 'Switch to light mode';
+      if (DATA) renderDashboard(DATA); // charts bake colors into SVG — repaint
+    }
+    $('themeBtn').addEventListener('click', () => {
+      applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+    });
+    (function initTheme() {
+      let saved = null;
+      try { saved = localStorage.getItem('ac_teams_theme'); } catch { /* private mode */ }
+      if (saved === 'light') applyTheme('light');
+      else applyTheme('dark');
+    })();
 
     // ── Shell ──
     document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => {
