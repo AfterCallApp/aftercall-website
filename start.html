@@ -1,181 +1,893 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AfterCall ‚Äî Get Started</title>
-  <meta name="description" content="See how AfterCall helps EMS agencies capture calls, track skills, support wellness, and connect crews with one EMS-built platform." />
-  <meta property="og:title" content="AfterCall ‚Äî Get Started" />
-  <meta property="og:description" content="Request a demo for your EMS agency and see how AfterCall supports crews from call capture to wellness." />
-  <meta property="og:url" content="https://aftercallapp.com/start" />
-  <meta property="og:type" content="website" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue: #3379CF;
-      --blue-dark: #1F5FA3;
-      --blue-light: #eef4fd;
-      --blue-mid: #b8d4f0;
-      --text-dark: #0f1923;
-      --text-mid: #374151;
-      --text-light: #6b7280;
-      --bg: #ffffff;
-      --bg-alt: #f7f9fc;
-      --border: #e2e8f0;
-      --green: #10B981;
-      --purple: #8b5cf6;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text-dark);
-      background:
-        radial-gradient(circle at 18% 12%, rgba(51,121,207,.16), transparent 28rem),
-        radial-gradient(circle at 85% 5%, rgba(16,185,129,.10), transparent 24rem),
-        linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-    a { color: inherit; }
-    .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
-    .nav { padding: 24px 0; }
-    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 900; letter-spacing: -0.04em; font-size: 22px; }
-    .brand img { width: 40px; height: 40px; border-radius: 12px; box-shadow: 0 10px 28px rgba(15,25,35,.12); }
-    .hero { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(360px, .78fr); gap: 56px; align-items: center; padding: 54px 0 76px; }
-    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; background: rgba(51,121,207,.10); color: var(--blue-dark); font-size: 13px; font-weight: 800; margin-bottom: 22px; }
-    .eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(16,185,129,.12); }
-    h1 { font-size: clamp(44px, 7vw, 78px); line-height: .94; letter-spacing: -0.07em; max-width: 760px; }
-    .lead { font-size: clamp(18px, 2vw, 22px); line-height: 1.55; color: var(--text-mid); margin: 26px 0 30px; max-width: 650px; }
-    .proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 34px; max-width: 660px; }
-    .proof-card { background: rgba(255,255,255,.72); border: 1px solid rgba(226,232,240,.9); border-radius: 18px; padding: 18px; box-shadow: 0 18px 50px rgba(15,25,35,.06); backdrop-filter: blur(16px); }
-    .proof-card strong { display: block; font-size: 15px; margin-bottom: 6px; }
-    .proof-card span { display: block; color: var(--text-light); font-size: 13px; line-height: 1.45; }
-    .form-shell { position: relative; }
-    .form-card { background: rgba(255,255,255,.94); border: 1px solid var(--border); border-radius: 28px; padding: 28px; box-shadow: 0 28px 90px rgba(15,25,35,.14); overflow: hidden; }
-    .form-card::before { content: ''; display: block; height: 5px; margin: -28px -28px 24px; background: linear-gradient(90deg, var(--blue), var(--green), var(--purple)); }
-    .form-kicker { color: var(--blue-dark); font-weight: 900; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
-    .form-card h2 { font-size: 28px; line-height: 1.08; letter-spacing: -0.04em; margin-bottom: 10px; }
-    .form-note { color: var(--text-light); font-size: 15px; line-height: 1.5; margin-bottom: 20px; }
-    #hubspot-start-form { min-height: 520px; }
-    #hubspot-start-form .hs-form-field { margin-bottom: 14px; }
-    #hubspot-start-form label { color: var(--text-dark); font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 7px; }
-    #hubspot-start-form input, #hubspot-start-form select, #hubspot-start-form textarea {
-      width: 100% !important;
-      border: 1px solid #d1d5db !important;
-      border-radius: 12px !important;
-      padding: 12px 14px !important;
-      font-family: 'Inter', sans-serif !important;
-      font-size: 15px !important;
-      color: var(--text-dark) !important;
-      background: white !important;
-      box-shadow: none !important;
-    }
-    #hubspot-start-form input:focus, #hubspot-start-form select:focus, #hubspot-start-form textarea:focus { outline: 3px solid rgba(51,121,207,.16) !important; border-color: var(--blue) !important; }
-    #hubspot-start-form input[type='submit'], #hubspot-start-form .hs-button {
-      display: inline-flex !important;
-      justify-content: center !important;
-      width: 100% !important;
-      background: var(--blue) !important;
-      border: 0 !important;
-      border-radius: 999px !important;
-      color: white !important;
-      padding: 14px 24px !important;
-      font-family: 'Inter', sans-serif !important;
-      font-weight: 900 !important;
-      cursor: pointer !important;
-      box-shadow: 0 14px 30px rgba(51,121,207,.26) !important;
-    }
-    #hubspot-start-form input[type='submit']:hover, #hubspot-start-form .hs-button:hover { background: var(--blue-dark) !important; transform: translateY(-1px); }
-    .below { border-top: 1px solid var(--border); padding: 54px 0 72px; }
-    .below-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .feature { background: white; border: 1px solid var(--border); border-radius: 22px; padding: 24px; box-shadow: 0 18px 48px rgba(15,25,35,.05); }
-    .feature .icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px; background: var(--blue-light); color: var(--blue-dark); font-weight: 900; margin-bottom: 16px; }
-    .feature h3 { font-size: 19px; letter-spacing: -0.03em; margin-bottom: 8px; }
-    .feature p { color: var(--text-light); line-height: 1.55; font-size: 15px; }
-    footer { color: var(--text-light); font-size: 14px; padding: 28px 0; }
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 28px; }
-      .proof, .below-grid { grid-template-columns: 1fr; }
-      .form-card { padding: 22px; border-radius: 24px; }
-      .form-card::before { margin: -22px -22px 20px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AfterCall ‚Äî The call ends. The impact doesn't.</title>
+<meta name="description" content="AfterCall is the app built by EMS, for EMS. Log every call, track your clinical growth, and protect your wellness. Free on iOS &amp; Android.">
+<meta property="og:title" content="AfterCall ‚Äî The call ends. The impact doesn't.">
+<meta property="og:description" content="Built by EMS. Built for EMS. Log the call, track your growth, protect the provider behind the badge.">
+<meta property="og:image" content="https://aftercallapp.com/images/dashboard.png">
+<meta property="og:url" content="https://aftercallapp.com/start">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&display=swap" rel="stylesheet">
+<script src="https://js.hsforms.net/forms/embed/51892158.js" defer></script>
+
+<!--
+  ============================================================
+  AfterCall ‚Äî Paid-traffic lead capture page
+  ASE Creative Group
+
+  SWAP POINTS (search these strings):
+   [HUBSPOT]   ‚Äî replace the native <form> with the HubSpot embed
+   [PIXEL]     ‚Äî Meta Pixel / GA4 / gtag goes here
+   [ASSETS]    ‚Äî screenshots currently hotlinked from aftercallapp.com;
+                 move to local /images before launch
+   [CONVERT]   ‚Äî fires on successful submit; wire to fbq('track','Lead')
+  ============================================================
+-->
+
+<style>
+:root{
+  --ink:        #05091C;
+  --navy:       #0A1738;
+  --navy-lift:  #142A61;
+  --line:       rgba(255,255,255,.09);
+  --line-warm:  rgba(124,143,245,.28);
+
+  --signal:     #3B82F6;
+  --violet:     #8B5CF6;
+  --peri:       #7C8FF5;
+
+  --white:      #FFFFFF;
+  --text:       rgba(255,255,255,.72);
+  --text-dim:   rgba(255,255,255,.46);
+
+  --grad:       linear-gradient(96deg,#6E8BFF 0%,#8B5CF6 100%);
+
+  --shell:      1180px;
+  --r:          14px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+/* ---------- shared type roles ---------- */
+/* display: Inter 800, tight tracking (matches banner lockup) */
+.display{
+  font-weight:800;
+  letter-spacing:-.038em;
+  line-height:.98;
+  color:var(--white);
+  margin:0;
+}
+/* utility: the patch / radio-code voice */
+.code{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-feature-settings:"tnum" 1;
+}
+.grad{
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.shell{width:100%;max-width:var(--shell);margin:0 auto;padding:0 24px}
+
+/* the light-streak divider lifted from the EMS World banners */
+.streak{
+  height:1px;border:0;margin:0;
+  background:linear-gradient(90deg,transparent,rgba(124,143,245,.05) 18%,rgba(160,180,255,.55) 50%,rgba(124,143,245,.05) 82%,transparent);
+  position:relative;
+}
+.streak::after{
+  content:'';position:absolute;left:50%;top:-2px;transform:translateX(-50%);
+  width:120px;height:5px;border-radius:50%;
+  background:rgba(180,200,255,.5);filter:blur(6px);
+}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(5,9,28,.72);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{display:flex;align-items:center;gap:20px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:1;min-width:0}
+.brand img{width:26px;height:26px;border-radius:6px}
+.brand span{font-weight:800;font-size:19px;letter-spacing:-.03em;color:var(--white)}
+.nav-note{color:var(--text-dim);font-size:12.5px;white-space:nowrap}
+.nav-cta{
+  display:inline-flex;align-items:center;height:36px;padding:0 16px;
+  border-radius:99px;background:var(--grad);
+  color:#fff;font-size:13.5px;font-weight:600;text-decoration:none;white-space:nowrap;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(110,139,255,.34)}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  padding:82px 0 96px;
+  background:
+    radial-gradient(1100px 620px at 50% -180px,rgba(20,42,97,.95) 0%,rgba(10,23,56,.4) 55%,transparent 78%),
+    linear-gradient(180deg,var(--navy) 0%,var(--ink) 92%);
+  overflow:hidden;
+}
+/* faint ambulance lightbar wash, bottom-left */
+.hero::before{
+  content:'';position:absolute;left:-14%;bottom:-30%;width:70%;height:80%;
+  background:radial-gradient(circle,rgba(59,130,246,.16) 0%,transparent 62%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1.06fr .94fr;gap:64px;align-items:start;
+}
+
+.chip{
+  display:inline-block;padding:7px 14px;border-radius:99px;
+  border:1px solid var(--line-warm);color:var(--peri);
+  background:rgba(124,143,245,.07);margin-bottom:26px;
+}
+h1.display{font-size:clamp(44px,6.1vw,74px)}
+.hero-sub{
+  margin:24px 0 0;max-width:31em;
+  font-size:clamp(16.5px,1.9vw,18.5px);color:var(--text);
+}
+
+/* ---------- SIGNATURE: the run sheet ---------- */
+.runsheet{
+  margin-top:40px;max-width:430px;
+  border:1px solid var(--line);border-radius:var(--r);
+  background:rgba(255,255,255,.022);
+  padding:18px 20px 16px;
+}
+.runsheet-head{
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--text-dim);padding-bottom:11px;margin-bottom:6px;
+  border-bottom:1px solid var(--line);
+}
+.rs-live{display:flex;align-items:center;gap:7px;color:var(--peri)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+.rs-row{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:7px 0;
+  opacity:0;transform:translateY(5px);
+  animation:rsIn .5s cubic-bezier(.2,.7,.3,1) forwards;
+}
+.rs-label{font-size:12.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--text-dim)}
+.rs-time{
+  font-size:14.5px;font-weight:600;color:rgba(255,255,255,.86);
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:.02em;
+}
+.rs-row.is-after{
+  margin-top:6px;padding-top:13px;border-top:1px dashed var(--line-warm);
+}
+.rs-row.is-after .rs-label{color:var(--peri);font-weight:600}
+.rs-row.is-after .rs-time{color:var(--peri);opacity:.55}
+.caret{
+  display:inline-block;width:8px;height:15px;margin-left:5px;vertical-align:-2px;
+  background:var(--peri);animation:blink 1.15s steps(1,end) infinite;
+}
+.runsheet-note{
+  margin:14px 0 0;font-size:13.5px;line-height:1.5;color:var(--text-dim);
+  border-top:1px solid var(--line);padding-top:13px;
+}
+.runsheet-note b{color:rgba(255,255,255,.82);font-weight:600}
+
+@keyframes rsIn{to{opacity:1;transform:none}}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* ---------- form card ---------- */
+.form-card{
+  position:relative;
+  border:1px solid var(--line-warm);border-radius:18px;
+  background:linear-gradient(180deg,rgba(20,42,97,.62) 0%,rgba(8,16,42,.9) 100%);
+  padding:30px 30px 26px;
+  box-shadow:0 26px 70px -26px rgba(0,0,0,.85);
+}
+.form-card::before{
+  content:'';position:absolute;inset:-1px -1px auto;height:1px;border-radius:18px 18px 0 0;
+  background:linear-gradient(90deg,transparent,rgba(160,180,255,.6),transparent);
+}
+.fc-eyebrow{color:var(--peri);margin-bottom:12px;display:block}
+.fc-title{font-size:25px;font-weight:800;letter-spacing:-.028em;color:var(--white);margin:0 0 8px;line-height:1.15}
+.fc-sub{font-size:14.5px;margin:0 0 24px;color:var(--text)}
+
+.form-foot{
+  margin:15px 0 0;text-align:center;font-size:12.5px;color:var(--text-dim);
+}
+
+/* ---------- HubSpot embed overrides (portal 51892158) ----------
+   The embed renders inline into .hs-form-frame and ships its own
+   light-theme stylesheet. Everything below re-skins it to the
+   AfterCall dark palette. Selectors are scoped to .form-card so
+   nothing leaks elsewhere on the page.
+   NOTE: field labels, order and required flags are managed in
+   HubSpot's form editor, not here.
+---------------------------------------------------------------- */
+.hs-loading{min-height:300px;display:grid;place-items:center;color:var(--text-dim);font-size:13.5px}
+
+.form-card .hs-form-frame{font-family:'Inter',sans-serif}
+.form-card .hs-form-frame form{margin:0}
+
+.form-card .hs-form-field{margin-bottom:14px}
+.form-card .hs-form-field > label,
+.form-card .hs-form-field > label span{
+  display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:7px;line-height:1.4;
+}
+.form-card .hs-form-required{color:var(--peri);margin-left:3px}
+.form-card .hs-field-desc{
+  font-size:12px;color:rgba(255,255,255,.34);margin:-3px 0 8px;
+  text-transform:none;letter-spacing:0;font-weight:400;
+}
+
+.form-card .hs-input:not([type=checkbox]):not([type=radio]){
+  width:100%!important;height:46px;padding:0 14px;
+  background:rgba(255,255,255,.045);
+  border:1px solid var(--line);border-radius:10px;
+  color:var(--white);font-family:'Inter',sans-serif;font-size:15px;
+  box-shadow:none;
+  transition:border-color .16s ease,background .16s ease,box-shadow .16s ease;
+  appearance:none;-webkit-appearance:none;
+}
+.form-card textarea.hs-input{height:auto!important;min-height:96px;padding:12px 14px!important;line-height:1.5}
+.form-card select.hs-input{
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%237C8FF5' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;
+}
+.form-card select.hs-input option{background:#0A1738;color:#fff}
+.form-card .hs-input::placeholder{color:rgba(255,255,255,.3)}
+.form-card .hs-input:-webkit-autofill{
+  -webkit-text-fill-color:#fff;
+  -webkit-box-shadow:0 0 0 60px #101f47 inset;
+  caret-color:#fff;
+}
+.form-card .hs-input:focus{
+  outline:none;border-color:var(--peri);background:rgba(255,255,255,.07);
+  box-shadow:0 0 0 3px rgba(124,143,245,.16);
+}
+.form-card .hs-input.invalid,
+.form-card .hs-input.error{border-color:rgba(239,68,68,.55)}
+
+/* two-up name row */
+.form-card .hs-fieldtype-text.hs-form-field{width:100%}
+.form-card fieldset{max-width:none!important;margin:0}
+.form-card fieldset.form-columns-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-card fieldset.form-columns-2 .hs-form-field{width:100%!important;float:none}
+.form-card fieldset .input{margin-right:0!important}
+
+/* checkboxes / consent */
+.form-card .hs-form-booleancheckbox,
+.form-card .hs-form-checkbox{list-style:none}
+.form-card ul.inputs-list{list-style:none;margin:0;padding:0}
+.form-card .hs-form-booleancheckbox label,
+.form-card .hs-form-checkbox label{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:12.5px;line-height:1.5;color:var(--text-dim);cursor:pointer;
+  text-transform:none;letter-spacing:0;font-weight:400;margin:0;
+}
+.form-card input[type=checkbox].hs-input,
+.form-card input[type=radio].hs-input{
+  width:17px;height:17px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--violet);cursor:pointer;
+}
+.form-card .legal-consent-container{margin:16px 0 4px}
+.form-card .legal-consent-container p,
+.form-card .legal-consent-container .hs-richtext{
+  font-size:12.5px;line-height:1.5;color:var(--text-dim);margin:0 0 8px;
+}
+.form-card .legal-consent-container a,
+.form-card .hs-richtext a{color:var(--peri);text-decoration:underline;text-underline-offset:2px}
+
+/* submit */
+.form-card .hs-submit{margin-top:20px}
+.form-card .hs-button,
+.form-card input[type=submit].hs-button{
+  width:100%;height:52px;border:0;border-radius:11px;
+  background:var(--grad);color:#fff;
+  font-family:'Inter',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.01em;
+  cursor:pointer;text-shadow:none;padding:0;
+  transition:transform .16s ease,box-shadow .16s ease,opacity .16s ease;
+}
+.form-card .hs-button:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(110,139,255,.36)}
+.form-card .hs-button:active{transform:translateY(0)}
+
+/* validation + post-submit message */
+.form-card .hs-error-msg,
+.form-card .hs-error-msgs label{
+  color:#FCA5A5;font-size:12.5px;font-weight:400;
+  text-transform:none;letter-spacing:0;margin:6px 0 0;display:block;
+}
+.form-card .hs-error-msgs{list-style:none;margin:0;padding:0}
+.form-card .submitted-message{
+  color:var(--text);font-size:15px;line-height:1.6;text-align:center;padding:18px 0 6px;
+}
+.form-card .submitted-message p{margin:0 0 8px}
+.form-card .submitted-message strong,
+.form-card .submitted-message h1,
+.form-card .submitted-message h2,
+.form-card .submitted-message h3{color:var(--white)}
+.agency-link{
+  margin:20px 0 0;padding-top:18px;border-top:1px solid var(--line);
+  font-size:13.5px;text-align:center;color:var(--text-dim);
+}
+.agency-link a{color:var(--peri);font-weight:600;text-decoration:none}
+.agency-link a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* success state */
+.form-done{display:none;text-align:center;padding:26px 4px 14px}
+.form-done.show{display:block;animation:rsIn .45s ease forwards;opacity:0}
+.done-mark{
+  width:52px;height:52px;margin:0 auto 20px;border-radius:50%;
+  border:1.5px solid var(--peri);display:grid;place-items:center;
+  background:rgba(124,143,245,.1);
+}
+.form-done h3{font-size:22px;font-weight:800;letter-spacing:-.026em;color:var(--white);margin:0 0 10px}
+.form-done p{font-size:14.5px;margin:0 0 22px;color:var(--text)}
+.store-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.store-btn{
+  display:inline-flex;align-items:center;height:44px;padding:0 18px;border-radius:10px;
+  border:1px solid var(--line-warm);background:rgba(255,255,255,.05);
+  color:var(--white);font-size:14px;font-weight:600;text-decoration:none;
+  transition:background .16s ease,border-color .16s ease;
+}
+.store-btn:hover{background:rgba(255,255,255,.1);border-color:var(--peri)}
+
+/* ---------- proof band ---------- */
+.band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(10,23,56,.4)}
+.band-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.band-cell{padding:38px 30px;border-right:1px solid var(--line)}
+.band-cell:last-child{border-right:0}
+.band-num{
+  font-size:40px;font-weight:800;letter-spacing:-.04em;line-height:1;
+  color:var(--white);font-variant-numeric:tabular-nums;margin-bottom:11px;
+}
+.band-cell p{margin:0;font-size:14.5px;line-height:1.5;color:var(--text)}
+.band-cell .src{display:block;margin-top:9px;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.04em}
+
+/* ---------- features ---------- */
+.feat{padding:96px 0 40px}
+.sec-head{max-width:640px;margin:0 auto 62px;text-align:center}
+.sec-head .code{color:var(--peri);display:block;margin-bottom:16px}
+.sec-head h2{font-size:clamp(30px,4.2vw,44px)}
+.sec-head p{margin:18px 0 0;font-size:17px}
+
+.f-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;
+  padding:56px 0;border-top:1px solid var(--line);
+}
+.f-row:nth-child(even) .f-text{order:2}
+.f-kicker{color:var(--peri);display:block;margin-bottom:14px}
+.f-row h3{font-size:clamp(24px,3vw,31px);font-weight:800;letter-spacing:-.032em;color:var(--white);margin:0 0 14px;line-height:1.14}
+.f-row p{margin:0;font-size:16px;max-width:34em}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tag{
+  padding:6px 12px;border-radius:99px;border:1px solid var(--line);
+  font-size:12px;font-weight:500;color:var(--text-dim);background:rgba(255,255,255,.03);
+}
+.f-shot{
+  position:relative;border-radius:20px;overflow:hidden;
+  border:1px solid var(--line);
+  background:linear-gradient(150deg,rgba(20,42,97,.6),rgba(8,16,42,.8));
+  padding:22px;
+}
+.f-shot img{border-radius:12px;box-shadow:0 20px 50px -18px rgba(0,0,0,.8)}
+
+/* ---------- founder ---------- */
+.founder{padding:90px 0}
+.founder-in{
+  display:grid;grid-template-columns:132px 1fr;gap:36px;align-items:center;
+  max-width:880px;margin:0 auto;
+  border:1px solid var(--line);border-radius:20px;padding:40px;
+  background:linear-gradient(140deg,rgba(20,42,97,.42),rgba(8,16,42,.5));
+}
+.founder-in img{width:132px;height:132px;border-radius:50%;object-fit:cover;border:1px solid var(--line-warm)}
+.founder blockquote{
+  margin:0 0 20px;font-size:clamp(18px,2.3vw,22px);line-height:1.45;
+  color:var(--white);font-weight:500;letter-spacing:-.018em;
+}
+.founder .who{font-size:14px;color:var(--text-dim);margin:0}
+.founder .who b{color:var(--white);font-weight:600;display:block;font-size:15px;margin-bottom:2px}
+
+/* ---------- closing ---------- */
+.close{padding:96px 0 88px;text-align:center;position:relative;overflow:hidden;
+  background:radial-gradient(760px 380px at 50% 120%,rgba(59,130,246,.18) 0%,transparent 70%);}
+.close h2{font-size:clamp(32px,4.6vw,50px);max-width:15em;margin:0 auto}
+.close p{margin:22px auto 34px;max-width:30em;font-size:17px}
+.close-btn{
+  display:inline-flex;align-items:center;justify-content:center;height:56px;padding:0 34px;
+  border-radius:12px;background:var(--grad);color:#fff;
+  font-size:16.5px;font-weight:700;text-decoration:none;letter-spacing:-.01em;
+  transition:transform .16s ease,box-shadow .16s ease;
+}
+.close-btn:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(110,139,255,.4)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:38px 0 46px;background:var(--ink)}
+.foot-in{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.foot-links{display:flex;gap:22px;flex-wrap:wrap}
+.foot-links a{font-size:13.5px;color:var(--text-dim);text-decoration:none}
+.foot-links a:hover{color:var(--white)}
+.foot-legal{font-size:12.5px;color:rgba(255,255,255,.3);margin:26px 0 0;line-height:1.6}
+.crisis{
+  margin:20px 0 0;padding:13px 16px;border-radius:10px;
+  border:1px solid var(--line);background:rgba(255,255,255,.02);
+  font-size:12.5px;color:var(--text-dim);line-height:1.55;
+}
+.crisis b{color:rgba(255,255,255,.75);font-weight:600}
+
+/* ---------- agency / leadership economics ---------- */
+.agency{
+  padding:88px 0;
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(10,23,56,.55) 0%,transparent 100%);
+}
+.agency-head{max-width:660px;margin:0 0 52px}
+.agency-head .code{color:var(--peri);display:block;margin-bottom:16px}
+.agency-head h2{font-size:clamp(28px,3.9vw,42px)}
+.agency-head p{margin:18px 0 0;font-size:17px;max-width:34em}
+
+.ledger{
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:rgba(255,255,255,.022);
+}
+.ledger-row{
+  display:grid;grid-template-columns:minmax(160px,.9fr) 1.7fr;gap:32px;
+  padding:26px 30px;border-bottom:1px solid var(--line);align-items:baseline;
+}
+.ledger-row:last-child{border-bottom:0}
+.ledger-fig{
+  font-size:clamp(30px,4vw,40px);font-weight:800;letter-spacing:-.04em;line-height:1;
+  color:var(--white);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+}
+.ledger-fig .sub{
+  display:block;margin-top:8px;font-size:12px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--peri);
+}
+.ledger-row p{margin:0;font-size:15.5px;line-height:1.55}
+.ledger-row p .ref{
+  color:rgba(255,255,255,.32);font-size:12.5px;text-decoration:none;
+  border-bottom:1px dotted rgba(255,255,255,.2);margin-left:4px;
+}
+.ledger-row p .ref:hover{color:var(--peri);border-bottom-color:var(--peri)}
+
+.breakeven{
+  margin-top:26px;padding:28px 30px;
+  border:1px solid var(--line-warm);border-radius:16px;
+  background:linear-gradient(140deg,rgba(20,42,97,.55),rgba(8,16,42,.6));
+}
+.breakeven p{margin:0;font-size:17px;line-height:1.5;color:var(--white);font-weight:500;letter-spacing:-.015em}
+.breakeven .fine{
+  margin:14px 0 0;font-size:13px;color:var(--text-dim);font-weight:400;letter-spacing:0;line-height:1.55;
+}
+.agency-cta{
+  display:inline-flex;align-items:center;height:50px;padding:0 26px;margin-top:26px;
+  border-radius:11px;border:1px solid var(--line-warm);background:rgba(124,143,245,.1);
+  color:var(--white);font-size:15.5px;font-weight:600;text-decoration:none;
+  transition:background .16s ease,border-color .16s ease,transform .16s ease;
+}
+.agency-cta:hover{background:rgba(124,143,245,.2);border-color:var(--peri);transform:translateY(-1px)}
+
+/* ---------- sources ---------- */
+.sources{
+  margin:28px 0 0;padding:18px 20px;border:1px solid var(--line);border-radius:10px;
+  background:rgba(255,255,255,.015);
+  font-size:12px;line-height:1.7;color:rgba(255,255,255,.36);
+}
+.sources b{
+  display:block;color:rgba(255,255,255,.6);font-weight:600;font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:9px;
+}
+.sources a{color:rgba(255,255,255,.5);text-decoration:underline;text-underline-offset:2px}
+.sources a:hover{color:var(--peri)}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .runsheet{max-width:100%;order:3}
+  .f-row{grid-template-columns:1fr;gap:36px;padding:46px 0}
+  .f-row:nth-child(even) .f-text{order:0}
+  .band-grid{grid-template-columns:1fr}
+  .band-cell{border-right:0;border-bottom:1px solid var(--line);padding:30px 24px}
+  .band-cell:last-child{border-bottom:0}
+  .founder-in{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 26px}
+  .ledger-row{grid-template-columns:1fr;gap:12px;padding:24px}
+  .agency{padding:66px 0}
+}
+@media(max-width:640px){
+  .hero{padding:56px 0 68px}
+  .nav-note{display:none}
+  .form-card{padding:24px 20px 22px}
+  .row2{grid-template-columns:1fr}
+  .feat{padding:66px 0 20px}
+  .founder,.close{padding:66px 0}
+  .foot-in{flex-direction:column;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .rs-row{opacity:1;transform:none}
+  .rv{opacity:1;transform:none}
+  .caret{opacity:1}
+}
+</style>
 </head>
 <body>
-  <nav class="nav">
-    <div class="container">
-      <a class="brand" href="/" aria-label="AfterCall home">
-        <img src="images/logo-transparent.png" alt="AfterCall logo" />
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="shell nav-in">
+    <a href="https://aftercallapp.com/" class="brand">
+      <img src="https://aftercallapp.com/images/logo-transparent.png" alt="">
+      <span>AfterCall</span>
+    </a>
+    <span class="nav-note">Free ¬∑ iOS &amp; Android</span>
+    <a href="#get" class="nav-cta">Get the app</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="shell hero-grid">
+
+    <div class="hero-text">
+      <span class="chip code">Built by EMS. Built for EMS.</span>
+      <h1 class="display">The call ends.<br><span class="grad">The impact doesn't.</span></h1>
+      <p class="hero-sub">
+        AfterCall is where the job goes after you clear the scene. Log every call,
+        watch your clinical skill build shift over shift, and check in on yourself
+        before a heavy stretch catches you off guard.
+      </p>
+
+      <!-- SIGNATURE ELEMENT: the run sheet with one field nobody fills in -->
+      <div class="runsheet" aria-label="Example call timestamps">
+        <div class="runsheet-head">
+          <span class="code">Run 24-0917 ¬∑ Cardiac arrest</span>
+          <span class="rs-live code"><i class="dot"></i>Logged</span>
+        </div>
+
+        <div class="rs-row" style="animation-delay:.15s"><span class="rs-label">Dispatched</span><span class="rs-time">02:14:07</span></div>
+        <div class="rs-row" style="animation-delay:.28s"><span class="rs-label">En route</span><span class="rs-time">02:15:40</span></div>
+        <div class="rs-row" style="animation-delay:.41s"><span class="rs-label">On scene</span><span class="rs-time">02:21:12</span></div>
+        <div class="rs-row" style="animation-delay:.54s"><span class="rs-label">Transport</span><span class="rs-time">02:39:55</span></div>
+        <div class="rs-row" style="animation-delay:.67s"><span class="rs-label">At facility</span><span class="rs-time">02:51:30</span></div>
+        <div class="rs-row" style="animation-delay:.80s"><span class="rs-label">Clear</span><span class="rs-time">03:06:18</span></div>
+
+        <div class="rs-row is-after" style="animation-delay:1.15s">
+          <span class="rs-label">After</span>
+          <span class="rs-time">--:--:--<i class="caret"></i></span>
+        </div>
+
+        <p class="runsheet-note">
+          Every part of this job has a field. <b>Except the part you take home.</b>
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ LEAD FORM ‚Äî HubSpot portal 51892158 ============ -->
+    <div class="form-card" id="get">
+      <span class="fc-eyebrow code">Free ¬∑ No card required</span>
+      <h2 class="fc-title">Send me the app</h2>
+      <p class="fc-sub">We'll email your download link and a short walkthrough of the first shift. Nothing else unless you want it.</p>
+
+      <!-- Form fields, labels and the thank-you message are managed in the
+           HubSpot form editor. Styling is handled by the CSS above. -->
+      <div class="hs-form-frame"
+           data-region="na1"
+           data-form-id="7f14478a-ac4b-4909-9151-59b452485ff5"
+           data-portal-id="51892158">
+        <div class="hs-loading">Loading the form‚Ä¶</div>
+      </div>
+
+      <p class="form-foot" id="formFoot">Takes about 20 seconds. Free tier, no credit card.</p>
+
+      <!-- revealed after a successful HubSpot submit -->
+      <div class="form-done" id="formDone">
+        <div class="done-mark">
+          <svg width="22" height="17" viewBox="0 0 22 17" fill="none" aria-hidden="true">
+            <path d="M2 8.6 8.2 15 20 2" stroke="#7C8FF5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>You're in.</h3>
+        <p>Grab it now if you'd rather not wait for the email.</p>
+        <div class="store-row">
+          <a class="store-btn" href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener">App Store</a>
+          <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.aftercallapp.android" target="_blank" rel="noopener">Google Play</a>
+        </div>
+      </div>
+
+      <p class="agency-link">
+        Rolling this out to a department?
+        <a href="https://aftercallapp.com/teams.html">See AfterCall for agencies ‚Üí</a>
+      </p>
+    </div>
+    <!-- ============ /LEAD FORM ============ -->
+
+  </div>
+</header>
+
+<hr class="streak">
+
+<!-- ============ PROOF BAND ============ -->
+<section class="band">
+  <div class="shell band-grid">
+    <div class="band-cell rv">
+      <div class="band-num">20%</div>
+      <p>of paramedics meet criteria for PTSD in a given year. In the general working
+      population it's 3.1%.
+      <span class="src">Hoell, Kourmpeli &amp; Dressing ¬∑ Frontiers in Public Health, 2023 ¬∑ 41 samples, 17,045 paramedics</span></p>
+    </div>
+    <div class="band-cell rv">
+      <div class="band-num">76%</div>
+      <p>call burnout a critical issue in EMS today. One in four rank it the single
+      biggest problem their agency faces.
+      <span class="src">What Paramedics Want 2025 ¬∑ EMS1 &amp; Fitch &amp; Associates</span></p>
+    </div>
+    <div class="band-cell rv">
+      <div class="band-num">15%</div>
+      <p>actually use peer support, even though 96% of agencies offer something.
+      The gap isn't caring. It's a tool nobody opens.
+      <span class="src">2024 EMS Trend Survey</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section class="feat">
+  <div class="shell">
+    <div class="sec-head rv">
+      <span class="code">Clinical clarity. Provider wellness. One app.</span>
+      <h2 class="display">Clinical enough to be useful.<br>Personal enough to matter.</h2>
+      <p>The whole flow takes a few minutes at the end of a shift. What it gives you back lasts a career.</p>
+    </div>
+
+    <!-- [ASSETS] hotlinked ‚Äî move to local /images before launch -->
+    <div class="f-row rv">
+      <div class="f-text">
+        <span class="f-kicker code">Log the call</span>
+        <h3>Type it, speak it, or paste the CAD.</h3>
+        <p>Eight guided steps capture chief complaint, acuity, vitals, interventions, GCS, and outcome.
+        Or say the call out loud and let AfterCall build the structured narrative for you.</p>
+        <div class="tags"><span class="tag">8-step call flow</span><span class="tag">Voice logging</span><span class="tag">CAD dispatch paste</span><span class="tag">PDF export</span></div>
+      </div>
+      <div class="f-shot"><img src="https://aftercallapp.com/images/new-call.png" alt="AfterCall call type selection screen" loading="lazy"></div>
+    </div>
+
+    <div class="f-row rv">
+      <div class="f-text">
+        <span class="f-kicker code">Track your growth</span>
+        <h3>Turn experience into expertise.</h3>
+        <p>IV/IOs, airways, cardioversions, medications. Every intervention counted, so you can see
+        exactly where your skills are building and where you've gone cold.</p>
+        <div class="tags"><span class="tag">Skill momentum</span><span class="tag">Acuity breakdown</span><span class="tag">Shift analytics</span><span class="tag">12-month history</span></div>
+      </div>
+      <div class="f-shot"><img src="https://aftercallapp.com/images/my-calls-analytics.png" alt="AfterCall analytics showing call volume and acuity" loading="lazy"></div>
+    </div>
+
+    <div class="f-row rv">
+      <div class="f-text">
+        <span class="f-kicker code">Check in on yourself</span>
+        <h3>Because clearing the scene doesn't clear your head.</h3>
+        <p>Guided reflections after a hard call, a five-question shift debrief, and a wellness score
+        that reads your call load alongside your check-ins, so a heavy stretch shows up here first.</p>
+        <div class="tags"><span class="tag">Wellness score</span><span class="tag">Guided reflection</span><span class="tag">Shift debrief</span><span class="tag">Mood ¬∑ stress ¬∑ energy ¬∑ sleep</span></div>
+      </div>
+      <div class="f-shot"><img src="https://aftercallapp.com/images/journal-checkin.png" alt="AfterCall wellness check-in screen" loading="lazy"></div>
+    </div>
+
+    <div class="f-row rv">
+      <div class="f-text">
+        <span class="f-kicker code">Bring your crew</span>
+        <h3>Built individually. Stronger together.</h3>
+        <p>Join your station, share de-identified calls, message your partner, and reach peer support.
+        A private space that works the way crews already talk to each other.</p>
+        <div class="tags"><span class="tag">Stations</span><span class="tag">Peer support</span><span class="tag">Private messaging</span><span class="tag">Trending in EMS</span></div>
+      </div>
+      <div class="f-shot"><img src="https://aftercallapp.com/images/community-org.png" alt="AfterCall station community page" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="streak">
+
+<!-- ============ AGENCY ECONOMICS ============ -->
+<section class="agency">
+  <div class="shell">
+    <div class="agency-head rv">
+      <span class="code">For chiefs, directors and medical directors</span>
+      <h2 class="display">The human cost already<br>has a price tag.</h2>
+      <p>None of this is new to anyone running a service. What's new is a tool cheap enough
+      to put on every seat on the roster.</p>
+    </div>
+
+    <div class="ledger rv">
+      <div class="ledger-row">
+        <div class="ledger-fig">$9,113<span class="sub">Per paramedic</span></div>
+        <p>To recruit, screen, onboard and train one replacement full-time paramedic.
+        An EMT runs $6,780. Those are direct costs only, before a single hour of
+        overtime backfill.<a class="ref" href="https://www.ems1.com/recruitment-and-retention/articles/turnover-we-have-measured-it-but-can-we-manage-it-JfFuhyrBEf5gqU2O/" target="_blank" rel="noopener">AAA / Newton 360</a></p>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-fig">27% / 36%<span class="sub">Annual turnover</span></div>
+        <p>Full-time paramedics and full-time EMTs respectively. More than a third of
+        new hires don't finish their first year, which is where the onboarding spend
+        lands hardest.<a class="ref" href="https://stateline.org/2023/02/06/states-strive-to-reverse-shortage-of-paramedics-emts/" target="_blank" rel="noopener">AAA survey via Stateline</a></p>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-fig">$63,049<span class="sub">Per PTSD claim</span></div>
+        <p>Average paid benefits, medical care and settlement on a first responder
+        workers' comp claim involving PTSD, against $14,076 for their other claims.
+        Roughly four and a half times.<a class="ref" href="https://www.rand.org/pubs/research_briefs/RBA1391-1.html" target="_blank" rel="noopener">RAND RBA1391-1</a></p>
+      </div>
+    </div>
+
+    <div class="breakeven rv">
+      <p>Retaining one paramedic pays for a hundred people for a year.</p>
+      <p class="fine">A 100-person roster on AfterCall Teams Pro is $5,689 a year after the volume
+      discount. Replacing one paramedic costs $9,113. We haven't proven AfterCall reduces
+      turnover or PTSD and we won't pretend otherwise, which is why agencies start with a
+      90-day pilot on one station and decide on their own numbers.</p>
+    </div>
+
+    <a href="https://aftercallapp.com/teams.html" class="agency-cta rv">See AfterCall for agencies ‚Üí</a>
+  </div>
+</section>
+
+<!-- ============ FOUNDER ============ -->
+<section class="founder">
+  <div class="shell">
+    <div class="founder-in rv">
+      <img src="https://aftercallapp.com/images/founder.jpg" alt="Jordan Appelbaum" loading="lazy">
+      <div>
+        <blockquote>‚ÄúI've cleared brutal calls, driven back to quarters in silence, and had nothing waiting for me on the other side. AfterCall is what I wished existed when I needed it most.‚Äù</blockquote>
+        <p class="who"><b>Jordan Appelbaum</b>Founder &amp; CEO, AfterCall LLC</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section class="close">
+  <div class="shell">
+    <h2 class="display rv">Some calls stay with you.<br><span class="grad">Now they have somewhere to go.</span></h2>
+    <p class="rv">Free on iOS and Android. Pro adds AfterCall AI with a 7-day trial. Cancel any time.</p>
+    <a href="#get" class="close-btn rv">Send me the download link</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="shell">
+    <div class="foot-in">
+      <a href="https://aftercallapp.com/" class="brand">
+        <img src="https://aftercallapp.com/images/logo-transparent.png" alt="">
         <span>AfterCall</span>
       </a>
+      <div class="foot-links">
+        <a href="https://aftercallapp.com/teams.html">For agencies</a>
+        <a href="https://aftercallapp.com/terms.html">Terms</a>
+        <a href="https://aftercallapp.com/privacy.html">Privacy</a>
+        <a href="mailto:jordan@aftercallapp.com">Contact</a>
+      </div>
     </div>
-  </nav>
 
-  <main>
-    <section class="hero container">
-      <div>
-        <div class="eyebrow">Built by EMS providers, for EMS agencies</div>
-        <h1>Capture every call. Support every provider.</h1>
-        <p class="lead">AfterCall helps agencies modernize call logging, clinical skill tracking, shift reflection, wellness check-ins, and crew connection ‚Äî without adding another clunky system to the stack.</p>
-        <div class="proof" aria-label="AfterCall agency benefits">
-          <div class="proof-card"><strong>Cleaner call records</strong><span>Manual, voice, and CAD-assisted capture for EMS workflows.</span></div>
-          <div class="proof-card"><strong>Skills visibility</strong><span>Track interventions, patient encounters, and provider growth over time.</span></div>
-          <div class="proof-card"><strong>Wellness support</strong><span>Give crews a private place to reflect, decompress, and stay connected.</span></div>
-        </div>
-      </div>
+    <div class="sources">
+      <b>Sources</b>
+      PTSD prevalence: Hoell A, Kourmpeli E, Dressing H. Work-related posttraumatic stress
+      disorder in paramedics in comparison to data from the general population of working age.
+      <a href="https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2023.1151248/full" target="_blank" rel="noopener">Frontiers in Public Health, 2023;11:1151248</a>
+      (pooled 12-month prevalence, 41 samples / 17,045 paramedics; 20.0% vs 3.1% unexposed general population).
+      &nbsp;¬∑&nbsp;
+      Burnout: <a href="https://www.ems1.com/ems-trend-report/the-ems-workforce-is-sounding-the-alarm" target="_blank" rel="noopener">What Paramedics Want in 2025</a>, EMS1 &amp; Fitch &amp; Associates.
+      &nbsp;¬∑&nbsp;
+      Peer support use and programs offered: 2024 EMS Trend Survey.
+      &nbsp;¬∑&nbsp;
+      Replacement cost: <a href="https://ambulance.org/wp-content/uploads/2021/07/2021-AAA-EMS-Turnover-Study.pdf" target="_blank" rel="noopener">AAA / Newton 360 Ambulance Industry Employee Turnover Study</a>.
+      &nbsp;¬∑&nbsp;
+      Turnover rates: American Ambulance Association survey, full-time paramedics and EMTs, <a href="https://stateline.org/2023/02/06/states-strive-to-reverse-shortage-of-paramedics-emts/" target="_blank" rel="noopener">reported via Stateline</a>.
+      &nbsp;¬∑&nbsp;
+      Claim cost: <a href="https://www.rand.org/pubs/research_briefs/RBA1391-1.html" target="_blank" rel="noopener">RAND Corporation, RBA1391-1</a> ‚Äî California first responder claims 2008‚Äì2019, inflation-adjusted 2020 dollars; the cohort studied is firefighters and peace officers under CA SB 542.
+      &nbsp;¬∑&nbsp;
+      Teams pricing effective 2026; volume discounts apply automatically. Nothing here is legal, tax, medical or insurance advice.
+    </div>
 
-      <aside class="form-shell" aria-label="Request an AfterCall demo">
-        <div class="form-card">
-          <div class="form-kicker">Request a demo</div>
-          <h2>Bring AfterCall to your EMS agency.</h2>
-          <p class="form-note">Share a few details and we‚Äôll follow up with the right next step for your team.</p>
-          <div id="hubspot-start-form"></div>
-        </div>
-      </aside>
-    </section>
+    <p class="crisis">
+      <b>If you're in crisis, don't wait on an app.</b>
+      Call or text <b>988</b> for the Suicide &amp; Crisis Lifeline, or reach Safe Call Now at
+      <b>1-206-459-3020</b> for confidential support built for first responders.
+    </p>
 
-    <section class="below">
-      <div class="container below-grid">
-        <article class="feature">
-          <div class="icon">1</div>
-          <h3>Designed around EMS reality</h3>
-          <p>AfterCall fits the post-call workflow providers actually live in: fast notes, meaningful reflection, and useful history.</p>
-        </article>
-        <article class="feature">
-          <div class="icon">2</div>
-          <h3>Agency-ready insights</h3>
-          <p>Help leaders understand clinical exposure, skills progression, and provider needs without chasing scattered spreadsheets.</p>
-        </article>
-        <article class="feature">
-          <div class="icon">3</div>
-          <h3>Provider trust first</h3>
-          <p>Built with privacy, usability, and EMS culture in mind so crews can adopt it without feeling monitored or burdened.</p>
-        </article>
-      </div>
-    </section>
-  </main>
+    <p class="foot-legal">
+      ¬© 2026 AfterCall LLC. All rights reserved. Built by EMS providers, for EMS providers.<br>
+      AfterCall is a documentation and wellness tool. It is not a medical device and does not
+      provide medical or mental health treatment.
+    </p>
+  </div>
+</footer>
 
-  <footer>
-    <div class="container">¬© AfterCall ¬∑ <a href="/privacy.html">Privacy</a> ¬∑ <a href="/terms.html">Terms</a></div>
-  </footer>
-
-  <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
-  <script>
-    window.addEventListener('load', function () {
-      if (!window.hbspt || !window.hbspt.forms) return;
-      window.hbspt.forms.create({
-        region: 'na1',
-        portalId: '51892158',
-        formId: '7f14478a-ac4b-4909-9151-59b452485ff5',
-        target: '#hubspot-start-form'
-      });
+<script>
+/* ---- scroll reveal ---- */
+(function(){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  </script>
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv').forEach(function(el,i){
+    el.style.transitionDelay = (i % 4 * 60) + 'ms';
+    io.observe(el);
+  });
+})();
+
+/* ---- HubSpot form: reveal store buttons + fire conversion on submit ---- */
+(function(){
+  var frame = document.querySelector('.form-card .hs-form-frame');
+  var done  = document.getElementById('formDone');
+  var foot  = document.getElementById('formFoot');
+  var fired = false;
+  if(!frame || !done) return;
+
+  function onSubmitted(){
+    if(fired) return;
+    fired = true;
+    if(foot) foot.style.display = 'none';
+    done.classList.add('show');
+    /* [CONVERT] wire your pixels here:
+       if(window.fbq)  fbq('track','Lead');
+       if(window.gtag) gtag('event','generate_lead',{currency:'USD',value:1});
+       if(window.dataLayer) dataLayer.push({event:'aftercall_lead'}); */
+  }
+
+  /* HubSpot posts this message on a successful submit */
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if(!d) return;
+    if(d.type === 'hsFormCallback' && d.eventName === 'onFormSubmitted') onSubmitted();
+  });
+
+  /* Fallback for the inline embed, which swaps in .submitted-message
+     without always posting the message event */
+  var mo = new MutationObserver(function(){
+    if(frame.querySelector('.submitted-message')){ onSubmitted(); mo.disconnect(); }
+    var loader = frame.querySelector('.hs-loading');
+    if(loader && frame.querySelector('form')) loader.remove();
+  });
+  mo.observe(frame,{childList:true,subtree:true});
+
+  /* If the embed script is blocked, don't leave a dead 'Loading‚Ä¶' state */
+  setTimeout(function(){
+    var loader = frame.querySelector('.hs-loading');
+    if(loader && !frame.querySelector('form')){
+      loader.innerHTML = 'The form didn\'t load. Get the app directly: ' +
+        '<a href="https://apps.apple.com/us/app/aftercall/id6762097660" style="color:#7C8FF5">App Store</a> ¬∑ ' +
+        '<a href="https://play.google.com/store/apps/details?id=com.aftercallapp.android" style="color:#7C8FF5">Google Play</a>';
+    }
+  }, 6000);
+})();
+</script>
 </body>
 </html>
