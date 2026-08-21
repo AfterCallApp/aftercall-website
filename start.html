@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AfterCall ‚Äî Get Started</title>
+  <meta name="description" content="See how AfterCall helps EMS agencies capture calls, track skills, support wellness, and connect crews with one EMS-built platform." />
+  <meta property="og:title" content="AfterCall ‚Äî Get Started" />
+  <meta property="og:description" content="Request a demo for your EMS agency and see how AfterCall supports crews from call capture to wellness." />
+  <meta property="og:url" content="https://aftercallapp.com/start" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #3379CF;
+      --blue-dark: #1F5FA3;
+      --blue-light: #eef4fd;
+      --blue-mid: #b8d4f0;
+      --text-dark: #0f1923;
+      --text-mid: #374151;
+      --text-light: #6b7280;
+      --bg: #ffffff;
+      --bg-alt: #f7f9fc;
+      --border: #e2e8f0;
+      --green: #10B981;
+      --purple: #8b5cf6;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-dark);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(51,121,207,.16), transparent 28rem),
+        radial-gradient(circle at 85% 5%, rgba(16,185,129,.10), transparent 24rem),
+        linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .nav { padding: 24px 0; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 900; letter-spacing: -0.04em; font-size: 22px; }
+    .brand img { width: 40px; height: 40px; border-radius: 12px; box-shadow: 0 10px 28px rgba(15,25,35,.12); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(360px, .78fr); gap: 56px; align-items: center; padding: 54px 0 76px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; background: rgba(51,121,207,.10); color: var(--blue-dark); font-size: 13px; font-weight: 800; margin-bottom: 22px; }
+    .eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(16,185,129,.12); }
+    h1 { font-size: clamp(44px, 7vw, 78px); line-height: .94; letter-spacing: -0.07em; max-width: 760px; }
+    .lead { font-size: clamp(18px, 2vw, 22px); line-height: 1.55; color: var(--text-mid); margin: 26px 0 30px; max-width: 650px; }
+    .proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 34px; max-width: 660px; }
+    .proof-card { background: rgba(255,255,255,.72); border: 1px solid rgba(226,232,240,.9); border-radius: 18px; padding: 18px; box-shadow: 0 18px 50px rgba(15,25,35,.06); backdrop-filter: blur(16px); }
+    .proof-card strong { display: block; font-size: 15px; margin-bottom: 6px; }
+    .proof-card span { display: block; color: var(--text-light); font-size: 13px; line-height: 1.45; }
+    .form-shell { position: relative; }
+    .form-card { background: rgba(255,255,255,.94); border: 1px solid var(--border); border-radius: 28px; padding: 28px; box-shadow: 0 28px 90px rgba(15,25,35,.14); overflow: hidden; }
+    .form-card::before { content: ''; display: block; height: 5px; margin: -28px -28px 24px; background: linear-gradient(90deg, var(--blue), var(--green), var(--purple)); }
+    .form-kicker { color: var(--blue-dark); font-weight: 900; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+    .form-card h2 { font-size: 28px; line-height: 1.08; letter-spacing: -0.04em; margin-bottom: 10px; }
+    .form-note { color: var(--text-light); font-size: 15px; line-height: 1.5; margin-bottom: 20px; }
+    #hubspot-start-form { min-height: 520px; }
+    #hubspot-start-form .hs-form-field { margin-bottom: 14px; }
+    #hubspot-start-form label { color: var(--text-dark); font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 7px; }
+    #hubspot-start-form input, #hubspot-start-form select, #hubspot-start-form textarea {
+      width: 100% !important;
+      border: 1px solid #d1d5db !important;
+      border-radius: 12px !important;
+      padding: 12px 14px !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 15px !important;
+      color: var(--text-dark) !important;
+      background: white !important;
+      box-shadow: none !important;
+    }
+    #hubspot-start-form input:focus, #hubspot-start-form select:focus, #hubspot-start-form textarea:focus { outline: 3px solid rgba(51,121,207,.16) !important; border-color: var(--blue) !important; }
+    #hubspot-start-form input[type='submit'], #hubspot-start-form .hs-button {
+      display: inline-flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+      background: var(--blue) !important;
+      border: 0 !important;
+      border-radius: 999px !important;
+      color: white !important;
+      padding: 14px 24px !important;
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 900 !important;
+      cursor: pointer !important;
+      box-shadow: 0 14px 30px rgba(51,121,207,.26) !important;
+    }
+    #hubspot-start-form input[type='submit']:hover, #hubspot-start-form .hs-button:hover { background: var(--blue-dark) !important; transform: translateY(-1px); }
+    .below { border-top: 1px solid var(--border); padding: 54px 0 72px; }
+    .below-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .feature { background: white; border: 1px solid var(--border); border-radius: 22px; padding: 24px; box-shadow: 0 18px 48px rgba(15,25,35,.05); }
+    .feature .icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px; background: var(--blue-light); color: var(--blue-dark); font-weight: 900; margin-bottom: 16px; }
+    .feature h3 { font-size: 19px; letter-spacing: -0.03em; margin-bottom: 8px; }
+    .feature p { color: var(--text-light); line-height: 1.55; font-size: 15px; }
+    footer { color: var(--text-light); font-size: 14px; padding: 28px 0; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 28px; }
+      .proof, .below-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 22px; border-radius: 24px; }
+      .form-card::before { margin: -22px -22px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a class="brand" href="/" aria-label="AfterCall home">
+        <img src="images/logo-transparent.png" alt="AfterCall logo" />
+        <span>AfterCall</span>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero container">
+      <div>
+        <div class="eyebrow">Built by EMS providers, for EMS agencies</div>
+        <h1>Capture every call. Support every provider.</h1>
+        <p class="lead">AfterCall helps agencies modernize call logging, clinical skill tracking, shift reflection, wellness check-ins, and crew connection ‚Äî without adding another clunky system to the stack.</p>
+        <div class="proof" aria-label="AfterCall agency benefits">
+          <div class="proof-card"><strong>Cleaner call records</strong><span>Manual, voice, and CAD-assisted capture for EMS workflows.</span></div>
+          <div class="proof-card"><strong>Skills visibility</strong><span>Track interventions, patient encounters, and provider growth over time.</span></div>
+          <div class="proof-card"><strong>Wellness support</strong><span>Give crews a private place to reflect, decompress, and stay connected.</span></div>
+        </div>
+      </div>
+
+      <aside class="form-shell" aria-label="Request an AfterCall demo">
+        <div class="form-card">
+          <div class="form-kicker">Request a demo</div>
+          <h2>Bring AfterCall to your EMS agency.</h2>
+          <p class="form-note">Share a few details and we‚Äôll follow up with the right next step for your team.</p>
+          <div id="hubspot-start-form"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="below">
+      <div class="container below-grid">
+        <article class="feature">
+          <div class="icon">1</div>
+          <h3>Designed around EMS reality</h3>
+          <p>AfterCall fits the post-call workflow providers actually live in: fast notes, meaningful reflection, and useful history.</p>
+        </article>
+        <article class="feature">
+          <div class="icon">2</div>
+          <h3>Agency-ready insights</h3>
+          <p>Help leaders understand clinical exposure, skills progression, and provider needs without chasing scattered spreadsheets.</p>
+        </article>
+        <article class="feature">
+          <div class="icon">3</div>
+          <h3>Provider trust first</h3>
+          <p>Built with privacy, usability, and EMS culture in mind so crews can adopt it without feeling monitored or burdened.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">¬© AfterCall ¬∑ <a href="/privacy.html">Privacy</a> ¬∑ <a href="/terms.html">Terms</a></div>
+  </footer>
+
+  <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      if (!window.hbspt || !window.hbspt.forms) return;
+      window.hbspt.forms.create({
+        region: 'na1',
+        portalId: '51892158',
+        formId: '7f14478a-ac4b-4909-9151-59b452485ff5',
+        target: '#hubspot-start-form'
+      });
+    });
+  </script>
+</body>
+</html>
