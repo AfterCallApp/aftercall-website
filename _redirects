@@ -3,3 +3,5 @@
 # u/index.html, which reads the username from the path and fetches the
 # public-profile edge function. 200 = rewrite (URL stays /u/<username>).
 /u/*   /u/index.html   200
+
+/start /start.html 200
