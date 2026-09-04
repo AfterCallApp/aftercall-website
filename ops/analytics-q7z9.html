@@ -3,865 +3,454 @@
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="robots" content="noindex, nofollow"/>
 <title>AfterCall — Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
-  :root { --blue:#3379CF; --blue-dark:#1F5FA3; --ink:#111827; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; }
+  :root {
+    --blue:#3379CF; --blue-dark:#1F5FA3; --blue-soft:#E8F0FB;
+    --ink:#111827; --muted:#5B6B82; --faint:#93A0B4; --line:#E3E8EF; --line-soft:#EEF2F7;
+    --bg:#F5F7FA; --surface:#FFFFFF; --surface-2:#F8FAFC;
+    --ok:#16A34A; --ok-soft:#E8F7EE; --warn:#D97706; --warn-soft:#FEF3DC; --bad:#DC2626; --bad-soft:#FDE8E8;
+    --bar:#3379CF; --bar-2:#9CB6D8; --bar-3:#DCE5F0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --blue:#6FA5EA; --blue-dark:#8FB8F0; --blue-soft:#1B2C42; --ink:#E6EDF5; --muted:#9AA9BC; --faint:#6F7E92;
+      --line:#263243; --line-soft:#1D2836; --bg:#0E141C; --surface:#151D28; --surface-2:#1A2431;
+      --ok:#34D399; --ok-soft:#113126; --warn:#FBBF24; --warn-soft:#3A2C0B; --bad:#F87171; --bad-soft:#3F1A1A;
+      --bar:#6FA5EA; --bar-2:#3A5A80; --bar-3:#243247; }
+  }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
-  .wrap { max-width:900px; margin:0 auto; padding:28px 18px 64px; }
-  .card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; }
-  h1 { font-size:20px; margin:0 0 2px; }
-  h2 { font-size:15px; margin:0 0 14px; color:var(--blue-dark); }
-  .sub { color:var(--muted); font-size:13px; margin:0 0 20px; }
-  label { display:block; font-size:13px; font-weight:600; margin:14px 0 6px; }
-  input, select { width:100%; padding:10px 12px; border:1px solid var(--border);
-    border-radius:9px; font-size:15px; font-family:inherit; background:#fff; }
-  .row { display:flex; gap:10px; }
-  .row > * { flex:1; }
-  button { width:100%; margin-top:18px; padding:12px; border:0; border-radius:10px; font-size:15px;
-    font-weight:700; cursor:pointer; background:var(--blue); color:#fff; }
-  button:disabled { opacity:.5; cursor:not-allowed; }
-  .out { margin-top:16px; padding:12px 14px; border-radius:10px; font-size:14px; display:none; }
-  .err { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
-  .warn { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
-  .stats { display:flex; gap:12px; flex-wrap:wrap; }
-  .stat { flex:1; min-width:150px; background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
-  .stat .n { font-size:26px; font-weight:800; color:var(--ink); }
-  .stat .l { font-size:12px; color:var(--muted); margin-top:2px; }
-  table { width:100%; border-collapse:collapse; font-size:14px; }
-  th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--border); }
-  th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
-  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
-  .bar { height:8px; border-radius:5px; background:var(--blue); }
-  .barwrap { background:#EEF2F7; border-radius:5px; }
-  .muted { color:var(--muted); }
-  .hidden { display:none; }
-  .daybars { display:flex; align-items:flex-end; gap:3px; height:120px; }
-  .daybar { flex:1; background:var(--blue); border-radius:3px 3px 0 0; min-height:2px; }
-  .daylabels { display:flex; gap:3px; margin-top:6px; }
-  .daylabel { flex:1; font-size:9px; color:var(--muted); text-align:center; overflow:hidden; white-space:nowrap; }
-  .note { font-size:12px; color:var(--muted); margin:-8px 0 12px; }
-  .tiny { font-size:11px; color:var(--muted); }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; font-size:14px; line-height:1.5; }
+  .wrap { max-width:1080px; margin:0 auto; padding:24px 20px 80px; }
+  h1 { font-size:20px; font-weight:800; margin:0; letter-spacing:-.01em; }
+  h2 { font-size:17px; font-weight:700; margin:0; letter-spacing:-.01em; }
+  h3 { font-size:13px; font-weight:700; margin:18px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+  p { margin:6px 0; }
+  .muted { color:var(--muted); } .tiny { font-size:12px; color:var(--muted); } .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  /* top bar */
+  .top { display:flex; flex-wrap:wrap; gap:12px 18px; align-items:flex-end; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .top .brand { flex:1 1 260px; }
+  .top .brand p { margin:2px 0 0; color:var(--muted); font-size:13px; }
+  .field { display:flex; flex-direction:column; gap:4px; }
+  .field label { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+  input, select { padding:9px 11px; border:1px solid var(--line); border-radius:8px; font:inherit; font-size:14px; background:var(--surface); color:var(--ink); min-width:170px; }
+  button.primary { padding:10px 18px; border:0; border-radius:8px; font:inherit; font-weight:700; font-size:14px; cursor:pointer; background:var(--blue); color:#fff; }
+  button.primary:disabled { opacity:.5; cursor:not-allowed; }
+  input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+  .status { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:12px 2px 0; font-size:12.5px; color:var(--muted); min-height:20px; }
+  .alert { display:none; margin-top:12px; padding:10px 14px; border-radius:8px; font-size:13px; border:1px solid; }
+  .alert.err { background:var(--bad-soft); color:var(--bad); border-color:var(--bad); } .alert.warn { background:var(--warn-soft); color:var(--warn); border-color:var(--warn); }
+  /* section nav */
+  .nav { position:sticky; top:0; z-index:5; display:flex; gap:4px; overflow-x:auto; background:var(--bg); padding:12px 0 8px; margin-top:8px; border-bottom:1px solid var(--line); }
+  .nav a { flex:0 0 auto; padding:6px 11px; border-radius:999px; font-size:12.5px; font-weight:600; color:var(--muted); text-decoration:none; border:1px solid transparent; }
+  .nav a:hover { background:var(--surface); border-color:var(--line); color:var(--ink); }
+  /* sections */
+  section { margin-top:28px; scroll-margin-top:64px; }
+  .sechead { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; margin-bottom:12px; }
+  .sechead .q { color:var(--muted); font-size:13px; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .card + .card { margin-top:12px; }
+  .grid { display:grid; gap:12px; }
+  .grid.c2 { grid-template-columns:repeat(2,1fr); } .grid.c3 { grid-template-columns:repeat(3,1fr); }
+  @media (max-width:760px) { .grid.c2, .grid.c3 { grid-template-columns:1fr; } }
+  /* tiles */
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .tile { background:var(--surface); padding:12px 14px; }
+  .tile .k { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+  .tile .v { font-size:24px; font-weight:800; margin-top:2px; font-variant-numeric:tabular-nums; line-height:1.15; }
+  .tile .s { font-size:12px; color:var(--muted); margin-top:2px; }
+  .tile.good .v { color:var(--ok); } .tile.bad .v { color:var(--bad); } .tile.warn .v { color:var(--warn); }
+  /* tables */
   .scroll { overflow-x:auto; }
-  .scroll table { min-width:760px; }
-  .nowrap { white-space:nowrap; }
-  .chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
-  .chip.pro { background:#EAF2FC; color:var(--blue-dark); border:1px solid #CFE0F5; }
-  .chip.free { background:#F3F4F6; color:var(--muted); border:1px solid var(--border); }
-  .chip.unk { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
-  .split { display:flex; height:8px; border-radius:5px; overflow:hidden; background:#EEF2F7; }
-  .split .sp { height:100%; }
-  .split .sp.p { background:var(--blue); }
-  .split .sp.f { background:#9CB6D8; }
-  .split .sp.u { background:#E5E7EB; }
-  .legend { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:-6px 0 12px; }
-  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; }
-  .gap td { background:#FEF2F2; color:#991B1B; }
-  .gap td:first-child { font-weight:600; }
-  .secerr { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA;
-    padding:9px 12px; border-radius:9px; font-size:13px; margin-bottom:12px; display:none; }
-  .secinfo { background:#F8FAFC; color:var(--muted); border:1px solid var(--border);
-    padding:9px 12px; border-radius:9px; font-size:13px; margin-bottom:12px; display:none; }
-
-  /* Collection health — the trust indicator. Status doubles as the class name. */
-  .healthstrip { display:flex; gap:12px; flex-wrap:wrap; }
-  .hstream { flex:1; min-width:240px; background:#F8FAFC; border:1px solid var(--border);
-    border-left-width:4px; border-radius:10px; padding:12px 14px; }
-  .hstream.ok { border-left-color:#16A34A; }
-  .hstream.stale { border-left-color:#D97706; }
-  .hstream.no_data { border-left-color:#DC2626; }
-  .hstream.unknown { border-left-color:#9CA3AF; }
-  .hhead { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; margin-bottom:6px; }
-  .hnote { font-size:12px; color:var(--muted); line-height:1.5; }
-  .hwhen { font-size:11px; color:var(--muted); margin-top:6px; font-variant-numeric:tabular-nums; }
-  .chip.ok { background:#ECFDF5; color:#166534; border:1px solid #A7F3D0; }
-  .chip.stale { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
-  .chip.no_data { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
-  .chip.unknown { background:#F3F4F6; color:var(--muted); border:1px solid var(--border); }
-  .banner { padding:10px 14px; border-radius:10px; font-size:13px; font-weight:600; margin-bottom:14px; }
-  .banner.ok { background:#ECFDF5; color:#166534; border:1px solid #A7F3D0; }
-  .banner.degraded { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
-  .banner.down { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
-  .banner.unknown { background:#F3F4F6; color:var(--muted); border:1px solid var(--border); }
-
-  /* Cohort table: retention cells shade with the retained share. */
-  .retcell { font-variant-numeric:tabular-nums; }
-  .retcell .sm { font-size:10px; color:var(--muted); display:block; }
-  .early { color:var(--muted); }
-  .defbox { background:#F8FAFC; border:1px solid var(--border); border-radius:9px;
-    padding:10px 12px; font-size:12px; color:var(--muted); line-height:1.55; margin:0 0 10px; }
-  .caveat { background:#FFFBEB; border:1px solid #FDE68A; color:#92400E; border-radius:9px;
-    padding:10px 12px; font-size:12px; line-height:1.55; margin:0 0 14px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; padding:8px 8px; border-bottom:1px solid var(--line); color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.05em; font-weight:600; white-space:nowrap; }
+  td { padding:8px 8px; border-bottom:1px solid var(--line-soft); vertical-align:middle; }
+  tr:last-child td { border-bottom:0; }
+  td .sub { display:block; font-size:11.5px; color:var(--muted); }
+  .barwrap { background:var(--bar-3); border-radius:4px; height:8px; min-width:80px; }
+  .bar { height:8px; border-radius:4px; background:var(--bar); }
+  .split { display:flex; height:8px; border-radius:4px; overflow:hidden; background:var(--bar-3); min-width:80px; }
+  .split i { display:block; height:100%; } .split .p { background:var(--bar); } .split .f { background:var(--bar-2); }
+  .chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; border:1px solid var(--line); background:var(--surface-2); color:var(--muted); }
+  .chip.ok { background:var(--ok-soft); color:var(--ok); border-color:transparent; } .chip.warn { background:var(--warn-soft); color:var(--warn); border-color:transparent; } .chip.bad { background:var(--bad-soft); color:var(--bad); border-color:transparent; }
+  .chip.pro { background:var(--blue-soft); color:var(--blue-dark); border-color:transparent; }
+  /* funnel */
+  .funnel .row { display:grid; grid-template-columns:200px 1fr 90px; gap:12px; align-items:center; padding:7px 0; border-bottom:1px solid var(--line-soft); }
+  .funnel .row:last-child { border-bottom:0; }
+  .funnel .lbl { font-weight:600; } .funnel .lbl span { display:block; font-weight:400; font-size:11.5px; color:var(--muted); }
+  .funnel .track { background:var(--bar-3); border-radius:4px; height:14px; } .funnel .fill { height:14px; border-radius:4px; background:var(--bar); }
+  @media (max-width:640px) { .funnel .row { grid-template-columns:1fr; gap:4px; } }
+  /* day bars */
+  .bars { display:flex; align-items:flex-end; gap:2px; height:110px; }
+  .bars i { flex:1; background:var(--bar); border-radius:2px 2px 0 0; min-height:2px; display:block; }
+  .bars i.alt { background:var(--bar-2); }
+  .barlabels { display:flex; gap:2px; margin-top:4px; } .barlabels span { flex:1; font-size:9.5px; color:var(--faint); text-align:center; overflow:hidden; white-space:nowrap; }
+  /* health */
+  .streams { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
+  .stream { background:var(--surface-2); border:1px solid var(--line); border-left-width:4px; border-radius:8px; padding:12px 14px; }
+  .stream.ok { border-left-color:var(--ok); } .stream.stale { border-left-color:var(--warn); } .stream.no_data { border-left-color:var(--bad); } .stream.unknown { border-left-color:var(--faint); }
+  .stream .h { font-weight:700; display:flex; gap:8px; align-items:center; margin-bottom:4px; } .stream .n { font-size:12px; color:var(--muted); }
+  .empty { padding:12px 14px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:13px; background:var(--surface-2); }
+  details summary { cursor:pointer; font-weight:600; color:var(--blue-dark); font-size:13px; }
+  details[open] summary { margin-bottom:10px; }
+  .note { font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; }
+  .hidden { display:none; }
+  .cohort td.cell { font-variant-numeric:tabular-nums; } .cohort td.cell small { display:block; font-size:10px; color:var(--muted); }
 </style></head>
 <body><div class="wrap">
 
-  <div class="card">
-    <h1>AfterCall Analytics</h1>
-    <p class="sub">Passive product usage — who's active, what they use, and what they never reach. Route names, event names and dwell time only; no journal or call content is ever stored or shown.</p>
-    <div class="row">
-      <div style="flex:2">
-        <label>Admin password</label>
-        <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••"/>
-      </div>
-      <div style="flex:1">
-        <label>Window</label>
-        <select id="days">
-          <option value="7">Last 7 days</option>
-          <option value="30" selected>Last 30 days</option>
-          <option value="90">Last 90 days</option>
-          <option value="365">Last year</option>
-        </select>
-      </div>
-    </div>
-    <button id="load">Load analytics</button>
-    <div id="err" class="out err"></div>
-    <div id="capwarn" class="out warn"></div>
+  <div class="top">
+    <div class="brand"><h1>AfterCall Analytics</h1><p>How people use the app — route names, event names and dwell time only. No journal or call content is ever stored or shown.</p></div>
+    <div class="field"><label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password" placeholder="••••••••"/></div>
+    <div class="field"><label for="days">Window</label><select id="days"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option></select></div>
+    <button id="load" class="primary">Load</button>
   </div>
+  <div class="status" id="status"></div>
+  <div id="err" class="alert err"></div>
+  <div id="capwarn" class="alert warn"></div>
 
   <div id="results" class="hidden">
-    <div class="card">
-      <h2>Collection health</h2>
-      <p class="note">Is the data actually arriving? Screen-time collection was silently broken for weeks before this panel existed — check it first, every time.</p>
-      <div class="secerr" id="health_err"></div>
-      <div id="health_banner" class="banner hidden"></div>
-      <div class="healthstrip" id="health"></div>
-      <p class="tiny" id="health_foot"></p>
-    </div>
+    <nav class="nav">
+      <a href="#overview">Overview</a><a href="#funnel">Funnel</a><a href="#retention">Retention</a><a href="#engagement">Engagement</a><a href="#conversion">Conversion</a><a href="#notifications">Notifications</a><a href="#sessions">Sessions</a><a href="#features">Features</a><a href="#screens">Screens</a><a href="#users">Users</a><a href="#health">Health</a>
+    </nav>
 
-    <div class="card">
-      <h2>Overview</h2>
-      <div class="stats">
-        <div class="stat"><div class="n" id="s_users">–</div><div class="l">Active users</div></div>
-        <div class="stat"><div class="n" id="s_views">–</div><div class="l">Screen visits</div></div>
-        <div class="stat"><div class="n" id="s_events">–</div><div class="l">Total events</div></div>
+    <section id="overview">
+      <div class="sechead"><h2>Overview</h2><span class="q">Who is active, and what they did in the window</span></div>
+      <div class="card"><div class="tiles" id="ov_tiles"></div></div>
+      <div class="card"><h3 style="margin-top:0">Active users per day</h3><div class="bars" id="ov_bars"></div><div class="barlabels" id="ov_labels"></div><div class="note" id="ov_note"></div></div>
+    </section>
+
+    <section id="funnel">
+      <div class="sechead"><h2>Activation funnel</h2><span class="q">Accounts created in the window — how far they got</span></div>
+      <div class="card"><div class="funnel" id="fn_rows"></div><div class="note" id="fn_note"></div></div>
+      <div class="grid c2" style="margin-top:12px">
+        <div class="card"><h3 style="margin-top:0">Onboarding gates (1.2.3)</h3><div class="scroll"><table><thead><tr><th>Gate</th><th class="num">Users completed</th></tr></thead><tbody id="fn_steps"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-top:0">Quick-start tutorial</h3><div id="qs"></div></div>
       </div>
-      <p class="muted" id="genat" style="font-size:12px;margin-top:14px"></p>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Rolling active users</h2>
-      <p class="note">Active = an app_open event or a screen-time row on that day. Independent of the window picker above.</p>
-      <div class="secerr" id="roll_err"></div>
-      <div class="secinfo" id="roll_info"></div>
-      <div class="stats">
-        <div class="stat"><div class="n" id="r_dau">–</div><div class="l">DAU — today (partial)</div></div>
-        <div class="stat"><div class="n" id="r_wau">–</div><div class="l">WAU — last 7 days</div></div>
-        <div class="stat"><div class="n" id="r_mau">–</div><div class="l">MAU — last 30 days</div></div>
-        <div class="stat"><div class="n" id="r_stick">–</div><div class="l">Stickiness (DAU/MAU)</div></div>
+    <section id="retention">
+      <div class="sechead"><h2>Retention</h2><span class="q">Do people come back after signing up</span></div>
+      <div class="card"><div class="tiles" id="ret_tiles"></div>
+        <div class="scroll" style="margin-top:14px"><table class="cohort"><thead><tr><th>Signup week</th><th class="num">Signups</th><th class="num">D1</th><th class="num">D7</th><th class="num">D30</th></tr></thead><tbody id="ret_rows"></tbody></table></div>
+        <div class="note" id="ret_note"></div>
+        <details style="margin-top:8px"><summary>How this is measured</summary><div class="tiny" id="ret_def"></div></details>
       </div>
-      <p class="tiny" id="roll_note"></p>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Retention by signup week</h2>
-      <div class="secerr" id="ret_err"></div>
-      <div class="secinfo" id="ret_info"></div>
-      <p class="defbox" id="ret_def"></p>
-      <p class="caveat" id="ret_caveat"></p>
-      <div class="legend">
-        <span>— &nbsp;too early: nobody in the cohort has reached that window yet</span>
-        <span>* &nbsp;partial cohort: only members whose window has elapsed are counted</span>
+    <section id="engagement">
+      <div class="sechead"><h2>Engagement</h2><span class="q">Time in the app on a typical active day</span></div>
+      <div class="card"><div class="tiles" id="eng_tiles"></div>
+        <h3>Average minutes per active user, by day</h3><div class="bars" id="eng_bars"></div><div class="barlabels" id="eng_labels"></div>
+        <h3>Where the time goes</h3><div class="scroll"><table><thead><tr><th>Screen</th><th class="num">Users</th><th class="num">Visits</th><th class="num">Per visit</th><th class="num">Total</th><th>Share of time</th></tr></thead><tbody id="eng_screens"></tbody></table></div>
+        <div class="note" id="eng_note"></div>
       </div>
-      <div class="scroll">
-        <table>
-          <thead><tr>
-            <th>Signup week</th>
-            <th class="num">Cohort size</th>
-            <th class="num">D1</th>
-            <th class="num">D7</th>
-            <th class="num">D30</th>
-          </tr></thead>
-          <tbody id="ret"></tbody>
-        </table>
+    </section>
+
+    <section id="conversion">
+      <div class="sechead"><h2>Conversion</h2><span class="q">Which gate turns a paywall view into a subscription</span></div>
+      <div class="card"><div class="tiles" id="cv_tiles"></div>
+        <h3>Paywall views → purchases, by source</h3><div class="scroll"><table><thead><tr><th>Source</th><th class="num">Views</th><th class="num">Users</th><th class="num">Purchases</th><th class="num">User → paid</th><th>Rate</th></tr></thead><tbody id="cv_rows"></tbody></table></div>
+        <div class="grid c2" style="margin-top:14px">
+          <div><h3 style="margin-top:0">Subscriptions (all time)</h3><div class="scroll"><table><thead><tr><th>Status</th><th>Period</th><th>Store</th><th class="num">Users</th></tr></thead><tbody id="cv_subs"></tbody></table></div></div>
+          <div><h3 style="margin-top:0">Products bought in window</h3><div class="scroll"><table><thead><tr><th>Product</th><th class="num">Purchases</th></tr></thead><tbody id="cv_products"></tbody></table></div><div class="note" id="cv_ref"></div></div>
+        </div>
+        <div class="note" id="cv_note"></div>
       </div>
-      <p class="tiny" id="ret_foot"></p>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Time in app</h2>
-      <p class="note">Minutes an active user spends in AfterCall on a day they open it — one observation per user per day.</p>
-      <div class="secerr" id="eng_err"></div>
-      <div class="secinfo" id="eng_info"></div>
-      <div class="stats" id="eng_stats"></div>
-      <div id="eng_chart" class="hidden">
-        <p class="note" style="margin:20px 0 10px">Average minutes per active user, by day.</p>
-        <div class="daybars" id="engbars"></div>
-        <div class="daylabels" id="englabels"></div>
+    <section id="notifications">
+      <div class="sechead"><h2>Notifications</h2><span class="q">Permission, the primer, what people tap, and the upgrade sequence</span></div>
+      <div class="card"><div class="tiles" id="nt_tiles"></div>
+        <div class="grid c2" style="margin-top:14px">
+          <div><h3 style="margin-top:0">Primer outcomes, by moment</h3><div class="scroll"><table><thead><tr><th>Moment</th><th class="num">Shown</th><th class="num">Granted</th><th class="num">Denied</th><th class="num">Later</th><th class="num">Settings</th><th class="num">Grant rate</th></tr></thead><tbody id="nt_prompts"></tbody></table></div></div>
+          <div><h3 style="margin-top:0">Notifications tapped, by type</h3><div class="scroll"><table><thead><tr><th>Type</th><th class="num">Taps</th><th class="num">Users</th></tr></thead><tbody id="nt_opens"></tbody></table></div></div>
+        </div>
+        <h3>Upgrade nudge sequence (server-side, day 7 / 14 / 30)</h3>
+        <div id="nt_lifecycle"></div>
+        <div class="note" id="nt_note"></div>
       </div>
-      <div id="eng_screens_wrap" class="hidden">
-        <h2 style="margin:26px 0 10px">Screens that hold attention longest</h2>
-        <p class="note">Ranked by average time per <em>visit</em> — a different question from the total-time ranking further down.</p>
-        <table>
-          <thead><tr>
-            <th>Screen</th>
-            <th class="num">Avg / visit</th>
-            <th class="num">Visits</th>
-            <th class="num">Users</th>
-          </tr></thead>
-          <tbody id="eng_screens"></tbody>
-        </table>
+    </section>
+
+    <section id="sessions">
+      <div class="sechead"><h2>Sessions</h2><span class="q">How often, at what hour, and how the app gets opened</span></div>
+      <div class="card"><div class="tiles" id="ss_tiles"></div>
+        <h3>Sessions by local hour</h3><div class="bars" id="ss_hours"></div><div class="barlabels" id="ss_hour_labels"></div>
+        <div class="grid c2" style="margin-top:14px">
+          <div><h3 style="margin-top:0">Opened from</h3><div class="scroll"><table><thead><tr><th>Source</th><th class="num">Sessions</th><th class="num">Share</th></tr></thead><tbody id="ss_from"></tbody></table></div></div>
+          <div><h3 style="margin-top:0">Time since last session</h3><div class="scroll"><table><thead><tr><th>Gap</th><th class="num">Sessions</th><th class="num">Share</th></tr></thead><tbody id="ss_gaps"></tbody></table></div></div>
+        </div>
+        <div class="note" id="ss_note"></div>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Activity by day</h2>
-      <div class="daybars" id="daybars"></div>
-      <div class="daylabels" id="daylabels"></div>
-    </div>
-
-    <div class="card">
-      <h2>Who's using AfterCall</h2>
-      <p class="note">Most recently active first. Plan comes from the subscription record (server-side truth), falling back to what the app itself reported.</p>
-      <div class="secerr" id="users_err"></div>
-      <div class="scroll">
-        <table>
-          <thead><tr>
-            <th>User</th>
-            <th>Plan</th>
-            <th>Platform</th>
-            <th>Version</th>
-            <th>Lang</th>
-            <th>Last active</th>
-            <th class="num">Days</th>
-            <th>Top actions</th>
-            <th class="num">Minutes</th>
-          </tr></thead>
-          <tbody id="users"></tbody>
-        </table>
+    <section id="features">
+      <div class="sechead"><h2>Features</h2><span class="q">What active users reach, split by plan and platform</span></div>
+      <div class="card">
+        <div class="scroll"><table><thead><tr><th>Feature event</th><th class="num">Users</th><th class="num">% of active</th><th>Reach</th><th class="num">Events</th><th>Pro / Free</th><th class="num">iOS</th><th class="num">Android</th></tr></thead><tbody id="ft_rows"></tbody></table></div>
+        <div class="note" id="ft_note"></div>
       </div>
-      <p class="tiny" id="users_foot"></p>
-    </div>
-
-    <div class="card">
-      <h2>Pro vs Free — what each plan actually does</h2>
-      <p class="note">Each action split by the plan in effect when it fired.</p>
-      <div class="legend">
-        <span><i style="background:#3379CF"></i>Pro</span>
-        <span><i style="background:#9CB6D8"></i>Free</span>
-        <span><i style="background:#E5E7EB"></i>Plan unknown</span>
+      <div class="grid c2" style="margin-top:12px">
+        <div class="card"><h3 style="margin-top:0">Call logging</h3><div id="cq"></div></div>
+        <div class="card"><h3 style="margin-top:0">Shifts</h3><div id="sh"></div></div>
       </div>
-      <div class="secerr" id="pvf_err"></div>
-      <table>
-        <thead><tr>
-          <th>Action</th>
-          <th class="num">Pro</th>
-          <th class="num">Free</th>
-          <th class="num">Pro users</th>
-          <th class="num">Free users</th>
-          <th style="width:24%">Split</th>
-        </tr></thead>
-        <tbody id="pvf"></tbody>
-      </table>
-      <p class="tiny" id="pvf_foot"></p>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Widget &amp; notification adoption</h2>
-      <div class="secinfo" id="widgets_info"></div>
-      <div class="secerr" id="widgets_err"></div>
-      <p class="note" id="widgets_note"></p>
-      <table>
-        <thead><tr>
-          <th>Widget</th>
-          <th class="num">Users</th>
-          <th class="num">Share</th>
-          <th style="width:30%">Adoption</th>
-        </tr></thead>
-        <tbody id="widgets"></tbody>
-      </table>
-    </div>
+    <section id="screens">
+      <div class="sechead"><h2>Screens</h2><span class="q">Every screen, ranked by total attention</span></div>
+      <div class="card"><details><summary>Show all screens</summary>
+        <div class="scroll"><table><thead><tr><th>Screen</th><th class="num">Visits</th><th class="num">Users</th><th class="num">% of active</th><th class="num">Per visit</th><th class="num">Total</th></tr></thead><tbody id="sc_rows"></tbody></table></div></details>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2>Adoption &amp; gaps</h2>
-      <p class="note">Share of active users who did each thing at least once, lowest first — these are the features people never reach. Rows flagged ⚠ are below 25% coverage.</p>
-      <div class="secerr" id="adopt_err"></div>
-      <table>
-        <thead><tr>
-          <th>Feature</th>
-          <th class="num">Users</th>
-          <th class="num">Reached</th>
-          <th class="num">Missing</th>
-          <th style="width:26%">Coverage</th>
-        </tr></thead>
-        <tbody id="adopt"></tbody>
-      </table>
+    <section id="users">
+      <div class="sechead"><h2>Users</h2><span class="q">Who is active, most recent first</span></div>
+      <div class="card"><details><summary id="us_sum">Show users</summary>
+        <div class="scroll"><table><thead><tr><th>User</th><th>Plan</th><th>Platform</th><th>Build</th><th>Lang</th><th>Last active</th><th class="num">Days</th><th>Top actions</th><th class="num">Minutes</th></tr></thead><tbody id="us_rows"></tbody></table></div>
+        <div class="note" id="us_note"></div></details>
+      </div>
+    </section>
 
-      <h2 style="margin:26px 0 10px">Least-reached screens</h2>
-      <p class="note">Screens ranked by how few distinct users opened them in this window.</p>
-      <table>
-        <thead><tr>
-          <th>Screen</th>
-          <th class="num">Users</th>
-          <th class="num">Reached</th>
-          <th class="num">Visits</th>
-          <th style="width:26%">Coverage</th>
-        </tr></thead>
-        <tbody id="adopt_screens"></tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Screens — usage &amp; dwell time</h2>
-      <p class="muted" style="font-size:12px;margin:-8px 0 12px">Aggregated per day on-device (visits + dwell), ranked by total time.</p>
-      <table>
-        <thead><tr>
-          <th>Screen</th>
-          <th class="num">Visits</th>
-          <th class="num">Users</th>
-          <th class="num">Avg time</th>
-          <th class="num">Total time</th>
-          <th style="width:22%">Share of time</th>
-        </tr></thead>
-        <tbody id="screens"></tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Events</h2>
-      <table>
-        <thead><tr><th>Event</th><th class="num">Count</th></tr></thead>
-        <tbody id="events"></tbody>
-      </table>
-    </div>
+    <section id="health">
+      <div class="sechead"><h2>Collection health</h2><span class="q">Is data still arriving — the trust check for everything above</span></div>
+      <div class="card"><div class="streams" id="hl_streams"></div><div class="note" id="hl_note"></div></div>
+    </section>
   </div>
-
 </div>
+
 <script>
-  // Same Supabase project / functions host as the push console.
   const API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/admin-analytics';
-
   const $ = (id) => document.getElementById(id);
-  const fmtInt = (n) => (n ?? 0).toLocaleString();
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const n = (v) => (v == null ? '—' : Number(v).toLocaleString());
+  const pc = (v) => (v == null ? '—' : (Math.round(v * 10) / 10) + '%');
+  const dur = (ms) => { if (!ms || ms < 0) return '—'; const s = Math.round(ms / 1000); if (s < 60) return s + 's'; const m = Math.floor(s / 60); if (m < 60) return m + 'm ' + String(s % 60).padStart(2, '0') + 's'; return Math.floor(m / 60) + 'h ' + String(m % 60).padStart(2, '0') + 'm'; };
+  const tile = (k, v, s, cls) => '<div class="tile ' + (cls || '') + '"><div class="k">' + esc(k) + '</div><div class="v">' + esc(v) + '</div>' + (s ? '<div class="s">' + esc(s) + '</div>' : '') + '</div>';
+  const bar = (p) => '<div class="barwrap"><div class="bar" style="width:' + Math.max(0, Math.min(100, p || 0)) + '%"></div></div>';
+  const empty = (msg) => '<div class="empty">' + esc(msg) + '</div>';
+  const emptyRow = (cols, msg) => '<tr><td colspan="' + cols + '" class="muted">' + esc(msg) + '</td></tr>';
+  const NOT_YET = 'Nothing recorded yet — this arrives with the 1.2.3 app build.';
 
-  function fmtDuration(ms) {
-    if (!ms || ms < 0) return '—';
-    const s = Math.round(ms / 1000);
-    if (s < 60) return s + 's';
-    const m = Math.floor(s / 60), r = s % 60;
-    return m + 'm ' + (r < 10 ? '0' : '') + r + 's';
+  function dayBars(barsId, labelsId, series, key, titleFn) {
+    const max = Math.max(1, ...series.map((x) => x[key] || 0));
+    $(barsId).innerHTML = series.map((x) => '<i style="height:' + Math.round(((x[key] || 0) / max) * 100) + '%" title="' + esc(titleFn(x)) + '"></i>').join('') || '<span class="muted">No data in this window.</span>';
+    $(labelsId).innerHTML = series.map((x, i) => '<span>' + (series.length <= 31 || i % 7 === 0 ? esc(String(x.day || '').slice(5)) : '') + '</span>').join('');
   }
 
-  function showErr(msg) {
-    const el = $('err'); el.textContent = msg; el.style.display = 'block';
+  // ── Overview ──
+  function renderOverview(d) {
+    const r = (d.retention && d.retention.rollingActive) || {};
+    const ev = Object.fromEntries((d.events || []).map((e) => [e.name, e]));
+    const cnt = (name) => (ev[name] ? ev[name].count : 0);
+    const usersOf = (name) => (ev[name] ? ev[name].users : 0);
+    const nt = d.notifications && d.notifications.permission;
+    $('ov_tiles').innerHTML =
+      tile('DAU', n(r.dau), 'today, UTC, still counting') + tile('WAU', n(r.wau), 'last 7 days') + tile('MAU', n(r.mau), 'last 30 days') +
+      tile('Stickiness', pc(r.stickinessPct), 'DAU ÷ MAU') +
+      tile('Active in window', n(d.totals && d.totals.activeUsers), 'any event or screen') +
+      tile('Calls logged', n(cnt('call_saved')), n(usersOf('call_saved')) + ' users') +
+      tile('Check-ins', n(cnt('journal_saved')), n(usersOf('journal_saved')) + ' users · all journal kinds') +
+      tile('Pro users', n(d.proVsFree && d.proVsFree.proUsersInWindow), 'subscription record or app-reported') +
+      tile('Notifications on', nt && nt.available ? pc(nt.pct) : '—', nt && nt.available ? n(nt.enabledUsers) + ' of ' + n(nt.reportingUsers) + ' reporting' : 'not reported by this build');
+    const daily = d.daily || [];
+    dayBars('ov_bars', 'ov_labels', daily, 'users', (x) => x.day + ': ' + x.users + ' users · ' + x.events + ' events');
+    $('ov_note').textContent = 'Bars = distinct users with any event that day. ' + (d.capped ? 'Warning: the result hit the row cap; narrow the window for exact totals.' : '');
+  }
+
+  // ── Funnel ──
+  function renderFunnel(d) {
+    const f = d.funnel;
+    if (!f || !f.available) { $('fn_rows').innerHTML = empty(f && f.error ? f.error : 'No accounts were created in this window.'); $('fn_note').textContent = ''; }
+    else {
+      const rows = [
+        ['Accounts created', f.signups, f.signups, null],
+        ['Acknowledged PHI terms', f.phiAcknowledged.n, f.signups, f.phiAcknowledged.pct],
+        ['Seen in analytics', f.seenInAnalytics.n, f.signups, f.seenInAnalytics.pct],
+        ['Logged a call by day 1', f.callByDay1.n, f.callByDay1.eligible, f.callByDay1.pct],
+        ['Checked in by day 7', f.checkinByDay7.n, f.checkinByDay7.eligible, f.checkinByDay7.pct],
+        ['Came back in week 1', f.returnedWeek1.n, f.returnedWeek1.eligible, f.returnedWeek1.pct],
+      ];
+      $('fn_rows').innerHTML = rows.map(([lbl, v, elig, p]) => {
+        const pctv = p == null ? (elig ? Math.round((v / elig) * 1000) / 10 : null) : p;
+        const sub = elig != null && elig !== f.signups ? 'of ' + n(elig) + ' eligible' : (lbl === 'Accounts created' ? 'in window' : 'of ' + n(f.signups));
+        return '<div class="row"><div class="lbl">' + esc(lbl) + '<span>' + esc(sub) + '</span></div><div class="track"><div class="fill" style="width:' + (elig ? Math.min(100, (v / elig) * 100) : 0) + '%"></div></div><div class="num"><b>' + n(v) + '</b> <span class="tiny">' + (pctv == null ? (lbl === 'Accounts created' ? '' : 'too early') : pc(pctv)) + '</span></div></div>';
+      }).join('');
+      $('fn_note').textContent = f.note || '';
+      $('fn_steps').innerHTML = (f.onboardingSteps || []).map((s) => '<tr><td>' + esc(s.step) + '</td><td class="num">' + n(s.users) + '</td></tr>').join('');
+    }
+    const q = d.quickStart;
+    if (!q || !q.available) $('qs').innerHTML = empty((q && q.error) || NOT_YET);
+    else $('qs').innerHTML = q.flows.map((fl) => '<div><b>' + esc(fl.flow) + '</b> — ' + n(fl.ended) + ' runs, <b>' + pc(fl.completedPct) + '</b> completed' +
+      (fl.abandonedAt.length ? '<div class="tiny">Left on: ' + fl.abandonedAt.map((a) => esc(a.step) + ' ×' + a.n).join(', ') + '</div>' : '') + '</div>').join('<hr style="border:0;border-top:1px solid var(--line-soft);margin:8px 0">') + '<div class="note">' + esc(q.note || '') + '</div>';
+  }
+
+  // ── Retention ──
+  function retCell(c) {
+    if (!c || c.tooEarly || c.pct == null) return '<td class="num cell muted" title="Too early — nobody in this cohort has completed the window yet.">—</td>';
+    const p = Math.max(0, Math.min(100, c.pct));
+    return '<td class="num cell" style="background:rgba(51,121,207,' + (0.05 + (p / 100) * 0.45).toFixed(2) + ')">' + pc(c.pct) + (c.partial ? '*' : '') + '<small>' + n(c.retained) + '/' + n(c.eligible) + '</small></td>';
+  }
+  function renderRetention(d) {
+    const s = d.retention;
+    const r = (s && s.rollingActive) || {};
+    $('ret_tiles').innerHTML = tile('DAU', n(r.dau)) + tile('WAU', n(r.wau)) + tile('MAU', n(r.mau)) + tile('Stickiness', pc(r.stickinessPct), 'DAU ÷ MAU');
+    if (!s || !s.available) { $('ret_rows').innerHTML = emptyRow(5, (s && (s.error || s.caveat)) || 'No measurable cohorts yet.'); $('ret_note').textContent = ''; $('ret_def').textContent = (s && s.definition) || ''; return; }
+    $('ret_rows').innerHTML = (s.cohorts || []).map((c) => '<tr><td>' + esc(c.week) + '<span class="sub">through ' + esc(c.weekEnd) + '</span></td><td class="num">' + n(c.cohortSize) + '</td>' + retCell(c.d1) + retCell(c.d7) + retCell(c.d30) + '</tr>').join('');
+    $('ret_note').textContent = [s.caveat, '* = partial cohort (recent signups excluded from the denominator).', s.capped ? 'Warning: retention scan hit its row cap.' : ''].filter(Boolean).join(' ');
+    $('ret_def').textContent = s.definition || '';
+  }
+
+  // ── Engagement ──
+  function renderEngagement(d) {
+    const e = d.engagement;
+    if (!e || !e.available) { $('eng_tiles').innerHTML = ''; $('eng_bars').innerHTML = ''; $('eng_labels').innerHTML = ''; $('eng_screens').innerHTML = emptyRow(6, (e && (e.error || e.reason)) || 'Time-in-app is unmeasured for this window (not zero).'); $('eng_note').textContent = ''; return; }
+    $('eng_tiles').innerHTML = tile('Median minutes', e.medianMinutesPerActiveUserPerDay, 'per active user per day — the typical day') + tile('Average minutes', e.avgMinutesPerActiveUserPerDay, 'pulled up by heavy days') + tile('User-days measured', n(e.activeUserDays)) + tile('Days with data', n(e.daysWithData));
+    dayBars('eng_bars', 'eng_labels', e.daily || [], 'avgMinutes', (x) => x.day + ': ' + x.avgMinutes + ' min avg · ' + x.users + ' users');
+    const screens = (d.screens || []).slice(0, 12);
+    const total = Math.max(1, (d.screens || []).reduce((s, x) => s + (x.totalDwellMs || 0), 0));
+    $('eng_screens').innerHTML = screens.map((s) => '<tr><td>' + esc(s.screen) + '</td><td class="num">' + n(s.users) + '</td><td class="num">' + n(s.views) + '</td><td class="num">' + dur(s.avgDwellMs) + '</td><td class="num">' + dur(s.totalDwellMs) + '</td><td>' + bar((s.totalDwellMs / total) * 100) + '</td></tr>').join('') || emptyRow(6, 'No screen activity.');
+    const clamp = d.dwellClamp;
+    $('eng_note').textContent = [e.note, clamp && clamp.clampedRows ? n(clamp.clampedRows) + ' row(s) from older builds claimed more than ' + Math.round(clamp.maxRowMs / 3600000) + 'h on one screen in a day and were capped (the 1.2.3 client pauses the clock while backgrounded).' : ''].filter(Boolean).join(' ');
+  }
+
+  // ── Conversion ──
+  function renderConversion(d) {
+    const c = d.conversion;
+    if (!c || !c.available) { $('cv_tiles').innerHTML = ''; $('cv_rows').innerHTML = emptyRow(6, (c && c.error) || 'Conversion data unavailable.'); $('cv_subs').innerHTML = ''; $('cv_products').innerHTML = ''; $('cv_ref').textContent = ''; $('cv_note').textContent = ''; return; }
+    const sub = c.subscriptions || {};
+    const pwUsers = (c.paywall || []).reduce((s, r) => s + r.users, 0);
+    $('cv_tiles').innerHTML = tile('Paywall viewers', n(pwUsers), 'in window') + tile('Purchases', n(c.purchases), n(c.purchasers) + ' users, in window', 'good') + tile('View → paid', pwUsers ? pc((c.purchasers / pwUsers) * 100) : '—', 'users who bought after viewing') +
+      tile('Active paid', n(sub.activePaid), 'all time, RevenueCat') + tile('In trial', n(sub.trialing)) + tile('Expired trials', n(sub.expiredTrials), 'never converted') + tile('Expired paid', n(sub.expiredPaid), 'churned');
+    const maxU = Math.max(1, ...(c.paywall || []).map((r) => r.users));
+    $('cv_rows').innerHTML = (c.paywall || []).map((r) => '<tr><td>' + esc(r.source) + '</td><td class="num">' + n(r.views) + '</td><td class="num">' + n(r.users) + '</td><td class="num">' + n(r.purchases) + '</td><td class="num"><b>' + pc(r.pct) + '</b></td><td>' + bar((r.users / maxU) * 100) + '</td></tr>').join('') || emptyRow(6, 'No paywall views in this window.');
+    $('cv_subs').innerHTML = (sub.groups || []).map((g) => '<tr><td>' + esc(g.status) + '</td><td>' + esc(g.periodType) + '</td><td>' + esc(g.store) + '</td><td class="num">' + n(g.n) + '</td></tr>').join('') || emptyRow(4, 'No subscription records.');
+    $('cv_products').innerHTML = (c.products || []).map((p) => '<tr><td>' + esc(p.product) + '</td><td class="num">' + n(p.n) + '</td></tr>').join('') || emptyRow(2, 'No purchases in this window.');
+    const rf = c.referrals || {};
+    $('cv_ref').textContent = 'Ambassador referrals: ' + n(rf.attributed) + ' attributed · ' + n(rf.trials) + ' started a trial · ' + n(rf.paid) + ' paid.';
+    $('cv_note').textContent = c.note || '';
+  }
+
+  // ── Notifications ──
+  function renderNotifications(d) {
+    const s = d.notifications;
+    if (!s || !s.available) { $('nt_tiles').innerHTML = ''; $('nt_prompts').innerHTML = emptyRow(7, (s && s.error) || 'Unavailable.'); $('nt_opens').innerHTML = ''; $('nt_lifecycle').innerHTML = ''; $('nt_note').textContent = ''; return; }
+    const p = s.permission;
+    const promptsShown = (s.prompts || []).reduce((a, r) => a + r.shown, 0);
+    const granted = (s.prompts || []).reduce((a, r) => a + r.granted, 0);
+    const opens = (s.opens || []).reduce((a, r) => a + r.count, 0);
+    $('nt_tiles').innerHTML = tile('Permission on', p && p.available ? pc(p.pct) : '—', p && p.available ? n(p.enabledUsers) + ' of ' + n(p.reportingUsers) + ' active users' : 'not reported by this build', p && p.available ? (p.pct >= 50 ? 'good' : 'warn') : '') +
+      tile('Primer shown', n(promptsShown), 'in window (1.2.3)') + tile('Granted at primer', promptsShown ? pc((granted / promptsShown) * 100) : '—', n(granted) + ' users') + tile('Notification taps', n(opens), 'in window (1.2.3)');
+    $('nt_prompts').innerHTML = (s.prompts || []).map((r) => '<tr><td>' + esc(r.moment) + '</td><td class="num">' + n(r.shown) + '</td><td class="num">' + n(r.granted) + '</td><td class="num">' + n(r.denied) + '</td><td class="num">' + n(r.dismissed) + '</td><td class="num">' + n(r.settings) + '</td><td class="num"><b>' + pc(r.grantedPct) + '</b></td></tr>').join('') || emptyRow(7, NOT_YET);
+    $('nt_opens').innerHTML = (s.opens || []).map((r) => '<tr><td>' + esc(r.type) + '</td><td class="num">' + n(r.count) + '</td><td class="num">' + n(r.users) + '</td></tr>').join('') || emptyRow(3, NOT_YET);
+    const lc = s.lifecycle || {};
+    const camps = lc.campaigns || [];
+    $('nt_lifecycle').innerHTML = '<div style="margin-bottom:8px"><span class="chip ' + (lc.enabled ? 'ok' : 'bad') + '">' + (lc.enabled ? 'SENDING' : 'SWITCHED OFF') + '</span> <span class="tiny">admin_settings.upgrade_sequence_enabled = ' + (lc.enabled ? 'true' : 'false') + (lc.launchDate ? ' · launch date ' + esc(lc.launchDate) : '') + '</span></div>' +
+      '<div class="scroll"><table><thead><tr><th>Campaign</th><th class="num">Sent (all time)</th><th class="num">Sent in window</th><th class="num">Tapped</th><th class="num">Paywall views</th><th class="num">Purchases</th></tr></thead><tbody>' +
+      (camps.map((c) => '<tr><td>' + esc(c.key) + '</td><td class="num">' + n(c.total) + '</td><td class="num">' + n(c.inWindow) + '</td><td class="num">' + n(c.opens) + '</td><td class="num">' + n(c.paywallViews) + '</td><td class="num">' + n(c.purchases) + '</td></tr>').join('') || emptyRow(6, 'The sequence has never sent a message.')) + '</tbody></table></div>';
+    $('nt_note').textContent = s.note || '';
+  }
+
+  // ── Sessions ──
+  function renderSessions(d) {
+    const s = d.sessions;
+    if (!s || !s.available) { $('ss_tiles').innerHTML = ''; $('ss_hours').innerHTML = ''; $('ss_hour_labels').innerHTML = ''; $('ss_from').innerHTML = emptyRow(3, (s && s.error) || NOT_YET); $('ss_gaps').innerHTML = ''; $('ss_note').textContent = (s && s.note) || ''; return; }
+    $('ss_tiles').innerHTML = tile('Sessions', n(s.sessions), 'in window') + tile('Users', n(s.users)) + tile('Sessions per active day', s.sessionsPerActiveUserDay == null ? '—' : s.sessionsPerActiveUserDay, 'per user, on days they open the app');
+    const hrs = s.hourOfDay || [];
+    const max = Math.max(1, ...hrs.map((h) => h.sessions));
+    $('ss_hours').innerHTML = hrs.map((h) => '<i class="' + (h.hour >= 19 || h.hour < 7 ? 'alt' : '') + '" style="height:' + Math.round((h.sessions / max) * 100) + '%" title="' + h.hour + ':00 — ' + h.sessions + ' sessions"></i>').join('');
+    $('ss_hour_labels').innerHTML = hrs.map((h) => '<span>' + (h.hour % 3 === 0 ? h.hour : '') + '</span>').join('');
+    $('ss_from').innerHTML = (s.openedFrom || []).map((r) => '<tr><td>' + esc(r.source) + '</td><td class="num">' + n(r.n) + '</td><td class="num">' + pc(r.pct) + '</td></tr>').join('');
+    $('ss_gaps').innerHTML = (s.gaps || []).map((r) => '<tr><td>' + esc(r.bucket) + '</td><td class="num">' + n(r.n) + '</td><td class="num">' + pc(r.pct) + '</td></tr>').join('');
+    $('ss_note').textContent = (s.note || '') + ' Darker bars = evening/night hours (19:00–06:59).';
+  }
+
+  // ── Features ──
+  function renderFeatures(d) {
+    const ad = d.adoption || {};
+    const pvf = Object.fromEntries(((d.proVsFree && d.proVsFree.rows) || []).map((r) => [r.name, r]));
+    const ev = Object.fromEntries((d.events || []).map((e) => [e.name, e]));
+    const subOk = !(d.users && d.users.subscriptionError);
+    const feats = (ad.features || []).slice().sort((a, b) => b.users - a.users);
+    $('ft_rows').innerHTML = feats.map((f) => {
+      const p = pvf[f.name] || { proCount: 0, freeCount: 0, unknownCount: 0 };
+      const free = p.freeCount + (subOk ? p.unknownCount : 0);
+      const tot = Math.max(1, p.proCount + free + (subOk ? 0 : p.unknownCount));
+      const e = ev[f.name] || { count: 0, ios: 0, android: 0, unknown: 0 };
+      return '<tr' + (f.neverSeen ? ' class="muted"' : '') + '><td>' + esc(f.name) + (f.neverSeen ? '<span class="sub">never fired</span>' : '') + '</td><td class="num">' + n(f.users) + '</td><td class="num">' + pc(f.pct) + '</td><td>' + bar(f.pct) + '</td><td class="num">' + n(e.count) + '</td>' +
+        '<td><div class="split" title="Pro ' + p.proCount + ' · Free ' + free + '"><i class="p" style="width:' + (p.proCount / tot) * 100 + '%"></i><i class="f" style="width:' + (free / tot) * 100 + '%"></i></div></td>' +
+        '<td class="num">' + n(e.ios) + '</td><td class="num">' + n(e.android) + '</td></tr>';
+    }).join('') || emptyRow(8, 'No feature events in this window.');
+    $('ft_note').textContent = '% of active = share of the ' + n(ad.activeUsers) + ' active users in the window who reached the feature at least once. Pro/Free is per event (blue = Pro). iOS/Android counts only exist on 1.2.3 rows; older rows are unlabeled.';
+    const cq = d.callQuality;
+    if (!cq || !cq.available) $('cq').innerHTML = empty((cq && cq.error) || 'No calls in this window.');
+    else {
+      $('cq').innerHTML = '<div class="tiles">' + tile('Calls', n(cq.calls)) + tile('Full 8-step flow', pc(cq.fullFlowPct), 'rest saved from the header') +
+        tile('High impact', cq.highImpactPct == null ? '—' : pc(cq.highImpactPct), cq.withContext ? 'of ' + n(cq.withContext) + ' with context (1.2.3)' : NOT_YET) +
+        tile('Minutes in flow', cq.minutesInFlow && cq.minutesInFlow.median != null ? cq.minutesInFlow.median : '—', cq.minutesInFlow && cq.minutesInFlow.n ? 'median · avg ' + cq.minutesInFlow.avg : NOT_YET) + '</div>' +
+        '<div class="grid c2" style="margin-top:10px"><div><div class="tiny" style="margin-bottom:4px">Narrative</div>' + ((cq.narrative || []).map((r) => esc(r.kind) + ' <b>' + pc(r.pct) + '</b>').join(' · ') || '<span class="muted">' + NOT_YET + '</span>') + '</div>' +
+        '<div><div class="tiny" style="margin-bottom:4px">Check-in kinds</div>' + ((cq.journalModes || []).map((r) => esc(r.mode) + ' <b>' + n(r.n) + '</b>').join(' · ') || '—') + '</div></div><div class="note">' + esc(cq.note || '') + '</div>';
+    }
+    const sh = d.shifts;
+    if (!sh || !sh.available) $('sh').innerHTML = empty((sh && sh.error) || NOT_YET);
+    else $('sh').innerHTML = '<div class="tiles">' + tile('Shifts started', n(sh.started.n), n(sh.started.users) + ' users') + tile('Median hours', sh.started.medianHours == null ? '—' : sh.started.medianHours) + '</div>' +
+      '<div class="tiny" style="margin-top:10px">Scheduled: ' + ((sh.scheduled || []).map((r) => esc(r.source) + ' <b>' + n(r.n) + '</b>').join(' · ') || '—') + '</div><div class="note">' + esc(sh.note || '') + '</div>';
+  }
+
+  // ── Screens / Users / Health ──
+  function renderScreens(d) {
+    const active = Math.max(1, (d.adoption && d.adoption.activeUsers) || (d.totals && d.totals.activeUsers) || 1);
+    $('sc_rows').innerHTML = (d.screens || []).map((s) => '<tr><td>' + esc(s.screen) + '</td><td class="num">' + n(s.views) + '</td><td class="num">' + n(s.users) + '</td><td class="num">' + pc((s.users / active) * 100) + '</td><td class="num">' + dur(s.avgDwellMs) + '</td><td class="num">' + dur(s.totalDwellMs) + '</td></tr>').join('') || emptyRow(6, 'No screen activity.');
+  }
+  function renderUsers(d) {
+    const u = d.users || {};
+    const rows = u.rows || [];
+    $('us_sum').textContent = 'Show users (' + n(rows.length) + (u.truncated ? ' of ' + n(u.totalUsers) : '') + ')';
+    $('us_rows').innerHTML = rows.map((r) => {
+      const name = r.username || r.displayName || r.email || String(r.userId || '').slice(0, 8) + '…';
+      const sub = r.username && (r.displayName || r.email) ? (r.displayName || r.email) : '';
+      const plan = r.isPro === true ? '<span class="chip pro">Pro</span>' : r.isPro === false ? '<span class="chip">Free</span>' : '<span class="chip warn">?</span>';
+      return '<tr><td>' + esc(name) + (sub ? '<span class="sub">' + esc(sub) + '</span>' : '') + '</td><td>' + plan + '</td><td>' + esc(r.platform || '—') + '</td><td>' + esc(r.appVersion || '—') + '</td><td>' + esc(r.language || '—') + '</td><td>' + esc(r.lastActive || '—') + '</td><td class="num">' + n(r.activeDays) + '</td><td class="tiny">' + ((r.topEvents || []).map((e) => esc(e.name) + ' ×' + e.count).join(', ') || '—') + '</td><td class="num">' + n(r.screenMinutes) + '</td></tr>';
+    }).join('') || emptyRow(9, 'No active users in this window.');
+    $('us_note').textContent = [u.identityError ? 'Names unavailable: ' + u.identityError : '', u.subscriptionError ? 'Subscription join unavailable: ' + u.subscriptionError : ''].filter(Boolean).join(' · ');
+  }
+  function renderHealth(d) {
+    const h = d.health || {};
+    const LABEL = { ok: 'OK', stale: 'STALE', no_data: 'NO DATA', unknown: '?' };
+    $('hl_streams').innerHTML = (h.streams || []).map((s) => '<div class="stream ' + esc(s.status || 'unknown') + '"><div class="h"><span class="chip ' + (s.status === 'ok' ? 'ok' : s.status === 'stale' ? 'warn' : 'bad') + '">' + esc(LABEL[s.status] || '?') + '</span>' + esc(s.label) + '</div><div class="n">' + esc(s.note || '') + '</div><div class="tiny" style="margin-top:6px">' + (s.lastWrite ? 'Last write ' + new Date(s.lastWrite).toLocaleString() + ' (' + s.hoursSinceLastWrite + 'h ago)' : 'Never written') + '</div></div>').join('') || empty('Health not reported by this deploy.');
+    $('hl_note').textContent = [h.appOpenUsersToday != null ? n(h.appOpenUsersToday) + ' users opened the app today (UTC)' : '', h.screenDailyReportingUsers != null ? n(h.screenDailyReportingUsers) + ' users reported screen time in the window' : '', h.staleHours ? 'A stream is stale after ' + h.staleHours + 'h without a write' : ''].filter(Boolean).join(' · ');
+    return h.status || 'unknown';
   }
 
   function render(d) {
     $('results').classList.remove('hidden');
-    $('s_users').textContent = fmtInt(d.totals.activeUsers);
-    $('s_views').textContent = fmtInt(d.totals.screenViews);
-    $('s_events').textContent = fmtInt(d.totals.events);
-    $('genat').textContent =
-      'Window: last ' + d.range.sinceDays + ' days · generated ' + new Date(d.generatedAt).toLocaleString();
-
-    if (d.capped) {
-      const c = $('capwarn');
-      c.textContent = 'Note: result set hit the row cap — figures reflect the most recent events only. Narrow the window for exact totals.';
-      c.style.display = 'block';
-    } else {
-      $('capwarn').style.display = 'none';
-    }
-
-    // Daily bars
-    const daily = d.daily || [];
-    const maxDay = Math.max(1, ...daily.map((x) => x.events));
-    $('daybars').innerHTML = daily
-      .map((x) => '<div class="daybar" style="height:' + Math.round((x.events / maxDay) * 100) + '%" title="' +
-        x.day + ': ' + x.events + ' events, ' + x.users + ' users"></div>')
-      .join('') || '<span class="muted">No activity in this window.</span>';
-    $('daylabels').innerHTML = daily
-      .map((x, i) => '<div class="daylabel">' + (daily.length <= 31 || i % 7 === 0 ? x.day.slice(5) : '') + '</div>')
-      .join('');
-
-    // Screens table — ranked by total dwell time (attention), share bar too.
-    const screens = d.screens || [];
-    const maxDwell = Math.max(1, ...screens.map((s) => s.totalDwellMs || 0));
-    $('screens').innerHTML = screens
-      .map((s) =>
-        '<tr><td>' + escapeHtml(s.screen) + '</td>' +
-        '<td class="num">' + fmtInt(s.views) + '</td>' +
-        '<td class="num">' + fmtInt(s.users) + '</td>' +
-        '<td class="num">' + fmtDuration(s.avgDwellMs) + '</td>' +
-        '<td class="num">' + fmtDuration(s.totalDwellMs) + '</td>' +
-        '<td><div class="barwrap"><div class="bar" style="width:' + Math.round(((s.totalDwellMs || 0) / maxDwell) * 100) + '%"></div></div></td>' +
-        '</tr>')
-      .join('') || '<tr><td colspan="6" class="muted">No screen activity yet.</td></tr>';
-
-    // Events table
-    $('events').innerHTML = (d.events || [])
-      .map((e) => '<tr><td>' + escapeHtml(e.name) + '</td><td class="num">' + fmtInt(e.count) + '</td></tr>')
-      .join('') || '<tr><td colspan="2" class="muted">No events yet.</td></tr>';
-
-    // New sections — each isolated so a render hiccup in one can't blank the page.
-    [
-      ['health_err', renderHealth],
-      ['roll_err', renderRolling],
-      ['ret_err', renderRetention],
-      ['eng_err', renderEngagement],
-      ['users_err', renderUsers],
-      ['pvf_err', renderProVsFree],
-      ['widgets_err', renderWidgets],
-      ['adopt_err', renderAdoption],
-    ].forEach(([bannerId, fn]) => {
-      try { fn(d); } catch (e) { setBanner(bannerId, 'Render error: ' + (e && e.message ? e.message : e)); }
-    });
-  }
-
-  // Per-section error/info banners: one bad section must never blank the page.
-  function setBanner(id, msg) {
-    const el = $(id);
-    if (!el) return;
-    if (msg) { el.textContent = msg; el.style.display = 'block'; }
-    else { el.textContent = ''; el.style.display = 'none'; }
-  }
-
-  const pctStr = (n) => (n == null ? '—' : (Math.round(n * 10) / 10) + '%');
-
-  function planChip(isPro) {
-    if (isPro === true) return '<span class="chip pro">Pro</span>';
-    if (isPro === false) return '<span class="chip free">Free</span>';
-    return '<span class="chip unk">?</span>';
-  }
-
-  function userLabel(u) {
-    const name = u.username || u.displayName || u.email;
-    if (name) {
-      const sub = u.username && (u.displayName || u.email) ? (u.displayName || u.email) : '';
-      return '<div>' + escapeHtml(name) + '</div>' +
-        (sub ? '<div class="tiny">' + escapeHtml(sub) + '</div>' : '');
-    }
-    return '<span class="muted">' + escapeHtml(String(u.userId || '').slice(0, 8)) + '…</span>';
-  }
-
-  // ── Who's using AfterCall ──────────────────────────────────────────────────
-  function renderUsers(d) {
-    const sec = d.users;
-    if (!sec) {
-      setBanner('users_err', 'This section needs a newer admin-analytics deploy.');
-      $('users').innerHTML = '';
-      $('users_foot').textContent = '';
-      return;
-    }
-    const notes = [];
-    if (sec.error) notes.push(sec.error);
-    if (sec.identityError) notes.push('Names/emails unavailable: ' + sec.identityError);
-    if (sec.subscriptionError) notes.push('Subscription join unavailable (plan falls back to what the app reported): ' + sec.subscriptionError);
-    setBanner('users_err', notes.join(' · '));
-
-    const rows = sec.rows || [];
-    $('users').innerHTML = rows
-      .map((u) => {
-        const top = (u.topEvents || [])
-          .map((e) => escapeHtml(e.name) + ' ×' + fmtInt(e.count))
-          .join('<br/>');
-        return '<tr>' +
-          '<td>' + userLabel(u) + '</td>' +
-          '<td>' + planChip(u.isPro) + '</td>' +
-          '<td>' + escapeHtml(u.platform || '—') + '</td>' +
-          '<td class="nowrap">' + escapeHtml(u.appVersion || '—') + '</td>' +
-          '<td>' + escapeHtml(u.language || '—') + '</td>' +
-          '<td class="nowrap">' + escapeHtml(u.lastActive || '—') + '</td>' +
-          '<td class="num">' + fmtInt(u.activeDays) + '</td>' +
-          '<td class="tiny">' + (top || '<span class="muted">—</span>') + '</td>' +
-          '<td class="num">' + fmtInt(u.screenMinutes) + '</td>' +
-          '</tr>';
-      })
-      .join('') || '<tr><td colspan="9" class="muted">No active users in this window.</td></tr>';
-
-    $('users_foot').textContent = sec.truncated
-      ? 'Showing the ' + fmtInt(sec.limit) + ' most recently active of ' + fmtInt(sec.totalUsers) + ' users.'
-      : fmtInt(rows.length) + ' user' + (rows.length === 1 ? '' : 's') + ' in this window.';
-  }
-
-  // ── Pro vs Free ────────────────────────────────────────────────────────────
-  function renderProVsFree(d) {
-    const sec = d.proVsFree;
-    if (!sec) {
-      setBanner('pvf_err', 'This section needs a newer admin-analytics deploy.');
-      $('pvf').innerHTML = ''; $('pvf_foot').textContent = '';
-      return;
-    }
-    setBanner('pvf_err', sec.error || '');
-
-    // A row in user_subscription_status is only ever written by the RevenueCat
-    // webhook, so a user with NO row has never had a subscription — they are
-    // Free, not "unknown". Older app builds don't tag events with the plan
-    // either, which is why almost every action landed in the unknown bucket and
-    // the Free column read as empty.
-    //
-    // This fold is only valid when the subscription lookup actually succeeded.
-    // If it errored we genuinely can't tell, so the unknown bucket stays
-    // separate rather than silently relabelling everyone as Free.
-    const subLookupOk = !(d.users && d.users.subscriptionError);
-    const freeCountOf = (r) => r.freeCount + (subLookupOk ? r.unknownCount : 0);
-    const freeUsersOf = (r) => r.freeUsers + (subLookupOk ? r.unknownUsers : 0);
-
-    const rows = (sec.rows || []).filter((r) => r.total > 0);
-    $('pvf').innerHTML = rows
-      .map((r) => {
-        const t = Math.max(1, r.total);
-        const freeC = freeCountOf(r);
-        return '<tr>' +
-          '<td>' + escapeHtml(r.name) + '</td>' +
-          '<td class="num">' + fmtInt(r.proCount) + '</td>' +
-          '<td class="num">' + fmtInt(freeC) + '</td>' +
-          '<td class="num">' + fmtInt(r.proUsers) + '</td>' +
-          '<td class="num">' + fmtInt(freeUsersOf(r)) + '</td>' +
-          '<td><div class="split">' +
-            '<div class="sp p" style="width:' + ((r.proCount / t) * 100) + '%"></div>' +
-            '<div class="sp f" style="width:' + ((freeC / t) * 100) + '%"></div>' +
-            (subLookupOk ? '' :
-              '<div class="sp u" style="width:' + ((r.unknownCount / t) * 100) + '%"></div>') +
-          '</div></td>' +
-          '</tr>';
-      })
-      .join('') || '<tr><td colspan="6" class="muted">No feature actions recorded yet.</td></tr>';
-
-    const parts = [];
-    if (sec.proUsersInWindow != null) {
-      const freeUsers = sec.freeUsersInWindow + (subLookupOk ? sec.unknownPlanUsers : 0);
-      parts.push(fmtInt(sec.proUsersInWindow) + ' Pro · ' + fmtInt(freeUsers) + ' Free' +
-        (subLookupOk ? '' : ' · ' + fmtInt(sec.unknownPlanUsers) + ' unknown plan'));
-    }
-    if (subLookupOk) {
-      parts.push('Free = no subscription record (RevenueCat only writes one for a purchase or trial)');
-    } else {
-      parts.push('Subscription lookup failed, so plan could not be resolved for everyone — unknown shown separately');
-    }
-    if (sec.resolution) {
-      parts.push(fmtInt(sec.resolution.fromEventMetadata) + ' actions classified from the event itself, ' +
-        fmtInt(sec.resolution.fromSubscription) + ' from the subscription record');
-    }
-    $('pvf_foot').textContent = parts.join(' · ');
-  }
-
-  // ── Widgets + notifications ────────────────────────────────────────────────
-  function renderWidgets(d) {
-    const sec = d.widgets;
-    if (!sec) {
-      setBanner('widgets_err', 'This section needs a newer admin-analytics deploy.');
-      setBanner('widgets_info', '');
-      $('widgets').innerHTML = ''; $('widgets_note').textContent = '';
-      return;
-    }
-    setBanner('widgets_err', sec.error || '');
-
-    if (!sec.available) {
-      setBanner('widgets_info',
-        'No widget data yet — the app does not report installed widgets in this build. This fills in once the richer app_open metadata ships.');
-      $('widgets').innerHTML = '<tr><td colspan="4" class="muted">Waiting on client-side collection.</td></tr>';
-    } else {
-      setBanner('widgets_info', '');
-      const kinds = sec.kinds || [];
-      const maxPct = Math.max(1, ...kinds.map((k) => k.pct || 0));
-      $('widgets').innerHTML = kinds
-        .map((k) =>
-          '<tr><td>' + escapeHtml(k.kind) + '</td>' +
-          '<td class="num">' + fmtInt(k.users) + '</td>' +
-          '<td class="num">' + pctStr(k.pct) + '</td>' +
-          '<td><div class="barwrap"><div class="bar" style="width:' + Math.round(((k.pct || 0) / maxPct) * 100) + '%"></div></div></td>' +
-          '</tr>')
-        .join('') || '<tr><td colspan="4" class="muted">Nobody has a widget installed.</td></tr>';
-    }
-
-    const bits = [];
-    if (sec.available) {
-      bits.push(fmtInt(sec.reportingUsers) + ' of ' + fmtInt(sec.totalUsers) + ' active users report widget state · ' +
-        fmtInt(sec.noneUsers) + ' (' + pctStr(sec.nonePct) + ') have none installed');
-    }
-    const n = sec.notifications;
-    if (n && n.available) {
-      bits.push('Notifications enabled for ' + fmtInt(n.enabledUsers) + ' of ' + fmtInt(n.reportingUsers) +
-        ' reporting users (' + pctStr(n.pct) + ')');
-    } else if (n) {
-      bits.push('Notification opt-in not reported by this build yet.');
-    }
-    $('widgets_note').textContent = bits.join(' · ');
-  }
-
-  // ── Adoption & gaps ────────────────────────────────────────────────────────
-  function renderAdoption(d) {
-    const sec = d.adoption;
-    if (!sec) {
-      setBanner('adopt_err', 'This section needs a newer admin-analytics deploy.');
-      $('adopt').innerHTML = ''; $('adopt_screens').innerHTML = '';
-      return;
-    }
-    setBanner('adopt_err', sec.error || '');
-    const threshold = sec.lowCoverageThresholdPct != null ? sec.lowCoverageThresholdPct : 25;
-
-    $('adopt').innerHTML = (sec.features || [])
-      .map((f) => {
-        const low = (f.pct || 0) < threshold;
-        const label = escapeHtml(f.name) + (f.neverSeen ? ' <span class="tiny">(never fired)</span>' : '');
-        return '<tr' + (low ? ' class="gap"' : '') + '>' +
-          '<td>' + (low ? '⚠ ' : '') + label + '</td>' +
-          '<td class="num">' + fmtInt(f.users) + '</td>' +
-          '<td class="num">' + pctStr(f.pct) + '</td>' +
-          '<td class="num">' + fmtInt(f.missingUsers) + '</td>' +
-          '<td><div class="barwrap"><div class="bar" style="width:' + Math.min(100, f.pct || 0) + '%"></div></div></td>' +
-          '</tr>';
-      })
-      .join('') || '<tr><td colspan="5" class="muted">No feature events recorded yet.</td></tr>';
-
-    $('adopt_screens').innerHTML = (sec.neverVisitedScreens || [])
-      .map((s) => {
-        const low = (s.pct || 0) < threshold;
-        return '<tr' + (low ? ' class="gap"' : '') + '>' +
-          '<td>' + (low ? '⚠ ' : '') + escapeHtml(s.screen) + '</td>' +
-          '<td class="num">' + fmtInt(s.users) + '</td>' +
-          '<td class="num">' + pctStr(s.pct) + '</td>' +
-          '<td class="num">' + fmtInt(s.visits) + '</td>' +
-          '<td><div class="barwrap"><div class="bar" style="width:' + Math.min(100, s.pct || 0) + '%"></div></div></td>' +
-          '</tr>';
-      })
-      .join('') || '<tr><td colspan="5" class="muted">No screen activity yet.</td></tr>';
-  }
-
-  // ── Collection health — the trust indicator, rendered first ────────────────
-  function renderHealth(d) {
-    const sec = d.health;
-    const strip = $('health');
-    const banner = $('health_banner');
-    if (!sec) {
-      setBanner('health_err',
-        'This section needs a newer admin-analytics deploy — collection health is not being reported, so a silent break would go unnoticed.');
-      strip.innerHTML = '';
-      banner.className = 'banner hidden';
-      banner.textContent = '';
-      $('health_foot').textContent = '';
-      return;
-    }
-    setBanner('health_err', sec.error || '');
-
-    const status = sec.status || 'unknown';
-    const HEADLINE = {
-      ok: 'All collection streams are writing.',
-      degraded: 'A collection stream has stopped writing — anything built on it below is incomplete.',
-      down: 'No collection stream is writing. Treat every number on this page as unmeasured, not as zero.',
-      unknown: 'Collection health could not be determined.',
-    };
-    banner.className = 'banner ' + status;
-    banner.textContent = (status === 'ok' ? '✓ ' : '⚠ ') + (HEADLINE[status] || HEADLINE.unknown);
-
-    const LABEL = { ok: 'OK', stale: 'STALE', no_data: 'NO DATA', unknown: '?' };
-    const streams = sec.streams || [];
-    strip.innerHTML = streams
-      .map((s) => {
-        const st = s.status || 'unknown';
-        const when = s.lastWrite
-          ? 'Last write ' + new Date(s.lastWrite).toLocaleString() +
-            (s.hoursSinceLastWrite != null ? ' (' + s.hoursSinceLastWrite + 'h ago)' : '')
-          : 'Never written';
-        return '<div class="hstream ' + escapeHtml(st) + '">' +
-          '<div class="hhead"><span class="chip ' + escapeHtml(st) + '">' + escapeHtml(LABEL[st] || st) + '</span>' +
-          escapeHtml(s.label || s.key || '') + '</div>' +
-          '<div class="hnote">' + escapeHtml(s.note || '') + '</div>' +
-          '<div class="hwhen">' + escapeHtml(when) + '</div>' +
-          '</div>';
-      })
-      .join('') || '<span class="muted">No stream data reported.</span>';
-
-    const foot = [];
-    if (sec.appOpenUsersToday != null) foot.push(fmtInt(sec.appOpenUsersToday) + ' users opened the app today (UTC)');
-    if (sec.screenDailyReportingUsers != null) {
-      foot.push(fmtInt(sec.screenDailyReportingUsers) + ' users reported screen time in the selected window');
-    }
-    if (sec.staleHours != null) foot.push('A stream is called stale after ' + sec.staleHours + 'h without a write');
-    $('health_foot').textContent = foot.join(' · ');
-  }
-
-  // ── Rolling active users ───────────────────────────────────────────────────
-  function renderRolling(d) {
-    const sec = d.retention;
-    const blank = () => { ['r_dau', 'r_wau', 'r_mau', 'r_stick'].forEach((id) => { $(id).textContent = '–'; }); };
-    if (!sec) {
-      setBanner('roll_err', 'This section needs a newer admin-analytics deploy.');
-      setBanner('roll_info', '');
-      blank(); $('roll_note').textContent = '';
-      return;
-    }
-    setBanner('roll_err', sec.error || '');
-    const r = sec.rollingActive;
-    if (!r) {
-      setBanner('roll_info', sec.error
-        ? 'Rolling active counts could not be computed — see the error above.'
-        : 'Rolling active counts are unavailable for this response.');
-      blank(); $('roll_note').textContent = '';
-      return;
-    }
-    setBanner('roll_info', '');
-    $('r_dau').textContent = fmtInt(r.dau);
-    $('r_wau').textContent = fmtInt(r.wau);
-    $('r_mau').textContent = fmtInt(r.mau);
-    $('r_stick').textContent = r.stickinessPct == null ? '—' : pctStr(r.stickinessPct);
-    const bits = [];
-    if (r.note) bits.push(r.note);
-    if (r.asOf) bits.push('As of ' + r.asOf);
-    if (r.dauPartialDay) bits.push("Today is still in progress, so DAU is a floor, not a final count.");
-    $('roll_note').textContent = bits.join(' · ');
-  }
-
-  // ── Retention cohorts ──────────────────────────────────────────────────────
-  function retCell(cell) {
-    if (!cell) return '<td class="num early" title="Not reported by this response.">—</td>';
-    if (cell.tooEarly || cell.pct == null) {
-      return '<td class="num early" title="Too early — nobody in this cohort has lived long enough to complete this window. Not 0%.">—</td>';
-    }
-    const p = Math.max(0, Math.min(100, cell.pct));
-    const bg = 'rgba(51,121,207,' + (0.06 + (p / 100) * 0.5).toFixed(3) + ')';
-    const title = fmtInt(cell.retained) + ' of ' + fmtInt(cell.eligible) + ' eligible members came back' +
-      (cell.partial
-        ? ' — partial cohort: members who signed up too recently to complete this window are excluded from the denominator.'
-        : '');
-    return '<td class="num retcell" style="background:' + bg + '" title="' + escapeHtml(title) + '">' +
-      pctStr(cell.pct) + (cell.partial ? '*' : '') +
-      '<span class="sm">' + fmtInt(cell.retained) + '/' + fmtInt(cell.eligible) + '</span></td>';
-  }
-
-  function renderRetention(d) {
-    const sec = d.retention;
-    if (!sec) {
-      setBanner('ret_err', 'This section needs a newer admin-analytics deploy.');
-      setBanner('ret_info', '');
-      $('ret').innerHTML = ''; $('ret_foot').textContent = '';
-      $('ret_def').style.display = 'none'; $('ret_caveat').style.display = 'none';
-      return;
-    }
-    setBanner('ret_err', sec.error || '');
-
-    $('ret_def').textContent = sec.definition || '';
-    $('ret_def').style.display = sec.definition ? '' : 'none';
-    $('ret_caveat').textContent = sec.caveat || '';
-    $('ret_caveat').style.display = sec.caveat ? '' : 'none';
-
-    const cohorts = sec.cohorts || [];
-    if (!cohorts.length) {
-      setBanner('ret_info', sec.error
-        ? 'Cohorts unavailable — see the error above.'
-        : 'No measurable cohorts yet: every account in the cohort window was created before analytics collection began, so their retention is unmeasurable rather than zero.');
-      $('ret').innerHTML = '<tr><td colspan="5" class="muted">Nothing measurable yet.</td></tr>';
-      $('ret_foot').textContent = '';
-      return;
-    }
-    setBanner('ret_info', '');
-
-    $('ret').innerHTML = cohorts
-      .map((c) =>
-        '<tr><td class="nowrap">' + escapeHtml(c.week) +
-        (c.weekEnd ? '<div class="tiny">through ' + escapeHtml(c.weekEnd) + '</div>' : '') + '</td>' +
-        '<td class="num">' + fmtInt(c.cohortSize) + '</td>' +
-        retCell(c.d1) + retCell(c.d7) + retCell(c.d30) + '</tr>')
-      .join('');
-
-    const foot = [];
-    if (sec.dataStartsAt) foot.push('Analytics data starts ' + sec.dataStartsAt);
-    if (sec.cohortWeeks != null) foot.push('Showing the last ' + sec.cohortWeeks + ' signup weeks');
-    if (sec.preAnalyticsUsers != null) foot.push(fmtInt(sec.preAnalyticsUsers) + ' pre-analytics accounts excluded');
-    if (sec.unknownSignupUsers) foot.push(fmtInt(sec.unknownSignupUsers) + ' accounts had no signup date and were skipped');
-    if (sec.capped) foot.push('⚠ The retention scan hit its row cap — figures may be partial.');
-    $('ret_foot').textContent = foot.join(' · ');
-  }
-
-  // ── Time in app ────────────────────────────────────────────────────────────
-  function statTile(n, l) {
-    return '<div class="stat"><div class="n">' + escapeHtml(n) + '</div><div class="l">' + escapeHtml(l) + '</div></div>';
-  }
-  const minStr = (v) => (v == null ? '—' : v + 'm');
-
-  function renderEngagement(d) {
-    const sec = d.engagement;
-    const stats = $('eng_stats');
-    const chart = $('eng_chart');
-    const screensWrap = $('eng_screens_wrap');
-    const clear = () => {
-      stats.innerHTML = '';
-      chart.classList.add('hidden');
-      screensWrap.classList.add('hidden');
-    };
-    if (!sec) {
-      setBanner('eng_err', 'This section needs a newer admin-analytics deploy.');
-      setBanner('eng_info', '');
-      clear();
-      return;
-    }
-    setBanner('eng_err', sec.error || '');
-
-    if (!sec.available) {
-      setBanner('eng_info', sec.error
-        ? 'Time-in-app could not be computed — see the error above. Nothing below is a measurement of zero.'
-        : (sec.reason ||
-          'Screen-time rollups have not arrived yet, so time-in-app is UNMEASURED — this is not a reading of zero minutes. Check Collection health above.'));
-      clear();
-      return;
-    }
-    setBanner('eng_info', '');
-
-    stats.innerHTML =
-      statTile(minStr(sec.avgMinutesPerActiveUserPerDay), 'Avg minutes / active user / day') +
-      statTile(minStr(sec.medianMinutesPerActiveUserPerDay), 'Median minutes / active user / day') +
-      statTile(fmtInt(sec.activeUserDays), 'User-days measured') +
-      statTile(fmtInt(sec.daysWithData), 'Days with data');
-
-    const daily = sec.daily || [];
-    if (daily.length) {
-      chart.classList.remove('hidden');
-      const max = Math.max(1, ...daily.map((x) => x.avgMinutes || 0));
-      $('engbars').innerHTML = daily
-        .map((x) => '<div class="daybar" style="height:' + Math.round(((x.avgMinutes || 0) / max) * 100) + '%" title="' +
-          escapeHtml(x.day + ': ' + (x.avgMinutes || 0) + ' min avg · ' + fmtInt(x.users) + ' users · ' +
-            (x.totalMinutes || 0) + ' min total') + '"></div>')
-        .join('');
-      $('englabels').innerHTML = daily
-        .map((x, i) => '<div class="daylabel">' +
-          (daily.length <= 31 || i % 7 === 0 ? escapeHtml(String(x.day || '').slice(5)) : '') + '</div>')
-        .join('');
-    } else {
-      chart.classList.add('hidden');
-    }
-
-    const top = sec.topScreensByAvgVisit || [];
-    if (top.length) {
-      screensWrap.classList.remove('hidden');
-      $('eng_screens').innerHTML = top
-        .map((s) =>
-          '<tr><td>' + escapeHtml(s.screen) + '</td>' +
-          '<td class="num">' + fmtDuration(s.avgMsPerVisit) + '</td>' +
-          '<td class="num">' + fmtInt(s.visits) + '</td>' +
-          '<td class="num">' + fmtInt(s.users) + '</td></tr>')
-        .join('');
-    } else {
-      screensWrap.classList.add('hidden');
-    }
-  }
-
-  function escapeHtml(s) {
-    return String(s ?? '').replace(/[&<>"']/g, (c) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const status = renderHealth(d);
+    const chip = status === 'ok' ? '<span class="chip ok">Collection OK</span>' : status === 'degraded' ? '<span class="chip warn">Collection degraded</span>' : status === 'down' ? '<span class="chip bad">Collection down</span>' : '<span class="chip">Health unknown</span>';
+    $('status').innerHTML = chip + '<span>Window: last ' + esc(d.range.sinceDays) + ' days</span><span>Generated ' + esc(new Date(d.generatedAt).toLocaleString()) + '</span>' + (d.schemaVersion ? '<span>API v' + esc(d.schemaVersion) + '</span>' : '<span class="chip warn">Older API deploy — some sections will be empty</span>');
+    $('capwarn').style.display = d.capped ? 'block' : 'none';
+    $('capwarn').textContent = 'The result hit the row cap — figures reflect the most recent rows only. Narrow the window for exact totals.';
+    [renderOverview, renderFunnel, renderRetention, renderEngagement, renderConversion, renderNotifications, renderSessions, renderFeatures, renderScreens, renderUsers].forEach((fn) => { try { fn(d); } catch (e) { console.error(fn.name, e); } });
   }
 
   async function load() {
     $('err').style.display = 'none';
     const password = $('pw').value.trim();
     const sinceDays = Number($('days').value);
-    if (!password) { showErr('Enter the admin password.'); return; }
+    if (!password) { $('err').textContent = 'Enter the admin password.'; $('err').style.display = 'block'; return; }
     const btn = $('load'); btn.disabled = true; btn.textContent = 'Loading…';
     try {
-      const res = await fetch(API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, sinceDays }),
-      });
+      const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, sinceDays }) });
       const data = await res.json();
-      if (!res.ok) { showErr(data.error || ('Request failed (' + res.status + ')')); return; }
+      if (!res.ok) { $('err').textContent = data.error || ('Request failed (' + res.status + ')'); $('err').style.display = 'block'; return; }
+      try { localStorage.setItem('ac_analytics_days', String(sinceDays)); } catch (e) {}
       render(data);
     } catch (e) {
-      showErr('Network error: ' + (e && e.message ? e.message : e));
-    } finally {
-      btn.disabled = false; btn.textContent = 'Load analytics';
-    }
+      $('err').textContent = 'Network error: ' + (e && e.message ? e.message : e); $('err').style.display = 'block';
+    } finally { btn.disabled = false; btn.textContent = 'Load'; }
   }
-
+  try { const saved = localStorage.getItem('ac_analytics_days'); if (saved) $('days').value = saved; } catch (e) {}
   $('load').addEventListener('click', load);
   $('pw').addEventListener('keydown', (e) => { if (e.key === 'Enter') load(); });
+  $('pw').focus();
 </script>
 </body></html>
