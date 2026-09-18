@@ -822,9 +822,11 @@ Nothing here is legal, tax, medical or insurance advice.
     if(foot) foot.style.display = 'none';
     done.classList.add('show');
     /* [CONVERT] Lead conversion hooks. */
-    if(window.gtag) gtag('event','generate_lead',{currency:'USD',value:1});
-    if(window.dataLayer) dataLayer.push({event:'aftercall_lead', source:'hubspot_start_form'});
-    if(window.fbq) fbq('track','Lead');
+    var attr = window.aftercallGetAttribution ? window.aftercallGetAttribution() : {};
+    var payload = Object.assign({currency:'USD',value:1,lead_source:'hubspot_start_form'}, attr || {});
+    if(window.gtag) gtag('event','generate_lead',payload);
+    if(window.dataLayer) dataLayer.push(Object.assign({event:'aftercall_lead', source:'hubspot_start_form'}, attr || {}));
+    if(window.fbq) fbq('track','Lead',payload);
   }
 
   /* HubSpot posts this message on a successful submit */
