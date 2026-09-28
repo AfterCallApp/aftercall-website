@@ -185,6 +185,9 @@
     .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
     .row > div { flex: 1; min-width: 130px; }
     .row > .fix { flex: 0; min-width: 0; }
+    /* Button slots size to their button — flex:0 let a second button draw on
+       top of the first (Billing: Set up billing / Manage billing). */
+    .row > .fix:has(> .btn) { flex: 0 0 auto; }
 
     .rescard { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: var(--card2);
       display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; margin-bottom: 10px; }
@@ -1400,14 +1403,29 @@
       post('leader_join_code').then((d) => { $('joinCode').textContent = d.joinCode || '— none —'; }).catch(() => {});
       return postBilling('billing_status').then((b) => {
         const s = b.billing || {};
+        const day = (v) => esc(String(v).slice(0, 10));
+        const onStripe = s.method === 'stripe' && (s.status === 'active' || s.status === 'past_due');
+        const pastDue = s.method === 'stripe' && s.status === 'past_due';
+        const canceling = onStripe && s.cancelAt;
         $('billingSummary').innerHTML =
           'Status: <b>' + esc((s.status || 'none').replace('_', ' ')) + '</b>'
           + ' · Method: <b>' + esc(s.method === 'stripe' ? 'Stripe' : s.method === 'invoice' ? 'Invoice / PO' : '—') + '</b>'
           + ' · Seats on plan: <b>' + esc(s.seatLimit) + '</b>'
-          + (s.currentPeriodEnd ? ' · Renews: <b>' + esc(String(s.currentPeriodEnd).slice(0, 10)) + '</b>' : '')
+          + (canceling ? ' · Cancels: <b>' + day(s.cancelAt) + '</b>'
+            : s.currentPeriodEnd && s.status !== 'canceled' ? ' · Renews: <b>' + day(s.currentPeriodEnd) + '</b>' : '')
+          + (pastDue ? '<br/><span style="color:var(--bad);">The last payment didn’t go through. Update the card under Update payment method — seats stay active meanwhile.</span>' : '')
+          + (canceling && !pastDue ? '<br/><span style="color:var(--muted);">The plan is set to end on ' + day(s.cancelAt) + '. To keep it, open Manage billing and renew the plan.</span>' : '')
           + (!b.stripeEnabled ? '<br/><span style="color:var(--muted);">This agency is invoiced directly — purchase orders and checks accepted.</span>' : '');
-        $('checkoutBtn').style.display = b.stripeEnabled && !(s.status === 'active' && s.method === 'stripe') ? '' : 'none';
-        $('portalBtn').style.display = s.hasStripeCustomer ? '' : 'none';
+        // One subscription per agency: while it is live (paid or past due) the
+        // portal is the only way in; Checkout is for starting or restarting.
+        // Toggle the .fix wrappers, not just the buttons, so a hidden button
+        // leaves no gap in the row.
+        $('checkoutBtn').style.display = '';
+        $('portalBtn').style.display = '';
+        $('checkoutBtn').parentElement.style.display = b.stripeEnabled && !onStripe ? '' : 'none';
+        $('portalBtn').parentElement.style.display = s.hasStripeCustomer ? '' : 'none';
+        $('portalBtn').textContent = pastDue ? 'Update payment method' : 'Manage billing';
+        $('portalBtn').className = pastDue ? 'btn sm' : 'btn ghost sm';
         return b;
       }).catch(() => { $('billingSummary').textContent = 'Billing status unavailable right now.'; return null; });
     }
