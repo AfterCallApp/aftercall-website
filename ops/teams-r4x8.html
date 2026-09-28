@@ -157,8 +157,13 @@
           + '<td><strong>' + esc(a.name) + '</strong><br /><span style="color:var(--muted);font-size:11.5px;">' + esc(a.slug) + '</span></td>'
           + '<td>' + esc(a.plan) + '</td>'
           + '<td><span class="pill ' + esc(a.status) + '">' + esc(a.status) + '</span></td>'
-          + '<td>' + esc(a.billing_status || 'none') + (a.billing_method && a.billing_method !== 'none' ? '<br /><span style="color:var(--muted);font-size:11px;">' + esc(a.billing_method) + '</span>' : '')
-          + (a.billing_cancel_at && a.billing_status !== 'canceled' ? '<br /><span style="color:var(--muted);font-size:11px;">cancels ' + esc(String(a.billing_cancel_at).slice(0, 10)) + '</span>' : '') + '</td>'
+          + '<td>' + esc(a.billing_status === 'past_due' ? 'awaiting payment' : (a.billing_status || 'none')) + (a.billing_method && a.billing_method !== 'none' ? '<br /><span style="color:var(--muted);font-size:11px;">' + esc(a.billing_method) + '</span>' : '')
+          + (a.billing_cancel_at && a.billing_status !== 'canceled' ? '<br /><span style="color:var(--muted);font-size:11px;">cancels ' + esc(String(a.billing_cancel_at).slice(0, 10)) + '</span>' : '')
+          // Failed payment: pay-by date while in grace; "billing hold" once the
+          // hold suspended it (paying reactivates automatically).
+          + (a.billing_suspended ? '<br /><span style="color:var(--bad, #ef6666);font-size:11px;">billing hold — reactivates on payment</span>'
+            : a.billing_status === 'past_due' && a.billing_grace_until ? '<br /><span style="color:var(--bad, #ef6666);font-size:11px;">pay by ' + esc(String(a.billing_grace_until).slice(0, 10)) + '</span>' : '')
+          + '</td>'
           + '<td>' + esc(a.activeSeats) + ' / ' + esc(a.seat_limit) + '</td>'
           + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
           + '<td>' + esc(fmtDate(a.pilot_ends_at)) + '</td>'

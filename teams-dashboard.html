@@ -265,6 +265,11 @@
       <button class="btn ghost sm" id="lockBtn" title="Forget the key in this tab">Sign out</button>
     </div>
 
+    <div class="msg err" id="billingBanner" style="margin:0 0 14px; display:none;">
+      <span id="billingBannerText"></span>
+      <button class="btn sm" id="billingBannerBtn" style="margin-left:10px;">Go to billing</button>
+    </div>
+
     <div class="tabs" id="tabs">
       <button class="tab active" data-page="overview">Overview</button>
       <button class="tab" data-page="wellbeing">Wellbeing</button>
@@ -587,6 +592,7 @@
           <h3>Billing</h3>
           <div style="font-size: 13.5px; color: var(--ink2); line-height: 1.7;" id="billingSummary">Loading…</div>
           <div class="row mt">
+            <div class="fix"><button class="btn sm" id="payInvoiceBtn" style="display:none;">Pay invoice</button></div>
             <div class="fix"><button class="btn sm" id="checkoutBtn" style="display:none;">Set up billing with Stripe</button></div>
             <div class="fix"><button class="btn ghost sm" id="portalBtn" style="display:none;">Manage billing</button></div>
           </div>
@@ -1407,13 +1413,32 @@
         const onStripe = s.method === 'stripe' && (s.status === 'active' || s.status === 'past_due');
         const pastDue = s.method === 'stripe' && s.status === 'past_due';
         const canceling = onStripe && s.cancelAt;
+        const held = s.suspended && s.billingHold;   // suspended by the billing hold
+        const inv = s.openInvoice;
+        const owed = inv && inv.amountDue != null ? money(inv.amountDue, inv.currency) : '';
+        const statusLabel = held ? 'Suspended — payment needed'
+          : s.suspended ? 'Suspended'
+          : ({ active: 'Active', past_due: 'Awaiting payment', checkout_pending: 'Checkout started', canceled: 'Canceled', none: 'Not set up' })[s.status || 'none'] || s.status;
+        let note = '';
+        if (held) {
+          note = 'Payment' + (owed ? ' of <b>' + esc(owed) + '</b>' : '') + ' wasn’t received by ' + day(s.graceUntil)
+            + ', so AfterCall Pro is paused for your members. The workspace, peer support and crisis resources stay on. '
+            + 'Paying the open invoice turns everything back on within a minute.';
+        } else if (s.suspended) {
+          note = 'This agency is suspended. Contact AfterCall to reactivate it.';
+        } else if (pastDue) {
+          note = 'A payment' + (owed ? ' of <b>' + esc(owed) + '</b>' : '') + ' didn’t go through. '
+            + (s.graceUntil ? 'Pay it by <b>' + day(s.graceUntil) + '</b> to keep AfterCall Pro on for your members — ' : 'Please pay it to keep AfterCall Pro on for your members — ')
+            + 'everything stays active until then. You can use a different card on the invoice page or update the card on file.';
+        }
+        renderBillingBanner(held, s.suspended, pastDue, s.graceUntil, owed);
         $('billingSummary').innerHTML =
-          'Status: <b>' + esc((s.status || 'none').replace('_', ' ')) + '</b>'
+          'Status: <b>' + esc(statusLabel) + '</b>'
           + ' · Method: <b>' + esc(s.method === 'stripe' ? 'Stripe' : s.method === 'invoice' ? 'Invoice / PO' : '—') + '</b>'
           + ' · Seats on plan: <b>' + esc(s.seatLimit) + '</b>'
           + (canceling ? ' · Cancels: <b>' + day(s.cancelAt) + '</b>'
             : s.currentPeriodEnd && s.status !== 'canceled' ? ' · Renews: <b>' + day(s.currentPeriodEnd) + '</b>' : '')
-          + (pastDue ? '<br/><span style="color:var(--bad);">The last payment didn’t go through. Update the card under Update payment method — seats stay active meanwhile.</span>' : '')
+          + (note ? '<br/><span style="color:var(--bad);">' + note + '</span>' : '')
           + (canceling && !pastDue ? '<br/><span style="color:var(--muted);">The plan is set to end on ' + day(s.cancelAt) + '. To keep it, open Manage billing and renew the plan.</span>' : '')
           + (!b.stripeEnabled ? '<br/><span style="color:var(--muted);">This agency is invoiced directly — purchase orders and checks accepted.</span>' : '');
         // One subscription per agency: while it is live (paid or past due) the
@@ -1424,11 +1449,58 @@
         $('portalBtn').style.display = '';
         $('checkoutBtn').parentElement.style.display = b.stripeEnabled && !onStripe ? '' : 'none';
         $('portalBtn').parentElement.style.display = s.hasStripeCustomer ? '' : 'none';
-        $('portalBtn').textContent = pastDue ? 'Update payment method' : 'Manage billing';
-        $('portalBtn').className = pastDue ? 'btn sm' : 'btn ghost sm';
+        // Owing money: the open invoice is the primary action; the card on
+        // file is secondary (primary only if we have no invoice link).
+        const owing = pastDue || held;
+        $('payInvoiceBtn').style.display = '';
+        $('payInvoiceBtn').parentElement.style.display = owing && inv && inv.url ? '' : 'none';
+        $('payInvoiceBtn').textContent = 'Pay invoice' + (owed ? ' · ' + owed : '');
+        PAY_URL = inv && inv.url ? inv.url : '';
+        $('portalBtn').textContent = owing ? 'Update payment method' : 'Manage billing';
+        $('portalBtn').className = owing && !(inv && inv.url) ? 'btn sm' : 'btn ghost sm';
         return b;
       }).catch(() => { $('billingSummary').textContent = 'Billing status unavailable right now.'; return null; });
     }
+    function money(cents, currency) {
+      try {
+        return new Intl.NumberFormat(undefined, { style: 'currency', currency: String(currency || 'usd').toUpperCase() }).format(cents / 100);
+      } catch (e) { return '$' + (cents / 100).toFixed(2); }
+    }
+    // Shown above the tabs on every page while money is owed.
+    function renderBillingBanner(held, suspended, pastDue, graceUntil, owed) {
+      const el = $('billingBanner');
+      let text = '';
+      if (held) text = 'AfterCall Pro is paused for your members until the open invoice' + (owed ? ' (' + owed + ')' : '') + ' is paid.';
+      else if (pastDue) text = 'A payment' + (owed ? ' of ' + owed : '') + ' didn’t go through.'
+        + (graceUntil ? ' Pay it by ' + String(graceUntil).slice(0, 10) + ' to keep AfterCall Pro on for your members.' : '');
+      else if (suspended) text = 'This agency is suspended. Contact AfterCall to reactivate it.';
+      $('billingBannerText').textContent = text;
+      $('billingBannerBtn').style.display = held || pastDue ? '' : 'none';
+      el.style.display = text ? 'block' : 'none';
+    }
+    $('billingBannerBtn').addEventListener('click', () => {
+      showPage('settings');
+      $('billingMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    // Pay the open invoice on Stripe's hosted page (new tab), then watch for
+    // the webhook to mark billing active again.
+    let PAY_URL = '';
+    $('payInvoiceBtn').addEventListener('click', () => {
+      if (!PAY_URL) return;
+      window.open(PAY_URL, '_blank', 'noopener');
+      flash('billingMsg', 'ok', 'Finish the payment in the Stripe tab — this page updates as soon as it goes through.');
+      let tries = 0;
+      (function poll() {
+        setTimeout(() => {
+          loadSettings().then((b) => {
+            const s = (b && b.billing) || {};
+            if (s.status === 'active' && !s.suspended) {
+              flash('billingMsg', 'ok', 'Payment received — billing is active and AfterCall Pro is on for your members.');
+            } else if (++tries < 120) poll();
+          });
+        }, 5000);
+      })();
+    });
     $('copyCode').addEventListener('click', () => {
       navigator.clipboard.writeText($('joinCode').textContent.trim()).then(() => flash('codeMsg', 'ok', 'Copied.'));
     });
