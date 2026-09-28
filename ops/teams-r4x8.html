@@ -237,6 +237,15 @@
         .catch(function (e) { banner('rosterOut', 'err', e.message); });
     }
 
+    // update_agency pushes seat / plan changes to a Stripe-billed agency's
+    // subscription and reports the outcome as `stripeSync`.
+    function stripeBanner(d, msg) {
+      var s = d && d.stripeSync;
+      if (!s) { banner('okmsg', 'ok', msg); return; }
+      if (s.ok) { banner('okmsg', 'ok', msg + ' Stripe subscription updated (prorated invoice sent).'); return; }
+      banner('err', 'err', msg + ' Stripe was NOT updated (' + (s.error || s.skipped) + ') \u2014 fix the subscription in the Stripe dashboard.');
+    }
+
     $('agencyBody').addEventListener('click', function (e) {
       var btn = e.target.closest('button'); if (!btn) return;
       var act = btn.dataset.act, id = btn.dataset.id;
@@ -245,7 +254,7 @@
         var plan = prompt('New plan (pilot / crew / essentials / teams_pro / command):');
         if (!plan) return;
         post({ action: 'update_agency', agencyId: id, plan: plan.trim() })
-          .then(function () { banner('okmsg', 'ok', 'Plan updated.'); load(); })
+          .then(function (d) { stripeBanner(d, 'Plan updated.'); load(); })
           .catch(function (err) { banner('err', 'err', err.message); });
         return;
       }
@@ -253,7 +262,7 @@
         var seats = prompt('New seat limit:');
         if (!seats) return;
         post({ action: 'update_agency', agencyId: id, seatLimit: parseInt(seats, 10) })
-          .then(function () { banner('okmsg', 'ok', 'Seat limit updated.'); load(); })
+          .then(function (d) { stripeBanner(d, 'Seat limit updated.'); load(); })
           .catch(function (err) { banner('err', 'err', err.message); });
         return;
       }
