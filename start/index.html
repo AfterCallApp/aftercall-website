@@ -375,6 +375,63 @@ h1.display{font-size:clamp(44px,6.1vw,74px)}
 .band-cell p{margin:0;font-size:14.5px;line-height:1.5;color:var(--text)}
 .band-cell .src{display:block;margin-top:9px;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.04em}
 
+/* ---------- product video carousel ---------- */
+.product-videos{
+  position:relative;overflow:hidden;padding:82px 0 76px;background:var(--ink);
+  --pv-edge:48px;--pv-head-edge:max(24px,calc((100vw - var(--shell))/2 + 24px));
+  --pv-gap:clamp(24px,3.8vw,60px);--pv-card:min(74vw,980px);--pv-radius:22px;
+}
+.product-videos::before{
+  content:'';position:absolute;inset:-140px 0 -120px;
+  background:
+    radial-gradient(55% 54% at 82% 18%,rgba(124,143,245,.18),transparent 72%),
+    radial-gradient(42% 48% at 12% 70%,rgba(59,130,246,.10),transparent 70%);
+  pointer-events:none;
+}
+.product-videos::after{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.34;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:58px 58px;mask-image:linear-gradient(90deg,transparent,black 12%,black 88%,transparent);
+}
+.product-videos > *{position:relative;z-index:1}.product-videos,.product-videos *{box-sizing:border-box}
+.pv-head{padding:0 var(--pv-head-edge);margin:0 0 30px;display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.pv-kicker{color:var(--peri);display:block;margin-bottom:12px}
+.pv-title{font-size:clamp(30px,4.2vw,46px)}
+.pv-sub{margin:14px 0 0;max-width:54em;font-size:16px;color:var(--text)}
+.pv-rail-wrap{position:relative;z-index:1}
+.pv-rail{
+  width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+  display:flex;gap:var(--pv-gap);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  padding-left:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));
+  padding-right:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));
+  scroll-padding-left:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));
+  scroll-padding-right:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));
+  touch-action:pan-x pinch-zoom;overscroll-behavior-x:contain;scrollbar-width:none;
+}
+.pv-rail::-webkit-scrollbar{height:0;display:none}
+.pv-card{flex:0 0 var(--pv-card);scroll-snap-align:center;position:relative}
+.pv-video-shell{
+  position:relative;aspect-ratio:16/9;border-radius:var(--pv-radius);overflow:hidden;background:#070b1c;
+  border:1px solid var(--line-warm);box-shadow:0 26px 80px rgba(0,0,0,.42),0 0 48px rgba(124,143,245,.10);
+}
+.pv-video{width:100%;height:100%;display:block;object-fit:cover;background:#070b1c;border-radius:var(--pv-radius);position:relative;z-index:0;-webkit-tap-highlight-color:transparent}
+.pv-video::-webkit-media-controls-start-playback-button,.pv-video::-webkit-media-controls-overlay-play-button{display:none!important}
+.pv-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
+.pv-card.is-playing .pv-poster{opacity:0;visibility:hidden}
+.pv-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;transition:opacity .25s ease,visibility .25s ease;background:linear-gradient(180deg,rgba(5,9,28,.02),rgba(5,9,28,.38));z-index:2}
+.pv-card.is-playing .pv-overlay{opacity:0;visibility:hidden}
+.pv-play{pointer-events:auto;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;line-height:0;color:#fff;background:rgba(5,9,28,.54);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.28);cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease;box-shadow:0 18px 44px rgba(0,0,0,.30)}
+.pv-play:hover{background:#05091c;transform:scale(1.05);box-shadow:0 0 28px rgba(124,143,245,.24)}
+.pv-play svg{width:28px;height:28px;display:block;margin-left:3px}
+.pv-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:15px}
+.pv-caption{font-size:clamp(14px,1.15vw,17px);font-weight:800;letter-spacing:-.01em;line-height:1.25;color:var(--white);margin:0}
+.pv-duration{flex:0 0 auto;margin-top:1px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--text-dim);background:rgba(255,255,255,.03);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
+.pv-nav{max-width:1600px;margin:24px auto 0;padding:0 var(--pv-edge);display:flex;justify-content:flex-end;gap:10px;position:relative;z-index:3}
+.pv-arrow{appearance:none;border:1px solid var(--line-warm);background:rgba(255,255,255,.045);color:#fff;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;cursor:pointer;transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.pv-arrow:hover{background:rgba(124,143,245,.12);border-color:var(--peri);box-shadow:0 0 22px rgba(124,143,245,.20);transform:translateY(-1px)}
+.pv-arrow svg{width:18px;height:18px;stroke:#fff}
+.pv-arrow:focus-visible,.pv-play:focus-visible{outline:3px solid rgba(124,143,245,.42);outline-offset:3px}
+
 /* ---------- features ---------- */
 .feat{padding:96px 0 40px}
 .sec-head{max-width:640px;margin:0 auto 62px;text-align:center}
@@ -491,6 +548,8 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;background:var(--ink
 @media(max-width:960px){
   .hero-grid{grid-template-columns:1fr;gap:44px}
   .runsheet{max-width:100%;order:3}
+  .product-videos{padding:64px 0 58px;--pv-edge:24px;--pv-card:86vw;--pv-gap:28px}
+  .pv-nav{justify-content:center}.pv-play{width:62px;height:62px}.pv-arrow{width:40px;height:40px}
   .f-row{grid-template-columns:1fr;gap:36px;padding:46px 0}
   .f-row:nth-child(even) .f-text{order:0}
   .band-grid{grid-template-columns:1fr}
@@ -504,6 +563,8 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;background:var(--ink
 @media(max-width:640px){
   .hero{padding:56px 0 68px}
   .nav-note{display:none}
+  .product-videos{padding:54px 0 52px;--pv-edge:18px;--pv-head-edge:24px;--pv-card:88vw;--pv-gap:18px;--pv-radius:16px}
+  .pv-head{margin-bottom:24px}.pv-sub{font-size:14.5px}.pv-meta{display:block;margin-top:12px}.pv-duration{display:inline-block;margin-top:9px}.pv-play{width:56px;height:56px}
   .form-card{padding:24px 20px 22px}
   .row2{grid-template-columns:1fr}
   .feat{padding:66px 0 20px}
@@ -609,6 +670,98 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;background:var(--ink
 
   </div>
 </header>
+
+<!-- ============ PRODUCT VIDEOS ============ -->
+<section class="product-videos" id="product-videos" aria-label="AfterCall product video carousel">
+  <div class="pv-head">
+    <div>
+      <span class="pv-kicker code">Product videos</span>
+      <h2 class="pv-title display">See AfterCall in action.</h2>
+      <p class="pv-sub">Quick walkthroughs for each core workflow, organized so providers can jump straight to the part of the app they want to understand.</p>
+    </div>
+  </div>
+
+  <div class="pv-rail-wrap">
+    <div class="pv-rail" id="productVideoRail" aria-label="AfterCall product videos">
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/01-overview.jpg" alt="AfterCall overview video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/01-overview.mp4" poster="/videos/start-product/01-overview.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play AfterCall overview video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">AfterCall Overview</h3><span class="pv-duration">0:52</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/02-manual-call-log.jpg" alt="Manual call log video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/02-manual-call-log.mp4" poster="/videos/start-product/02-manual-call-log.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play manual call log video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">Manual Call Log</h3><span class="pv-duration">4:11</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/03-voice-log.jpg" alt="Voice log video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/03-voice-log.mp4" poster="/videos/start-product/03-voice-log.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play voice log video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">Voice Log</h3><span class="pv-duration">2:56</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/04-cad-dispatch.jpg" alt="CAD and dispatch video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/04-cad-dispatch.mp4" poster="/videos/start-product/04-cad-dispatch.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play CAD and dispatch video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">CAD / Dispatch</h3><span class="pv-duration">1:50</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/05-skills.jpg" alt="Skills video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/05-skills.mp4" poster="/videos/start-product/05-skills.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play skills video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">Skills</h3><span class="pv-duration">1:52</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/06-journal.jpg" alt="Journal video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/06-journal.mp4" poster="/videos/start-product/06-journal.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play journal video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">Journal</h3><span class="pv-duration">3:20</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/07-communities.jpg" alt="Communities video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/07-communities.mp4" poster="/videos/start-product/07-communities.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play communities video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">Communities</h3><span class="pv-duration">3:03</span></div>
+      </article>
+
+      <article class="pv-card rv">
+        <div class="pv-video-shell">
+          <img class="pv-poster" src="/videos/start-product/08-aftercall-walkthrough.jpg" alt="AfterCall walkthrough video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+          <video class="pv-video" src="/videos/start-product/08-aftercall-walkthrough.mp4" poster="/videos/start-product/08-aftercall-walkthrough.jpg" preload="metadata" playsinline webkit-playsinline></video>
+          <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play full AfterCall walkthrough video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
+        <div class="pv-meta"><h3 class="pv-caption">Full AfterCall Walkthrough</h3><span class="pv-duration">5:46</span></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="pv-nav" aria-label="Product video carousel navigation">
+    <button class="pv-arrow" id="productVideoPrev" type="button" aria-label="Previous product video"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="pv-arrow" id="productVideoNext" type="button" aria-label="Next product video"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</section>
 
 <hr class="streak">
 
@@ -802,6 +955,65 @@ Nothing here is legal, tax, medical or insurance advice.
     el.style.transitionDelay = (i % 4 * 60) + 'ms';
     io.observe(el);
   });
+})();
+
+/* ---- product video carousel ---- */
+(function(){
+  var rail = document.getElementById('productVideoRail');
+  if(!rail) return;
+  var cards = Array.prototype.slice.call(rail.querySelectorAll('.pv-card'));
+  var videos = Array.prototype.slice.call(rail.querySelectorAll('.pv-video'));
+  var prev = document.getElementById('productVideoPrev');
+  var next = document.getElementById('productVideoNext');
+
+  function setPlaying(video, playing){
+    var card = video.closest('.pv-card');
+    if(!card) return;
+    card.classList.toggle('is-playing', playing);
+    video.controls = playing;
+  }
+
+  videos.forEach(function(video){
+    video.addEventListener('play', function(){
+      videos.forEach(function(other){ if(other !== video) other.pause(); });
+      setPlaying(video, true);
+    });
+    video.addEventListener('pause', function(){ setPlaying(video, false); });
+    video.addEventListener('ended', function(){
+      video.currentTime = 0;
+      setPlaying(video, false);
+    });
+  });
+
+  rail.querySelectorAll('.pv-play').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.pv-card');
+      var video = card && card.querySelector('video');
+      if(!video) return;
+      rail.scrollTo({left:card.offsetLeft - (rail.clientWidth - card.clientWidth) / 2, behavior:'smooth'});
+      video.play().catch(function(){ video.controls = true; });
+    });
+  });
+
+  function activeIndex(){
+    var center = rail.scrollLeft + rail.clientWidth / 2;
+    var best = 0, bestDist = Infinity;
+    cards.forEach(function(card,i){
+      var cardCenter = card.offsetLeft + card.clientWidth / 2;
+      var dist = Math.abs(cardCenter - center);
+      if(dist < bestDist){ best = i; bestDist = dist; }
+    });
+    return best;
+  }
+  function go(delta){
+    if(!cards.length) return;
+    videos.forEach(function(v){ v.pause(); });
+    var target = Math.max(0, Math.min(cards.length - 1, activeIndex() + delta));
+    var card = cards[target];
+    rail.scrollTo({left:card.offsetLeft - (rail.clientWidth - card.clientWidth) / 2, behavior:'smooth'});
+  }
+  if(prev) prev.addEventListener('click', function(){ go(-1); });
+  if(next) next.addEventListener('click', function(){ go(1); });
 })();
 
 /* ---- HubSpot form: reveal store buttons + fire conversion on submit ---- */
