@@ -219,10 +219,38 @@
     .keybox { font-size: 12px; word-break: break-all; background: var(--bg); border: 1px solid var(--border);
       border-radius: 9px; padding: 10px 12px; color: var(--ink2); }
 
+    /* Station check-in signals (Overview + Operations) */
+    .strow { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;
+      border: 1px solid var(--border); border-left: 4px solid var(--warn); border-radius: 12px;
+      background: var(--card2); padding: 12px 14px; margin-bottom: 10px; }
+    .strow.handled { border-left-color: var(--good); opacity: 0.85; }
+    .strow .t { font-size: 14.5px; font-weight: 800; }
+    .strow .m { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .sigchips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .sigchip { font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 4px 10px;
+      background: rgba(245,158,11,0.14); color: var(--chip-supervisor); }
+    .stpill { font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+    .stpill.due { background: rgba(245,158,11,0.16); color: var(--chip-supervisor); }
+    .stpill.done { background: rgba(16,185,129,0.14); color: var(--good); }
+    .stpill.ok { background: rgba(148,163,184,0.12); color: var(--muted); }
+    .rulegrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 860px) { .rulegrid { grid-template-columns: 1fr 1fr; } }
+
     .footer-meta { max-width: 1240px; margin: 0 auto; padding: 8px 22px 40px; font-size: 12px; color: var(--muted); }
 
     @media (max-width: 1080px) { .kpis { grid-template-columns: repeat(3, 1fr); } .cols-2, .cols-2e, .cols-3 { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { .kpis { grid-template-columns: repeat(2, 1fr); } .topbar { gap: 8px; } .agency-chip .name { max-width: 120px; } .statgrid { grid-template-columns: 1fr; } }
+    /* Phones: the five topbar controls are ~530px wide — wrap them onto a
+       second row (the spacer becomes a line break) and let the bar scroll
+       away so only the tab row stays pinned. Without this the whole page
+       scrolled sideways at 390px. */
+    @media (max-width: 620px) {
+      .topbar { position: static; flex-wrap: wrap; height: auto; padding: 10px 14px; row-gap: 8px; }
+      .topbar .spacer { flex: 0 0 100%; height: 0; }
+      .tabs { top: 0; padding: 0 14px; }
+      .page { padding: 16px; }
+      .agency-chip .name { max-width: 210px; }
+    }
   </style>
 <script src="/cookie-consent.js" defer></script>
 <script src="/meta-pixel.js" defer></script>
@@ -288,7 +316,18 @@
         <div class="card kpi"><div class="lab">Calls logged</div><div class="val" id="kCalls">—</div><div class="sub">in window</div><svg id="spCalls"></svg></div>
         <div class="card kpi"><div class="lab">Check-in attach</div><div class="val" id="kAttach">—</div><div class="sub">of calls, voluntary</div><svg id="spAttach"></svg></div>
         <div class="card kpi"><div class="lab">Team stress</div><div class="val" id="kStress">—</div><div class="sub">avg post-call, 1–10</div><svg id="spStress"></svg></div>
-        <div class="card kpi"><div class="lab">High-impact</div><div class="val" id="kFlags">—</div><div class="sub" id="kFlagsSub">calls flagged</div><svg id="spFlags"></svg></div>
+        <div class="card kpi"><div class="lab">Peer alerts</div><div class="val" id="kFlags">—</div><div class="sub" id="kFlagsSub">check-ins flagged</div><svg id="spFlags"></svg></div>
+      </div>
+
+      <div class="card mt">
+        <h3>Stations to check in on</h3>
+        <div id="stationAlerts"></div>
+        <div class="subnote" id="stationAlertsNote">Station-level only: a station shows here when, over the last
+          14 days, it has run well above your agency's normal share of Serious / Critical calls, its average
+          post-call stress is a full point above normal, or its members have had repeated heavy-run peer alerts.
+          It never says who, which call, or anything anyone wrote — and stations under
+          <span class="kmin">5</span> members are never flagged. Marking a station checked in quiets it for 7 days.</div>
+        <div id="stationMsg" class="msg"></div>
       </div>
 
       <div class="grid cols-2 mt">
@@ -299,9 +338,9 @@
         </div>
         <div class="card">
           <h3>Signals routed by week</h3>
-          <div class="legend"><span><i style="background:var(--s4)"></i>High-impact flags</span><span><i style="background:var(--s2)"></i>Peer conversations</span></div>
+          <div class="legend"><span><i style="background:var(--s4)"></i>Peer alerts</span><span><i style="background:var(--s2)"></i>Peer conversations</span></div>
           <div class="chart-wrap" id="chSignals"></div>
-          <div class="subnote">Counts only. A flag routes to your peer support team — leadership never sees who, or the call.</div>
+          <div class="subnote">Counts only. An alert routes to your peer support team — leadership never sees who, or the call.</div>
         </div>
       </div>
 
@@ -361,7 +400,12 @@
 
       <div class="grid cols-2 mt">
         <div class="card">
-          <h3>High-impact flag response</h3>
+          <h3>Peer alert response</h3>
+          <div id="noSupportersWarn" class="stat" style="display:none; border-color:var(--warn); margin-bottom:12px;">
+            <div class="sv" style="font-size:15px; color:var(--warn);">No peer supporters assigned</div>
+            <div class="sl">Alerts are being raised but there is nobody to route them to. Mark trained peer supporters on the
+              Roster tab — until then members' check-in requests reach no one.</div>
+          </div>
           <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
             <div class="chart-wrap" id="chLifecycle" style="flex:1 1 250px; min-width:230px;"></div>
             <div class="statgrid vert" style="flex:1 1 190px;">
@@ -370,8 +414,15 @@
               <div class="stat"><div class="sv" id="rStale">—</div><div class="sl">still open after 7 days</div></div>
             </div>
           </div>
-          <div class="subnote">How a flag works: when a member marks a call high-impact, a flag <b>opens</b> and your
-            peer supporters get a signal-only ping — never the call, never the content. It becomes
+          <div class="statgrid" style="margin-top:12px;">
+            <div class="stat"><div class="sv" id="rHighImpact">—</div><div class="sl">marked a call high-impact</div></div>
+            <div class="stat"><div class="sv" id="rHeavyRun">—</div><div class="sl">automatic: a run of Serious / Critical calls</div></div>
+            <div class="stat"><div class="sv" id="rRequested">—</div><div class="sl">asked for a check-in</div></div>
+          </div>
+          <div class="subnote">How an alert works: a flag <b>opens</b> when a member marks a call high-impact, has a heavy
+            run (<span id="ruleSentence">4+ Serious or Critical calls, or 3+ Critical, within 24 hours</span>), or taps
+            “Ask for a check-in” after a rough call. Your peer supporters get a signal-only ping — who and why, never the call,
+            never the content. It becomes
             <b>acknowledged</b> when a supporter picks it up and reaches out, and <b>closed</b> when the follow-up
             is done. These three numbers are the health of that loop: if the median creeps up or flags sit open
             past a week, the peer team needs more hands.</div>
@@ -416,11 +467,13 @@
         <h3>Stations</h3>
         <div class="tablewrap">
           <table>
-            <thead><tr><th>Station</th><th class="num">Members</th><th class="num">Active</th><th class="num">Calls</th><th class="num">Check-in %</th><th class="num">Avg stress</th></tr></thead>
+            <thead><tr><th>Station</th><th class="num">Members</th><th class="num">Active</th><th class="num">Calls</th><th class="num">Check-in %</th><th class="num">Avg stress</th><th class="num">Serious / Critical, 14d</th><th class="num">Stress, 14d</th><th class="num">Peer alerts, 14d</th><th>Check-in</th></tr></thead>
             <tbody id="stationBody"></tbody>
           </table>
         </div>
-        <div class="subnote">Avg stress is suppressed for any station under <span class="kmin">5</span> members or contributors. Assign stations on the Roster tab.</div>
+        <div class="subnote">Avg stress is suppressed for any station under <span class="kmin">5</span> members or contributors, and
+          the 14-day station signals for any station under <span class="kmin">5</span> members. Peer alerts are counts of
+          check-ins routed to your peer team — never who. Assign stations on the Roster tab.</div>
       </div>
     </div>
 
@@ -607,6 +660,36 @@
           <div id="newKeyBox" class="keybox" style="display:none; margin-top:10px;"></div>
         </div>
       </div>
+      <div class="card mt" id="peerRulesCard">
+        <h3>Peer alert rules</h3>
+        <div style="font-size:13px; color:var(--ink2); line-height:1.6; margin-bottom:12px;">
+          Besides a member marking a call high-impact or asking for a check-in, AfterCall can alert your peer
+          supporters automatically when one member has a <b>heavy run</b> of high-acuity calls. Set what a heavy run
+          means for your agency. Supporters learn only that someone had a heavy stretch — never the calls, never
+          anything they wrote — and you only ever see the count.</div>
+        <label class="chk" style="margin-bottom:14px;"><input type="checkbox" id="prEnabled" /> Automatic heavy-run alerts</label>
+        <div class="rulegrid">
+          <div><label for="prWindow">Within</label>
+            <select id="prWindow">
+              <option value="6">6 hours</option><option value="12">12 hours</option><option value="24">24 hours</option>
+              <option value="36">36 hours</option><option value="48">48 hours</option><option value="72">72 hours</option>
+            </select></div>
+          <div><label for="prMinCalls">Serious or Critical calls</label><input id="prMinCalls" type="number" min="2" max="15" step="1" /></div>
+          <div><label for="prMinCritical">…or Critical calls</label><input id="prMinCritical" type="number" min="2" max="10" step="1" /></div>
+          <div><label for="prCooldown">At most one alert per member every</label>
+            <select id="prCooldown">
+              <option value="12">12 hours</option><option value="24">24 hours</option><option value="48">2 days</option>
+              <option value="72">3 days</option><option value="168">7 days</option><option value="336">14 days</option>
+            </select></div>
+        </div>
+        <div class="subnote" id="prSummary"></div>
+        <div class="mt" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="prSave">Save rules</button>
+          <button class="btn ghost sm" id="prReset">Reset to defaults</button>
+        </div>
+        <div id="prMsg" class="msg"></div>
+      </div>
+
       <div class="card mt">
         <h3>The agreement, in one card</h3>
         <div style="font-size: 13.5px; color: var(--ink2); line-height: 1.8;">
@@ -901,6 +984,126 @@
 
     // ── Render: analytics ──
     const MOOD_LABELS = ['1 · Rough', '2 · Low', '3 · Okay', '4 · Good', '5 · Great'];
+    // ── Station check-in signals ──
+    const SIGNAL_LABEL = { high_acuity: 'High-acuity run', stress: 'Stress above normal', heavy_runs: 'Repeated peer alerts' };
+    function daysAgo(iso) {
+      const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+      return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days + ' days ago';
+    }
+    function stationStatusPill(s) {
+      if (s.signalsSuppressed) return '<span class="stpill ok">under 5 members</span>';
+      if (s.checkInDue) return '<span class="stpill due">Check in</span>';
+      if (s.needsCheckIn) return '<span class="stpill done">Checked in ' + esc(daysAgo(s.lastCheckInAt)) + '</span>';
+      return '<span class="stpill ok">Steady</span>';
+    }
+    function signalDetail(sig, s, base) {
+      const r = s.recent || {};
+      if (sig === 'high_acuity') return SIGNAL_LABEL[sig] + ': ' + r.highAcuityPct + '% of calls Serious / Critical'
+        + (base.highAcuityPct != null ? ' (agency normal ' + base.highAcuityPct + '%)' : '');
+      if (sig === 'stress') return SIGNAL_LABEL[sig] + ': ' + r.avgPostCallStress + ' avg post-call'
+        + (base.avgPostCallStress != null ? ' (agency normal ' + base.avgPostCallStress + ')' : '');
+      if (sig === 'heavy_runs') return SIGNAL_LABEL[sig] + ': ' + r.peerAlerts + ' peer alert' + (r.peerAlerts === 1 ? '' : 's')
+        + (r.heavyRuns ? ', ' + r.heavyRuns + ' heavy run' + (r.heavyRuns === 1 ? '' : 's') : '');
+      return SIGNAL_LABEL[sig] || sig;
+    }
+    function renderStationAlerts(d) {
+      const base = (d.stationSignals && d.stationSignals.baseline) || {};
+      const flagged = (d.stationBreakdown || []).filter((s) => s.needsCheckIn)
+        .sort((a, b) => Number(b.checkInDue) - Number(a.checkInDue) || b.signals.length - a.signals.length);
+      const el = $('stationAlerts');
+      if (!flagged.length) {
+        const anyEligible = (d.stationBreakdown || []).some((s) => !s.signalsSuppressed);
+        el.innerHTML = '<div style="font-size:13.5px; color:var(--ink2);">'
+          + (anyEligible ? '✓ No station stands out over the last ' + ((d.stationSignals && d.stationSignals.days) || 14) + ' days.'
+            : 'No station has 5 or more members yet — assign stations on the Roster tab to see station signals.')
+          + '</div>';
+        return;
+      }
+      el.innerHTML = flagged.map((s) => `
+        <div class="strow${s.checkInDue ? '' : ' handled'}">
+          <div style="min-width:0; flex:1 1 260px;">
+            <div class="t">${esc(s.station)}</div>
+            <div class="m">${s.members} members · ${s.recent ? s.recent.calls : 0} calls in the last ${s.recent ? s.recent.days : 14} days
+              ${s.lastCheckInAt ? ' · last checked in ' + esc(daysAgo(s.lastCheckInAt)) : ''}</div>
+            <div class="sigchips">${s.signals.map((g) => '<span class="sigchip">' + esc(signalDetail(g, s, base)) + '</span>').join('')}</div>
+          </div>
+          <div style="flex:0 0 auto;">
+            ${s.checkInDue
+              ? '<button class="btn sm" data-checkin="' + esc(s.station) + '" data-signals="' + esc(s.signals.join(',')) + '">Mark checked in</button>'
+              : '<span class="stpill done">Checked in ' + esc(daysAgo(s.lastCheckInAt)) + '</span>'}
+          </div>
+        </div>`).join('');
+      el.querySelectorAll('[data-checkin]').forEach((b) => b.addEventListener('click', () => {
+        b.disabled = true; b.textContent = 'Saving…';
+        post('leader_station_checkin', { station: b.dataset.checkin, signals: (b.dataset.signals || '').split(',').filter(Boolean) })
+          .then(() => { flash('stationMsg', 'ok', b.dataset.checkin + ' marked checked in.'); return refreshDashboard(); })
+          .catch((e) => { flash('stationMsg', 'err', e.message); b.disabled = false; b.textContent = 'Mark checked in'; });
+      }));
+    }
+
+    // ── Peer alert rules (Settings) ──
+    function ruleSentence(p) {
+      if (!p.heavyRunEnabled) return 'automatic heavy-run alerts are turned off for your agency';
+      return p.minCalls + '+ Serious or Critical calls, or ' + p.minCritical + '+ Critical, within ' + p.windowHours + ' hours';
+    }
+    function setSelect(id, v) {
+      const sel = $(id);
+      if (![...sel.options].some((o) => o.value === String(v))) {
+        const o = document.createElement('option'); o.value = String(v); o.textContent = v + ' hours'; sel.appendChild(o);
+      }
+      sel.value = String(v);
+    }
+    function fillPeerRules(p) {
+      $('prEnabled').checked = !!p.heavyRunEnabled;
+      setSelect('prWindow', p.windowHours);
+      $('prMinCalls').value = p.minCalls;
+      $('prMinCritical').value = p.minCritical;
+      setSelect('prCooldown', p.cooldownHours);
+      updatePeerRuleUi();
+    }
+    function readPeerRules() {
+      return {
+        heavyRunEnabled: $('prEnabled').checked,
+        windowHours: parseInt($('prWindow').value, 10),
+        minCalls: parseInt($('prMinCalls').value, 10),
+        minCritical: parseInt($('prMinCritical').value, 10),
+        cooldownHours: parseInt($('prCooldown').value, 10),
+      };
+    }
+    function updatePeerRuleUi() {
+      const p = readPeerRules();
+      ['prWindow', 'prMinCalls', 'prMinCritical', 'prCooldown'].forEach((id) => { $(id).disabled = !p.heavyRunEnabled; });
+      $('prSummary').textContent = p.heavyRunEnabled
+        ? 'Your peer supporters get a heads-up when one member logs ' + (isNaN(p.minCalls) ? '?' : p.minCalls)
+          + ' or more Serious / Critical calls, or ' + (isNaN(p.minCritical) ? '?' : p.minCritical)
+          + ' or more Critical calls, within ' + p.windowHours + ' hours — at most once every '
+          + (p.cooldownHours >= 48 ? (p.cooldownHours / 24) + ' days' : p.cooldownHours + ' hours') + ' per member.'
+        : 'Off: peer supporters are alerted only when a member marks a call high-impact or asks for a check-in.';
+    }
+    function loadPeerRules() {
+      return post('leader_peer_alerts').then((d) => fillPeerRules(d.settings)).catch(() => {});
+    }
+    ['prEnabled', 'prWindow', 'prMinCalls', 'prMinCritical', 'prCooldown'].forEach((id) => {
+      $(id).addEventListener('input', updatePeerRuleUi);
+      $(id).addEventListener('change', updatePeerRuleUi);
+    });
+    $('prSave').addEventListener('click', () => {
+      const p = readPeerRules();
+      if (!Number.isInteger(p.minCalls) || p.minCalls < 2 || p.minCalls > 15) { flash('prMsg', 'err', 'Serious or Critical calls must be 2–15.'); return; }
+      if (!Number.isInteger(p.minCritical) || p.minCritical < 2 || p.minCritical > 10) { flash('prMsg', 'err', 'Critical calls must be 2–10.'); return; }
+      $('prSave').disabled = true;
+      post('leader_set_peer_alerts', p)
+        .then((d) => { fillPeerRules(d.settings); $('ruleSentence').textContent = ruleSentence(d.settings); flash('prMsg', 'ok', 'Saved — the new rules apply to the next call anyone logs.'); })
+        .catch((e) => flash('prMsg', 'err', e.message))
+        .finally(() => { $('prSave').disabled = false; });
+    });
+    $('prReset').addEventListener('click', () => {
+      if (!confirm('Reset peer alert rules to the AfterCall defaults?')) return;
+      post('leader_set_peer_alerts', { reset: true })
+        .then((d) => { fillPeerRules(d.settings); $('ruleSentence').textContent = ruleSentence(d.settings); flash('prMsg', 'ok', 'Back to the defaults.'); })
+        .catch((e) => flash('prMsg', 'err', e.message));
+    });
+
     function renderDashboard(d) {
       DATA = d;
       $('agencyName').textContent = d.agency.name;
@@ -923,6 +1126,12 @@
       else stressEl.textContent = d.wellness.avgPostCallStress;
       $('kFlags').textContent = d.highImpact.total;
       $('kFlagsSub').textContent = d.highImpact.lifecycle.open + ' open · ' + d.peerSupport.conversationsOpened + ' peer convos';
+      // Why alerts opened (teams-admin ≥ 1.3.0; older payloads have no byReason).
+      const why = d.highImpact.byReason || null;
+      $('rHighImpact').textContent = why ? fmt(why.high_impact) : fmt(d.highImpact.total);
+      $('rHeavyRun').textContent = why ? fmt(why.heavy_run) : '—';
+      $('rRequested').textContent = why ? fmt(why.requested) : '—';
+      $('noSupportersWarn').style.display = d.highImpact.noPeerSupporters ? '' : 'none';
 
       spark($('spActive'), wk.map((w) => w.activeMembers), C.s1);
       spark($('spSeats'), wk.map((w) => w.activeMembers), C.s3);
@@ -936,7 +1145,7 @@
         { key: 'Journal entries', color: C.s3, data: wk.map((w) => w.journals) },
       ]);
       barChart($('chSignals'), labels, [
-        { key: 'High-impact flags', color: C.s4, data: wk.map((w) => w.highImpactFlags) },
+        { key: 'Peer alerts', color: C.s4, data: wk.map((w) => w.highImpactFlags) },
         { key: 'Peer conversations', color: C.s2, data: wk.map((w) => w.peerConversations) },
       ]);
       lineChart($('chActive'), labels, [
@@ -1015,15 +1224,25 @@
       })));
       hBars($('chTypes'), (d.topCallTypes || []).map((t) => ({ label: t.type, value: t.count, color: C.s1 })));
 
-      $('stationBody').innerHTML = (d.stationBreakdown || []).map((s) => `
+      const supp = '<span style="color:var(--muted)">suppressed</span>';
+      $('stationBody').innerHTML = (d.stationBreakdown || []).map((s) => {
+        const r = s.recent;
+        return `
         <tr>
           <td><b>${esc(s.station)}</b></td>
           <td class="num">${s.members}</td>
           <td class="num">${s.activeMembers}</td>
           <td class="num">${s.callsLogged}</td>
           <td class="num">${s.checkInPct == null ? '—' : s.checkInPct + '%'}</td>
-          <td class="num">${s.avgPostCallStress == null ? '<span style="color:var(--muted)">suppressed</span>' : s.avgPostCallStress}</td>
-        </tr>`).join('');
+          <td class="num">${s.avgPostCallStress == null ? supp : s.avgPostCallStress}</td>
+          <td class="num">${!r ? supp : r.highAcuity + (r.highAcuityPct == null ? '' : ' <span style="color:var(--muted)">(' + r.highAcuityPct + '%)</span>')}</td>
+          <td class="num">${!r || r.avgPostCallStress == null ? supp : r.avgPostCallStress}</td>
+          <td class="num">${!r ? supp : r.peerAlerts}</td>
+          <td>${stationStatusPill(s)}</td>
+        </tr>`;
+      }).join('');
+      renderStationAlerts(d);
+      if (d.peerAlerts) $('ruleSentence').textContent = ruleSentence(d.peerAlerts);
 
       $('genMeta').textContent = 'Generated ' + d.generatedAt + ' · window since ' + d.range.since.slice(0, 10)
         + ' · wellbeing suppression floor: ' + d.kMin + ' members · AfterCall Teams';
@@ -1564,7 +1783,7 @@
     // One Refresh button, everything: analytics, roster, resources, channels, settings.
     function refreshAll() {
       refreshDashboard().catch((e) => alert(e.message));
-      loadRoster(); loadResources(); loadChannels(); loadSettings();
+      loadRoster(); loadResources(); loadChannels(); loadSettings(); loadPeerRules();
       if (MANAGED) loadChannelMembers();
     }
     function enterApp() {
