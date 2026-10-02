@@ -288,7 +288,7 @@
         <div class="card kpi"><div class="lab">Calls logged</div><div class="val" id="kCalls">—</div><div class="sub">in window</div><svg id="spCalls"></svg></div>
         <div class="card kpi"><div class="lab">Check-in attach</div><div class="val" id="kAttach">—</div><div class="sub">of calls, voluntary</div><svg id="spAttach"></svg></div>
         <div class="card kpi"><div class="lab">Team stress</div><div class="val" id="kStress">—</div><div class="sub">avg post-call, 1–10</div><svg id="spStress"></svg></div>
-        <div class="card kpi"><div class="lab">High-impact</div><div class="val" id="kFlags">—</div><div class="sub" id="kFlagsSub">calls flagged</div><svg id="spFlags"></svg></div>
+        <div class="card kpi"><div class="lab">Peer alerts</div><div class="val" id="kFlags">—</div><div class="sub" id="kFlagsSub">check-ins flagged</div><svg id="spFlags"></svg></div>
       </div>
 
       <div class="grid cols-2 mt">
@@ -299,9 +299,9 @@
         </div>
         <div class="card">
           <h3>Signals routed by week</h3>
-          <div class="legend"><span><i style="background:var(--s4)"></i>High-impact flags</span><span><i style="background:var(--s2)"></i>Peer conversations</span></div>
+          <div class="legend"><span><i style="background:var(--s4)"></i>Peer alerts</span><span><i style="background:var(--s2)"></i>Peer conversations</span></div>
           <div class="chart-wrap" id="chSignals"></div>
-          <div class="subnote">Counts only. A flag routes to your peer support team — leadership never sees who, or the call.</div>
+          <div class="subnote">Counts only. An alert routes to your peer support team — leadership never sees who, or the call.</div>
         </div>
       </div>
 
@@ -361,7 +361,12 @@
 
       <div class="grid cols-2 mt">
         <div class="card">
-          <h3>High-impact flag response</h3>
+          <h3>Peer alert response</h3>
+          <div id="noSupportersWarn" class="stat" style="display:none; border-color:var(--warn); margin-bottom:12px;">
+            <div class="sv" style="font-size:15px; color:var(--warn);">No peer supporters assigned</div>
+            <div class="sl">Alerts are being raised but there is nobody to route them to. Mark trained peer supporters on the
+              Roster tab — until then members' check-in requests reach no one.</div>
+          </div>
           <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
             <div class="chart-wrap" id="chLifecycle" style="flex:1 1 250px; min-width:230px;"></div>
             <div class="statgrid vert" style="flex:1 1 190px;">
@@ -370,8 +375,15 @@
               <div class="stat"><div class="sv" id="rStale">—</div><div class="sl">still open after 7 days</div></div>
             </div>
           </div>
-          <div class="subnote">How a flag works: when a member marks a call high-impact, a flag <b>opens</b> and your
-            peer supporters get a signal-only ping — never the call, never the content. It becomes
+          <div class="statgrid" style="margin-top:12px;">
+            <div class="stat"><div class="sv" id="rHighImpact">—</div><div class="sl">marked a call high-impact</div></div>
+            <div class="stat"><div class="sv" id="rHeavyRun">—</div><div class="sl">automatic: a run of Serious / Critical calls</div></div>
+            <div class="stat"><div class="sv" id="rRequested">—</div><div class="sl">asked for a check-in</div></div>
+          </div>
+          <div class="subnote">How an alert works: a flag <b>opens</b> when a member marks a call high-impact, has a heavy
+            run (by default 4+ Serious or Critical calls, or 3+ Critical, within 24 hours), or taps “Ask for a
+            check-in” after a rough call. Your peer supporters get a signal-only ping — who and why, never the call,
+            never the content. It becomes
             <b>acknowledged</b> when a supporter picks it up and reaches out, and <b>closed</b> when the follow-up
             is done. These three numbers are the health of that loop: if the median creeps up or flags sit open
             past a week, the peer team needs more hands.</div>
@@ -923,6 +935,12 @@
       else stressEl.textContent = d.wellness.avgPostCallStress;
       $('kFlags').textContent = d.highImpact.total;
       $('kFlagsSub').textContent = d.highImpact.lifecycle.open + ' open · ' + d.peerSupport.conversationsOpened + ' peer convos';
+      // Why alerts opened (teams-admin ≥ 1.3.0; older payloads have no byReason).
+      const why = d.highImpact.byReason || null;
+      $('rHighImpact').textContent = why ? fmt(why.high_impact) : fmt(d.highImpact.total);
+      $('rHeavyRun').textContent = why ? fmt(why.heavy_run) : '—';
+      $('rRequested').textContent = why ? fmt(why.requested) : '—';
+      $('noSupportersWarn').style.display = d.highImpact.noPeerSupporters ? '' : 'none';
 
       spark($('spActive'), wk.map((w) => w.activeMembers), C.s1);
       spark($('spSeats'), wk.map((w) => w.activeMembers), C.s3);
@@ -936,7 +954,7 @@
         { key: 'Journal entries', color: C.s3, data: wk.map((w) => w.journals) },
       ]);
       barChart($('chSignals'), labels, [
-        { key: 'High-impact flags', color: C.s4, data: wk.map((w) => w.highImpactFlags) },
+        { key: 'Peer alerts', color: C.s4, data: wk.map((w) => w.highImpactFlags) },
         { key: 'Peer conversations', color: C.s2, data: wk.map((w) => w.peerConversations) },
       ]);
       lineChart($('chActive'), labels, [
