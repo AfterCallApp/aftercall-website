@@ -326,19 +326,25 @@
 
       <form class="gview hidden" id="vForgot" novalidate>
         <div class="gate-title">Reset your password</div>
-        <div class="gate-note">We'll email you a link to choose a new password.</div>
+        <div class="gate-note">We'll email you a 6-digit code to choose a new password.</div>
         <label for="fpEmail">Email</label>
         <input type="email" id="fpEmail" autocomplete="username" />
-        <button class="btn wide" id="fpBtn" type="submit">Send reset link</button>
+        <button class="btn wide" id="fpBtn" type="submit">Send reset code</button>
         <div class="gate-links"><a data-to="vSignIn">Back to sign in</a></div>
       </form>
 
       <form class="gview hidden" id="vReset" novalidate>
         <div class="gate-title">Choose a new password</div>
+        <div class="gate-note" id="rpNote"></div>
+        <div id="rpCodeWrap">
+          <label for="rpCode">Code from the email</label>
+          <input id="rpCode" class="code-in" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="••••••" />
+        </div>
         <label for="rpPass">New password</label>
         <input type="password" id="rpPass" autocomplete="new-password" />
         <div class="gate-hint">At least 8 characters.</div>
         <button class="btn wide" id="rpBtn" type="submit">Save password</button>
+        <div class="gate-links" id="rpLinks"><a id="rpResend">Send a new code</a><a data-to="vSignIn">Back to sign in</a></div>
       </form>
 
       <div class="gview hidden" id="vPick">
@@ -2181,25 +2187,83 @@
     $('switchBtn').addEventListener('click', () => { setAgency(null); loadAgencies(); });
 
     // Forgot / reset password
+    // The Supabase "Reset password" email carries a 6-digit code ({{ .Token }}) —
+    // the same email the app's reset screen uses — so the dashboard verifies
+    // that code (POST /verify, type recovery), saves the new password, then
+    // asks for the usual sign-in code. A link-style template still works:
+    // init() picks a #type=recovery fragment up and shows the password field only.
+    let RESET_EMAIL = '';       // set while a reset code is expected
+    let RESET_VERIFIED = false; // the code was accepted (a retry only re-saves the password)
+    let RESET_COOLDOWN = 0;
+    function tickResetResend() {
+      const a = $('rpResend');
+      if (RESET_COOLDOWN > 0) { a.classList.add('off'); a.textContent = 'Send a new code in ' + RESET_COOLDOWN + 's'; RESET_COOLDOWN--; setTimeout(tickResetResend, 1000); }
+      else { a.classList.remove('off'); a.textContent = 'Send a new code'; }
+    }
+    function sendResetCode(email) {
+      return gotrue('recover?redirect_to=' + encodeURIComponent(DASHBOARD_URL), { email })
+        .then(() => { RESET_COOLDOWN = 60; tickResetResend(); });
+    }
+    function showResetForm(email) {
+      RESET_EMAIL = email || '';
+      RESET_VERIFIED = false;
+      $('rpCode').value = ''; $('rpPass').value = '';
+      $('rpCodeWrap').style.display = RESET_EMAIL ? '' : 'none';
+      $('rpLinks').style.display = RESET_EMAIL ? '' : 'none';
+      $('rpNote').textContent = RESET_EMAIL
+        ? 'If there’s an AfterCall account for ' + RESET_EMAIL + ', we just emailed it a 6-digit code. Enter it here with your new password. The code works for 1 hour.'
+        : 'Enter a new password for your account.';
+      showGate('vReset');
+    }
     $('vForgot').addEventListener('submit', (ev) => {
       ev.preventDefault();
       const email = $('fpEmail').value.trim().toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { flash('gateMsg', 'err', 'Enter a valid email address.'); return; }
       busy($('fpBtn'), true, 'Sending…');
-      gotrue('recover?redirect_to=' + encodeURIComponent(DASHBOARD_URL), { email })
-        .then(() => flash('gateMsg', 'ok', 'If there’s an account for ' + email + ', a reset link is on its way. Open it on this computer.'))
+      sendResetCode(email)
+        .then(() => showResetForm(email))
         .catch((e) => flash('gateMsg', 'err', signInErr(e)))
         .finally(() => busy($('fpBtn'), false));
     });
+    $('rpResend').addEventListener('click', () => {
+      if (RESET_COOLDOWN > 0 || !RESET_EMAIL) return;
+      sendResetCode(RESET_EMAIL)
+        .then(() => flash('gateMsg', 'ok', 'A new code is on its way.'))
+        .catch((e) => flash('gateMsg', 'err', signInErr(e)));
+    });
+    $('rpCode').addEventListener('input', () => { $('rpCode').value = $('rpCode').value.replace(/\D/g, '').slice(0, 10); });
     $('vReset').addEventListener('submit', (ev) => {
       ev.preventDefault();
+      const code = $('rpCode').value.replace(/\D/g, '');
       const password = $('rpPass').value;
+      if (RESET_EMAIL && !RESET_VERIFIED && code.length < 6) { flash('gateMsg', 'err', 'Enter the code from the email.'); return; }
       if (password.length < 8) { flash('gateMsg', 'err', 'Choose a password of at least 8 characters.'); return; }
       busy($('rpBtn'), true, 'Saving…');
-      freshToken()
+      const verified = RESET_EMAIL && !RESET_VERIFIED
+        ? gotrue('verify', { type: 'recovery', email: RESET_EMAIL, token: code })
+          .then((d) => { setAuth(sessionFrom(d)); RESET_VERIFIED = true; })
+          .catch((e) => {
+            throw Object.assign(new Error(e.code === 'otp_expired' || /expired|invalid/i.test(e.message)
+              ? 'That code isn’t right or has expired. Check it, or send yourself a new one.'
+              : e.message), { code: e.code });
+          })
+        : Promise.resolve();
+      verified
+        .then(() => freshToken())
         .then((tok) => gotrue('user', { password }, tok, 'PUT'))
-        .then(() => { $('rpPass').value = ''; flash('gateMsg', 'ok', 'Password saved.'); return afterPassword(); })
-        .catch((e) => flash('gateMsg', 'err', e.code === 'same_password' ? 'Pick a password you haven’t used here before.' : e.message))
+        .then(() => {
+          $('rpPass').value = ''; $('rpCode').value = ''; RESET_EMAIL = '';
+          return afterPassword().then(() => {
+            if ($('vCode').classList.contains('hidden')) return;
+            if (!$('gateMsg').classList.contains('err')) {
+              flash('gateMsg', 'ok', 'Password saved. Enter the sign-in code we just emailed you to finish.');
+            }
+          });
+        })
+        .catch((e) => flash('gateMsg', 'err',
+          e.code === 'same_password' ? 'Pick a password you haven’t used before.'
+            : e.code === 'weak_password' ? 'That password is too easy to guess. Try a longer one.'
+              : e.message))
         .finally(() => busy($('rpBtn'), false));
     });
 
@@ -2259,7 +2323,7 @@
           access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'),
           expires_at: parseInt(hash.get('expires_at') || '0', 10) || undefined, expires_in: parseInt(hash.get('expires_in') || '3600', 10),
         }));
-        if (hash.get('type') === 'recovery') { showGate('vReset'); return; }
+        if (hash.get('type') === 'recovery') { showResetForm(''); return; }
       }
       if (AGENCY) document.body.classList.toggle('viewer', AGENCY.role !== 'admin');
       if (AUTH) afterPassword().catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vSignIn', e.message); });
