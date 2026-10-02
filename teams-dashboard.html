@@ -100,6 +100,31 @@
     .msg.err { display: block; background: rgba(239,102,102,0.12); color: var(--bad); }
     .msg.ok { display: block; background: rgba(16,185,129,0.12); color: var(--good); }
     .gate-privacy { font-size: 12px; color: var(--muted); margin-top: 18px; line-height: 1.6; }
+    .gview.hidden { display: none; }
+    .gview label { margin-top: 12px; }
+    .gview label:first-child { margin-top: 0; }
+    .gview .btn.wide { width: 100%; margin-top: 16px; }
+    .gate-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+    .gate-note { font-size: 13px; color: var(--ink2); line-height: 1.55; margin-bottom: 14px; }
+    .gate-hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+    .gate-links { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 14px; font-size: 13px; }
+    .gate-links a { color: var(--s1); text-decoration: none; font-weight: 600; cursor: pointer; }
+    .gate-links a:hover { text-decoration: underline; }
+    .gate-links a.off { color: var(--muted); pointer-events: none; }
+    .code-in { font-size: 26px; font-weight: 800; letter-spacing: 10px; text-align: center; font-variant-numeric: tabular-nums; }
+    .agency-pick { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
+      background: var(--card2); color: var(--ink); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; margin-top: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-align: left; }
+    .agency-pick:hover { border-color: var(--blue); }
+    .agency-pick .r { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    /* Read-only dashboard access: every control that changes something is hidden. */
+    body.viewer .admin-only, body.viewer #chanList button, body.viewer #resList button,
+    body.viewer #chanMembersCard, body.viewer [data-checkin], body.viewer #checkoutBtn,
+    body.viewer #portalBtn, body.viewer #payInvoiceBtn, body.viewer #prSave, body.viewer #prReset { display: none !important; }
+    .viewonly-pill { display: none; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px;
+      background: rgba(148,163,184,0.14); color: var(--muted); white-space: nowrap; }
+    body.viewer .viewonly-pill { display: inline-block; }
+    body.viewer #page-settings .cols-2e { grid-template-columns: 1fr; }
 
     /* ── App shell ── */
     .app { display: none; min-height: 100vh; }
@@ -258,15 +283,71 @@
 <body>
 
   <!-- ══ Gate ══ -->
+  <!-- Every leader signs in with their own AfterCall account: password, then a
+       6-digit code (auth-mfa) — the dashboard API only answers a session that
+       entered one. There is no shared key any more. -->
   <div class="gate" id="gate">
     <div class="gate-card">
       <div class="brandline"><span class="w">AfterCall</span><span class="t">Teams</span></div>
       <div class="gate-sub">Agency command center. Aggregate wellbeing signals, roster and resource controls — never any member's content.</div>
-      <label for="key">Dashboard key</label>
-      <input type="password" id="key" placeholder="Paste the key AfterCall provided" autocomplete="off" />
-      <div style="margin-top: 14px; display: flex; gap: 10px;">
-        <button class="btn" id="enterBtn" style="flex:1;">Open dashboard</button>
+
+      <form class="gview" id="vSignIn" novalidate>
+        <label for="siEmail">Email</label>
+        <input type="email" id="siEmail" autocomplete="username" placeholder="you@agency.org" />
+        <label for="siPass">Password</label>
+        <input type="password" id="siPass" autocomplete="current-password" />
+        <button class="btn wide" id="siBtn" type="submit">Sign in</button>
+        <div class="gate-links"><a id="toSignUp">Create an account</a><a id="toForgot">Forgot password?</a></div>
+      </form>
+
+      <form class="gview hidden" id="vSignUp" novalidate>
+        <div class="gate-title">Create your account</div>
+        <div class="gate-note">For agency leaders who were given dashboard access. Use the email your invitation went to.
+          Already use the AfterCall app? Sign in with that account instead.</div>
+        <label for="suName">Full name</label>
+        <input id="suName" autocomplete="name" maxlength="80" />
+        <label for="suEmail">Work email</label>
+        <input type="email" id="suEmail" autocomplete="username" />
+        <label for="suPass">Choose a password</label>
+        <input type="password" id="suPass" autocomplete="new-password" />
+        <div class="gate-hint">At least 8 characters. You'll also confirm your email with a code.</div>
+        <button class="btn wide" id="suBtn" type="submit">Create account</button>
+        <div class="gate-links"><a data-to="vSignIn">I already have an account</a></div>
+      </form>
+
+      <form class="gview hidden" id="vCode" novalidate>
+        <div class="gate-title" id="codeTitle">Check your email</div>
+        <div class="gate-note" id="codeNote">Sending your sign-in code…</div>
+        <label for="codeInput">6-digit code</label>
+        <input id="codeInput" class="code-in" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="••••••" />
+        <button class="btn wide" id="codeBtn" type="submit">Verify</button>
+        <div class="gate-links"><a id="codeResend">Send a new code</a><a id="codeSwitch">Use a different account</a></div>
+      </form>
+
+      <form class="gview hidden" id="vForgot" novalidate>
+        <div class="gate-title">Reset your password</div>
+        <div class="gate-note">We'll email you a link to choose a new password.</div>
+        <label for="fpEmail">Email</label>
+        <input type="email" id="fpEmail" autocomplete="username" />
+        <button class="btn wide" id="fpBtn" type="submit">Send reset link</button>
+        <div class="gate-links"><a data-to="vSignIn">Back to sign in</a></div>
+      </form>
+
+      <form class="gview hidden" id="vReset" novalidate>
+        <div class="gate-title">Choose a new password</div>
+        <label for="rpPass">New password</label>
+        <input type="password" id="rpPass" autocomplete="new-password" />
+        <div class="gate-hint">At least 8 characters.</div>
+        <button class="btn wide" id="rpBtn" type="submit">Save password</button>
+      </form>
+
+      <div class="gview hidden" id="vPick">
+        <div class="gate-title">Choose an agency</div>
+        <div class="gate-note" id="pickNote"></div>
+        <div id="pickList"></div>
+        <div class="gate-links"><a id="pickSignOut">Sign out</a></div>
       </div>
+
       <div id="gateMsg" class="msg"></div>
       <div class="gate-privacy">
         Wellness figures are suppressed for any group under five members. Leadership never sees a
@@ -280,7 +361,7 @@
   <div class="app" id="app">
     <div class="topbar">
       <div class="brandline"><span class="w">AfterCall</span><span class="t">Teams</span></div>
-      <div class="agency-chip"><span class="name" id="agencyName">—</span><span class="plan-pill" id="planPill">—</span></div>
+      <div class="agency-chip"><span class="name" id="agencyName">—</span><span class="plan-pill" id="planPill">—</span><span class="viewonly-pill" title="Your access is read-only. An admin of your agency can change it.">View only</span></div>
       <div class="spacer"></div>
       <select id="days">
         <option value="30">Last 30 days</option>
@@ -289,8 +370,9 @@
         <option value="180">Last 180 days</option>
       </select>
       <button class="btn ghost sm" id="themeBtn" title="Switch light / dark">☀</button>
+      <button class="btn ghost sm" id="switchBtn" style="display:none;">Switch agency</button>
       <button class="btn ghost sm" id="refreshBtn">Refresh</button>
-      <button class="btn ghost sm" id="lockBtn" title="Forget the key in this tab">Sign out</button>
+      <button class="btn ghost sm" id="lockBtn">Sign out</button>
     </div>
 
     <div class="msg err" id="billingBanner" style="margin:0 0 14px; display:none;">
@@ -302,7 +384,7 @@
       <button class="tab active" data-page="overview">Overview</button>
       <button class="tab" data-page="wellbeing">Wellbeing</button>
       <button class="tab" data-page="operations">Operations</button>
-      <button class="tab" data-page="roster">Roster</button>
+      <button class="tab admin-only" data-page="roster">Roster</button>
       <button class="tab" data-page="resources">Resources</button>
       <button class="tab" data-page="channels">Channels</button>
       <button class="tab" data-page="settings">Settings</button>
@@ -506,7 +588,7 @@
           <div class="subnote">These render in every member's app — in the agency workspace and the crisis support screen —
             above the national resources. The 988 Suicide &amp; Crisis Lifeline always shows and can never be removed or replaced.</div>
         </div>
-        <div class="card">
+        <div class="card admin-only">
           <h3 id="resFormTitle">Add a resource</h3>
           <input type="hidden" id="resId" />
           <div class="row">
@@ -537,7 +619,7 @@
           <div class="subnote">Channels are private feeds inside your workspace — stations, shifts, committees, peer team
             coordination. Members see them in the app under Communities. Deleting a channel deletes its posts.</div>
         </div>
-        <div class="card">
+        <div class="card admin-only">
           <h3 id="chanFormTitle">Create a channel</h3>
           <input type="hidden" id="chanId" />
           <div class="row">
@@ -604,7 +686,7 @@
         <div class="subnote" id="chanMembersNote"></div>
       </div>
 
-      <div class="card mt">
+      <div class="card mt admin-only">
         <h3>Send an announcement</h3>
         <div class="grid cols-2e">
           <div>
@@ -629,8 +711,8 @@
 
     <!-- ── Settings ── -->
     <div class="page" id="page-settings">
-      <div class="grid cols-3">
-        <div class="card">
+      <div class="grid cols-2e">
+        <div class="card admin-only">
           <h3>Roster join code</h3>
           <div class="code-display" id="joinCode">········</div>
           <div style="display:flex; gap:10px;">
@@ -651,14 +733,28 @@
           </div>
           <div id="billingMsg" class="msg"></div>
         </div>
-        <div class="card">
-          <h3>Dashboard access</h3>
-          <div style="font-size:13px; color:var(--ink2); line-height:1.6;">This dashboard is opened with your agency's
-            access key. Rotate it if it may have leaked — everyone using the old key loses access immediately.</div>
-          <div class="row mt"><div class="fix"><button class="btn danger sm" id="rotateKey">Rotate access key</button></div></div>
-          <div id="keyMsg" class="msg"></div>
-          <div id="newKeyBox" class="keybox" style="display:none; margin-top:10px;"></div>
+      </div>
+      <div class="card mt admin-only" id="accessCard">
+        <h3>Dashboard access</h3>
+        <div style="font-size:13px; color:var(--ink2); line-height:1.6;">Everyone who opens this dashboard signs in with
+          their own AfterCall account and a code sent to their email — there is no shared key. Owners and admins on the
+          roster have access automatically. Invite anyone else (a chief, a wellness coordinator) by email: they create
+          their own password and the account is linked to your agency the first time they sign in.</div>
+        <div class="tablewrap mt">
+          <table>
+            <thead><tr><th>Person</th><th>Access</th><th>Status</th><th></th></tr></thead>
+            <tbody id="accessBody"><tr><td colspan="4" style="color:var(--muted);">Loading…</td></tr></tbody>
+          </table>
         </div>
+        <div class="row mt">
+          <div style="flex:2; min-width:200px;"><label for="invEmail">Invite by email</label><input type="email" id="invEmail" placeholder="chief@agency.org" /></div>
+          <div class="fix" style="min-width:150px;"><label for="invRole">Access</label>
+            <select id="invRole"><option value="viewer">View only</option><option value="admin">Admin</option></select></div>
+          <div class="fix" style="align-self:flex-end;"><button class="btn sm" id="invGo">Send invite</button></div>
+        </div>
+        <div class="subnote">View only: analytics, resources, channels and billing status, no changes. Admin: everything on
+          this dashboard. Removing someone ends their access at once; their AfterCall account is untouched.</div>
+        <div id="accessMsg" class="msg"></div>
       </div>
       <div class="card mt" id="peerRulesCard">
         <h3>Peer alert rules</h3>
@@ -708,10 +804,15 @@
 
   <script>
     'use strict';
-    // Same host as the rest of the site. The dashboard key is checked
-    // server-side on every request; this public page holds no secrets.
+    // Every request carries the leader's own Supabase access token; the
+    // functions check it, the two-step state of the session and the agency
+    // grant server-side. The anon key below is the public client key.
     const API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-admin';
     const BILLING_API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-billing';
+    const SB_URL = 'https://scjjcyurnjlpmkayglfn.supabase.co';
+    const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjampjeXVybmpscG1rYXlnbGZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyODA0NTksImV4cCI6MjA4Njg1NjQ1OX0.9Qn_XKbBsQnBD45OJaJaUk66OoZ3nsayXAS-zZzraXE';
+    const MFA_API = SB_URL + '/functions/v1/auth-mfa';
+    const DASHBOARD_URL = 'https://aftercallapp.com/teams-dashboard.html';
 
     // Validated categorical series (dataviz six checks) — one set per surface.
     // Acuity/status colors are reserved and identical in both themes.
@@ -732,28 +833,92 @@
     const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const fmt = (v, suf) => (v == null ? '—' : v + (suf || ''));
 
-    // The key lives in sessionStorage only (this tab, until closed), so the
-    // Stripe checkout round-trip and reloads don't force a re-paste.
-    let KEY = sessionStorage.getItem('ac_teams_key') || '';
+    // ── Session ──
+    // The session lives in sessionStorage only (this tab, until closed), so the
+    // Stripe checkout round-trip and reloads don't force a new sign-in. A
+    // refresh keeps the same session id, so a verified session stays verified.
+    function readStore(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+    function writeStore(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+    let AUTH = readStore('ac_teams_auth');      // { access_token, refresh_token, expires_at, email }
+    let AGENCY = readStore('ac_teams_agency');  // { id, name, role }
+    let AGENCIES = [];
     let DATA = null;
 
+    function sessionFrom(d) {
+      return {
+        access_token: d.access_token,
+        refresh_token: d.refresh_token,
+        expires_at: d.expires_at || Math.floor(Date.now() / 1000) + (d.expires_in || 3600),
+        email: (d.user && d.user.email) || (AUTH && AUTH.email) || '',
+      };
+    }
+    function setAuth(a) { AUTH = a; writeStore('ac_teams_auth', a); }
+    function setAgency(a) {
+      AGENCY = a; writeStore('ac_teams_agency', a);
+      document.body.classList.toggle('viewer', !!a && a.role !== 'admin');
+    }
+    function authError(d, fallback) {
+      const e = new Error(d.msg || d.error_description || d.message || d.error || fallback || 'Request failed.');
+      e.code = d.error_code || d.code || d.error || '';
+      return e;
+    }
+    function gotrue(path, body, token, method) {
+      return fetch(SB_URL + '/auth/v1/' + path, {
+        method: method || 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SB_ANON, Authorization: 'Bearer ' + (token || SB_ANON) },
+        body: body ? JSON.stringify(body) : undefined,
+      }).then((res) => res.json().catch(() => ({})).then((d) => { if (!res.ok) throw authError(d); return d; }));
+    }
+    let refreshing = null;
+    function freshToken(force) {
+      if (!AUTH || !AUTH.refresh_token) return Promise.reject(Object.assign(new Error('Please sign in.'), { code: 'sign_in_required' }));
+      if (!force && AUTH.expires_at * 1000 - Date.now() > 60000) return Promise.resolve(AUTH.access_token);
+      if (!refreshing) {
+        refreshing = gotrue('token?grant_type=refresh_token', { refresh_token: AUTH.refresh_token })
+          .then((d) => { setAuth(sessionFrom(d)); return AUTH.access_token; })
+          .catch((e) => { throw Object.assign(new Error('Your session ended. Please sign in again.'), { code: 'sign_in_required', cause: e }); })
+          .finally(() => { refreshing = null; });
+      }
+      return refreshing;
+    }
+    const FRIENDLY = {
+      admin_only: 'Your access to this dashboard is view-only. Ask an admin of your agency to make this change.',
+      no_access: 'This account no longer has access to that agency.',
+      mfa_required: 'Enter the code we emailed you to finish signing in.',
+      sign_in_required: 'Your session ended. Please sign in again.',
+      key_retired: 'Dashboard keys are retired. Sign in with your own account.',
+    };
+    // One authenticated call to an edge function. Losing the session, the
+    // two-step state or the agency grant sends the page back to the right
+    // step of the sign-in (authLost); every other error is the caller's.
+    const AUTH_CODES = ['sign_in_required', 'mfa_required', 'no_access'];
+    function callFn(url, payload, retried) {
+      return freshToken()
+        .then((tok) => fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: SB_ANON, Authorization: 'Bearer ' + tok },
+          body: JSON.stringify(payload),
+        }))
+        .then((res) => res.json().catch(() => ({})).then((data) => {
+          if (res.ok) return data;
+          const code = data.error || (res.status === 401 ? 'sign_in_required' : '');
+          // An expired or revoked access token: refresh once and retry.
+          if (res.status === 401 && !retried && code !== 'key_retired') return freshToken(true).then(() => callFn(url, payload, true));
+          throw Object.assign(new Error(FRIENDLY[code] || data.message || code || 'Request failed.'), { code });
+        }))
+        .catch((e) => {
+          if (AUTH_CODES.includes(e.code)) setTimeout(() => authLost(e.code), 0);
+          throw e;
+        });
+    }
     function post(action, extra) {
-      return fetch(API, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.assign({ action, dashboardKey: KEY }, extra || {})),
-      }).then((res) => res.json().then((data) => {
-        if (!res.ok) throw new Error(data.error || 'Request failed.');
-        return data;
-      }));
+      return callFn(API, Object.assign({ action, agencyId: AGENCY && AGENCY.id }, extra || {}));
     }
     function postBilling(action) {
-      return fetch(BILLING_API, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, dashboardKey: KEY }),
-      }).then((res) => res.json().then((data) => {
-        if (!res.ok) throw new Error(data.message || data.error || 'Request failed.');
-        return data;
-      }));
+      return callFn(BILLING_API, { action, agencyId: AGENCY && AGENCY.id });
+    }
+    function mfa(action, extra) {
+      return callFn(MFA_API, Object.assign({ action }, extra || {}));
     }
     function flash(id, cls, text) { const e = $(id); e.className = 'msg ' + cls; e.textContent = text; }
     function clearMsg(id) { const e = $(id); e.className = 'msg'; e.textContent = ''; }
@@ -1072,7 +1237,9 @@
     }
     function updatePeerRuleUi() {
       const p = readPeerRules();
-      ['prWindow', 'prMinCalls', 'prMinCritical', 'prCooldown'].forEach((id) => { $(id).disabled = !p.heavyRunEnabled; });
+      const readOnly = !AGENCY || AGENCY.role !== 'admin';
+      $('prEnabled').disabled = readOnly;
+      ['prWindow', 'prMinCalls', 'prMinCritical', 'prCooldown'].forEach((id) => { $(id).disabled = readOnly || !p.heavyRunEnabled; });
       $('prSummary').textContent = p.heavyRunEnabled
         ? 'Your peer supporters get a heads-up when one member logs ' + (isNaN(p.minCalls) ? '?' : p.minCalls)
           + ' or more Serious / Critical calls, or ' + (isNaN(p.minCritical) ? '?' : p.minCritical)
@@ -1081,6 +1248,7 @@
         : 'Off: peer supporters are alerted only when a member marks a call high-impact or asks for a check-in.';
     }
     function loadPeerRules() {
+      updatePeerRuleUi(); // apply this agency's read-only state before the rules load
       return post('leader_peer_alerts').then((d) => fillPeerRules(d.settings)).catch(() => {});
     }
     ['prEnabled', 'prWindow', 'prMinCalls', 'prMinCritical', 'prCooldown'].forEach((id) => {
@@ -1625,7 +1793,9 @@
 
     // ── Settings ──
     function loadSettings() {
-      post('leader_join_code').then((d) => { $('joinCode').textContent = d.joinCode || '— none —'; }).catch(() => {});
+      if (AGENCY && AGENCY.role === 'admin') {
+        post('leader_join_code').then((d) => { $('joinCode').textContent = d.joinCode || '— none —'; }).catch(() => {});
+      }
       return postBilling('billing_status').then((b) => {
         const s = b.billing || {};
         const day = (v) => esc(String(v).slice(0, 10));
@@ -1728,14 +1898,61 @@
       post('leader_rotate_join_code').then((d) => { $('joinCode').textContent = d.joinCode; flash('codeMsg', 'ok', 'New code active.'); })
         .catch((e) => flash('codeMsg', 'err', e.message));
     });
-    $('rotateKey').addEventListener('click', () => {
-      if (!confirm('Rotate the dashboard access key? Anyone using the current key — including this tab after you leave — will need the new one.')) return;
-      post('leader_rotate_key').then((d) => {
-        KEY = d.dashboardKey; sessionStorage.setItem('ac_teams_key', KEY);
-        $('newKeyBox').style.display = 'block';
-        $('newKeyBox').textContent = d.dashboardKey;
-        flash('keyMsg', 'ok', 'New key active. Save it now — it is only shown once, and this tab has already switched to it.');
-      }).catch((e) => flash('keyMsg', 'err', e.message));
+    // ── Dashboard access (Settings) ──
+    function accessLabel(role) { return role === 'admin' ? 'Admin' : 'View only'; }
+    function loadDashboardUsers() {
+      if (!AGENCY || AGENCY.role !== 'admin') return;
+      post('leader_dashboard_users').then((d) => {
+        const me = ((AUTH && AUTH.email) || '').toLowerCase();
+        const seatRows = (d.seatAdmins || []).map((p) => `
+          <tr>
+            <td><b>${esc(p.name || p.email || 'Member')}</b>${p.email && p.name ? '<div style="color:var(--muted);font-size:12px;">' + esc(p.email) + '</div>' : ''}</td>
+            <td>Admin</td>
+            <td><span class="stpill ok">Roster ${esc(p.role)}</span></td>
+            <td style="color:var(--muted);font-size:12px;">${(p.email || '').toLowerCase() === me ? 'You' : 'Change on Roster'}</td>
+          </tr>`);
+        const inviteRows = (d.invites || []).map((i) => `
+          <tr data-id="${esc(i.id)}">
+            <td><b>${esc(i.email)}</b>${i.invitedBy ? '<div style="color:var(--muted);font-size:12px;">Invited by ' + esc(i.invitedBy) + '</div>' : ''}</td>
+            <td><select data-act="role" ${i.email === me ? 'disabled' : ''}>
+              <option value="viewer"${i.role === 'viewer' ? ' selected' : ''}>View only</option>
+              <option value="admin"${i.role === 'admin' ? ' selected' : ''}>Admin</option></select></td>
+            <td>${i.status === 'active' ? '<span class="stpill done">Active</span>' : '<span class="stpill due">Invited</span>'}</td>
+            <td>${i.email === me ? '<span style="color:var(--muted);font-size:12px;">You</span>' : '<button class="btn danger sm" data-act="revoke">Remove</button>'}</td>
+          </tr>`);
+        $('accessBody').innerHTML = seatRows.concat(inviteRows).join('')
+          || '<tr><td colspan="4" style="color:var(--muted);">No one yet.</td></tr>';
+      }).catch((e) => flash('accessMsg', 'err', e.message));
+    }
+    $('accessBody').addEventListener('change', (ev) => {
+      const sel = ev.target.closest('select[data-act="role"]'); if (!sel) return;
+      const id = ev.target.closest('tr').dataset.id;
+      post('leader_set_dashboard_user_role', { id, role: sel.value })
+        .then(() => { flash('accessMsg', 'ok', 'Access changed to ' + accessLabel(sel.value) + '.'); loadDashboardUsers(); })
+        .catch((e) => { flash('accessMsg', 'err', e.message); loadDashboardUsers(); });
+    });
+    $('accessBody').addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button[data-act="revoke"]'); if (!btn) return;
+      if (!confirm('Remove this person’s dashboard access? They lose it immediately.')) return;
+      post('leader_revoke_dashboard_user', { id: ev.target.closest('tr').dataset.id })
+        .then(() => { flash('accessMsg', 'ok', 'Access removed.'); loadDashboardUsers(); })
+        .catch((e) => flash('accessMsg', 'err', e.message));
+    });
+    $('invGo').addEventListener('click', () => {
+      const email = $('invEmail').value.trim().toLowerCase();
+      const role = $('invRole').value;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { flash('accessMsg', 'err', 'Enter a valid email address.'); return; }
+      $('invGo').disabled = true;
+      post('leader_invite_dashboard_user', { email, role })
+        .then((d) => {
+          flash('accessMsg', 'ok', d.emailed
+            ? 'Invite sent to ' + email + '. They create their own password and sign in with a code.'
+            : 'Access added for ' + email + ', but the email didn’t send. Send them this page’s link and ask them to create an account with that email.');
+          $('invEmail').value = '';
+          loadDashboardUsers();
+        })
+        .catch((e) => flash('accessMsg', 'err', e.message))
+        .finally(() => { $('invGo').disabled = false; });
     });
     // Stripe sends people back to the dashboard URL; remember to reopen the
     // Billing card (Settings) when they return, from Checkout or the portal.
@@ -1782,31 +1999,220 @@
     }
     // One Refresh button, everything: analytics, roster, resources, channels, settings.
     function refreshAll() {
-      refreshDashboard().catch((e) => alert(e.message));
-      loadRoster(); loadResources(); loadChannels(); loadSettings(); loadPeerRules();
-      if (MANAGED) loadChannelMembers();
+      refreshDashboard().catch((e) => { if (!AUTH_CODES.includes(e.code)) alert(e.message); });
+      const admin = AGENCY && AGENCY.role === 'admin';
+      if (admin) loadRoster();
+      loadResources(); loadChannels(); loadSettings(); loadPeerRules();
+      if (admin) loadDashboardUsers();
+      if (admin && MANAGED) loadChannelMembers();
     }
     function enterApp() {
       $('gate').style.display = 'none';
       $('app').style.display = 'block';
+      $('switchBtn').style.display = AGENCIES.length > 1 ? '' : 'none';
+      $('lockBtn').title = AUTH && AUTH.email ? 'Signed in as ' + AUTH.email : '';
+      // A viewer can't land on a tab that is hidden from them.
+      if (AGENCY.role !== 'admin' && $('page-roster').classList.contains('active')) showPage('overview');
       refreshAll();
     }
-    function tryKey(key) {
-      KEY = key;
-      const btn = $('enterBtn'); btn.disabled = true; btn.textContent = 'Opening…';
-      return post('dashboard', { sinceDays: parseInt($('days').value, 10) })
-        .then((d) => { sessionStorage.setItem('ac_teams_key', KEY); renderDashboard(d); enterApp(); showBillingReturn(); })
-        .catch((e) => { flash('gateMsg', 'err', e.message === 'Unauthorized' ? 'That key doesn’t match an agency. Check it and try again.' : e.message); })
-        .finally(() => { btn.disabled = false; btn.textContent = 'Open dashboard'; });
+    function showGate(view, message, cls) {
+      $('app').style.display = 'none';
+      $('gate').style.display = 'flex';
+      document.querySelectorAll('#gate .gview').forEach((v) => v.classList.toggle('hidden', v.id !== view));
+      if (message) flash('gateMsg', cls || 'err', message); else clearMsg('gateMsg');
+      const first = $(view).querySelector('input:not([disabled])');
+      if (first) setTimeout(() => first.focus(), 30);
     }
-    $('enterBtn').addEventListener('click', () => { const k = $('key').value.trim(); if (k) tryKey(k); });
-    $('key').addEventListener('keydown', (e) => { if (e.key === 'Enter') { const k = $('key').value.trim(); if (k) tryKey(k); } });
-    $('refreshBtn').addEventListener('click', refreshAll);
-    $('days').addEventListener('change', () => { refreshDashboard().catch((e) => alert(e.message)); });
-    $('lockBtn').addEventListener('click', () => {
-      sessionStorage.removeItem('ac_teams_key'); KEY = '';
-      $('app').style.display = 'none'; $('gate').style.display = 'flex'; $('key').value = '';
+    document.querySelectorAll('#gate [data-to]').forEach((a) => a.addEventListener('click', () => showGate(a.dataset.to)));
+    function busy(btn, on, label) {
+      if (on) { btn.dataset.label = btn.textContent; btn.textContent = label || 'One moment…'; btn.disabled = true; }
+      else { btn.textContent = btn.dataset.label || btn.textContent; btn.disabled = false; }
+    }
+    // Where a lost session / grant / code sends the page.
+    let LOST = false;
+    function authLost(code) {
+      if (LOST) return;
+      if (code === 'mfa_required') { LOST = true; startCode().finally(() => { LOST = false; }); return; }
+      if (code === 'no_access') { setAgency(null); LOST = true; loadAgencies().finally(() => { LOST = false; }); return; }
+      forgetSession();
+      showGate('vSignIn', FRIENDLY.sign_in_required);
+    }
+    function forgetSession() {
+      setAuth(null); setAgency(null); AGENCIES = []; DATA = null;
+    }
+
+    // 1 — password
+    function signInErr(e) {
+      if (e.code === 'invalid_credentials' || /invalid login/i.test(e.message)) return 'That email and password don’t match. Check them or reset your password.';
+      if (e.code === 'email_not_confirmed') return 'Confirm your email first — check your inbox for the link, then sign in.';
+      if (e.code === 'over_request_rate_limit' || e.code === 'over_email_send_rate_limit') return 'Too many attempts. Wait a minute and try again.';
+      return e.message;
+    }
+    $('vSignIn').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const email = $('siEmail').value.trim().toLowerCase();
+      const password = $('siPass').value;
+      if (!email || !password) { flash('gateMsg', 'err', 'Enter your email and password.'); return; }
+      busy($('siBtn'), true, 'Signing in…');
+      gotrue('token?grant_type=password', { email, password })
+        .then((d) => { setAuth(sessionFrom(d)); $('siPass').value = ''; return afterPassword(); })
+        .catch((e) => flash('gateMsg', 'err', signInErr(e)))
+        .finally(() => busy($('siBtn'), false));
     });
+    $('toSignUp').addEventListener('click', () => { $('suEmail').value = $('siEmail').value.trim(); showGate('vSignUp'); });
+    $('toForgot').addEventListener('click', () => { $('fpEmail').value = $('siEmail').value.trim(); showGate('vForgot'); });
+
+    // 1b — new account (their own password)
+    $('vSignUp').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const name = $('suName').value.trim();
+      const email = $('suEmail').value.trim().toLowerCase();
+      const password = $('suPass').value;
+      if (!name) { flash('gateMsg', 'err', 'Enter your name.'); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { flash('gateMsg', 'err', 'Enter a valid email address.'); return; }
+      if (password.length < 8) { flash('gateMsg', 'err', 'Choose a password of at least 8 characters.'); return; }
+      busy($('suBtn'), true, 'Creating account…');
+      gotrue('signup', { email, password, data: { full_name: name, name, signup_source: 'teams_dashboard' } })
+        .then((d) => {
+          $('suPass').value = '';
+          if (d.access_token) { setAuth(sessionFrom(d)); return afterPassword(); }
+          // Projects that confirm email by link return no session.
+          $('siEmail').value = email;
+          showGate('vSignIn', 'Account created. Confirm your email with the link we sent, then sign in.', 'ok');
+        })
+        .catch((e) => {
+          if (e.code === 'user_already_exists' || /already registered/i.test(e.message)) {
+            $('siEmail').value = email;
+            showGate('vSignIn', 'There’s already an AfterCall account for ' + email + '. Sign in with it (or reset the password).');
+          } else if (e.code === 'weak_password') {
+            flash('gateMsg', 'err', 'That password is too easy to guess. Try a longer one.');
+          } else flash('gateMsg', 'err', e.message);
+        })
+        .finally(() => busy($('suBtn'), false));
+    });
+
+    // 2 — the code
+    function afterPassword() {
+      return mfa('status').then((st) => (st.state === 'verified' ? loadAgencies() : startCode(st)));
+    }
+    let CODE_COOLDOWN = 0;
+    function tickResend() {
+      const a = $('codeResend');
+      if (CODE_COOLDOWN > 0) { a.classList.add('off'); a.textContent = 'Send a new code in ' + CODE_COOLDOWN + 's'; CODE_COOLDOWN--; setTimeout(tickResend, 1000); }
+      else { a.classList.remove('off'); a.textContent = 'Send a new code'; }
+    }
+    function sendCode(announce) {
+      return mfa('send').then((d) => {
+        if (d.alreadyVerified) return loadAgencies();
+        $('codeNote').textContent = 'We sent a 6-digit code to ' + d.hint + '. Enter it to finish signing in. It works for 10 minutes.';
+        $('codeTitle').textContent = d.channel === 'sms' ? 'Check your texts' : 'Check your email';
+        if (announce) flash('gateMsg', 'ok', 'A new code is on its way.');
+        CODE_COOLDOWN = d.resendAfterSeconds || 30; tickResend();
+      }).catch((e) => {
+        if (e.code === 'cooldown') { $('codeNote').textContent = 'We just sent you a code. Enter it below.'; CODE_COOLDOWN = 30; tickResend(); return; }
+        flash('gateMsg', 'err', e.code === 'too_many_codes' ? 'Too many codes requested. Wait a few minutes and try again.'
+          : e.code === 'delivery_failed' ? 'We couldn’t send the code. Try again in a moment.' : e.message);
+      });
+    }
+    function startCode() {
+      $('codeInput').value = '';
+      $('codeNote').textContent = 'Sending your sign-in code…';
+      showGate('vCode');
+      return sendCode(false);
+    }
+    function verifyCode() {
+      const code = $('codeInput').value.replace(/\D/g, '');
+      if (code.length !== 6) { flash('gateMsg', 'err', 'Enter the 6-digit code.'); return; }
+      busy($('codeBtn'), true, 'Checking…');
+      mfa('verify', { code })
+        .then(() => { clearMsg('gateMsg'); return loadAgencies(); })
+        .catch((e) => {
+          $('codeInput').value = '';
+          flash('gateMsg', 'err', ({
+            wrong_code: 'That code isn’t right. Check it and try again.',
+            expired: 'That code expired. Send a new one.',
+            too_many_attempts: 'Too many tries on that code. Send a new one.',
+            no_code: 'Send yourself a new code first.',
+          })[e.code] || e.message);
+        })
+        .finally(() => busy($('codeBtn'), false));
+    }
+    $('vCode').addEventListener('submit', (ev) => { ev.preventDefault(); verifyCode(); });
+    $('codeInput').addEventListener('input', () => {
+      const v = $('codeInput').value.replace(/\D/g, '').slice(0, 6);
+      $('codeInput').value = v;
+      if (v.length === 6 && !$('codeBtn').disabled) verifyCode();
+    });
+    $('codeResend').addEventListener('click', () => { if (CODE_COOLDOWN <= 0) sendCode(true); });
+    $('codeSwitch').addEventListener('click', () => signOut());
+
+    // 3 — which agency
+    function loadAgencies() {
+      return callFn(API, { action: 'my_agencies' }).then((d) => {
+        AGENCIES = d.agencies || [];
+        if (AUTH) setAuth(Object.assign({}, AUTH, { email: d.email || AUTH.email }));
+        const keep = AGENCY && AGENCIES.find((a) => a.id === AGENCY.id);
+        if (keep) return openAgency(keep);
+        if (AGENCIES.length === 1) return openAgency(AGENCIES[0]);
+        if (!AGENCIES.length) {
+          $('pickNote').innerHTML = 'You’re signed in as <b>' + esc(d.email) + '</b>, but this account doesn’t have access to an '
+            + 'agency’s dashboard yet. Ask your agency’s AfterCall admin to invite this email, or write to '
+            + '<a href="mailto:jordan@aftercallapp.com">jordan@aftercallapp.com</a>.';
+          $('pickList').innerHTML = '';
+        } else {
+          $('pickNote').innerHTML = 'Signed in as <b>' + esc(d.email) + '</b>.';
+          $('pickList').innerHTML = AGENCIES.map((a) => '<button class="agency-pick" data-id="' + esc(a.id) + '">'
+            + '<span>' + esc(a.name) + '</span><span class="r">' + esc(accessLabel(a.role)) + '</span></button>').join('');
+        }
+        showGate('vPick');
+      }).catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vSignIn', e.message); });
+    }
+    $('pickList').addEventListener('click', (ev) => {
+      const b = ev.target.closest('.agency-pick'); if (!b) return;
+      const a = AGENCIES.find((x) => x.id === b.dataset.id); if (a) openAgency(a);
+    });
+    $('pickSignOut').addEventListener('click', () => signOut());
+    function openAgency(a) {
+      setAgency(a);
+      return post('dashboard', { sinceDays: parseInt($('days').value, 10) })
+        .then((d) => { renderDashboard(d); enterApp(); showBillingReturn(); })
+        .catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vPick', e.message); });
+    }
+    $('switchBtn').addEventListener('click', () => { setAgency(null); loadAgencies(); });
+
+    // Forgot / reset password
+    $('vForgot').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const email = $('fpEmail').value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { flash('gateMsg', 'err', 'Enter a valid email address.'); return; }
+      busy($('fpBtn'), true, 'Sending…');
+      gotrue('recover?redirect_to=' + encodeURIComponent(DASHBOARD_URL), { email })
+        .then(() => flash('gateMsg', 'ok', 'If there’s an account for ' + email + ', a reset link is on its way. Open it on this computer.'))
+        .catch((e) => flash('gateMsg', 'err', signInErr(e)))
+        .finally(() => busy($('fpBtn'), false));
+    });
+    $('vReset').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const password = $('rpPass').value;
+      if (password.length < 8) { flash('gateMsg', 'err', 'Choose a password of at least 8 characters.'); return; }
+      busy($('rpBtn'), true, 'Saving…');
+      freshToken()
+        .then((tok) => gotrue('user', { password }, tok, 'PUT'))
+        .then(() => { $('rpPass').value = ''; flash('gateMsg', 'ok', 'Password saved.'); return afterPassword(); })
+        .catch((e) => flash('gateMsg', 'err', e.code === 'same_password' ? 'Pick a password you haven’t used here before.' : e.message))
+        .finally(() => busy($('rpBtn'), false));
+    });
+
+    function signOut() {
+      const tok = AUTH && AUTH.access_token;
+      // scope=local ends only THIS browser session, never the leader's app sign-in.
+      if (tok) gotrue('logout?scope=local', null, tok).catch(() => {});
+      forgetSession();
+      showGate('vSignIn');
+    }
+    $('refreshBtn').addEventListener('click', refreshAll);
+    $('days').addEventListener('change', () => { refreshDashboard().catch((e) => { if (!AUTH_CODES.includes(e.code)) alert(e.message); }); });
+    $('lockBtn').addEventListener('click', () => signOut());
 
     // Back from Stripe: land on Settings (the Billing card) with the outcome.
     // A successful checkout is confirmed by Stripe's webhook a few seconds
@@ -1844,10 +2250,20 @@
       try { returning = sessionStorage.getItem('ac_teams_return'); sessionStorage.removeItem('ac_teams_return'); } catch (e) {}
       if (billing) window.history.replaceState({}, '', window.location.pathname + window.location.hash);
       PENDING_BILLING = billing === 'success' || billing === 'canceled' ? billing : returning === 'portal' ? 'portal' : null;
-      if (KEY) {
-        enterApp();
-        showBillingReturn();
+      // A password-reset link lands here with the session in the URL fragment.
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      if (hash.get('access_token') || hash.get('error_description')) {
+        window.history.replaceState({}, '', window.location.pathname + window.location.search);
+        if (hash.get('error_description')) { showGate('vForgot', 'That link didn’t work (' + hash.get('error_description') + '). Send yourself a new one.'); return; }
+        setAuth(sessionFrom({
+          access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'),
+          expires_at: parseInt(hash.get('expires_at') || '0', 10) || undefined, expires_in: parseInt(hash.get('expires_in') || '3600', 10),
+        }));
+        if (hash.get('type') === 'recovery') { showGate('vReset'); return; }
       }
+      if (AGENCY) document.body.classList.toggle('viewer', AGENCY.role !== 'admin');
+      if (AUTH) afterPassword().catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vSignIn', e.message); });
+      else showGate('vSignIn');
     })();
   </script>
 </body>

@@ -43,7 +43,7 @@
 <body>
   <div class="wrap">
     <h1>AfterCall Teams — Ops</h1>
-    <div class="sub">Provision agencies, manage rosters, rotate codes and dashboard keys. Private — do not share this URL.</div>
+    <div class="sub">Provision agencies, manage rosters and join codes, and grant dashboard access. Private — do not share this URL.</div>
 
     <div class="card">
       <h2>Access</h2>
@@ -128,6 +128,23 @@
             <tbody id="rosterBody"></tbody>
           </table>
         </div>
+        <h2 style="margin-top: 22px;">Dashboard access</h2>
+        <div class="sub" style="margin-bottom: 10px;">Leaders sign in to teams-dashboard.html with their own AfterCall account + an emailed code.
+          Roster owners/admins have access automatically; invite anyone else here (they get an email and create their own password).</div>
+        <div class="row" style="margin-bottom: 10px;">
+          <div><label>Email</label><input id="dEmail" placeholder="chief@agency.org" /></div>
+          <div><label>Access</label>
+            <select id="dRole"><option value="admin">admin</option><option value="viewer">viewer (read-only)</option></select>
+          </div>
+          <div style="flex: 0;"><button id="inviteBtn" class="mini">Invite</button></div>
+        </div>
+        <div id="accessOut" class="out"></div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Who</th><th>Access</th><th>Source</th><th>Status</th><th></th></tr></thead>
+            <tbody id="accessBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -173,7 +190,6 @@
           + '<button class="mini" data-act="seats" data-id="' + esc(a.id) + '">Seats</button>'
           + '<button class="mini" data-act="mark_invoiced" data-id="' + esc(a.id) + '">Mark invoiced</button>'
           + '<button class="mini" data-act="rotate_code" data-id="' + esc(a.id) + '">New code</button>'
-          + '<button class="mini warn" data-act="rotate_key" data-id="' + esc(a.id) + '">New dash key</button>'
           + '</div></td>'
           + '</tr>';
       });
@@ -204,10 +220,10 @@
       })
         .then(function (d) {
           banner('createOut', 'ok',
-            'Created. SAVE THESE NOW (the dashboard key is only shown on create/rotate):\n'
+            'Created.\n'
             + 'Join code: ' + d.joinCode + '\n'
-            + 'Dashboard key: ' + d.dashboardKey + '\n'
-            + 'Dashboard URL: ' + d.dashboardUrl);
+            + 'Dashboard: ' + d.dashboardUrl + '\n'
+            + 'Next: open its Roster and invite leadership under "Dashboard access" — they create their own password and sign in with a code.');
           load();
         })
         .catch(function (e) { banner('createOut', 'err', e.message); })
@@ -241,7 +257,48 @@
       post({ action: 'roster', agencyId: agencyId })
         .then(function (d) { renderRoster(d.members || []); $('rosterCard').scrollIntoView({ behavior: 'smooth' }); })
         .catch(function (e) { banner('rosterOut', 'err', e.message); });
+      loadAccess();
     }
+
+    function loadAccess() {
+      if (!currentRosterAgency) return;
+      clearBanner('accessOut');
+      post({ action: 'dashboard_users', agencyId: currentRosterAgency })
+        .then(function (d) {
+          var rows = '';
+          (d.seatAdmins || []).forEach(function (p) {
+            rows += '<tr><td>' + esc(p.name || '—') + '<br><span style="color:var(--muted);">' + esc(p.email || '') + '</span></td>'
+              + '<td>admin</td><td>roster ' + esc(p.role) + '</td><td><span class="pill active">active</span></td><td></td></tr>';
+          });
+          (d.invites || []).forEach(function (i) {
+            rows += '<tr><td>' + esc(i.email) + (i.invitedBy ? '<br><span style="color:var(--muted);">by ' + esc(i.invitedBy) + '</span>' : '') + '</td>'
+              + '<td>' + esc(i.role) + '</td><td>invite</td>'
+              + '<td><span class="pill ' + (i.status === 'active' ? 'active' : 'churned') + '">' + esc(i.status) + '</span></td>'
+              + '<td><button class="mini warn" data-act="revoke_access" data-id="' + esc(i.id) + '">Remove</button></td></tr>';
+          });
+          $('accessBody').innerHTML = rows || '<tr><td colspan="5" style="color:var(--muted);">No one yet — invite the chief or wellness lead.</td></tr>';
+        })
+        .catch(function (e) { banner('accessOut', 'err', e.message); });
+    }
+    $('inviteBtn').addEventListener('click', function () {
+      if (!currentRosterAgency) return;
+      var email = $('dEmail').value.trim();
+      if (!email) { banner('accessOut', 'err', 'Enter an email.'); return; }
+      post({ action: 'invite_dashboard_user', agencyId: currentRosterAgency, email: email, role: $('dRole').value })
+        .then(function (d) {
+          banner('accessOut', 'ok', d.emailed ? 'Invited ' + email + ' (email sent).' : 'Access added for ' + email + ', but the email did not send — send them the dashboard link.');
+          $('dEmail').value = '';
+          loadAccess();
+        })
+        .catch(function (e) { banner('accessOut', 'err', e.message); });
+    });
+    $('accessBody').addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn || btn.dataset.act !== 'revoke_access') return;
+      if (!confirm('Remove this dashboard access? It ends immediately.')) return;
+      post({ action: 'revoke_dashboard_user', agencyId: currentRosterAgency, id: btn.dataset.id })
+        .then(function () { banner('accessOut', 'ok', 'Access removed.'); loadAccess(); })
+        .catch(function (err) { banner('accessOut', 'err', err.message); });
+    });
 
     // update_agency pushes seat / plan changes to a Stripe-billed agency's
     // subscription and reports the outcome as `stripeSync`.
@@ -285,12 +342,6 @@
           .then(function (d) { banner('okmsg', 'ok', 'New join code: ' + d.joinCode); load(); })
           .catch(function (err) { banner('err', 'err', err.message); });
         return;
-      }
-      if (act === 'rotate_key') {
-        if (!confirm('Rotate the dashboard key? The old key stops working immediately — you must re-send the new one to agency leadership.')) return;
-        post({ action: 'rotate_dashboard_key', agencyId: id })
-          .then(function (d) { banner('okmsg', 'ok', 'New dashboard key (save now): ' + d.dashboardKey); })
-          .catch(function (err) { banner('err', 'err', err.message); });
       }
     });
 
