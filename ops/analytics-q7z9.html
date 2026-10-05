@@ -83,9 +83,10 @@
   @media (max-width:640px) { .funnel .row { grid-template-columns:1fr; gap:4px; } }
   /* day bars */
   .bars { display:flex; align-items:flex-end; gap:2px; height:110px; }
-  .bars i { flex:1; background:var(--bar); border-radius:2px 2px 0 0; min-height:2px; display:block; }
+  .grid > * { min-width:0; }
+  .bars i { flex:1 1 0; min-width:0; background:var(--bar); border-radius:2px 2px 0 0; min-height:2px; display:block; }
   .bars i.alt { background:var(--bar-2); }
-  .barlabels { display:flex; gap:2px; margin-top:4px; } .barlabels span { flex:1; font-size:9.5px; color:var(--faint); text-align:center; overflow:hidden; white-space:nowrap; }
+  .barlabels { display:flex; gap:2px; margin-top:4px; } .barlabels span { flex:1 1 0; min-width:0; font-size:9.5px; color:var(--faint); text-align:center; overflow:hidden; white-space:nowrap; }
   /* health */
   .streams { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
   .stream { background:var(--surface-2); border:1px solid var(--line); border-left-width:4px; border-radius:8px; padding:12px 14px; }
@@ -97,6 +98,25 @@
   .note { font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; }
   .hidden { display:none; }
   /* ── Ops sign-in (staff account + emailed code; identical block on every ops page) ── */
+  /* insights */
+  .insights { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:12px; }
+  .ins { background:var(--surface); border:1px solid var(--line); border-left-width:4px; border-radius:10px; padding:14px 16px; }
+  .ins.good { border-left-color:var(--ok); } .ins.warn { border-left-color:var(--warn); } .ins.bad { border-left-color:var(--bad); } .ins.info { border-left-color:var(--blue); }
+  .ins .t { font-weight:700; font-size:14.5px; line-height:1.35; } .ins .b { font-size:13px; margin-top:6px; line-height:1.5; }
+  .ins .nx { font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.5; } .ins .nx b { color:var(--ink); font-weight:600; }
+  /* daily table */
+  table.daily td, table.daily th { white-space:nowrap; }
+  table.daily tr.we td { background:var(--surface-2); }
+  table.daily tr.today td { font-style:italic; }
+  table.daily td.k { font-weight:700; }
+  .delta { font-size:12px; font-weight:700; } .delta.up { color:var(--ok); } .delta.down { color:var(--bad); }
+  .tools { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  button.ghost { padding:7px 12px; border:1px solid var(--line); border-radius:8px; font:inherit; font-size:12.5px; font-weight:700; cursor:pointer; background:var(--surface); color:var(--blue-dark); }
+  /* histogram rows */
+  .hist .row { display:grid; grid-template-columns:110px 1fr 120px; gap:12px; align-items:center; padding:5px 0; }
+  .hist .lbl { font-weight:600; font-size:13px; } .hist .num { font-size:12.5px; }
+  .hist .track { background:var(--bar-3); border-radius:4px; height:12px; } .hist .fill { height:12px; border-radius:4px; background:var(--bar); }
+  @media (max-width:640px) { .hist .row { grid-template-columns:90px 1fr 90px; } }
   .oa { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:flex-end; }
   .oa[hidden], .oa-msg[hidden] { display:none; }
   .oa .oa-f { display:flex; flex-direction:column; gap:4px; flex:1; min-width:180px; }
@@ -147,13 +167,46 @@
 
   <div id="results" class="hidden">
     <nav class="nav">
-      <a href="#overview">Overview</a><a href="#funnel">Funnel</a><a href="#retention">Retention</a><a href="#engagement">Engagement</a><a href="#conversion">Conversion</a><a href="#notifications">Notifications</a><a href="#sessions">Sessions</a><a href="#features">Features</a><a href="#screens">Screens</a><a href="#users">Users</a><a href="#health">Health</a>
+      <a href="#insights">Insights</a><a href="#overview">Overview</a><a href="#daily">Daily</a><a href="#growth">Growth</a><a href="#funnel">Funnel</a><a href="#retention">Retention</a><a href="#engagement">Engagement</a><a href="#conversion">Conversion</a><a href="#notifications">Notifications</a><a href="#sessions">Sessions</a><a href="#features">Features</a><a href="#builds">Builds</a><a href="#screens">Screens</a><a href="#users">Users</a><a href="#health">Health</a>
     </nav>
+
+    <section id="insights" style="margin-top:16px">
+      <div class="sechead"><h2>What the numbers say</h2><span class="q">Plain-English findings from everything below, with the lever to pull</span></div>
+      <div class="insights" id="in_cards"></div>
+      <div class="note" id="in_note"></div>
+    </section>
 
     <section id="overview">
       <div class="sechead"><h2>Overview</h2><span class="q">Who is active, and what they did in the window</span></div>
       <div class="card"><div class="tiles" id="ov_tiles"></div></div>
       <div class="card"><h3 style="margin-top:0">Active users per day</h3><div class="bars" id="ov_bars"></div><div class="barlabels" id="ov_labels"></div><div class="note" id="ov_note"></div></div>
+    </section>
+
+    <section id="daily">
+      <div class="sechead"><h2>Daily activity</h2><span class="q">Exact numbers for every day in the window, newest first</span></div>
+      <div class="card">
+        <div class="tools"><span class="tiny" id="dl_hint"></span><button class="ghost" id="dl_csv" type="button">Download CSV</button></div>
+        <div class="scroll"><table class="daily"><thead><tr>
+          <th>Date</th><th class="num">Active (DAU)</th><th class="num">New</th><th class="num">Returning</th><th class="num">WAU</th><th class="num">MAU</th><th class="num">DAU ÷ MAU</th>
+          <th class="num">Signups</th><th class="num">Calls</th><th class="num">Call loggers</th><th class="num">Check-ins</th><th class="num">Checked in</th>
+          <th class="num">Minutes</th><th class="num">Min / person</th><th class="num">Sessions</th><th class="num">App opens</th>
+        </tr></thead><tbody id="dl_rows"></tbody></table></div>
+        <div class="note" id="dl_note"></div>
+      </div>
+      <div class="grid c2" style="margin-top:12px">
+        <div class="card"><h3 style="margin-top:0">Calls logged per day</h3><div class="bars" id="dl_calls"></div><div class="barlabels" id="dl_calls_l"></div></div>
+        <div class="card"><h3 style="margin-top:0">New accounts per day</h3><div class="bars" id="dl_sign"></div><div class="barlabels" id="dl_sign_l"></div></div>
+      </div>
+    </section>
+
+    <section id="growth">
+      <div class="sechead"><h2>Growth</h2><span class="q">Every week: who arrived, who stayed, who came back, who went quiet</span></div>
+      <div class="card">
+        <div class="scroll"><table class="daily"><thead><tr>
+          <th>Week of</th><th class="num">Active</th><th class="num">New</th><th class="num">Stayed</th><th class="num">Came back</th><th class="num">Went quiet</th><th class="num">Net</th><th class="num">Kept from last week</th><th class="num">Quick ratio</th>
+        </tr></thead><tbody id="gr_rows"></tbody></table></div>
+        <div class="note" id="gr_note"></div>
+      </div>
     </section>
 
     <section id="funnel">
@@ -175,11 +228,15 @@
     </section>
 
     <section id="engagement">
-      <div class="sechead"><h2>Engagement</h2><span class="q">Time in the app on a typical active day</span></div>
+      <div class="sechead"><h2>Engagement</h2><span class="q">How often people come back, and time in the app on a typical active day</span></div>
       <div class="card"><div class="tiles" id="eng_tiles"></div>
         <h3>Average minutes per active user, by day</h3><div class="bars" id="eng_bars"></div><div class="barlabels" id="eng_labels"></div>
         <h3>Where the time goes</h3><div class="scroll"><table><thead><tr><th>Screen</th><th class="num">Users</th><th class="num">Visits</th><th class="num">Per visit</th><th class="num">Total</th><th>Share of time</th></tr></thead><tbody id="eng_screens"></tbody></table></div>
         <div class="note" id="eng_note"></div>
+      </div>
+      <div class="grid c2" style="margin-top:12px">
+        <div class="card"><h3 style="margin-top:0">Days active in the last 7</h3><div class="hist" id="fq_l7"></div><div class="note" id="fq_l7_note"></div></div>
+        <div class="card"><h3 style="margin-top:0">Days active in the last 28</h3><div class="hist" id="fq_l28"></div><div class="note" id="fq_l28_note"></div></div>
       </div>
     </section>
 
@@ -232,6 +289,16 @@
       </div>
     </section>
 
+    <section id="builds">
+      <div class="sechead"><h2>Builds &amp; platforms</h2><span class="q">Which app version, platform and language active people are on</span></div>
+      <div class="grid c3">
+        <div class="card"><h3 style="margin-top:0">App version</h3><div class="scroll"><table><thead><tr><th>Version</th><th class="num">People</th><th class="num">Share</th><th class="num">iOS</th><th class="num">Android</th></tr></thead><tbody id="bv_rows"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-top:0">Platform</h3><div class="scroll"><table><thead><tr><th>Platform</th><th class="num">People</th><th class="num">Share</th></tr></thead><tbody id="bp_rows"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-top:0">App language</h3><div class="scroll"><table><thead><tr><th>Language</th><th class="num">People</th><th class="num">Share</th></tr></thead><tbody id="bl_rows"></tbody></table></div></div>
+      </div>
+      <div class="note" id="bv_note"></div>
+    </section>
+
     <section id="screens">
       <div class="sechead"><h2>Screens</h2><span class="q">Every screen, ranked by total attention</span></div>
       <div class="card"><details><summary>Show all screens</summary>
@@ -269,28 +336,285 @@
 
   function dayBars(barsId, labelsId, series, key, titleFn) {
     const max = Math.max(1, ...series.map((x) => x[key] || 0));
+    // Long windows (90 / 365 days): tighten the gaps so the bars always fit.
+    const gap = series.length > 120 ? '0px' : series.length > 45 ? '1px' : '';
+    $(barsId).style.gap = gap; $(labelsId).style.gap = gap;
     $(barsId).innerHTML = series.map((x) => '<i style="height:' + Math.round(((x[key] || 0) / max) * 100) + '%" title="' + esc(titleFn(x)) + '"></i>').join('') || '<span class="muted">No data in this window.</span>';
-    $(labelsId).innerHTML = series.map((x, i) => '<span>' + (series.length <= 31 || i % 7 === 0 ? esc(String(x.day || '').slice(5)) : '') + '</span>').join('');
+    const every = series.length <= 14 ? 1 : series.length <= 31 ? 3 : series.length <= 120 ? 14 : 30;
+    $(labelsId).innerHTML = series.map((x, i) => '<span' + (every > 1 ? ' style="overflow:visible"' : '') + '>' + ((series.length - 1 - i) % every === 0 ? esc(String(x.day || '').slice(5)) : '') + '</span>').join('');
+  }
+
+  // ── Exact daily activity (admin_activity_report, migration 098) ──────────
+  // Every daily number below is counted in SQL over all rows, in this
+  // browser's time zone, without AfterCall staff / demo personas / test
+  // accounts. "Active" = opened or used the app, or saved a call or check-in.
+  const TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) { return 'UTC'; } })();
+  const sum = (xs) => xs.reduce((a, b) => a + (Number(b) || 0), 0);
+  const avg = (xs) => (xs.length ? sum(xs) / xs.length : null);
+  const r1 = (x) => (x == null || !isFinite(x) ? null : Math.round(x * 10) / 10);
+  const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dowOf = (day) => DOW[new Date(String(day) + 'T12:00:00Z').getUTCDay()];
+  const pctOf = (a, b) => (b ? (a / b) * 100 : null);
+  const deltaPct = (cur, prev) => (cur == null || !prev ? null : ((cur - prev) / prev) * 100);
+  const deltaHtml = (d) => (d == null ? '' : '<span class="delta ' + (d >= 0 ? 'up' : 'down') + '">' + (d >= 0 ? '▲ ' : '▼ ') + Math.abs(Math.round(d)) + '%</span>');
+  const deltaTxt = (d) => (d == null ? '' : (d >= 0 ? 'up ' : 'down ') + Math.abs(Math.round(d)) + '%');
+
+  function activity(d) {
+    const a = d.activity || {};
+    const daily = a.daily || [];
+    const today = daily.length ? daily[daily.length - 1] : null;   // still in progress
+    const full = daily.slice(0, -1);                                  // complete days
+    return { a, daily, today, full, yest: full.length ? full[full.length - 1] : null, last7: full.slice(-7), prev7: full.slice(-14, -7) };
   }
 
   // ── Overview ──
   function renderOverview(d) {
-    const r = (d.retention && d.retention.rollingActive) || {};
-    const ev = Object.fromEntries((d.events || []).map((e) => [e.name, e]));
-    const cnt = (name) => (ev[name] ? ev[name].count : 0);
-    const usersOf = (name) => (ev[name] ? ev[name].users : 0);
+    const { a, daily, today, full, yest, last7, prev7 } = activity(d);
     const nt = d.notifications && d.notifications.permission;
+    if (!a.available) {
+      $('ov_tiles').innerHTML = empty('Daily activity is unavailable: ' + (a.error || 'this API deploy does not report it.'));
+      $('ov_bars').innerHTML = ''; $('ov_labels').innerHTML = ''; $('ov_note').textContent = '';
+      return;
+    }
+    const avg7 = avg(last7.map((x) => x.dau)), avgPrev = avg(prev7.map((x) => x.dau));
+    const stick = avg(last7.filter((x) => x.mau).map((x) => (x.dau / x.mau) * 100));
+    const minutes = sum(daily.map((x) => x.minutes)), screenUsers = sum(daily.map((x) => x.screenUsers));
     $('ov_tiles').innerHTML =
-      tile('DAU', n(r.dau), 'today, UTC, still counting') + tile('WAU', n(r.wau), 'last 7 days') + tile('MAU', n(r.mau), 'last 30 days') +
-      tile('Stickiness', pc(r.stickinessPct), 'DAU ÷ MAU') +
-      tile('Active in window', n(d.totals && d.totals.activeUsers), 'any event or screen') +
-      tile('Calls logged', n(cnt('call_saved')), n(usersOf('call_saved')) + ' users') +
-      tile('Check-ins', n(cnt('journal_saved')), n(usersOf('journal_saved')) + ' users · all journal kinds') +
-      tile('Pro users', n(d.proVsFree && d.proVsFree.proUsersInWindow), 'subscription record or app-reported') +
+      tile('Active today', n(today && today.dau), 'so far · ' + (a.tz || TZ)) +
+      tile('Active yesterday', n(yest && yest.dau), yest ? dowOf(yest.day) + ' ' + yest.day : '') +
+      tile('Daily average', avg7 == null ? '—' : String(r1(avg7)), 'last 7 full days' + (avgPrev ? ' · ' + deltaTxt(deltaPct(avg7, avgPrev)) + ' vs prior 7' : ''),
+        avgPrev ? (avg7 >= avgPrev ? 'good' : 'bad') : '') +
+      tile('WAU', n(today && today.wau), 'people active in the last 7 days') +
+      tile('MAU', n(today && today.mau), 'people active in the last 30 days') +
+      tile('Stickiness', pc(stick), 'avg DAU ÷ MAU, last 7 days') +
+      tile('New accounts', n(sum(daily.map((x) => x.signups))), 'created in the window') +
+      tile('Calls logged', n(sum(daily.map((x) => x.calls))), (full.length ? r1(avg(full.map((x) => x.calls))) + ' per day' : '')) +
+      tile('Check-ins', n(sum(daily.map((x) => x.checkins))), (full.length ? r1(avg(full.map((x) => x.checkins))) + ' per day' : '')) +
+      tile('Minutes per person', screenUsers ? String(r1(minutes / screenUsers)) : '—', 'average per active day (screen time)') +
+      tile('Pro users', n(d.proVsFree && d.proVsFree.proUsersInWindow), 'active in window, subscription or Teams') +
       tile('Notifications on', nt && nt.available ? pc(nt.pct) : '—', nt && nt.available ? n(nt.enabledUsers) + ' of ' + n(nt.reportingUsers) + ' reporting' : 'not reported by this build');
-    const daily = d.daily || [];
-    dayBars('ov_bars', 'ov_labels', daily, 'users', (x) => x.day + ': ' + x.users + ' users · ' + x.events + ' events');
-    $('ov_note').textContent = 'Bars = distinct users with any event that day. ' + (d.capped ? 'Warning: the result hit the row cap; narrow the window for exact totals.' : '');
+    dayBars('ov_bars', 'ov_labels', daily, 'dau', (x) => dowOf(x.day) + ' ' + x.day + ': ' + x.dau + ' active · ' + x.newActive + ' new · ' + x.calls + ' calls');
+    $('ov_note').textContent = (a.definition || '') + ' ' + n(a.excludedAccounts) + ' accounts excluded. The last bar is today, still in progress.';
+  }
+
+  // ── Daily table ──
+  let DAILY_ROWS = [];
+  function renderDaily(d) {
+    const { a, daily, today } = activity(d);
+    DAILY_ROWS = daily;
+    if (!a.available || !daily.length) {
+      $('dl_rows').innerHTML = emptyRow(16, a.error || 'No daily activity reported by this API deploy.');
+      $('dl_note').textContent = ''; $('dl_hint').textContent = '';
+      return;
+    }
+    $('dl_hint').textContent = n(daily.length) + ' days · ' + (a.tz || TZ) + ' calendar days · weekends shaded';
+    $('dl_rows').innerHTML = daily.slice().reverse().map((x) => {
+      const we = ['Sat', 'Sun'].includes(dowOf(x.day));
+      const isToday = today && x.day === today.day;
+      return '<tr class="' + (we ? 'we ' : '') + (isToday ? 'today' : '') + '">' +
+        '<td>' + esc(dowOf(x.day)) + ' ' + esc(x.day) + (isToday ? '<span class="sub">today, so far</span>' : '') + '</td>' +
+        '<td class="num k">' + n(x.dau) + '</td><td class="num">' + n(x.newActive) + '</td><td class="num">' + n(x.returning) + '</td>' +
+        '<td class="num">' + n(x.wau) + '</td><td class="num">' + n(x.mau) + '</td><td class="num">' + pc(pctOf(x.dau, x.mau)) + '</td>' +
+        '<td class="num">' + n(x.signups) + '</td><td class="num">' + n(x.calls) + '</td><td class="num">' + n(x.callUsers) + '</td>' +
+        '<td class="num">' + n(x.checkins) + '</td><td class="num">' + n(x.checkinUsers) + '</td>' +
+        '<td class="num">' + n(x.minutes) + '</td><td class="num">' + (x.screenUsers ? r1(x.minutes / x.screenUsers) : '—') + '</td>' +
+        '<td class="num">' + n(x.sessions) + '</td><td class="num">' + n(x.appOpens) + '</td></tr>';
+    }).join('');
+    $('dl_note').textContent = 'New = active people whose account was created that day; Returning = everyone else active that day. Signups = accounts created that day (some never became active). ' +
+      'WAU / MAU = distinct people active in the 7 / 30 days ending that day. Call loggers / Checked in = distinct people. Minutes = screen time reported by the app (capped at 4h per screen per day). ' +
+      'Sessions and app opens come from analytics and miss people who turned analytics off; everything else does not.';
+    dayBars('dl_calls', 'dl_calls_l', daily, 'calls', (x) => dowOf(x.day) + ' ' + x.day + ': ' + x.calls + ' calls by ' + x.callUsers + ' people');
+    dayBars('dl_sign', 'dl_sign_l', daily, 'signups', (x) => dowOf(x.day) + ' ' + x.day + ': ' + x.signups + ' new accounts');
+  }
+  $('dl_csv').addEventListener('click', () => {
+    if (!DAILY_ROWS.length) return;
+    const cols = ['day', 'dau', 'newActive', 'returning', 'wau', 'mau', 'signups', 'calls', 'callUsers', 'checkins', 'checkinUsers', 'minutes', 'screenUsers', 'sessions', 'appOpens'];
+    const head = ['date', 'weekday', 'active_dau', 'new_active', 'returning', 'wau', 'mau', 'signups', 'calls', 'call_loggers', 'checkins', 'checked_in', 'minutes', 'people_with_screen_time', 'sessions', 'app_opens'];
+    const lines = [head.join(',')].concat(DAILY_ROWS.map((x) => [x.day, dowOf(x.day)].concat(cols.slice(1).map((c) => x[c] ?? '')).join(',')));
+    const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = 'aftercall-daily-activity-' + (DAILY_ROWS[0].day) + '-to-' + DAILY_ROWS[DAILY_ROWS.length - 1].day + '.csv';
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  // ── Growth accounting ──
+  function renderGrowth(d) {
+    const a = d.activity || {};
+    const weeks = a.weekly || [];
+    if (!weeks.length) { $('gr_rows').innerHTML = emptyRow(9, a.error || 'No weekly data reported by this API deploy.'); $('gr_note').textContent = ''; return; }
+    const rows = weeks.map((w, i) => {
+      const prev = i > 0 ? weeks[i - 1] : null;
+      const qr = w.churned ? (w.newUsers + w.resurrected) / w.churned : null;
+      const net = w.newUsers + w.resurrected - w.churned;
+      const kept = prev && prev.active ? pctOf(w.retained, prev.active) : null;
+      const isCurrent = i === weeks.length - 1;
+      return '<tr' + (isCurrent ? ' class="today"' : '') + '><td>' + esc(w.week) + (isCurrent ? '<span class="sub">this week, so far</span>' : '') + '</td>' +
+        '<td class="num k">' + n(w.active) + '</td><td class="num">' + n(w.newUsers) + '</td><td class="num">' + n(w.retained) + '</td>' +
+        '<td class="num">' + n(w.resurrected) + '</td><td class="num">' + n(w.churned) + '</td>' +
+        '<td class="num"><span class="delta ' + (net >= 0 ? 'up' : 'down') + '">' + (net >= 0 ? '+' : '') + n(net) + '</span></td>' +
+        '<td class="num">' + (kept == null ? '—' : pc(kept)) + '</td><td class="num">' + (qr == null ? '—' : r1(qr)) + '</td></tr>';
+    });
+    $('gr_rows').innerHTML = rows.reverse().join('');
+    $('gr_note').textContent = 'Weeks start Monday. Active = people active that week. New = account created that week. Stayed = also active the week before. ' +
+      'Came back = active this week, not last week, and not new. Went quiet = active last week but not this week. ' +
+      'Kept from last week = Stayed ÷ last week\'s Active. Quick ratio = (New + Came back) ÷ Went quiet — above 1 means the active base is growing.';
+  }
+
+  // ── Return frequency ──
+  function histRows(id, rows, total) {
+    $(id).innerHTML = rows.map((r) => '<div class="row"><div class="lbl">' + esc(r.label) + '</div><div class="track"><div class="fill" style="width:' +
+      (total ? Math.round((r.users / total) * 100) : 0) + '%"></div></div><div class="num"><b>' + n(r.users) + '</b> <span class="tiny">' + pc(pctOf(r.users, total)) + '</span></div></div>').join('') || empty('No one active in this period.');
+  }
+  function renderFrequency(d) {
+    const f = (d.activity && d.activity.frequency) || {};
+    const l7 = f.l7 || [], l28 = f.l28 || [];
+    const at = (list, k) => (list.find((x) => x.days === k) || { users: 0 }).users;
+    const t7 = sum(l7.map((x) => x.users)), t28 = sum(l28.map((x) => x.users));
+    histRows('fq_l7', [1, 2, 3, 4, 5, 6, 7].map((k) => ({ label: k + (k === 1 ? ' day' : ' days'), users: at(l7, k) })), t7);
+    const band = (lo, hi) => sum(l28.filter((x) => x.days >= lo && x.days <= hi).map((x) => x.users));
+    histRows('fq_l28', [['1 day', 1, 1], ['2–3 days', 2, 3], ['4–7 days', 4, 7], ['8–14 days', 8, 14], ['15–21 days', 15, 21], ['22–28 days', 22, 28]]
+      .map(([label, lo, hi]) => ({ label, users: band(lo, hi) })), t28);
+    $('fq_l7_note').textContent = n(t7) + ' people were active in the last 7 days (today included). A healthy shift-worker habit shows up as 2–4 days.';
+    $('fq_l28_note').textContent = n(t28) + ' people were active in the last 28 days. 8+ days ≈ using AfterCall most shifts.';
+  }
+
+  // ── Builds & platforms ──
+  function renderBuilds(d) {
+    const v = d.versions;
+    if (!v || !v.available) {
+      const msg = (v && v.error) || 'Not reported by this API deploy.';
+      $('bv_rows').innerHTML = emptyRow(5, msg); $('bp_rows').innerHTML = emptyRow(3, msg); $('bl_rows').innerHTML = emptyRow(3, msg); $('bv_note').textContent = ''; return;
+    }
+    $('bv_rows').innerHTML = v.versions.map((r) => '<tr><td><b>' + esc(r.version) + '</b></td><td class="num">' + n(r.users) + '</td><td class="num">' + pc(r.pct) + '</td><td class="num">' + n(r.ios) + '</td><td class="num">' + n(r.android) + '</td></tr>').join('');
+    $('bp_rows').innerHTML = v.platforms.map((r) => '<tr><td>' + esc(r.platform) + '</td><td class="num">' + n(r.users) + '</td><td class="num">' + pc(r.pct) + '</td></tr>').join('');
+    $('bl_rows').innerHTML = v.languages.map((r) => '<tr><td>' + esc(r.language) + '</td><td class="num">' + n(r.users) + '</td><td class="num">' + pc(r.pct) + '</td></tr>').join('');
+    $('bv_note').textContent = n(v.reportingUsers) + ' people reported a build in the window. ' + (v.note || '');
+  }
+
+  // ── What the numbers say ──
+  const FEATURE_LABELS = {
+    journal_saved: 'Journal / check-in', call_saved: 'Call logging', feed_post_shared: 'Sharing to the feed', feed_comment_posted: 'Feed comments',
+    skills_viewed: 'Skills tracker', voice_call_saved: 'Voice call logging', ai_chat_message_sent: 'AfterCall AI chat', recap_viewed: 'Weekly recap',
+    narrative_generated: 'AI call narratives', pdf_exported: 'PDF export', live_activity_started: 'Live Activity', community_joined: 'Joining communities',
+    community_post_created: 'Community posts', dm_sent: 'Direct messages', badge_earned: 'Badges', shift_started: 'Starting a shift',
+    shift_scheduled: 'Scheduling shifts', wellness_suggestion_tapped: 'Wellness suggestions', agency_joined: 'Joining an agency (Teams)',
+  };
+  const verKey = (v) => String(v).split(/[^0-9]+/).filter(Boolean).map((x) => x.padStart(5, '0')).join('.');
+  function renderInsights(d) {
+    const out = [];
+    const add = (tone, title, body, next) => out.push({ tone, title, body, next });
+    const { a, full, yest, last7, prev7 } = activity(d);
+
+    if (a.available && last7.length) {
+      const avg7 = avg(last7.map((x) => x.dau)), avgPrev = avg(prev7.map((x) => x.dau));
+      const dlt = deltaPct(avg7, avgPrev);
+      add(dlt == null ? 'info' : dlt >= 5 ? 'good' : dlt <= -5 ? 'bad' : 'info',
+        r1(avg7) + ' people use AfterCall on an average day',
+        'Average over the last ' + last7.length + ' full days (' + last7[0].day + ' to ' + last7[last7.length - 1].day + ')' +
+          (avgPrev ? ', ' + deltaTxt(dlt) + ' from ' + r1(avgPrev) + '/day the week before' : '') + '. Yesterday: ' + n(yest && yest.dau) + '.',
+        dlt != null && dlt <= -5 ? '<b>Find what changed:</b> fewer new accounts (Daily), a new build (Builds), or fewer reminders going out (Notifications).'
+          : '<b>See what drove it</b> in the Daily table — signups, a post, a push — and do more of it.');
+    }
+
+    const weeks = (a.weekly || []);
+    const lw = weeks.length >= 2 ? weeks[weeks.length - 2] : null;   // last complete week
+    const pw = weeks.length >= 3 ? weeks[weeks.length - 3] : null;
+    if (lw) {
+      const gained = lw.newUsers + lw.resurrected;
+      const qr = lw.churned ? gained / lw.churned : null;
+      const kept = pw && pw.active ? pctOf(lw.retained, pw.active) : null;
+      add(qr == null ? 'info' : qr >= 1 ? 'good' : 'bad',
+        'Last week: ' + n(gained) + ' people arrived or came back, ' + n(lw.churned) + ' went quiet',
+        'Week of ' + lw.week + ': ' + n(lw.newUsers) + ' new, ' + n(lw.resurrected) + ' came back, ' + n(lw.retained) + ' stayed' +
+          (kept != null ? ' (' + pc(kept) + ' of the week before)' : '') + '. Quick ratio ' + (qr == null ? '—' : r1(qr)) + ' — above 1 means the active base grew.',
+        qr != null && qr < 1 ? '<b>Keeping people matters more than finding new ones right now:</b> reminders after shifts, the weekly recap and What\'s New are the levers.'
+          : '<b>Protect the week-2 habit:</b> most people who go quiet do it in their first two weeks (see Retention).');
+    }
+
+    const f = (a.frequency || {});
+    const l7 = f.l7 || [];
+    const t7 = sum(l7.map((x) => x.users));
+    if (t7) {
+      const once = (l7.find((x) => x.days === 1) || { users: 0 }).users;
+      const three = sum(l7.filter((x) => x.days >= 3).map((x) => x.users));
+      const share = pctOf(once, t7);
+      add(share >= 60 ? 'warn' : 'info', pc(share) + ' of this week\'s users came on only one day',
+        n(once) + ' of ' + n(t7) + ' people active in the last 7 days used AfterCall on a single day; ' + n(three) + ' came on 3 or more days.',
+        '<b>Build the shift habit:</b> a nudge at the end of a scheduled shift to log calls, and making the post-call check-in one tap, turn one-off visits into repeat use.');
+    }
+
+    const fn = d.funnel;
+    if (fn && fn.available && fn.callByDay1 && fn.callByDay1.eligible) {
+      const p = fn.callByDay1.pct;
+      add(p >= 50 ? 'good' : p >= 30 ? 'info' : 'warn', pc(p) + ' of new accounts log a call within a day',
+        n(fn.callByDay1.n) + ' of ' + n(fn.callByDay1.eligible) + ' accounts created in this window (old enough to tell). ' +
+          (fn.returnedWeek1 && fn.returnedWeek1.eligible ? pc(fn.returnedWeek1.pct) + ' came back during their first week; ' : '') +
+          (fn.checkinByDay7 && fn.checkinByDay7.eligible ? pc(fn.checkinByDay7.pct) + ' checked in within 7 days.' : ''),
+        '<b>The first call is the strongest predictor of keeping someone.</b> Every step between signup and that first logged call (Funnel, Quick-start tutorial) is worth shortening.');
+    }
+
+    if (a.available && last7.length) {
+      const stick = avg(last7.filter((x) => x.mau).map((x) => (x.dau / x.mau) * 100));
+      if (stick != null) add(stick >= 20 ? 'good' : stick >= 10 ? 'info' : 'warn', 'Stickiness ' + pc(stick) + ' (daily ÷ monthly users)',
+        'Of everyone who used AfterCall in the last 30 days, about ' + pc(stick) + ' use it on any given day.',
+        'Providers work every 2–3 days, so using AfterCall every shift is roughly 30–40%. <b>Closing that gap = reminders tied to the shift calendar.</b>');
+      const calls = sum(full.map((x) => x.calls)), checkins = sum(full.map((x) => x.checkins)), dau = sum(full.map((x) => x.dau));
+      const loggers = sum(full.map((x) => x.callUsers));
+      if (dau) add('info', r1(calls / dau) + ' calls per active person per day',
+        n(calls) + ' calls and ' + n(checkins) + ' check-ins over ' + full.length + ' full days. On an average day ' + pc(pctOf(loggers, dau)) + ' of active people log at least one call; ' +
+          (calls ? 'check-ins run at ' + r1(checkins / calls * 100) + ' per 100 calls.' : ''),
+        checkins < calls ? '<b>Check-ins trail calls</b> — the post-call check-in is the place to make it faster or more rewarding.' : '<b>Check-ins keep pace with calls</b> — the wellness loop is being used.');
+    }
+
+    const nt = d.notifications && d.notifications.permission;
+    if (nt && nt.available) add(nt.pct >= 60 ? 'good' : nt.pct >= 40 ? 'info' : 'warn', pc(nt.pct) + ' of active people have notifications on',
+      n(nt.enabledUsers) + ' of ' + n(nt.reportingUsers) + ' people reporting. Reminders and replies can only reach these people.',
+      '<b>Raising this is the cheapest retention win:</b> check which primer moment converts best in Notifications and lead with it.');
+
+    const ad = d.adoption && d.adoption.features;
+    if (ad && ad.length) {
+      const named = ad.filter((x) => FEATURE_LABELS[x.name] && !x.neverSeen).sort((x, y) => x.pct - y.pct);
+      const low = named.slice(0, 4);
+      const top = named.slice().sort((x, y) => y.pct - x.pct).slice(0, 3);
+      if (low.length) add('info', 'Least-reached features: ' + low.map((x) => FEATURE_LABELS[x.name]).join(', '),
+        'Share of active people who used each in the window — lowest: ' + low.map((x) => FEATURE_LABELS[x.name] + ' ' + pc(x.pct)).join(' · ') +
+          '. Most used: ' + top.map((x) => FEATURE_LABELS[x.name] + ' ' + pc(x.pct)).join(' · ') + '.',
+        '<b>Low reach usually means people never find it.</b> Surface these in the quick start, What\'s New or a one-time push — or drop what nobody needs.');
+    }
+
+    const cv = d.conversion;
+    if (cv && cv.available) {
+      const views = sum((cv.paywall || []).map((x) => x.users));
+      const best = (cv.paywall || []).filter((x) => x.users >= 5 && x.pct != null).sort((x, y) => y.pct - x.pct)[0];
+      add(cv.purchases ? 'info' : 'warn', n(cv.purchases) + ' purchases in the window',
+        n(views) + ' paywall views by source-user (a person can see several sources). ' + n(cv.subscriptions && cv.subscriptions.activePaid) + ' active paid subscriptions, ' +
+          n(cv.subscriptions && cv.subscriptions.trialing) + ' trials right now.' + (best ? ' Best-converting gate: ' + best.source + ' (' + pc(best.pct) + ' of ' + n(best.users) + ' people).' : ''),
+        '<b>Put the best-converting gate where more people hit it,</b> and compare it with the worst one in Conversion.');
+    }
+
+    const v = d.versions;
+    if (v && v.available && v.versions.length) {
+      const known = v.versions.filter((x) => x.version !== 'unknown');
+      const latest = known.slice().sort((x, y) => (verKey(y.version) > verKey(x.version) ? 1 : -1))[0];
+      if (latest) add(latest.pct >= 70 ? 'good' : 'warn', pc(latest.pct) + ' of active people are on ' + latest.version,
+        n(latest.users) + ' of ' + n(v.reportingUsers) + ' people. ' + (known.length > 1 ? 'Also in use: ' + known.filter((x) => x !== latest).slice(0, 3).map((x) => x.version + ' (' + pc(x.pct) + ')').join(', ') + '.' : ''),
+        '<b>Bug reports from older builds may already be fixed</b> — check the build before chasing them.');
+    }
+
+    const e = d.engagement;
+    if (e && e.available) {
+      const top = (d.screens || [])[0];
+      const total = sum((d.screens || []).map((x) => x.totalDwellMs));
+      add('info', 'A typical active day is ' + e.medianMinutesPerActiveUserPerDay + ' minutes in the app',
+        'Median per person per active day (average ' + e.avgMinutesPerActiveUserPerDay + ').' + (top ? ' Most time goes to ' + top.screen + ' (' + pc(pctOf(top.totalDwellMs, total)) + ').' : ''),
+        '<b>Short and frequent beats long and rare</b> for a post-call tool — watch per-visit time on the call flow in Engagement.');
+    }
+
+    $('in_cards').innerHTML = out.map((x) => '<div class="ins ' + x.tone + '"><div class="t">' + esc(x.title) + '</div><div class="b">' + esc(x.body) + '</div>' +
+      (x.next ? '<div class="nx">' + x.next + '</div>' : '') + '</div>').join('') || empty('Not enough data in this window yet.');
+    $('in_note').textContent = 'Green = going well, amber = worth attention, red = slipping, blue = context. All figures exclude AfterCall staff, demo personas and test accounts.';
   }
 
   // ── Funnel ──
@@ -328,8 +652,12 @@
   }
   function renderRetention(d) {
     const s = d.retention;
+    const { a, today, yest, last7 } = activity(d);
+    const stick7 = avg(last7.filter((x) => x.mau).map((x) => (x.dau / x.mau) * 100));
     const r = (s && s.rollingActive) || {};
-    $('ret_tiles').innerHTML = tile('DAU', n(r.dau)) + tile('WAU', n(r.wau)) + tile('MAU', n(r.mau)) + tile('Stickiness', pc(r.stickinessPct), 'DAU ÷ MAU');
+    $('ret_tiles').innerHTML = a.available
+      ? tile('Active yesterday', n(yest && yest.dau), 'full day, ' + (a.tz || TZ)) + tile('WAU', n(today && today.wau), 'last 7 days') + tile('MAU', n(today && today.mau), 'last 30 days') + tile('Stickiness', pc(stick7), 'avg DAU ÷ MAU, last 7 days')
+      : tile('DAU', n(r.dau)) + tile('WAU', n(r.wau)) + tile('MAU', n(r.mau)) + tile('Stickiness', pc(r.stickinessPct), 'DAU ÷ MAU');
     if (!s || !s.available) { $('ret_rows').innerHTML = emptyRow(5, (s && (s.error || s.caveat)) || 'No measurable cohorts yet.'); $('ret_note').textContent = ''; $('ret_def').textContent = (s && s.definition) || ''; return; }
     $('ret_rows').innerHTML = (s.cohorts || []).map((c) => '<tr><td>' + esc(c.week) + '<span class="sub">through ' + esc(c.weekEnd) + '</span></td><td class="num">' + n(c.cohortSize) + '</td>' + retCell(c.d1) + retCell(c.d7) + retCell(c.d30) + '</tr>').join('');
     $('ret_note').textContent = [s.caveat, '* = partial cohort (recent signups excluded from the denominator).', s.capped ? 'Warning: retention scan hit its row cap.' : ''].filter(Boolean).join(' ');
@@ -461,10 +789,10 @@
     $('results').classList.remove('hidden');
     const status = renderHealth(d);
     const chip = status === 'ok' ? '<span class="chip ok">Collection OK</span>' : status === 'degraded' ? '<span class="chip warn">Collection degraded</span>' : status === 'down' ? '<span class="chip bad">Collection down</span>' : '<span class="chip">Health unknown</span>';
-    $('status').innerHTML = chip + '<span>Window: last ' + esc(d.range.sinceDays) + ' days</span><span>Generated ' + esc(new Date(d.generatedAt).toLocaleString()) + '</span>' + (d.schemaVersion ? '<span>API v' + esc(d.schemaVersion) + '</span>' : '<span class="chip warn">Older API deploy — some sections will be empty</span>');
+    $('status').innerHTML = chip + '<span>Window: last ' + esc(d.range.sinceDays) + ' days</span>' + (d.activity && d.activity.tz ? '<span>Days in ' + esc(d.activity.tz) + '</span>' : '') + (d.excludedAccounts != null ? '<span>' + esc(n(d.excludedAccounts)) + ' staff / demo / test accounts excluded</span>' : '') + '<span>Generated ' + esc(new Date(d.generatedAt).toLocaleString()) + '</span>' + (d.schemaVersion ? '<span>API v' + esc(d.schemaVersion) + '</span>' : '<span class="chip warn">Older API deploy — some sections will be empty</span>');
     $('capwarn').style.display = d.capped ? 'block' : 'none';
     $('capwarn').textContent = 'The result hit the row cap — figures reflect the most recent rows only. Narrow the window for exact totals.';
-    [renderOverview, renderFunnel, renderRetention, renderEngagement, renderConversion, renderNotifications, renderSessions, renderFeatures, renderScreens, renderUsers].forEach((fn) => { try { fn(d); } catch (e) { console.error(fn.name, e); } });
+    [renderInsights, renderOverview, renderDaily, renderGrowth, renderFunnel, renderRetention, renderEngagement, renderFrequency, renderConversion, renderNotifications, renderSessions, renderFeatures, renderBuilds, renderScreens, renderUsers].forEach((fn) => { try { fn(d); } catch (e) { console.error(fn.name, e); } });
   }
 
   // ── Ops sign-in (migration 097) ──────────────────────────────────────────
@@ -654,7 +982,7 @@
     const sinceDays = Number($('days').value);
     const btn = $('load'); btn.disabled = true; btn.textContent = 'Loading…';
     try {
-      const data = await OpsAuth.call(API, { sinceDays });
+      const data = await OpsAuth.call(API, { sinceDays, tz: TZ });
       try { localStorage.setItem('ac_analytics_days', String(sinceDays)); } catch (e) {}
       render(data);
     } catch (e) {
