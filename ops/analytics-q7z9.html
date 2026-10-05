@@ -96,6 +96,21 @@
   details[open] summary { margin-bottom:10px; }
   .note { font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; }
   .hidden { display:none; }
+  /* ── Ops sign-in (staff account + emailed code; identical block on every ops page) ── */
+  .oa { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:flex-end; }
+  .oa[hidden], .oa-msg[hidden] { display:none; }
+  .oa .oa-f { display:flex; flex-direction:column; gap:4px; flex:1; min-width:180px; }
+  .oa .oa-f label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin:0; }
+  .oa .oa-f input { width:100%; }
+  .oa .oa-code { font-size:20px; font-weight:800; letter-spacing:8px; text-align:center; font-variant-numeric:tabular-nums; }
+  .oa .oa-note { flex-basis:100%; font-size:13px; color:var(--muted); margin:0; }
+  .oa .oa-links { flex-basis:100%; display:flex; gap:16px; flex-wrap:wrap; font-size:13px; }
+  .oa a { color:var(--blue); font-weight:600; cursor:pointer; text-decoration:none; }
+  .oa a:hover { text-decoration:underline; }
+  .oa a.off { color:var(--muted); pointer-events:none; }
+  .oa-signed { font-size:13px; color:var(--muted); align-items:center; }
+  .oa-msg { margin-top:10px; padding:9px 12px; border-radius:8px; font-size:13px; background:rgba(220,38,38,.08); color:#DC2626; border:1px solid rgba(220,38,38,.35); }
+  .oa-msg.ok { background:rgba(22,163,74,.08); color:#16A34A; border-color:rgba(22,163,74,.35); }
   .cohort td.cell { font-variant-numeric:tabular-nums; } .cohort td.cell small { display:block; font-size:10px; color:var(--muted); }
 </style><script src="/meta-pixel.js" defer></script>
 </head>
@@ -103,9 +118,28 @@
 
   <div class="top">
     <div class="brand"><h1>AfterCall Analytics</h1><p>How people use the app — route names, event names and dwell time only. No journal or call content is ever stored or shown.</p></div>
-    <div class="field"><label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password" placeholder="••••••••"/></div>
     <div class="field"><label for="days">Window</label><select id="days"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option></select></div>
-    <button id="load" class="primary">Load</button>
+    <button id="load" class="primary" hidden>Load</button>
+  </div>
+  <div class="card" style="margin-top:12px;">
+    <!-- Ops sign-in: your AfterCall staff account + the code we email you
+         (migration 097). Identical block on every ops page. -->
+    <form class="oa" id="oaSignIn" hidden novalidate>
+      <div class="oa-f"><label for="oaEmail">Email</label><input type="email" id="oaEmail" autocomplete="username" /></div>
+      <div class="oa-f"><label for="oaPass">Password</label><input type="password" id="oaPass" autocomplete="current-password" /></div>
+      <div style="flex:0 0 auto;"><button type="submit" id="oaSignInBtn" class="primary">Sign in</button></div>
+      <p class="oa-note">Sign in with your AfterCall staff account. We'll email you a 6-digit code to finish.</p>
+    </form>
+    <form class="oa" id="oaCode" hidden novalidate>
+      <p class="oa-note" id="oaCodeNote">Sending your sign-in code…</p>
+      <div class="oa-f" style="max-width:240px;"><label for="oaCodeInput">6-digit code</label><input id="oaCodeInput" class="oa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="••••••" /></div>
+      <div style="flex:0 0 auto;"><button type="submit" id="oaCodeBtn" class="primary">Verify</button></div>
+      <div class="oa-links"><a id="oaResend">Send a new code</a><a id="oaSwitch">Use a different account</a></div>
+    </form>
+    <div class="oa oa-signed" id="oaSigned" hidden>
+      <span>Signed in as <b id="oaWho"></b></span><a id="oaOut">Sign out</a>
+    </div>
+    <div class="oa-msg" id="oaMsg" hidden></div>
   </div>
   <div class="status" id="status"></div>
   <div id="err" class="alert err"></div>
@@ -433,25 +467,208 @@
     [renderOverview, renderFunnel, renderRetention, renderEngagement, renderConversion, renderNotifications, renderSessions, renderFeatures, renderScreens, renderUsers].forEach((fn) => { try { fn(d); } catch (e) { console.error(fn.name, e); } });
   }
 
+  // ── Ops sign-in (migration 097) ──────────────────────────────────────────
+  // Identical block on every ops page. Your own AfterCall account: password,
+  // then the 6-digit code auth-mfa emails you. The ops functions answer only a
+  // session that entered a code AND whose email is on
+  // admin_settings.ops_staff_emails. Session lives in sessionStorage (this
+  // tab only) and refreshes itself; nothing secret is in this file.
+  const OpsAuth = (function () {
+    const SB_URL = 'https://scjjcyurnjlpmkayglfn.supabase.co';
+    const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjampjeXVybmpscG1rYXlnbGZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyODA0NTksImV4cCI6MjA4Njg1NjQ1OX0.9Qn_XKbBsQnBD45OJaJaUk66OoZ3nsayXAS-zZzraXE';
+    const MFA_API = SB_URL + '/functions/v1/auth-mfa';
+    const STORE = 'ac_ops_auth';
+    const MESSAGES = {
+      sign_in_required: 'Your session ended. Please sign in again.',
+      mfa_required: 'Enter the code we emailed you to finish signing in.',
+      not_staff: 'That account isn’t on the AfterCall ops staff list.',
+      wrong_code: 'That code isn’t right. Check it and try again.',
+      expired: 'That code expired. Send a new one.',
+      too_many_attempts: 'Too many tries on that code. Send a new one.',
+      no_code: 'Send yourself a new code first.',
+      too_many_codes: 'Too many codes requested. Wait a few minutes and try again.',
+      delivery_failed: 'We couldn’t send the code. Try again in a moment.',
+      invalid_credentials: 'That email and password don’t match.',
+    };
+    const el = (id) => document.getElementById(id);
+    let auth = null;
+    try { auth = JSON.parse(sessionStorage.getItem(STORE) || 'null'); } catch (e) {}
+    let refreshing = null, coding = false, cooldown = 0;
+    const hooks = { ready: [], signedOut: [] };
+
+    function save(a) {
+      auth = a;
+      try { if (a) sessionStorage.setItem(STORE, JSON.stringify(a)); else sessionStorage.removeItem(STORE); } catch (e) {}
+    }
+    function fromSession(d) {
+      return {
+        access_token: d.access_token, refresh_token: d.refresh_token,
+        expires_at: d.expires_at || Math.floor(Date.now() / 1000) + (d.expires_in || 3600),
+        email: (d.user && d.user.email) || (auth && auth.email) || '',
+      };
+    }
+    function fail(d, status) {
+      const code = d.error_code || d.error || (status === 401 ? 'sign_in_required' : '');
+      return Object.assign(new Error(MESSAGES[code] || d.msg || d.error_description || d.message || code || ('Request failed (' + status + ')')), { code });
+    }
+    function gotrue(path, body, token) {
+      return fetch(SB_URL + '/auth/v1/' + path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SB_ANON, Authorization: 'Bearer ' + (token || SB_ANON) },
+        body: body ? JSON.stringify(body) : undefined,
+      }).then((res) => res.json().catch(() => ({})).then((d) => { if (!res.ok) throw fail(d, res.status); return d; }));
+    }
+    function token(force) {
+      if (!auth) return Promise.reject(Object.assign(new Error(MESSAGES.sign_in_required), { code: 'sign_in_required' }));
+      if (!force && auth.expires_at * 1000 - Date.now() > 60000) return Promise.resolve(auth.access_token);
+      if (!refreshing) {
+        refreshing = gotrue('token?grant_type=refresh_token', { refresh_token: auth.refresh_token })
+          .then((d) => { save(fromSession(d)); return auth.access_token; })
+          .catch(() => { throw Object.assign(new Error(MESSAGES.sign_in_required), { code: 'sign_in_required' }); })
+          .finally(() => { refreshing = null; });
+      }
+      return refreshing;
+    }
+    // One authenticated call to an edge function. A lost session, a missing
+    // code or a non-staff account sends the page back to the right step.
+    function call(url, body, retried) {
+      return token()
+        .then((t) => fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: SB_ANON, Authorization: 'Bearer ' + t },
+          body: JSON.stringify(body || {}),
+        }))
+        .then((res) => res.json().catch(() => ({})).then((d) => {
+          if (res.ok) return d;
+          if (res.status === 401 && !retried) return token(true).then(() => call(url, body, true));
+          throw fail(d, res.status);
+        }))
+        .catch((e) => {
+          if (e.code === 'sign_in_required') signOut(MESSAGES.sign_in_required);
+          else if (e.code === 'not_staff') signOut(MESSAGES.not_staff);
+          else if (e.code === 'mfa_required') startCode();
+          throw e;
+        });
+    }
+
+    function show(view, message, ok) {
+      ['oaSignIn', 'oaCode', 'oaSigned'].forEach((id) => { el(id).hidden = id !== view; });
+      const m = el('oaMsg');
+      m.hidden = !message; m.textContent = message || ''; m.className = 'oa-msg' + (ok ? ' ok' : '');
+      const first = el(view).querySelector('input');
+      if (first) setTimeout(() => first.focus(), 30);
+    }
+    function busy(btn, on, label) {
+      if (on) { btn.dataset.label = btn.textContent; btn.textContent = label; btn.disabled = true; }
+      else { btn.textContent = btn.dataset.label || btn.textContent; btn.disabled = false; }
+    }
+    function ready() {
+      coding = false;
+      el('oaWho').textContent = auth ? auth.email : '';
+      show('oaSigned');
+      hooks.ready.forEach((fn) => fn());
+    }
+    function afterPassword() {
+      return call(MFA_API, { action: 'status' }).then((st) => (st.state === 'verified' ? ready() : startCode()));
+    }
+    function tick() {
+      const a = el('oaResend');
+      if (cooldown > 0) { a.classList.add('off'); a.textContent = 'Send a new code in ' + cooldown + 's'; cooldown--; setTimeout(tick, 1000); }
+      else { a.classList.remove('off'); a.textContent = 'Send a new code'; }
+    }
+    function sendCode(announce) {
+      return call(MFA_API, { action: 'send' }).then((d) => {
+        if (d.alreadyVerified) return ready();
+        el('oaCodeNote').textContent = 'We emailed a 6-digit code to ' + d.hint + '. It works for 10 minutes.';
+        if (announce) show('oaCode', 'A new code is on its way.', true);
+        cooldown = d.resendAfterSeconds || 30; tick();
+      }).catch((e) => {
+        if (e.code === 'cooldown') { el('oaCodeNote').textContent = 'We just emailed you a code. Enter it below.'; cooldown = 30; tick(); return; }
+        if (e.code !== 'sign_in_required') show('oaCode', e.message);
+      });
+    }
+    function startCode() {
+      if (coding) return Promise.resolve();
+      coding = true;
+      hooks.signedOut.forEach((fn) => fn());
+      el('oaCodeInput').value = '';
+      el('oaCodeNote').textContent = 'Sending your sign-in code…';
+      show('oaCode');
+      return sendCode(false);
+    }
+    function verify() {
+      const code = el('oaCodeInput').value.replace(/\D/g, '');
+      if (code.length !== 6) { show('oaCode', 'Enter the 6-digit code.'); return; }
+      busy(el('oaCodeBtn'), true, 'Checking…');
+      call(MFA_API, { action: 'verify', code })
+        .then(() => ready())
+        .catch((e) => { el('oaCodeInput').value = ''; if (e.code !== 'sign_in_required') show('oaCode', e.message); })
+        .finally(() => busy(el('oaCodeBtn'), false));
+    }
+    function signOut(message) {
+      const t = auth && auth.access_token;
+      // scope=local ends only this browser session, never your app sign-in.
+      if (t) gotrue('logout?scope=local', null, t).catch(() => {});
+      save(null); coding = false;
+      hooks.signedOut.forEach((fn) => fn());
+      show('oaSignIn', message);
+    }
+
+    el('oaSignIn').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const email = el('oaEmail').value.trim().toLowerCase();
+      const password = el('oaPass').value;
+      if (!email || !password) { show('oaSignIn', 'Enter your email and password.'); return; }
+      busy(el('oaSignInBtn'), true, 'Signing in…');
+      gotrue('token?grant_type=password', { email, password })
+        .then((d) => { save(fromSession(d)); el('oaPass').value = ''; return afterPassword(); })
+        .catch((e) => { if (e.code !== 'sign_in_required' && e.code !== 'not_staff') show('oaSignIn', e.message); })
+        .finally(() => busy(el('oaSignInBtn'), false));
+    });
+    el('oaCode').addEventListener('submit', (ev) => { ev.preventDefault(); verify(); });
+    el('oaCodeInput').addEventListener('input', () => {
+      const v = el('oaCodeInput').value.replace(/\D/g, '').slice(0, 6);
+      el('oaCodeInput').value = v;
+      if (v.length === 6 && !el('oaCodeBtn').disabled) verify();
+    });
+    el('oaResend').addEventListener('click', () => { if (cooldown <= 0) sendCode(true); });
+    el('oaSwitch').addEventListener('click', () => signOut());
+    el('oaOut').addEventListener('click', () => signOut());
+
+    function start() {
+      if (auth) afterPassword().catch(() => {});
+      else show('oaSignIn');
+    }
+    return {
+      call,
+      onReady: (fn) => hooks.ready.push(fn),
+      onSignedOut: (fn) => hooks.signedOut.push(fn),
+      start,
+      isReady: () => !el('oaSigned').hidden,
+    };
+  })();
+
   async function load() {
     $('err').style.display = 'none';
-    const password = $('pw').value.trim();
+    if (!OpsAuth.isReady()) return;
     const sinceDays = Number($('days').value);
-    if (!password) { $('err').textContent = 'Enter the admin password.'; $('err').style.display = 'block'; return; }
     const btn = $('load'); btn.disabled = true; btn.textContent = 'Loading…';
     try {
-      const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, sinceDays }) });
-      const data = await res.json();
-      if (!res.ok) { $('err').textContent = data.error || ('Request failed (' + res.status + ')'); $('err').style.display = 'block'; return; }
+      const data = await OpsAuth.call(API, { sinceDays });
       try { localStorage.setItem('ac_analytics_days', String(sinceDays)); } catch (e) {}
       render(data);
     } catch (e) {
-      $('err').textContent = 'Network error: ' + (e && e.message ? e.message : e); $('err').style.display = 'block';
+      // Sign-in problems are shown by the sign-in card itself.
+      if (!['sign_in_required', 'mfa_required', 'not_staff'].includes(e.code)) {
+        $('err').textContent = (e && e.message) || String(e); $('err').style.display = 'block';
+      }
     } finally { btn.disabled = false; btn.textContent = 'Load'; }
   }
   try { const saved = localStorage.getItem('ac_analytics_days'); if (saved) $('days').value = saved; } catch (e) {}
   $('load').addEventListener('click', load);
-  $('pw').addEventListener('keydown', (e) => { if (e.key === 'Enter') load(); });
-  $('pw').focus();
+  $('days').addEventListener('change', () => { if (OpsAuth.isReady()) load(); });
+  OpsAuth.onReady(() => { $('load').hidden = false; load(); });
+  OpsAuth.onSignedOut(() => { $('load').hidden = true; $('results').classList.add('hidden'); $('status').innerHTML = ''; $('capwarn').style.display = 'none'; });
+  OpsAuth.start();
 </script>
 </body></html>
