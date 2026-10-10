@@ -1966,8 +1966,8 @@
         <div class="pro-badge">Most Popular</div>
         <p class="pricing-tier">Pro</p>
         <div id="pro-trial-badge" class="trial-badge">🎉 7-day free trial included</div>
-        <div class="pricing-price"><sub>$</sub><span id="pro-price">59.99</span></div>
-        <div class="pricing-cadence" id="pro-cadence">per year · that's $5/mo · cancel anytime</div>
+        <div class="pricing-price"><sub>$</sub><span id="pro-price">79.99</span></div>
+        <div class="pricing-cadence" id="pro-cadence">per year · that's $6.67/mo · cancel anytime</div>
         <p class="pricing-desc">The full AfterCall experience. AI that actually understands EMS: clinically specific, never generic.</p>
         <ul class="pricing-features">
           <li><span class="check">✓</span> Everything in Free</li>
@@ -2067,8 +2067,8 @@
     const monthly = plan === 'monthly';
     document.getElementById('tog-annual').classList.toggle('active', !monthly);
     document.getElementById('tog-monthly').classList.toggle('active', monthly);
-    document.getElementById('pro-price').textContent   = monthly ? '7.99' : '59.99';
-    document.getElementById('pro-cadence').textContent = monthly ? 'per month · cancel anytime' : 'per year · that\'s $5/mo · cancel anytime';
+    document.getElementById('pro-price').textContent   = monthly ? '9.99' : '79.99';
+    document.getElementById('pro-cadence').textContent = monthly ? 'per month · cancel anytime' : 'per year · that\'s $6.67/mo · cancel anytime';
     document.getElementById('pro-trial-badge').style.display = monthly ? 'none' : 'inline-block';
     document.getElementById('pro-cta').textContent = monthly ? 'Get Pro Access' : 'Start Free Trial';
   }
