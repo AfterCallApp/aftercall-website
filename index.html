@@ -1,2148 +1,936 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AfterCall — Your calls, captured.</title>
-  <meta name="description" content="AfterCall is the app built for EMS providers to log every call by hand, voice, or CAD paste, track clinical skills, protect mental wellness, and connect with your crew. Now on the App Store and Google Play." />
-  <meta property="og:title" content="AfterCall — Your calls, captured." />
-  <meta property="og:description" content="The app built for EMS providers. Log calls, track skills, protect your wellness. Now on iOS and Android." />
-  <meta property="og:url" content="https://aftercallapp.com" />
-  <meta property="og:type" content="website" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2" />
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=2" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AfterCall — The call ends, the impact doesn't.</title>
+<meta name="description" content="AfterCall is the app built for EMS providers to log every call by hand, voice, or CAD paste, track clinical skills, protect mental wellness, and connect with your crew. Now on the App Store and Google Play.">
+<meta property="og:title" content="AfterCall — The call ends, the impact doesn't.">
+<meta property="og:description" content="The app built for EMS providers. Log calls, track skills, protect your wellness. Now on iOS and Android.">
+<meta property="og:url" content="https://aftercallapp.com">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
 
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#05091C; --navy:#0A1738; --navy-lift:#142A61;
+  --signal:#3B82F6; --violet:#8B5CF6; --peri:#7C8FF5;
+  --grad:linear-gradient(96deg,#6E8BFF 0%,#8B5CF6 100%);
+  --text:rgba(255,255,255,.72); --dim:rgba(255,255,255,.46); --line:rgba(255,255,255,.09);
+  --paper:#FFFFFF; --mist:#F5F6FA; --graphite:#1D1D1F; --slate:#6E6E73; --hair:rgba(0,0,0,.08);
+  --shell:1200px; --ease:cubic-bezier(.2,.7,.1,1);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{background:var(--ink)}
+body{background:transparent;color:var(--text);font-family:Inter,-apple-system,system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.shell{max-width:var(--shell);margin:0 auto;padding:0 24px}
+h1,h2,h3{color:#fff;font-weight:800;letter-spacing:-.035em;line-height:1.02}
+.light h1,.light h2,.light h3{color:var(--graphite)}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--peri)}
+.light .eyebrow{color:#5B5BD6}
+.lede{font-size:clamp(18px,2vw,21px);color:var(--text);max-width:40ch;line-height:1.5}
+.light .lede{color:var(--slate)}
+.center{text-align:center}.center .lede{margin-left:auto;margin-right:auto}
 
-    :root {
-      --blue:       #3379CF;
-      --blue-dark:  #1F5FA3;
-      --blue-light: #eef4fd;
-      --blue-mid:   #b8d4f0;
-      --text-dark:  #0f1923;
-      --text-mid:   #374151;
-      --text-light: #6b7280;
-      --bg:         #ffffff;
-      --bg-alt:     #f7f9fc;
-      --border:     #e2e8f0;
-      --radius:     16px;
-      /* AfterCall AI brand color */
-      --ai-purple:  #8b5cf6;
-      --ai-purple-light: #f5f3ff;
-    }
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;height:52px;padding:0 26px;border-radius:999px;font-weight:600;font-size:16px;letter-spacing:-.01em;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 10px 30px -10px rgba(139,92,246,.7),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-grad:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(139,92,246,.8),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-glass{color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)}
+.btn-glass:hover{background:rgba(255,255,255,.14)}
+.btn-dark{background:var(--graphite);color:#fff}
+.btn-dark:hover{transform:translateY(-2px)}
+.link{color:var(--peri);font-weight:600}
+.light .link{color:#4F46E5}
+.link::after{content:" ›";transition:margin .3s}
+.link:hover::after{margin-left:4px}
 
-    html { scroll-behavior: smooth; }
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:100;height:56px;background:rgba(5,9,28,.62);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--line);transition:background .4s}
+.nav.on-light{background:rgba(255,255,255,.72);border-color:var(--hair)}
+.nav .shell{display:flex;align-items:center;justify-content:space-between;height:100%;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#fff;letter-spacing:-.02em;font-size:17px;transition:color .4s}
+.brand img{width:28px;height:28px;border-radius:7px}
+.nav.on-light .brand{color:var(--graphite)}
+.navlinks{display:flex;gap:30px;font-size:13px;color:var(--text);transition:color .4s}
+.navlinks a:hover{color:#fff}
+.nav.on-light .navlinks{color:var(--slate)}
+.nav.on-light .navlinks a:hover{color:var(--graphite)}
+.nav .btn{height:34px;padding:0 16px;font-size:13px}
+@media(max-width:900px){.navlinks{display:none}}
 
-    html { overflow-x: hidden; }
-    body {
-      overflow-x: hidden;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text-dark);
-      background: var(--bg);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
+/* ambient */
+.aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;animation:drift 22s ease-in-out infinite alternate}
+.aurora i:nth-child(1){width:620px;height:620px;background:#3B4BFF;top:-180px;left:-120px}
+.aurora i:nth-child(2){width:540px;height:540px;background:#8B5CF6;top:40px;right:-160px;animation-delay:-8s}
+.aurora i:nth-child(3){width:420px;height:420px;background:#1E3A8A;bottom:-200px;left:30%;animation-delay:-14s}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.12)}}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-    /* ─── UTILITY ─── */
-    .container { max-width: 1100px; margin: 0 auto; }
-    .btn {
-      display: inline-block;
-      background: var(--blue);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 11px;
-      font-weight: 700;
-      font-size: 15px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      letter-spacing: -0.1px;
-    }
-    .btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(51,121,207,0.35); }
-    .btn-lg { padding: 15px 32px; font-size: 17px; border-radius: 13px; }
-    .btn-white { background: white; color: var(--blue-dark); }
-    .btn-white:hover { background: #f0f7ff; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
-    .btn-full { width: 100%; text-align: center; display: block; }
+/* glass */
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);box-shadow:0 30px 80px -30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);border-radius:28px}
+.light .glass{background:rgba(255,255,255,.7);border-color:rgba(255,255,255,.9);box-shadow:0 30px 80px -40px rgba(30,40,90,.35),inset 0 1px 0 #fff}
 
-    /* ─── APP STORE DOWNLOAD BUTTON ─── */
-    .app-store-btn {
-      display: inline-flex; align-items: center; gap: 14px;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1d1d1f 100%);
-      color: #ffffff; text-decoration: none;
-      padding: 16px 28px 16px 22px;
-      border-radius: 16px;
-      font-family: inherit;
-      position: relative; overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-      box-shadow:
-        0 14px 38px rgba(0,0,0,0.28),
-        0 0 0 1px rgba(255,255,255,0.06) inset,
-        0 1px 0 rgba(255,255,255,0.12) inset;
-    }
-    .app-store-btn:hover {
-      transform: translateY(-2px);
-      box-shadow:
-        0 22px 52px rgba(0,0,0,0.34),
-        0 0 0 1px rgba(255,255,255,0.08) inset,
-        0 1px 0 rgba(255,255,255,0.14) inset;
-    }
-    .app-store-btn .apple-glyph {
-      width: 32px; height: 32px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      position: relative; z-index: 2;
-    }
-    .app-store-btn .apple-glyph svg { width: 100%; height: 100%; fill: #ffffff; }
-    .app-store-btn .ast {
-      display: flex; flex-direction: column; line-height: 1;
-      position: relative; z-index: 2;
-    }
-    .app-store-btn .ast-small {
-      font-size: 12px; opacity: 0.86;
-      letter-spacing: 0.2px; margin-bottom: 5px;
-      font-weight: 500;
-    }
-    .app-store-btn .ast-big {
-      font-size: 22px; font-weight: 700; letter-spacing: -0.4px;
-    }
-    .app-store-btn::after {
-      content: ''; position: absolute;
-      top: -50%; bottom: -50%; width: 55%;
-      left: -75%;
-      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
-      transform: skewX(-18deg);
-      animation: shine 4s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes shine {
-      0% { left: -75%; }
-      55% { left: -75%; }
-      100% { left: 175%; }
-    }
-    .app-store-btn.lg { padding: 20px 36px 20px 30px; border-radius: 20px; min-width: 280px; box-sizing: border-box; }
-    .app-store-btn.lg .apple-glyph { width: 40px; height: 40px; }
-    .app-store-btn.lg .ast-small { font-size: 13px; }
-    .app-store-btn.lg .ast-big { font-size: 27px; }
-    .app-store-btn.on-blue {
-      background: #ffffff; color: #0a0a0a;
-      box-shadow:
-        0 14px 38px rgba(0,0,0,0.22),
-        0 0 0 1px rgba(0,0,0,0.04) inset;
-    }
-    .app-store-btn.on-blue .apple-glyph svg { fill: #0a0a0a; }
-    .app-store-btn.on-blue:hover {
-      background: #f5f5f7;
-      box-shadow: 0 22px 52px rgba(0,0,0,0.28);
-    }
-    /* Google Play glyph — mirrors the Apple glyph for a consistent store button */
-    .app-store-btn .play-glyph {
-      width: 32px; height: 32px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      position: relative; z-index: 2;
-    }
-    /* Square Play triangle scaled to ~85% so its optical mass matches the taller, narrower Apple mark */
-    .app-store-btn .play-glyph svg { width: 85%; height: 85%; fill: #ffffff; }
-    .app-store-btn.lg .play-glyph { width: 40px; height: 40px; }
-    .app-store-btn.on-blue .play-glyph svg { fill: #0a0a0a; }
+/* iPhone placeholder */
+.iphone{--w:300px;position:relative;width:min(var(--w),100%);flex-shrink:0;aspect-ratio:9/19.5;border-radius:calc(var(--w)*.17);padding:calc(var(--w)*.035);background:linear-gradient(145deg,#4a4d58,#1a1b20 40%,#2c2e36);box-shadow:0 0 0 1.5px #5b5e6a inset,0 60px 100px -30px rgba(0,0,0,.65),0 30px 60px -30px rgba(76,90,255,.35)}
+.iphone .screen{position:relative;width:100%;height:100%;border-radius:calc(var(--w)*.14);overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#1b2a66 0%,#0A1738 45%,#05091C 100%);display:grid;place-items:center}
+.iphone .screen::before{content:"";position:absolute;top:calc(var(--w)*.035);left:50%;transform:translateX(-50%);width:32%;height:calc(var(--w)*.09);background:#000;border-radius:99px;z-index:2}
+.iphone .screen::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 32%);pointer-events:none}
+.ph{text-align:center;padding:0 18px;color:rgba(255,255,255,.55);font-size:12px;line-height:1.4}
+.ph b{display:block;color:#fff;font-size:15px;letter-spacing:-.01em;margin:10px 0 4px}
+.ph .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.14em;padding:5px 9px;border-radius:99px;border:1px dashed rgba(255,255,255,.35)}
+.iphone.sm{--w:220px}.iphone.xs{--w:170px}
 
-    /* "Live" eyebrow — green pulsing dot for post-launch state */
-    .hero-eyebrow.is-live {
-      background: rgba(16,185,129,0.12);
-      color: #047857;
-    }
-    .hero-eyebrow.is-live .eyebrow-dot {
-      background: #10B981;
-    }
+.iphone .screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.mist h1,.mist h2,.mist h3{color:var(--graphite)}
+.mist .eyebrow{color:#5B5BD6}.mist .lede{color:var(--slate)}.mist .link{color:#4F46E5}
+.ai-stage{position:relative;display:flex;justify-content:flex-end;padding:0 0 60px}
+.ai-stage .narr{position:absolute;left:0;bottom:0;width:min(440px,78%);z-index:2}
+.well-stage{position:relative;display:flex;justify-content:center;align-items:flex-start;padding:0 0 70px}
+.well-stage .front{order:1;--w:260px !important;z-index:2;margin:70px -44px 0 0}
+.well-stage .back{order:2;--w:280px !important;z-index:1}
+@media(max-width:900px){.ai-stage,.well-stage{flex-direction:column;align-items:center;padding:0}.ai-stage .narr{position:relative;left:auto;bottom:auto;width:100%;max-width:440px;margin-top:-80px}.well-stage{flex-direction:row;justify-content:center;align-items:flex-start;padding-bottom:40px}.well-stage .front{--w:min(42vw,230px) !important;margin:44px -26px 0 0}.well-stage .back{--w:min(45vw,250px) !important}}
 
-    .download-cta-row {
-      display: flex; align-items: center; gap: 22px;
-      flex-wrap: wrap; margin-bottom: 16px;
-    }
-    .download-cta-row .secondary-link {
-      color: var(--text-mid); font-weight: 600; font-size: 15px;
-      text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
-      transition: color 0.2s;
-    }
-    .download-cta-row .secondary-link:hover { color: var(--blue); }
-    .download-cta-row .secondary-link .arrow { transition: transform 0.2s; display: inline-block; }
-    .download-cta-row .secondary-link:hover .arrow { transform: translateX(3px); }
+@media(max-width:600px){
+  .hero{padding-top:120px;--ov:250px}
+  .statement{--ov:250px}
+  .hero .cf2{display:none}
+  .hero .cf1{left:50%;right:auto;top:auto;bottom:150px;transform:translateX(-50%);animation:none;font-size:12px;padding:10px 14px;white-space:normal;width:max-content;max-width:calc(100% - 16px)}
+  .cf1 .ic{width:30px;height:30px}
+  .hero-stage .iphone{--w:280px !important}
+  .ctas .btn{flex:1 1 100%;justify-content:center}
+  .tile{padding:28px;min-height:0}
+  .tile h3{font-size:26px}
+  .plan{padding:28px}
+  .roi{padding:28px}
+  .stores .store{flex:1 1 100%;justify-content:center}
+  footer .shell{flex-direction:column;align-items:flex-start}
+}
 
-    /* ─── NAV ─── */
-    nav {
-      position: fixed; top: 0; width: 100%;
-      background: rgba(255,255,255,0.93);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      z-index: 200;
-    }
-    .nav-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 78px; padding: 0 24px;
-    }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
-    }
-    .logo-icon { width: 56px; height: 56px; flex-shrink: 0; border-radius: 13px; object-fit: cover; }
-    .logo-wordmark { color: var(--blue); font-weight: 900; font-size: 24px; letter-spacing: -0.5px; }
-    .hero-logo { width: 116px; height: 116px; border-radius: 26px; object-fit: cover; margin-bottom: 28px; display: block; box-shadow: 0 12px 40px rgba(51,121,207,0.30); }
-    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
-    .nav-links a { text-decoration: none; color: var(--text-mid); font-size: 15px; font-weight: 500; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--blue); }
+@media(max-width:1000px){.hero .chip-float{display:none}}
 
-    /* ─── HERO ─── */
-    .hero {
-      padding: 148px 24px 100px;
-      max-width: 1100px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 56px; align-items: center;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--blue-light); color: var(--blue-dark);
-      padding: 6px 14px; border-radius: 100px;
-      font-size: 13px; font-weight: 700; letter-spacing: 0.2px;
-      margin-bottom: 22px;
-    }
-    .eyebrow-dot {
-      width: 7px; height: 7px; background: var(--blue);
-      border-radius: 50%; animation: blink 2.2s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-    h1 {
-      font-size: 60px; font-weight: 900;
-      line-height: 1.04; letter-spacing: -1.8px;
-      color: var(--text-dark); margin-bottom: 22px;
-    }
-    h1 em { font-style: normal; color: var(--blue); }
-    .hero-sub {
-      font-size: 19px; color: var(--text-mid);
-      line-height: 1.68; margin-bottom: 36px; max-width: 480px;
-    }
-    .hero-trust { font-size: 13px; color: var(--text-light); }
+/* reveal */
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.aurora i{animation:none}}
 
-    /* Phone Mockup */
-    .phone-wrap { display: flex; justify-content: center; align-items: flex-start; }
-    .phone {
-      width: 280px; background: #1c1c1e; border-radius: 40px;
-      padding: 8px;
-      box-shadow: 0 40px 90px rgba(31,95,163,0.22), 0 15px 35px rgba(0,0,0,0.22);
-      position: relative;
-    }
-    .phone::before {
-      content: ''; position: absolute;
-      top: 15px; left: 50%; transform: translateX(-50%);
-      width: 86px; height: 6px;
-      background: #3a3a3c; border-radius: 3px; z-index: 2;
-    }
-    .phone-screen {
-      border-radius: 32px; overflow: hidden;
-      background: #f0f2f5;
-      aspect-ratio: 9/19.5;
-    }
-    .phone-screen img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top; display: block;
-    }
-    .screen-placeholder {
-      width: 100%; height: 100%;
-      background: linear-gradient(160deg, #eef4fd 0%, #d4e8f8 100%);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 10px; color: var(--blue-dark);
-      font-size: 13px; font-weight: 600; text-align: center;
-      padding: 20px;
-    }
-    .screen-placeholder svg { opacity: 0.5; }
+section{position:relative}
+.pad{padding:140px 0}
+@media(max-width:700px){.pad{padding:96px 0}}
+.light,.mist{color:var(--slate)}
+/* SCROLL BACKGROUND MORPH: one fixed layer behind the page crossfades between section colors */
+.page-bg{position:fixed;inset:0;z-index:-1;background:var(--page-bg,#05091C);transition:background-color .9s cubic-bezier(.4,0,.2,1)}
+.page-bg::before{content:"";position:absolute;inset:0;opacity:var(--glow,1);transition:opacity .9s cubic-bezier(.4,0,.2,1);background:radial-gradient(900px 600px at 15% 10%,rgba(59,75,255,.22),transparent 70%),radial-gradient(800px 600px at 90% 90%,rgba(139,92,246,.18),transparent 70%)}
+section>*,section>.aurora,section>.grain{transition:opacity .7s cubic-bezier(.4,0,.2,1)}
+section.off-theme>*,section.off-theme>.rv.in{opacity:.08}
+section.off-theme>.aurora,section.off-theme>.grain{opacity:0}
+@media(prefers-reduced-motion:reduce){.page-bg,.page-bg::before,section>*{transition:none}}
 
-    /* ─── TRUST BAR ─── */
-    .trust-bar {
-      background: var(--bg-alt);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 22px 24px;
-      text-align: center;
-    }
-    .trust-bar p {
-      font-size: 14px; font-weight: 600;
-      color: var(--text-light); letter-spacing: 0.3px;
-    }
-    .trust-bar span { color: var(--blue); font-weight: 700; }
+/* HERO */
+.hero{--ov:340px;padding:150px 0 0;position:relative;z-index:3;overflow-x:clip;overflow-y:visible}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:260px;background:linear-gradient(180deg,rgba(5,9,28,0),var(--ink));pointer-events:none;z-index:0}
+.hero>.aurora,.hero>.grain{z-index:0}
+.hero .shell{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:72px;text-align:center}
+.hero .lede{margin:0 auto;max-width:46ch}.hero .ctas{justify-content:center}
+.hero-stage{margin-bottom:calc(var(--ov) * -1)}
+.hero-stage .iphone{box-shadow:0 0 0 1.5px #5b5e6a inset,0 80px 120px -30px rgba(0,0,0,.75),0 40px 90px -20px rgba(76,90,255,.45)}
+.hero h1{font-size:clamp(52px,8.4vw,112px);margin:22px 0 26px}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 10px;border-radius:99px;font-size:13px;color:#fff}
+.pill .ekg{width:46px;height:24px;border-radius:99px;background:var(--grad);display:grid;place-items:center;box-shadow:0 6px 18px -6px rgba(139,92,246,.8)}
+.pill .ekg svg{width:36px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:90;stroke-dashoffset:90;animation:ekg 2.4s ease-in-out infinite}
+@keyframes ekg{0%{stroke-dashoffset:90}55%,100%{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.pill .ekg svg{animation:none;stroke-dashoffset:0}}
+.pill .dot{width:22px;height:22px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:11px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
+.fine{font-size:13px;color:var(--dim);margin-top:18px}
+.hero-stage{position:relative;display:flex;justify-content:center;perspective:1400px}
+.hero-stage .iphone{transform:rotateX(14deg);transform-origin:50% 100%;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:rotateX(14deg) translateY(-14px)}}
+.chip-float{text-align:left;position:absolute;padding:14px 16px;border-radius:18px;font-size:13px;color:#fff;display:flex;gap:12px;align-items:center;white-space:nowrap}
+.chip-float .ic{width:34px;height:34px;border-radius:10px;background:var(--grad);display:grid;place-items:center;font-weight:800}
+.chip-float small{display:block;color:var(--dim);font-size:11px}
+.cf1{top:18%;right:calc(50% + 196px);left:auto;animation:float2 6s ease-in-out infinite}
+.cf2{top:52%;left:calc(50% + 196px);right:auto;bottom:auto;animation:float2 7s ease-in-out infinite reverse}
+@keyframes float2{50%{transform:translateY(-10px)}}
+@media(max-width:900px){.cf1{left:0}.cf2{right:0}}
+.scroll-cue{display:none;position:absolute;bottom:28px;left:50%;transform:translateX(-50%);width:24px;height:38px;border:1.5px solid rgba(255,255,255,.3);border-radius:14px}
+.scroll-cue::after{content:"";position:absolute;top:7px;left:50%;width:3px;height:7px;margin-left:-1.5px;border-radius:2px;background:#fff;animation:cue 1.8s infinite}
+@keyframes cue{to{transform:translateY(12px);opacity:0}}
 
-    /* ─── SECTION COMMONS ─── */
-    section { padding: 96px 24px; }
-    .section-label {
-      font-size: 12px; font-weight: 800;
-      color: var(--blue); letter-spacing: 1.5px;
-      text-transform: uppercase; margin-bottom: 14px;
-    }
-    h2 {
-      font-size: 44px; font-weight: 900;
-      line-height: 1.12; letter-spacing: -0.9px;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 18px; color: var(--text-mid);
-      line-height: 1.68; max-width: 560px;
-      margin-bottom: 60px;
-    }
+/* STATEMENT */
+.statement{padding:calc(var(--ov, 340px) + 120px) 0 120px;position:relative;z-index:1}
+.statement{--ov:340px}
+.statement p.big{font-size:clamp(32px,4.6vw,60px);font-weight:700;letter-spacing:-.03em;line-height:1.12;color:rgba(255,255,255,.22);max-width:22ch}
+.statement p.big span{color:#fff;transition:color .6s}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:90px}
+@media(max-width:800px){.stats{grid-template-columns:1fr}}
+.stat{padding:36px 32px}
+.stat .n{font-size:clamp(56px,6vw,84px);font-weight:800;letter-spacing:-.05em;line-height:1;color:#fff}
+.stat p{margin-top:14px;color:var(--text);font-size:16px}
+.src{font-size:12px;color:var(--dim);margin-top:28px}
 
-    /* ─── PROBLEM (dark) ─── */
-    .problem { background: var(--text-dark); }
-    .problem .section-label { color: #93c5fd; }
-    .problem h2 { color: white; }
-    .problem-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 64px; align-items: center;
-    }
-    .problem-text p {
-      font-size: 18px; line-height: 1.78;
-      color: #d1d5db; margin-bottom: 22px;
-    }
-    .problem-text p:last-child { margin-bottom: 0; }
-    .problem-text strong { color: white; font-weight: 700; }
-    .stats-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-    }
-    .stat-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px; padding: 24px 20px;
-    }
-    .stat-num {
-      font-size: 40px; font-weight: 900;
-      color: var(--blue); line-height: 1; margin-bottom: 8px;
-    }
-    .stat-label { font-size: 14px; color: #9ca3af; line-height: 1.5; }
+/* BENTO */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;margin-top:72px}
+.tile{position:relative;border-radius:32px;background:var(--mist);overflow:hidden;padding:40px;min-height:340px;display:flex;flex-direction:column;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.tile:hover{transform:translateY(-6px);box-shadow:0 40px 80px -40px rgba(20,30,80,.35)}
+.tile h3{font-size:30px;margin-bottom:12px;letter-spacing:-.03em}
+.tile p{color:var(--slate);font-size:16px;max-width:36ch}
+.tile .tags{margin-top:auto;padding-top:24px;display:flex;flex-wrap:wrap;gap:8px}
+.tile .tags span{font-size:12px;font-weight:600;padding:6px 11px;border-radius:99px;background:#fff;color:var(--graphite);border:1px solid var(--hair)}
+.tile .tags span.pro{background:var(--graphite);color:#fff;border-color:transparent}
+.t-dark{background:var(--ink);color:var(--text)}
+.t-dark p{color:var(--text)} .t-dark h3{color:#fff}
+.t-dark .tags span{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.12)}
+.t-grad{background:linear-gradient(150deg,#6E8BFF,#8B5CF6 60%,#5B21B6)}
+.t-grad h3,.t-grad p{color:#fff}
+.t-grad .tags span{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.25)}
+.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}.s6{grid-column:span 6}
+@media(max-width:980px){.s2,.s3,.s4{grid-column:span 3}}
+@media(max-width:700px){.bento{grid-template-columns:1fr}.s2,.s3,.s4,.s6{grid-column:auto}}
+.badge{position:absolute;top:24px;right:24px;font-size:11px;font-weight:800;letter-spacing:.12em;padding:6px 10px;border-radius:99px;background:var(--graphite);color:#fff}
+.badge.new{background:var(--grad)}
+.t-dark .badge,.t-grad .badge{background:rgba(255,255,255,.16);backdrop-filter:blur(10px)}
+.tile-phone{display:flex;justify-content:center;margin:28px -40px -140px}
+.split-tile{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+@media(max-width:700px){.split-tile{grid-template-columns:1fr}}
+.certs{display:grid;gap:10px;margin-top:22px}
+.cert{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fff;border-radius:14px;border:1px solid var(--hair);font-weight:600;color:var(--graphite);font-size:14px}
+.cert .bar{flex:1;height:6px;border-radius:9px;background:#E9EAF2;margin:0 14px;overflow:hidden}
+.cert .bar i{display:block;height:100%;background:var(--grad);border-radius:9px}
 
-    /* ─── FEATURES ─── */
-    .features { background: var(--bg-alt); }
-    .features-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
-    }
-    .feature-card {
-      background: white; border-radius: 22px;
-      border: 1px solid var(--border); overflow: hidden;
-      display: flex; flex-direction: column;
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 24px 60px rgba(51,121,207,0.13);
-    }
-    .feature-content { padding: 28px 28px 22px; flex: 1; }
-    .feature-icon {
-      width: 48px; height: 48px;
-      background: var(--blue-light); border-radius: 13px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px; font-size: 24px;
-    }
-    .feature-card h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; }
-    .feature-card p { font-size: 15px; color: var(--text-mid); line-height: 1.65; }
-    .feature-tags {
-      display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px;
-    }
-    .tag {
-      font-size: 12px; font-weight: 700;
-      color: var(--blue-dark); background: var(--blue-light);
-      padding: 4px 10px; border-radius: 100px; letter-spacing: 0.1px;
-    }
-    /* ─── WHAT'S NEW (release highlight) ─── */
-    .whatsnew {
-      background: linear-gradient(135deg, #eef4fd 0%, #dbeafe 100%);
-      border: 1px solid var(--blue-mid);
-      border-radius: 22px;
-      padding: 32px 34px;
-      margin-bottom: 44px;
-      display: flex; flex-direction: row; align-items: center; gap: 40px;
-    }
-    .whatsnew-body { display: flex; flex-direction: column; gap: 15px; flex: 1; min-width: 0; }
-    .whatsnew-visual { flex-shrink: 0; }
-    .score-ring-card {
-      background: white; border: 1px solid var(--blue-mid);
-      border-radius: 20px; padding: 24px 30px;
-      box-shadow: 0 10px 30px rgba(31,95,163,0.12);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-    }
-    .score-ring { position: relative; width: 116px; height: 116px; }
-    .score-ring .sr-center {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-    }
-    .score-ring .sr-num { font-size: 38px; font-weight: 900; color: #10B981; line-height: 1; }
-    .score-ring .sr-tag {
-      font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
-      text-transform: uppercase; color: #10B981; margin-top: 3px;
-    }
-    .score-ring-card .sr-caption { font-size: 12.5px; font-weight: 700; color: var(--text-mid); }
-    /* Two stacked release tiles read as a pair: tighter gap between them than to the grid. */
-    .whatsnew:has(+ .whatsnew) { margin-bottom: 18px; }
-    /* Certification tracker card (What's new 1.2.4) */
-    .cert-card {
-      width: 262px; background: white; border: 1px solid rgba(51,121,207,0.18); border-radius: 18px;
-      padding: 16px 16px 14px; box-shadow: 0 14px 40px rgba(51,121,207,0.14);
-      display: flex; flex-direction: column; gap: 12px; text-align: left;
-    }
-    .cert-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .cert-name { font-size: 14px; font-weight: 800; color: var(--text-dark); }
-    .cert-pill { font-size: 11px; font-weight: 800; color: #B45309; background: #FEF3C7; border-radius: 100px; padding: 3px 9px; white-space: nowrap; }
-    .cert-row { display: grid; grid-template-columns: 58px 1fr 48px; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-mid); }
-    .cert-row span:last-child { text-align: right; color: var(--blue-dark); font-weight: 800; }
-    .cert-row .bar { height: 6px; background: rgba(51,121,207,0.15); border-radius: 100px; overflow: hidden; }
-    .cert-row .bar i { display: block; height: 100%; background: var(--blue); border-radius: 100px; }
-    .cert-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-    .cert-list li { font-size: 12px; color: var(--text-mid); padding-left: 22px; position: relative; line-height: 1.35; }
-    .cert-list li::before { content: ''; position: absolute; left: 0; top: 2px; width: 13px; height: 13px; border-radius: 4px; border: 1.5px solid rgba(51,121,207,0.4); box-sizing: border-box; }
-    .cert-list li.done { color: var(--text-light); text-decoration: line-through; }
-    .cert-list li.done::before { background: var(--blue); border-color: var(--blue); }
-    .whatsnew-pill {
-      align-self: flex-start;
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--blue); color: white;
-      font-size: 11px; font-weight: 800; letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 5px 12px; border-radius: 100px;
-    }
-    .whatsnew-pill::before {
-      content: ""; width: 7px; height: 7px;
-      border-radius: 50%; background: white;
-    }
-    .whatsnew h3 {
-      font-size: 27px; font-weight: 900; letter-spacing: -0.5px;
-      color: var(--text-dark); margin: 0;
-    }
-    .whatsnew h3 span { color: var(--blue-dark); }
-    .whatsnew p {
-      font-size: 16px; color: var(--text-mid); line-height: 1.6;
-      max-width: 620px; margin: 0;
-    }
-    .whatsnew-chips {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin: 4px 0 0; padding: 0; list-style: none;
-    }
-    .whatsnew-chips .tag { background: white; }
-    @media (max-width: 760px) {
-      .whatsnew { flex-direction: column-reverse; align-items: stretch; gap: 24px; }
-      .whatsnew-visual { align-self: center; }
-    }
-    @media (max-width: 640px) {
-      .whatsnew { padding: 26px 22px; }
-      .whatsnew h3 { font-size: 22px; }
-    }
-    /* Fixed-height phone zone so all cards show identical phone sizes */
-    .feature-phone-wrap {
-      height: 340px; padding: 0 28px 24px;
-      display: flex; justify-content: center; align-items: center;
-      flex-shrink: 0;
-    }
-    .feature-phone {
-      width: 155px; background: #1c1c1e;
-      border-radius: 26px; padding: 5px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-    }
-    .feature-phone-screen {
-      border-radius: 21px; overflow: hidden;
-      background: #f0f2f5; aspect-ratio: 9/19.5;
-    }
-    .feature-phone-screen img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top; display: block;
-    }
+/* AI */
+.ai{overflow:hidden}
+.ai-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center;margin-top:20px}
+@media(max-width:900px){.ai-grid{grid-template-columns:1fr}}
+.ai h2{font-size:clamp(44px,6vw,80px)}
+.narr{padding:30px;font-size:15px;color:rgba(255,255,255,.85);line-height:1.65}
+.narr .hd{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--peri);margin-bottom:18px}
+.narr .hd i{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 0 4px rgba(52,211,153,.18)}
+.narr .fields{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.narr .fields div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--dim)}
+.narr .fields b{display:block;color:#fff;font-size:13px;margin-top:2px}
+.narr #type::after{content:"";display:inline-block;width:2px;height:1.1em;background:var(--peri);margin-left:2px;vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.ai-points{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap}
+.ai-points div{font-size:14px;color:var(--dim)}
+.ai-points b{display:block;color:#fff;font-size:15px;margin-bottom:2px}
 
-    /* ─── SCROLLING GALLERY ─── */
-    .gallery { background: white; padding: 72px 0; overflow: hidden; }
-    .gallery-header {
-      text-align: center;
-      padding: 0 24px; margin-bottom: 48px;
-    }
-    .scroll-wrapper {
-      overflow: hidden;
-      mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
-    }
-    .scroll-track {
-      display: flex; gap: 18px;
-      width: max-content;
-      animation: marquee 24s linear infinite;
-    }
-    .scroll-track:hover { animation-play-state: paused; }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .scroll-phone {
-      width: 165px; background: #1c1c1e;
-      border-radius: 28px; padding: 5px; flex-shrink: 0;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-    }
-    .scroll-screen {
-      border-radius: 23px; overflow: hidden;
-      background: #e8edf3; aspect-ratio: 9/19.5;
-    }
-    .scroll-screen img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top; display: block;
-    }
+/* WELLNESS */
+.well-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+@media(max-width:900px){.well-grid{grid-template-columns:1fr}}
+.well h2{font-size:clamp(44px,6vw,80px)}
+.gauge-card{padding:44px;border-radius:40px;background:linear-gradient(180deg,#fff,#F3F4FB);box-shadow:0 50px 100px -50px rgba(30,40,110,.45),inset 0 0 0 1px rgba(0,0,0,.04)}
+.gauge{position:relative;width:240px;height:240px;margin:0 auto}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.gauge .val b{display:block;font-size:72px;font-weight:800;letter-spacing:-.05em;color:var(--graphite);line-height:1}
+.gauge .val span{font-size:12px;font-weight:800;letter-spacing:.2em;color:#5B5BD6}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+.mini div{background:#fff;border-radius:18px;padding:16px 18px;border:1px solid var(--hair)}
+.mini small{font-size:12px;color:var(--slate)}
+.mini b{display:block;font-size:22px;color:var(--graphite);letter-spacing:-.02em}
+.spark{margin-top:14px;background:#fff;border-radius:18px;padding:16px 18px;border:1px solid var(--hair)}
+.spark small{font-size:12px;color:var(--slate)}
+.checklist{list-style:none;padding:0;margin-top:32px;display:grid;gap:14px}
+.checklist li{display:flex;gap:14px;align-items:flex-start;color:var(--slate)}
+.checklist li b{color:var(--graphite)}
+.checklist li::before{content:"";flex:none;width:22px;height:22px;margin-top:2px;border-radius:50%;background:var(--grad) center/12px no-repeat;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.2 2.2L9.5 3.6' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),var(--grad)}
 
-    /* ─── HOW IT WORKS ─── */
-    .hiw { background: linear-gradient(180deg, #f7f9fc 0%, #eef4fd 100%); }
-    .steps {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 40px; max-width: 780px; margin: 0 auto;
-      position: relative;
-    }
-    /* Connecting dotted line — sits behind circles */
-    .steps::before {
-      content: ''; position: absolute;
-      top: 29px;
-      left: calc(16.66% + 34px);
-      right: calc(16.66% + 34px);
-      height: 2px;
-      background: repeating-linear-gradient(90deg, var(--blue-mid) 0, var(--blue-mid) 8px, transparent 8px, transparent 16px);
-      z-index: 0;
-    }
-    .step {
-      display: flex; flex-direction: column;
-      align-items: center; text-align: center;
-      position: relative; z-index: 1;
-    }
-    .step-num {
-      width: 60px; height: 60px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white; font-size: 26px; font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 22px; flex-shrink: 0;
-      box-shadow: 0 4px 18px rgba(51,121,207,0.35);
-      border: 4px solid var(--bg-alt);
-      position: relative; z-index: 2;
-    }
-    .step-icon { display: none; }
-    .step h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-dark); }
-    .step p { font-size: 14px; color: var(--text-mid); line-height: 1.65; }
+/* PHONE ROW */
+.phone-row{display:flex;justify-content:center;align-items:center;margin-top:80px;padding-bottom:20px}
+.phone-row .iphone{--w:270px !important}
+.phone-row .iphone:nth-child(2){--w:300px !important;z-index:2;margin:0 -34px}
+.phone-row .iphone:nth-child(1),.phone-row .iphone:nth-child(3){z-index:1;transform:translateY(36px) scale(.92);filter:saturate(.95)}
+.phone-row .iphone:nth-child(1){transform-origin:right center}
+.phone-row .iphone:nth-child(3){transform-origin:left center}
+@media(max-width:900px){.phone-row .iphone{--w:min(30vw,220px) !important}.phone-row .iphone:nth-child(2){--w:min(34vw,250px) !important;margin:0 -18px}}
+@media(max-width:560px){.phone-row .iphone{--w:31vw !important}.phone-row .iphone:nth-child(2){--w:37vw !important;margin:0 -12px}.phone-row .iphone:nth-child(1),.phone-row .iphone:nth-child(3){transform:translateY(20px) scale(.92)}}
 
-    /* ─── FOUNDER ─── */
-    .founder { background: var(--blue-light); }
-    .founder-grid {
-      display: grid; grid-template-columns: 400px 1fr;
-      gap: 64px; align-items: center;
-    }
-    .founder-card {
-      background: white; border-radius: 24px; padding: 36px;
-      border: 1px solid var(--blue-mid);
-      box-shadow: 0 8px 40px rgba(51,121,207,0.1);
-    }
-    .founder-avatar {
-      width: 160px; height: 160px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 56px; font-weight: 900; color: white;
-      margin-bottom: 22px; overflow: hidden; flex-shrink: 0;
-      box-shadow: 0 8px 32px rgba(51,121,207,0.22);
-    }
-    .founder-avatar img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    .founder-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-    .founder-role {
-      font-size: 14px; color: var(--blue); font-weight: 700;
-      letter-spacing: 0.2px; margin-bottom: 22px;
-    }
-    .founder-quote {
-      font-size: 16px; color: var(--text-mid);
-      line-height: 1.75; font-style: italic;
-      border-left: 3px solid var(--blue-mid); padding-left: 16px;
-    }
-    .founder-text h2 { margin-bottom: 24px; }
-    .founder-text p {
-      font-size: 17px; color: var(--text-mid);
-      line-height: 1.78; margin-bottom: 20px;
-    }
-    .founder-text p:last-child { margin-bottom: 0; }
-    .founder-text strong { color: var(--text-dark); }
+/* DUO (journal + communities) */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:64px;position:relative;z-index:2;text-align:left}
+@media(max-width:860px){.duo{grid-template-columns:1fr;margin-top:24px}}
+.duo-card{background:rgba(255,255,255,.82);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid #fff;border-radius:30px;padding:36px;box-shadow:0 40px 80px -50px rgba(30,40,110,.45)}
+.duo-card h3{font-size:26px;letter-spacing:-.025em;margin:12px 0 10px}
+.duo-card .checklist{margin-top:20px}
 
-    /* ─── PRICING ─── */
-    .pricing { background: white; }
-    .pricing-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 24px; max-width: 760px; margin: 0 auto;
-    }
-    .pricing-card {
-      background: var(--bg-alt);
-      border: 2px solid var(--border);
-      border-radius: 22px; padding: 34px;
-    }
-    .pricing-card.pro {
-      background: white;
-      border-color: var(--blue);
-      box-shadow: 0 8px 40px rgba(51,121,207,0.15);
-      position: relative;
-    }
-    .pro-badge {
-      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-      background: var(--blue); color: white;
-      padding: 5px 18px; border-radius: 100px;
-      font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
-      text-transform: uppercase; white-space: nowrap;
-    }
-    .pricing-tier {
-      font-size: 12px; font-weight: 800; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--text-light); margin-bottom: 10px;
-    }
-    .pricing-price {
-      font-size: 44px; font-weight: 900; color: var(--text-dark);
-      letter-spacing: -1.2px; line-height: 1; margin-bottom: 4px;
-    }
-    .pricing-price sub { font-size: 18px; font-weight: 600; letter-spacing: 0; vertical-align: baseline; }
-    .pricing-cadence { font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
-    .pricing-desc {
-      font-size: 14px; color: var(--text-mid); line-height: 1.6; margin-bottom: 26px;
-      padding-bottom: 26px; border-bottom: 1px solid var(--border);
-    }
-    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; }
-    .pricing-features li {
-      font-size: 14px; color: var(--text-mid);
-      display: flex; align-items: flex-start; gap: 10px; line-height: 1.4;
-    }
-    .check { color: var(--blue); font-weight: 800; flex-shrink: 0; }
-    .pricing-features li.locked .check { color: #d1d5db; }
-    .pricing-features li.locked { color: #9ca3af; }
+/* PRIVACY */
+.priv{overflow:hidden}
+.priv-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:64px}
+@media(max-width:800px){.priv-cards{grid-template-columns:1fr}}
+.priv-cards .glass{padding:34px}
+.priv-cards h3{font-size:22px;margin:18px 0 8px;letter-spacing:-.02em}
+.ico{width:46px;height:46px;border-radius:14px;background:var(--grad);display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(139,92,246,.7)}
+.ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-    /* ─── CTA SECTION ─── */
-    .cta-section {
-      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-      padding: 100px 24px; text-align: center;
-    }
-    .cta-section h2 { color: white; max-width: 700px; margin: 0 auto 16px; }
-    .cta-section p {
-      font-size: 19px; color: rgba(255,255,255,0.82);
-      line-height: 1.65; margin: 0 auto 40px; max-width: 520px;
-    }
-    .cta-note { font-size: 13px; color: rgba(255,255,255,0.55); }
+/* DEMOS */
+.demos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:60px}
+@media(max-width:900px){.demos{grid-template-columns:repeat(2,1fr)}}
+.demo{border-radius:24px;overflow:hidden;background:var(--mist);transition:transform .5s var(--ease)}
+.demo:hover{transform:translateY(-6px)}
+.demo .thumb{aspect-ratio:4/5;position:relative;display:grid;place-items:center;background:radial-gradient(100% 80% at 50% 0%,#24357a,#0A1738 60%,#05091C)}
+.demo .thumb .iphone{--w:96px;box-shadow:none}
+.demo .thumb .play{position:absolute;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.3);display:grid;place-items:center}
+.demo .thumb .play::after{content:"";border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.demo .meta{padding:16px 18px;display:flex;justify-content:space-between;font-weight:600;color:var(--graphite);font-size:15px}
+.demo .meta span{color:var(--slate);font-weight:500;font-variant-numeric:tabular-nums}
+.demo.wide{grid-column:span 2}
+.demo.wide .thumb{aspect-ratio:auto;height:100%;min-height:280px}
 
-    /* ─── FOOTER ─── */
-    footer {
-      background: var(--text-dark); padding: 52px 24px;
-    }
-    .footer-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 24px;
-    }
-    .footer-logo .logo-wordmark { color: white; }
-    .footer-links { display: flex; gap: 28px; list-style: none; }
-    .footer-links a {
-      color: #6b7280; text-decoration: none;
-      font-size: 14px; font-weight: 500; transition: color 0.2s;
-    }
-    .footer-links a:hover { color: white; }
-    .footer-right { text-align: right; }
-    .footer-copy { font-size: 13px; color: #4b5563; line-height: 1.7; }
-    .footer-tag {
-      font-size: 12px; font-weight: 700; color: var(--blue);
-      letter-spacing: 0.5px; margin-bottom: 4px;
-    }
 
-    /* ─── FEATURES WIDE CARD ─── */
-    .feature-card-wide {
-      background: white; border-radius: 22px;
-      border: 1px solid var(--border); overflow: hidden;
-      display: grid; grid-template-columns: 1fr 200px;
-      gap: 0; margin-top: 28px;
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-    .feature-card-wide:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(51,121,207,0.13); }
-    .feature-card-wide .feature-content { padding: 36px 36px; display: flex; flex-direction: column; justify-content: center; }
-    .feature-card-wide .feature-phone-wrap { padding: 20px 20px 20px 0; display: flex; align-items: center; justify-content: center; background: var(--blue-light); }
-    .feature-card-wide .feature-phone { width: 140px; border-radius: 24px; padding: 4px; }
+/* PRODUCT VIDEO CAROUSEL (from aftercallapp.com/start) */
+.product-videos{--line-warm:rgba(124,143,245,.28);--pv-edge:48px;--pv-head-edge:max(24px,calc((100vw - var(--shell))/2 + 24px));--pv-gap:clamp(24px,3.8vw,60px);--pv-card:min(74vw,980px);--pv-radius:22px;position:relative;overflow:hidden;padding:140px 0 120px}
+.product-videos::before{content:"";position:absolute;inset:-140px 0 -120px;background:radial-gradient(55% 54% at 82% 18%,rgba(124,143,245,.18),transparent 72%),radial-gradient(42% 48% at 12% 70%,rgba(59,130,246,.1),transparent 70%);pointer-events:none}
+.product-videos::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:58px 58px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.product-videos>*{position:relative;z-index:1}
+.product-videos::before,.product-videos::after{-webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent)}
+.product-videos::before{inset:0}
+.pv-head{padding:0 var(--pv-head-edge);margin:0 0 44px}
+.pv-head h2{font-size:clamp(44px,6vw,80px);margin-top:16px}
+.pv-head .lede{margin-top:22px}
+.pv-rail{display:flex;gap:var(--pv-gap);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-left:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));padding-right:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));scroll-padding-left:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));scroll-padding-right:max(var(--pv-edge),calc((100vw - var(--pv-card))/2));touch-action:pan-x pinch-zoom;overscroll-behavior-x:contain;scrollbar-width:none}
+.pv-rail::-webkit-scrollbar{display:none}
+.pv-card{flex:0 0 var(--pv-card);scroll-snap-align:center;position:relative;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.pv-card:not(.is-active){opacity:.45;transform:scale(.96)}
+.pv-video-shell{position:relative;aspect-ratio:16/9;border-radius:var(--pv-radius);overflow:hidden;background:#070B1C;border:1px solid var(--line-warm);box-shadow:0 26px 80px rgba(0,0,0,.42),0 0 48px rgba(124,143,245,.1)}
+.pv-video{width:100%;height:100%;display:block;object-fit:cover;background:#070B1C}
+.pv-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;pointer-events:none;transition:opacity .22s,visibility .22s}
+.pv-card.is-started .pv-poster{opacity:0;visibility:hidden}
+.pv-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:2;background:linear-gradient(rgba(5,9,28,.02),rgba(5,9,28,.38));transition:opacity .25s,visibility .25s}
+.pv-card.is-playing .pv-overlay,.pv-card.is-started .pv-overlay{opacity:0;visibility:hidden}
+.pv-play{pointer-events:auto;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(5,9,28,.54);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.28);cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;box-shadow:0 18px 44px rgba(0,0,0,.3)}
+.pv-play:hover{background:#05091C;transform:scale(1.05);box-shadow:0 0 28px rgba(124,143,245,.24)}
+.pv-play svg{width:28px;height:28px;margin-left:3px}
+.pv-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:15px}
+.pv-caption{font-size:clamp(14px,1.15vw,17px);font-weight:800;letter-spacing:-.01em;line-height:1.25;color:#fff}
+.pv-duration{flex:0 0 auto;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--dim);background:rgba(255,255,255,.03);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
+.pv-nav{max-width:1600px;margin:28px auto 0;padding:0 var(--pv-edge);display:flex;justify-content:flex-end;gap:10px}
+.pv-arrow{appearance:none;border:1px solid var(--line-warm);background:rgba(255,255,255,.043);color:#fff;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
+.pv-arrow:hover{background:rgba(124,143,245,.12);border-color:var(--peri);box-shadow:0 0 22px rgba(124,143,245,.2);transform:translateY(-1px)}
+.pv-arrow svg{width:18px;height:18px;stroke:#fff}
+.pv-arrow:focus-visible,.pv-play:focus-visible{outline:3px solid rgba(124,143,245,.42);outline-offset:3px}
+@media(max-width:960px){.product-videos{padding:96px 0 80px;--pv-edge:24px;--pv-card:86vw;--pv-gap:28px}.pv-nav{justify-content:center}.pv-play{width:62px;height:62px}}
+@media(max-width:640px){.product-videos{--pv-edge:18px;--pv-head-edge:24px;--pv-card:88vw;--pv-gap:18px;--pv-radius:16px}.pv-meta{display:block;margin-top:12px}.pv-duration{display:inline-block;margin-top:9px}.pv-play{width:56px;height:56px}}
 
-    /* ─── AI SHOWCASE ─── */
-    .ai-showcase { background: var(--text-dark); }
-    .ai-showcase h2 { color: white; }
-    .ai-showcase .section-label { color: var(--ai-purple); font-weight: 800; letter-spacing: 0.5px; }
-    .ai-purple { color: var(--ai-purple); font-weight: 700; }
-    .ai-purple-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(139,92,246,0.15); color: var(--ai-purple);
-      border: 1px solid rgba(139,92,246,0.3);
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 12px; font-weight: 800; letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
-    .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-    .ai-text p { font-size: 17px; color: #d1d5db; line-height: 1.75; margin-bottom: 20px; }
-    .ai-text p strong { color: white; }
-    .ai-terminal {
-      background: #0d1117; border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px; overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    }
-    .terminal-bar {
-      background: #161b22; padding: 12px 16px;
-      display: flex; align-items: center; gap: 7px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .t-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .t-dot.red { background: #ff5f57; }
-    .t-dot.yellow { background: #ffbd2e; }
-    .t-dot.green { background: #28c840; }
-    .terminal-label { font-size: 12px; color: rgba(255,255,255,0.3); margin-left: 8px; font-weight: 500; }
-    .terminal-body { padding: 0; font-size: 13px; line-height: 1.7; font-family: 'SF Mono', 'Fira Code', monospace; }
-    /* Two-panel terminal layout */
-    .t-panels { display: grid; grid-template-columns: 1fr 1fr; }
-    .t-panel { padding: 18px; }
-    .t-panel-input { border-right: 1px solid rgba(255,255,255,0.06); }
-    .t-panel-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .t-panel-label.input-label { color: #6b7280; }
-    .t-panel-label.output-label { color: #4ade80; }
-    .t-field { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
-    .t-key { font-size: 10px; color: #3379CF; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-    .t-val { color: #d1d5db; font-size: 12px; line-height: 1.5; }
-    .t-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 4px 0 10px; }
-    .t-generating { color: #93c5fd; font-size: 10px; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-    .t-dot-pulse { width: 6px; height: 6px; background: #3379CF; border-radius: 50%; animation: blink 1s infinite; display: inline-block; flex-shrink: 0; }
-    .t-output { color: #e2e8f0; line-height: 1.8; font-size: 12px; }
-    .t-output .highlight { color: #93c5fd; font-weight: 600; }
-    .t-cursor { display: inline-block; width: 2px; height: 13px; background: #3379CF; margin-left: 2px; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+/* FOUNDER */
+.founder{padding:150px 0;overflow:hidden}
+.portrait{width:200px;height:200px;margin:0 auto;border-radius:50%;padding:5px;background:var(--grad);box-shadow:0 30px 60px -24px rgba(91,91,214,.55)}
+.portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 50%;border:4px solid #fff;display:block}
+@media(max-width:600px){.portrait{width:160px;height:160px}}
+.founder blockquote{font-size:clamp(28px,3.8vw,48px);font-weight:700;letter-spacing:-.03em;line-height:1.18;color:var(--graphite);max-width:24ch;margin:28px auto 34px}
+.founder .who b{display:block;color:var(--graphite);font-size:17px}
+.founder .who small{color:var(--slate);font-size:14px}
+.founder-note{max-width:56ch;margin:24px auto 0;font-size:15px;color:var(--slate)}
 
-    /* ─── PRICING TOGGLE ─── */
-    .pricing-toggle-wrap { text-align: center; margin-bottom: 48px; }
-    .pricing-toggle {
-      display: inline-flex; background: var(--bg-alt);
-      border: 2px solid var(--border); border-radius: 12px; padding: 4px; gap: 4px;
-    }
-    .toggle-opt {
-      padding: 10px 22px; border-radius: 9px; font-size: 15px; font-weight: 700;
-      cursor: pointer; border: none; font-family: inherit; background: transparent;
-      color: var(--text-light); transition: all 0.2s; position: relative;
-    }
-    .toggle-opt.active { background: white; color: var(--text-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .save-pill {
-      background: #d1fae5; color: #065f46;
-      font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
-      padding: 2px 8px; border-radius: 100px; margin-left: 6px; vertical-align: middle;
-    }
-    .trial-badge {
-      display: inline-block; background: var(--blue-light); color: var(--blue-dark);
-      font-size: 12px; font-weight: 700; padding: 4px 12px;
-      border-radius: 100px; margin-bottom: 16px; letter-spacing: 0.2px;
-    }
+/* AGENCIES */
+.ag-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-top:56px}
+@media(max-width:900px){.ag-grid{grid-template-columns:1fr}}
+.ag-list{display:grid;gap:26px}
+.ag-list div b{display:block;color:var(--graphite);font-size:19px;letter-spacing:-.02em;margin-bottom:4px}
+.roi{border-radius:32px;padding:40px;background:var(--ink);color:var(--text);position:relative;overflow:hidden}
+.roi .aurora i{opacity:.4}
+.roi .n{font-size:clamp(64px,7vw,96px);font-weight:800;letter-spacing:-.05em;line-height:1;color:#fff;position:relative}
+.roi p{position:relative}
+.roi .math{position:relative;margin-top:28px;border-top:1px solid var(--line)}
+.roi .math div{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px;font-variant-numeric:tabular-nums}
+.roi .math div b{color:#fff}
+.sees{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+@media(max-width:700px){.sees{grid-template-columns:1fr}}
+.sees>div{border-radius:28px;padding:30px;background:#fff;border:1px solid var(--hair)}
+.sees h3{font-size:18px;margin-bottom:14px}
+.sees ul{list-style:none;padding:0;display:grid;gap:10px;font-size:15px}
+.sees li{display:flex;gap:10px}
+.sees .yes li::before{content:"✓";color:#4F46E5;font-weight:800}
+.sees .no li::before{content:"✕";color:#A1A1AA;font-weight:800}
 
-    /* ─── DARK MODE SHOWCASE ─── */
-    .darkmode-section { background: #0d1117; padding: 96px 24px; overflow: hidden; }
-    .darkmode-section .section-label { color: #93c5fd; }
-    .darkmode-section h2 { color: white; }
-    .darkmode-sub { font-size: 18px; color: #9ca3af; line-height: 1.65; max-width: 560px; margin-bottom: 60px; }
-    .darkmode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-    .darkmode-phones { display: flex; gap: 20px; justify-content: center; align-items: flex-end; }
-    .dm-phone-lg { width: 210px; background: #1c1c1e; border-radius: 44px; padding: 12px; box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05); }
-    .dm-phone-sm { width: 160px; background: #1c1c1e; border-radius: 36px; padding: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05); margin-bottom: -20px; }
-    .dm-screen { border-radius: 32px; overflow: hidden; background: #161b22; aspect-ratio: 9/19.5; }
-    .dm-screen-sm { border-radius: 26px; overflow: hidden; background: #161b22; aspect-ratio: 9/19.5; }
-    .dm-screen img, .dm-screen-sm img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-    .darkmode-features { display: flex; flex-direction: column; gap: 24px; }
-    .dm-feature { display: flex; gap: 16px; align-items: flex-start; }
-    .dm-icon { width: 44px; height: 44px; background: rgba(51,121,207,0.15); border: 1px solid rgba(51,121,207,0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-    .dm-feature h4 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 5px; }
-    .dm-feature p { font-size: 14px; color: #9ca3af; line-height: 1.6; }
+/* PRICING */
+.seg{display:inline-flex;padding:4px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid var(--line);margin-top:36px;backdrop-filter:blur(20px)}
+.seg button{border:0;background:transparent;color:var(--text);font:600 14px Inter,sans-serif;padding:10px 22px;border-radius:99px;cursor:pointer;transition:all .35s var(--ease)}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 6px 20px -6px rgba(0,0,0,.5)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;text-align:left}
+.plans.two{grid-template-columns:repeat(2,1fr);max-width:880px;margin-left:auto;margin-right:auto}
+@media(max-width:900px){.plans,.plans.two{grid-template-columns:1fr}}
+.plan{padding:36px;display:flex;flex-direction:column;position:relative}
+.plan.hot{background:linear-gradient(160deg,rgba(110,139,255,.28),rgba(139,92,246,.18));border-color:rgba(139,92,246,.55)}
+.plan .tagline{position:absolute;top:-12px;left:32px;font-size:11px;font-weight:800;letter-spacing:.12em;padding:6px 12px;border-radius:99px;background:var(--grad);color:#fff}
+.plan .nm{font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--peri);text-transform:uppercase}
+.plan .pr{font-size:54px;font-weight:800;letter-spacing:-.045em;color:#fff;margin-top:14px;line-height:1}
+.plan .pr small{font-size:16px;font-weight:500;color:var(--dim);letter-spacing:0}
+.plan .sub{font-size:14px;color:var(--dim);margin:10px 0 24px;min-height:42px}
+.plan ul{list-style:none;padding:0;display:grid;gap:11px;margin-bottom:30px;flex:1;font-size:15px}
+.plan li{display:flex;gap:10px}
+.plan li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:rgba(124,143,245,.25) center/10px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.2 2.2L9.5 3.6' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.plan .btn{justify-content:center}
+[hidden]{display:none!important}
 
-    /* ─── COMPARISON TABLE ─── */
-    /* ─── COMPARISON TABLE ─── */
-    .compare-section { background: var(--bg-alt); }
-    .compare-section h2 { text-align: center; margin-bottom: 14px; }
-    .compare-sub { text-align: center; font-size: 18px; color: var(--text-mid); max-width: 580px; margin: 0 auto 56px; line-height: 1.65; }
-    .compare-wrap { background: white; border-radius: 24px; box-shadow: 0 8px 48px rgba(51,121,207,0.10), 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; }
-    .compare-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    .compare-table colgroup col:nth-child(1) { width: 44%; }
-    .compare-table colgroup col:nth-child(2) { width: 19%; }
-    .compare-table colgroup col:nth-child(3) { width: 19%; }
-    .compare-table colgroup col:nth-child(4) { width: 18%; }
-    /* Header */
-    .compare-table thead th { padding: 22px 16px 20px; font-size: 13px; font-weight: 800; text-align: center; letter-spacing: 0.4px; text-transform: uppercase; border-bottom: 2px solid rgba(51,121,207,0.12); }
-    .compare-table thead th:first-child { text-align: left; background: white; color: var(--text-light); }
-    .th-aftercall { background: linear-gradient(160deg, var(--blue) 0%, var(--blue-dark) 100%) !important; color: white !important; font-size: 15px !important; text-transform: none !important; letter-spacing: 0 !important; border-radius: 0 !important; }
-    .th-aftercall small { display: block; font-size: 11px; font-weight: 600; opacity: 0.8; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.8px; }
-    .th-notes, .th-pcr { background: #f8fafc !important; color: var(--text-mid) !important; }
-    /* Category divider rows */
-    .cat-divider td { padding: 10px 20px 10px 24px; background: #eef4fb; color: var(--blue-dark); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; border-top: 0; }
-    .cat-divider td span { margin-right: 6px; }
-    /* Data rows */
-    .compare-table tbody tr:not(.cat-divider) td { padding: 15px 16px; border-top: 1px solid #f0f2f5; font-size: 14px; text-align: center; vertical-align: middle; background: white; }
-    .compare-table tbody tr:not(.cat-divider) td:first-child { text-align: left; color: var(--text-dark); font-weight: 500; padding-left: 24px; background: white; }
-    /* AfterCall column highlight */
-    .col-af { background: rgba(51,121,207,0.05) !important; }
-    /* Key feature rows — extra emphasis */
-    .key-row td { background: #fdfeff !important; }
-    .key-row td.col-af { background: rgba(51,121,207,0.09) !important; }
-    .key-row td:first-child { font-weight: 700 !important; color: var(--text-dark) !important; }
-    .key-badge { display: inline-block; background: linear-gradient(135deg,#eef4ff,#dbeafe); color: var(--blue-dark); font-size: 10px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle; }
-    /* Check / No / Partial marks */
-    .c-yes { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: var(--blue); color: white; border-radius: 50%; font-size: 15px; font-weight: 900; line-height: 1; }
-    .c-no { display: inline-block; width: 18px; height: 3px; background: #d1d5db; border-radius: 2px; vertical-align: middle; }
-    .c-partial { background: rgba(245,158,11,0.12); color: #b45309; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; white-space: nowrap; }
+/* GRANTS */
+.grants{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:56px}
+@media(max-width:1100px){.grants{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.grants{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.grants{grid-template-columns:1fr}}
+.grant{border-radius:26px;padding:28px;background:#fff;border:1px solid var(--hair);display:flex;flex-direction:column;gap:8px;transition:transform .5s var(--ease)}
+.grant:hover{transform:translateY(-4px)}
+.grant small{font-size:11px;font-weight:800;letter-spacing:.14em;color:#5B5BD6;text-transform:uppercase}
+.grant b{font-size:18px;color:var(--graphite);letter-spacing:-.02em;line-height:1.25}
+.grant .amt{font-size:22px;line-height:1.15;font-weight:800;letter-spacing:-.04em;color:var(--graphite)}
+.grant p{font-size:14px;flex:1}
 
-    /* ─── COLOR ACCENTS ─── */
-    /* Section label accent bars */
-    .section-label {
-      position: relative; display: inline-block;
-    }
-    /* Stat cards get a gradient top border */
-    .stat-card { border-top: 3px solid var(--blue); }
-    /* Feature icon gets subtle gradient */
-    .feature-icon { background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); }
-    /* Pricing Pro card inner glow */
-    .pricing-card.pro { box-shadow: 0 8px 40px rgba(51,121,207,0.18), inset 0 0 0 1px rgba(51,121,207,0.15); }
-    /* HIW section steps get colored number backgrounds */
-    .hiw { background: linear-gradient(180deg, #f7f9fc 0%, #eef4fd 100%); }
-    /* Features section subtle gradient */
-    .features { background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%); }
-    /* Compare section */
-    .compare-section { background: linear-gradient(180deg, #f0f6ff 0%, #f7f9fc 100%); }
-    /* Category dividers get a stronger blue accent */
-    .cat-divider td { border-left: 3px solid var(--blue); }
-    /* CTA section gets a more vivid gradient */
-    .cta-section { background: linear-gradient(135deg, var(--blue-dark) 0%, #1a4f8a 50%, var(--blue) 100%); }
+/* FAQ */
+.faq{max-width:860px;margin:56px auto 0}
+.faq h4{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#5B5BD6;margin:40px 0 6px}
+.faq details{border-bottom:1px solid var(--hair)}
+.faq summary{list-style:none;cursor:pointer;padding:24px 44px 24px 0;font-size:19px;font-weight:600;color:var(--graphite);letter-spacing:-.015em;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:6px;top:50%;width:12px;height:12px;border-right:2px solid var(--slate);border-bottom:2px solid var(--slate);transform:translateY(-70%) rotate(45deg);transition:transform .35s var(--ease)}
+.faq details[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+.faq details p{padding:0 44px 24px 0}
 
-    /* ─── EKG / HEARTBEAT ANIMATION (HERO) ─── */
-    .ekg-decor {
-      position: absolute; inset: 0;
-      pointer-events: none; overflow: hidden; z-index: 0;
-    }
-    .ekg-decor svg {
-      position: absolute; left: 0; right: 0;
-      width: 200%; height: 80px;
-      bottom: 8%;
-      opacity: 0.18;
-    }
-    .ekg-line {
-      stroke: var(--blue);
-      stroke-width: 2.5;
-      fill: none;
-      stroke-dasharray: 2400;
-      stroke-dashoffset: 2400;
-      animation: ekg-sweep 4.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-    }
-    @keyframes ekg-sweep {
-      0%   { stroke-dashoffset: 2400; }
-      55%  { stroke-dashoffset: 0; }
-      100% { stroke-dashoffset: -2400; }
-    }
-    .hero-left { position: relative; z-index: 1; }
-
-    /* ─── ANIMATED STAT COUNTERS ─── */
-    .stat-card { position: relative; }
-    .stat-icon {
-      position: absolute; top: 18px; right: 18px;
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(51,121,207,0.12); border-radius: 9px;
-    }
-    .stat-icon svg { width: 16px; height: 16px; stroke: var(--blue); fill: none; stroke-width: 2; }
-    .stat-bar {
-      margin-top: 12px; height: 6px;
-      background: rgba(255,255,255,0.08); border-radius: 100px;
-      overflow: hidden;
-    }
-    .stat-bar-fill {
-      display: block; height: 100%;
-      background: linear-gradient(90deg, var(--blue), #6ba6e8);
-      border-radius: 100px;
-      width: 0;
-      transition: width 1.6s cubic-bezier(0.22,0.61,0.36,1);
-    }
-
-    /* ─── FEATURE INLINE DATA VIZ ─── */
-    .feature-icon-svg {
-      width: 48px; height: 48px;
-      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-      border-radius: 13px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px;
-    }
-    .feature-icon-svg svg { width: 24px; height: 24px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .feature-mini {
-      margin-top: 16px;
-      background: linear-gradient(180deg, #f7faff 0%, #eef4fd 100%);
-      border: 1px solid rgba(51,121,207,0.10);
-      border-radius: 12px;
-      padding: 14px 14px;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .mini-label {
-      font-size: 10px; font-weight: 800; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--blue-dark);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .mini-label .mini-trend { color: #15803d; font-size: 10px; font-weight: 800; }
-    .mini-bars { display: flex; align-items: flex-end; gap: 4px; height: 38px; }
-    .mini-bars span {
-      flex: 1; background: linear-gradient(180deg, var(--blue), var(--blue-dark));
-      border-radius: 3px 3px 1px 1px;
-      transform-origin: bottom;
-      transform: scaleY(0);
-      animation: bar-rise 1.2s cubic-bezier(0.22,0.61,0.36,1) forwards;
-    }
-    @keyframes bar-rise { to { transform: scaleY(1); } }
-
-    /* Acuity stacked bar (matches in-app acuity colors) */
-    .acuity-stack {
-      display: flex; height: 14px;
-      background: rgba(15,25,35,0.05);
-      border-radius: 100px; overflow: hidden;
-    }
-    .acuity-stack span {
-      display: block; height: 100%;
-      transform-origin: left; transform: scaleX(0);
-      animation: bar-stretch 1.1s cubic-bezier(0.22,0.61,0.36,1) forwards;
-    }
-    @keyframes bar-stretch { to { transform: scaleX(1); } }
-    .acuity-legend {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 4px 10px; margin-top: 4px;
-    }
-    .acuity-legend > span {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; color: var(--text-mid); font-weight: 600;
-    }
-    .acuity-legend i {
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-    }
-    .acuity-legend b { color: var(--text-dark); font-weight: 800; margin-left: 2px; }
-    .mini-line {
-      width: 100%; height: 38px;
-    }
-    .mini-line svg { width: 100%; height: 100%; display: block; }
-    .mini-line .l-path {
-      stroke: var(--blue); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round;
-      stroke-dasharray: 220; stroke-dashoffset: 220;
-      animation: line-draw 1.6s ease-out forwards;
-    }
-    .mini-line .l-area { fill: url(#blueFade); }
-    @keyframes line-draw { to { stroke-dashoffset: 0; } }
-    .mini-dial {
-      display: flex; align-items: center; gap: 14px;
-    }
-    .mini-dial .dial-ring { width: 52px; height: 52px; flex-shrink: 0; }
-    .mini-dial .ring-track { stroke: rgba(51,121,207,0.15); stroke-width: 6; fill: none; }
-    .mini-dial .ring-fill {
-      stroke: var(--blue); stroke-width: 6; fill: none; stroke-linecap: round;
-      transform: rotate(-90deg); transform-origin: center;
-      stroke-dasharray: 138; stroke-dashoffset: 138;
-      animation: ring-fill 1.6s cubic-bezier(0.22,0.61,0.36,1) forwards;
-    }
-    @keyframes ring-fill { to { stroke-dashoffset: 41; } } /* 70% */
-    .mini-dial .dial-label { font-size: 12px; color: var(--text-mid); }
-    .mini-dial .dial-num { font-size: 18px; font-weight: 800; color: var(--text-dark); }
-    .mini-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-    .mini-chip {
-      font-size: 11px; font-weight: 700; color: var(--blue-dark);
-      background: white; border: 1px solid rgba(51,121,207,0.20);
-      padding: 3px 9px; border-radius: 100px;
-    }
-    .mini-chip.alt { background: var(--blue); color: white; border-color: var(--blue); }
-    .mini-avatars { display: flex; align-items: center; }
-    .mini-avatars .av {
-      width: 28px; height: 28px; border-radius: 50%;
-      border: 2px solid white;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white; font-size: 11px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      margin-left: -8px;
-    }
-    .mini-avatars .av:first-child { margin-left: 0; }
-    .mini-avatars .av-more {
-      background: white; color: var(--blue-dark); border: 2px solid var(--blue-mid);
-    }
-    .mini-skill-rows { display: flex; flex-direction: column; gap: 6px; }
-    .skill-row { display: grid; grid-template-columns: 70px 1fr 32px; align-items: center; gap: 8px; }
-    .skill-row span:first-child { font-size: 11px; font-weight: 700; color: var(--text-mid); }
-    .skill-row span:last-child { font-size: 11px; font-weight: 800; color: var(--blue-dark); text-align: right; }
-    .skill-row .bar { height: 6px; background: rgba(51,121,207,0.15); border-radius: 100px; overflow: hidden; }
-    .skill-row .bar i {
-      display: block; height: 100%;
-      background: linear-gradient(90deg, var(--blue), var(--blue-dark));
-      border-radius: 100px;
-      transform-origin: left;
-      transform: scaleX(0);
-      animation: bar-grow 1.4s cubic-bezier(0.22,0.61,0.36,1) forwards;
-    }
-    @keyframes bar-grow { to { transform: scaleX(1); } }
-
-    /* ─── TYPEWRITER REVEAL FOR AI NARRATIVE ─── */
-    .t-output.reveal-on-view {
-      clip-path: inset(0 100% 0 0);
-      transition: clip-path 4s steps(60) 0.4s;
-    }
-    .t-output.reveal-on-view.in-view { clip-path: inset(0 0 0 0); }
-
-    /* ─── HOW IT WORKS — STEP ICONS ─── */
-    .step-glyph {
-      width: 42px; height: 42px;
-      margin: 8px auto 14px;
-      display: flex; align-items: center; justify-content: center;
-      background: white; border-radius: 11px;
-      border: 1px solid rgba(51,121,207,0.18);
-    }
-    .step-glyph svg { width: 22px; height: 22px; stroke: var(--blue-dark); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-    /* ─── STAT-PROBLEM TWEAKS ─── */
-    .problem .stat-card .stat-icon { background: rgba(255,255,255,0.10); }
-    .problem .stat-card .stat-icon svg { stroke: #93c5fd; }
-    .problem .stat-card .stat-bar { background: rgba(255,255,255,0.08); }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      h1 { font-size: 44px; }
-      h2 { font-size: 34px; }
-      .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; text-align: center; }
-      .hero .phone-wrap { display: flex; justify-content: center; margin-top: 32px; }
-      .phone { width: 220px; }
-      .hero-sub { max-width: none; margin-left: auto; margin-right: auto; }
-      .download-cta-row { justify-content: center; }
-      .problem-grid { grid-template-columns: 1fr; gap: 48px; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .features-grid { grid-template-columns: 1fr; }
-      .steps { grid-template-columns: 1fr; max-width: 400px; }
-      .steps::before { display: none; }
-      .founder-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-      .footer-inner { flex-direction: column; text-align: center; gap: 24px; }
-      .footer-links { flex-wrap: wrap; justify-content: center; }
-      .footer-right { text-align: center; }
-      .nav-links { display: none; }
-      .ai-grid { grid-template-columns: 1fr; }
-      .t-panels { grid-template-columns: 1fr; }
-      .t-panel-input { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-      .darkmode-grid { grid-template-columns: 1fr; }
-      .darkmode-phones { justify-content: center; }
-      .feature-card-wide { grid-template-columns: 1fr; }
-      .feature-card-wide .feature-phone-wrap { display: none; }
-      .app-store-btn.lg { padding: 18px 28px 18px 24px; min-width: 240px; }
-      .app-store-btn.lg .ast-big { font-size: 22px; }
-      .compare-wrap { overflow: visible; border-radius: 16px; }
-      .compare-table { min-width: 0; width: 100%; }
-      /* Hide Paper Notes and PCR columns on tablet/mobile - show AfterCall comparison only */
-      .th-notes, .th-pcr, .compare-table colgroup col:nth-child(3),
-      .compare-table colgroup col:nth-child(4) { display: none; }
-      .compare-table tbody tr td:nth-child(3),
-      .compare-table tbody tr td:nth-child(4) { display: none; }
-      .compare-table thead tr th:nth-child(3),
-      .compare-table thead tr th:nth-child(4) { display: none; }
-      .compare-table colgroup col:nth-child(1) { width: 55% !important; }
-      .compare-table colgroup col:nth-child(2) { width: 20% !important; }
-      .th-aftercall { font-size: 13px !important; text-align: center !important; padding: 16px 10px !important; }
-      .compare-table colgroup col:nth-child(1) { width: 60% !important; }
-      .compare-table colgroup col:nth-child(2) { width: 40% !important; }
-      .founder-grid { gap: 32px; }
-    }
-    @media (max-width: 480px) {
-      h1 { font-size: 36px; letter-spacing: -1px; }
-      h2 { font-size: 28px; }
-      section { padding: 72px 20px; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .hero-logo { width: 96px; height: 96px; }
-      .feature-phone-wrap { height: 190px; padding: 0 20px 16px; }
-      .feature-phone { width: 110px !important; border-radius: 22px; }
-      .feature-phone-screen { border-radius: 17px; }
-      .scroll-phone { width: 130px; border-radius: 22px; padding: 4px; }
-      .scroll-screen { border-radius: 19px; }
-      .scroll-wrapper { padding: 20px 0; }
-      .dm-phone-lg { width: 150px !important; border-radius: 32px !important; padding: 7px !important; }
-      .dm-phone-sm { width: 115px !important; border-radius: 26px !important; padding: 6px !important; }
-      .darkmode-section { padding: 64px 16px; }
-      .darkmode-phones { gap: 12px; overflow: visible; }
-      .steps { grid-template-columns: 1fr; gap: 32px; }
-      .steps::before { display: none; }
-      /* compare-table: responsive on mobile */
-    }
-  </style>
+/* FINAL */
+.final{padding:180px 0 0;overflow:hidden;text-align:center}
+.final h2{font-size:clamp(48px,7vw,96px)}
+.stores{display:flex;justify-content:center;gap:12px;margin-top:40px;flex-wrap:wrap}
+.store{display:flex;align-items:center;gap:12px;height:58px;padding:0 22px;border-radius:16px;color:#fff;text-align:left}
+.store svg{width:24px;height:24px;fill:#fff}
+.store small{display:block;font-size:10px;color:var(--dim);line-height:1}
+.store b{font-size:17px;letter-spacing:-.01em;line-height:1.2}
+footer{border-top:1px solid var(--line);padding:40px 0 48px;margin-top:140px;font-size:13px;color:var(--dim)}
+footer .shell{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer nav{display:flex;gap:22px;flex-wrap:wrap}
+footer nav a:hover{color:#fff}
+.crisis{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:99px;color:#fff;font-weight:600;font-size:14px}
+.crisis i{width:8px;height:8px;border-radius:50%;background:#F87171;box-shadow:0 0 0 4px rgba(248,113,113,.2)}
+</style>
 <script src="/cookie-consent.js" defer></script>
 <script src="/meta-pixel.js" defer></script>
-  <meta name="facebook-domain-verification" content="lansdf4nis7yy66014v4zba0cmhy1w" />
-  <script defer src="/aftercall-analytics.js"></script>
+<meta name="facebook-domain-verification" content="lansdf4nis7yy66014v4zba0cmhy1w">
+<script defer src="/aftercall-analytics.js"></script>
 </head>
 <body>
+<div class="page-bg" id="pageBg" aria-hidden="true"></div>
 
-<!-- ══════════════════════════════════════════
-     NAV
-══════════════════════════════════════════ -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="logo">
-      <img src="images/logo-transparent.png" class="logo-icon" alt="AfterCall logo" />
-      <span class="logo-wordmark">AfterCall</span>
-    </a>
-
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how-it-works">How It Works</a></li>
-      <li><a href="#founder">Our Story</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="teams.html">For Agencies</a></li>
-    </ul>
-
-    <a href="#download" class="btn">Download</a>
+<header class="nav" id="nav">
+  <div class="shell">
+    <a class="brand" href="#top"><img src="images/home/logo.png" alt="">AfterCall</a>
+    <nav class="navlinks" aria-label="Primary">
+      <a href="#features">Features</a><a href="#ai">AfterCall AI</a><a href="#wellness">Wellness</a><a href="#privacy">Privacy</a><a href="#demos">Demos</a><a href="#agencies">Agencies</a><a href="#pricing">Pricing</a>
+    </nav>
+    <a class="btn btn-grad" href="#get" data-dl>Get the app</a>
   </div>
-</nav>
+</header>
 
-
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
-<section style="padding: 0; position: relative;">
-  <div class="ekg-decor" aria-hidden="true">
-    <svg viewBox="0 0 2400 80" preserveAspectRatio="none">
-      <path class="ekg-line" d="M0 40 L240 40 L260 40 L300 40 L320 38 L340 42 L360 40 L520 40 L540 18 L555 60 L570 12 L585 64 L600 40 L780 40 L795 36 L810 44 L825 40 L1000 40 L1020 40 L1060 40 L1080 38 L1100 42 L1120 40 L1280 40 L1300 18 L1315 60 L1330 12 L1345 64 L1360 40 L1540 40 L1555 36 L1570 44 L1585 40 L1760 40 L1780 38 L1820 42 L1840 40 L2000 40 L2020 18 L2035 60 L2050 12 L2065 64 L2080 40 L2400 40" />
-    </svg>
-  </div>
-  <div class="hero">
-    <div class="hero-left">
-      <img src="images/logo-transparent.png" class="hero-logo" alt="AfterCall" />
-      <div class="hero-eyebrow is-live">
-        <span class="eyebrow-dot"></span>
-        Now on the App Store &amp; Google Play
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell">
+    <div>
+      <div class="pill glass rv"><span class="ekg" aria-hidden="true"><svg viewBox="0 0 64 24"><path d="M0 12h14l4-7 5 14 5-18 5 15 3-4h28"/></svg></span>Built by EMS. Built for EMS.</div>
+      <h1 class="rv d1">The call ends,<br><span class="grad-text">the impact doesn't.</span></h1>
+      <p class="lede rv d2">The app built for EMS providers. Log every call by hand, by voice, or straight from CAD. Track your skills, keep your certs current, and check in on yourself, all in a few minutes after the shift.</p>
+      <div class="ctas rv d3">
+        <a class="btn btn-grad" href="#get" data-dl>Download free</a>
+        <a class="btn btn-glass" href="#demos">Watch product demo&nbsp;<span aria-hidden="true">▶</span></a>
       </div>
-      <h1>Your calls,<br><em>captured.</em></h1>
-      <p class="hero-sub">
-        AfterCall is the app built for EMS providers. Log every call — by hand, by voice, or straight from your CAD dispatch — track your clinical skills, protect your mental health, and connect with your crew. Built by EMS providers, for EMS providers.
-      </p>
-      <div class="download-cta-row">
-        <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn lg" aria-label="Download AfterCall on the App Store">
-          <span class="apple-glyph" aria-hidden="true">
-            <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-          </span>
-          <span class="ast">
-            <span class="ast-small">Download on the</span>
-            <span class="ast-big">App Store</span>
-          </span>
-        </a>
-        <a href="https://play.google.com/store/apps/details?id=com.aftercallapp.android&amp;pcampaignid=web_share" target="_blank" rel="noopener" class="app-store-btn lg" aria-label="Get AfterCall on Google Play">
-          <span class="play-glyph" aria-hidden="true">
-            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l220.7-221.3 60.1 60.1L104.6 499z"/></svg>
-          </span>
-          <span class="ast">
-            <span class="ast-small">GET IT ON</span>
-            <span class="ast-big">Google Play</span>
-          </span>
-        </a>
-        <a href="#features" class="secondary-link">See what's inside <span class="arrow">→</span></a>
-      </div>
-      <p class="hero-trust">Free to download · iOS &amp; Android · Pro with 7-day free trial</p>
+      <p class="fine rv d3">Free on iOS &amp; Android · No credit card · Pro with a 7-day free trial · Rolling out to a department? <a class="link" href="#agencies" style="font-weight:500">See AfterCall for agencies</a></p>
     </div>
+    <div class="hero-stage rv d2">
+      <div class="iphone" style="--w:340px"><div class="screen"><img src="images/home/dashboard-wellness-dark.jpg" alt="AfterCall dashboard with peer support team, active shift and Wellness Score" loading="lazy" decoding="async"></div></div>
+      <div class="chip-float glass cf1"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div>Peer support, one tap away<small>Your team · anonymous if you'd rather</small></div></div>
+      <div class="chip-float glass cf2"><span class="ic">✦</span><div>Narrative ready<small>AfterCall AI · 4 sec</small></div></div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"></div>
+</section>
 
-    <div class="phone-wrap">
-      <div class="phone">
-        <div class="phone-screen">
-          <img src="images/dashboard.png" alt="AfterCall dashboard showing active shift, call counts, and wellness metrics" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-          <div class="screen-placeholder" style="display:none;">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-            AfterCall Dashboard
+<!-- STATEMENT + STATS -->
+<section class="statement">
+  <div class="shell">
+    <div class="eyebrow rv" style="margin-bottom:22px">The problem</div>
+    <p class="big" id="statement">Every part of this job has a field. <span>Except the part you take home.</span></p>
+    <p class="lede rv" style="margin-top:28px;max-width:52ch">Cardiac arrests. Pediatric codes. Overdoses. You run the call, clear, and go again. Nobody asks how you're holding up.</p>
+    <div class="stats">
+      <div class="stat glass rv"><div class="n" data-count="20" data-suffix="%">0%</div><p>of paramedics meet criteria for PTSD in a given year. In the general working population it's 3.1%.</p></div>
+      <div class="stat glass rv d1"><div class="n" data-count="76" data-suffix="%">0%</div><p>call burnout a critical issue in EMS today.</p></div>
+      <div class="stat glass rv d2"><div class="n" data-count="15" data-suffix="%">0%</div><p>actually use peer support, even though 96% of agencies offer it.</p></div>
+    </div>
+    <p class="src">Sources: Hoell, Kourmpeli &amp; Dressing, Frontiers in Public Health, 2023 · What Paramedics Want 2025, EMS1 &amp; Fitch &amp; Associates · 2024 EMS Trend Survey</p>
+  </div>
+</section>
+
+<!-- FEATURES (white bento) -->
+<section class="light pad" id="features">
+  <div class="shell">
+    <div class="center">
+      <div class="eyebrow rv">What AfterCall does</div>
+      <h2 class="rv d1" style="font-size:clamp(44px,6.4vw,88px);margin-top:16px">Everything after the call,<br>in one app.</h2>
+      <p class="lede rv d2" style="margin-top:22px">From the moment you clear a call to the end of a career, AfterCall covers every part of the job that matters.</p>
+    </div>
+    <div class="bento">
+      <article class="tile t-dark s4 rv">
+        <div class="split-tile">
+          <div>
+            <h3>Log Every Call</h3>
+            <p>An 8-step guided entry captures chief complaint, acuity, vitals, interventions, GCS, and outcome. Type it, speak it, or paste your CAD dispatch, and AfterCall builds it into a structured, clinical narrative.</p>
+            <div class="tags"><span>8-Step Call Flow</span><span class="pro">Voice Logging · Pro</span><span class="pro">CAD Dispatch Paste · Pro</span><span class="pro">PDF Export · Pro</span></div>
           </div>
+          <div class="tile-phone" style="margin:0 0 -140px"><div class="iphone sm"><div class="screen"><img src="images/home/mycalls-light.jpg" alt="My Calls list with logged calls, acuity and skills" loading="lazy" decoding="async"></div></div></div>
         </div>
+      </article>
+      <article class="tile t-grad s2 rv d1">
+        <h3>Process What You Carry</h3>
+        <p>Guided reflections after tough calls, end-of-shift debriefs, and quick check-ins tracking mood, stress, energy, alertness, and sleep over time.</p>
+        <div class="tags"><span>Wellness Journal</span><span>Guided Reflection</span><span>Shift Debrief</span><span>Check-ins</span></div>
+      </article>
+      <article class="tile s2 rv">
+        <h3>Know Your Shifts</h3>
+        <p>Acuity breakdowns, category trends, and call patterns across every shift you've worked. Your clinical growth, visualized.</p>
+        <div class="tags"><span>Shift Summary</span><span class="pro">Advanced Analytics · Pro</span><span class="pro">12-Month Heatmap · Pro</span></div>
+      </article>
+      <article class="tile t-dark s2 rv d1">
+        <span class="badge new">NEW</span>
+        <h3>Wellness Score</h3>
+        <p>Your Call Load and your Recharge, combined into one score that catches buildup before burnout. Follow your 14-day trend, and keep your score on your home screen with the widget.</p>
+        <div class="tags"><span>Call Load</span><span>Recharge</span><span>14-Day Trend</span><span>Home-Screen Widget</span></div>
+      </article>
+      <article class="tile s2 rv d2">
+        <h3>Connect With Your Crew</h3>
+        <p>Join your community, share calls, message your partner, and access peer support. A private space built for EMS culture, not a generic feed.</p>
+        <div class="tags"><span>Communities</span><span>Peer Support</span><span>Private Messaging</span></div>
+      </article>
+      <article class="tile s3 rv">
+        <span class="badge">PRO</span>
+        <h3>Own Your Clinical Edge</h3>
+        <p>IV/IOs, airways, medications, cardioversions. Every intervention tracked, so you can see your skill momentum month over month.</p>
+        <div class="tags"><span>Skills Tracker</span><span>Intervention Log</span><span>Skill Momentum</span></div>
+        <div class="tile-phone"><div class="iphone sm"><div class="screen"><img src="images/home/skills-light.jpg" alt="Skills: 195 skills performed in the last 30 days, by category" loading="lazy" decoding="async"></div></div></div>
+      </article>
+      <article class="tile s3 rv d1">
+        <span class="badge">PRO</span>
+        <h3>Stay Ahead of the Job</h3>
+        <p>Trending protocol updates, industry news, and deep-dive breakdowns, curated so you're not digging through Google before a shift.</p>
+        <div class="tags"><span>Trending in EMS</span><span>Protocol Updates</span><span>Deep Dives</span></div>
+        <div class="tile-phone"><div class="iphone sm"><div class="screen"><img src="images/home/trending.jpg" alt="Trending in EMS feed" loading="lazy" decoding="async"></div></div></div>
+      </article>
+      <article class="tile s6 rv">
+        <div class="split-tile">
+          <div>
+            <h3>Keep Every Card Current</h3>
+            <p>NREMT, state license, ACLS, PALS, PHTLS. Each certification runs on its own renewal clock, with CE hours banked as you earn them, a checklist for the paperwork, and reminders at 90, 30 and 7 days out.</p>
+            <div class="tags"><span>Renewal Countdown</span><span>CE Hours</span><span>90 / 30 / 7-day Reminders</span></div>
+          </div>
+          <div class="tile-phone" style="margin:0 0 -140px"><div class="iphone sm"><div class="screen"><img src="images/home/certs-light.jpg" alt="Certifications screen with BLS/CPR due in 11 days, CE hours and renewal checklist" loading="lazy" decoding="async"></div></div></div>
+        </div>
+      </article>
+    </div>
+    <div class="center rv" style="margin-top:48px"><a class="btn btn-dark" href="#get" data-dl>Download free</a></div>
+  </div>
+</section>
+
+<!-- DEMOS (dark carousel) -->
+<section class="product-videos" id="demos" aria-label="AfterCall product video carousel">
+  <div class="pv-head">
+    <div class="eyebrow rv">Product films</div>
+    <h2 class="rv d1">See AfterCall in action.</h2>
+    <p class="lede rv d2">Short walkthroughs of every feature. Jump straight to the part you care about.</p>
+  </div>
+  <div class="pv-rail rv" id="productVideoRail" aria-label="AfterCall product videos">
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/01-overview.jpg" alt="AfterCall Overview video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/01-overview.mp4" poster="/videos/start-product/01-overview.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play AfterCall Overview video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
       </div>
+      <div class="pv-meta"><h3 class="pv-caption">AfterCall Overview</h3><span class="pv-duration">0:52</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/02-manual-call-log.jpg" alt="Manual Call Log video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/02-manual-call-log.mp4" poster="/videos/start-product/02-manual-call-log.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play Manual Call Log video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">Manual Call Log</h3><span class="pv-duration">4:11</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/03-voice-log.jpg" alt="Voice Log video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/03-voice-log.mp4" poster="/videos/start-product/03-voice-log.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play Voice Log video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">Voice Log</h3><span class="pv-duration">2:56</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/04-cad-dispatch.jpg" alt="CAD / Dispatch video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/04-cad-dispatch.mp4" poster="/videos/start-product/04-cad-dispatch.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play CAD / Dispatch video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">CAD / Dispatch</h3><span class="pv-duration">1:50</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/05-skills.jpg" alt="Skills video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/05-skills.mp4" poster="/videos/start-product/05-skills.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play Skills video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">Skills</h3><span class="pv-duration">1:52</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/06-journal.jpg" alt="Journal video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/06-journal.mp4" poster="/videos/start-product/06-journal.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play Journal video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">Journal</h3><span class="pv-duration">3:20</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/07-communities.jpg" alt="Communities video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/07-communities.mp4" poster="/videos/start-product/07-communities.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play Communities video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">Communities</h3><span class="pv-duration">3:03</span></div>
+    </article>
+    <article class="pv-card">
+      <div class="pv-video-shell">
+        <img class="pv-poster" src="/videos/start-product/08-aftercall-walkthrough.jpg" alt="Full AfterCall Walkthrough video thumbnail" loading="lazy" decoding="async" width="1280" height="720">
+        <video class="pv-video" src="/videos/start-product/08-aftercall-walkthrough.mp4" poster="/videos/start-product/08-aftercall-walkthrough.jpg" preload="metadata" playsinline webkit-playsinline></video>
+        <div class="pv-overlay"><button class="pv-play" type="button" aria-label="Play Full AfterCall Walkthrough video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      </div>
+      <div class="pv-meta"><h3 class="pv-caption">Full AfterCall Walkthrough</h3><span class="pv-duration">5:46</span></div>
+    </article>
+  </div>
+  <div class="pv-nav" aria-label="Product video carousel navigation">
+    <button class="pv-arrow" id="productVideoPrev" type="button" aria-label="Previous product video"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="pv-arrow" id="productVideoNext" type="button" aria-label="Next product video"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</section>
+
+<!-- WELLNESS (white) -->
+<section class="light pad well" id="wellness">
+  <div class="shell well-grid">
+    <div>
+      <div class="eyebrow rv">New</div>
+      <h2 class="rv d1" style="margin-top:16px">Wellness Score</h2>
+      <p class="lede rv d2" style="margin-top:24px">Your Call Load and your Recharge, combined into one score that catches buildup before burnout. Follow your 14-day trend, and keep your score on your home screen with the widget.</p>
+      <ul class="checklist rv d3">
+        <li><span><b>Call Load</b></span></li>
+        <li><span><b>Recharge</b></span></li>
+        <li><span><b>14-Day Trend</b></span></li>
+        <li><span><b>Home-Screen Widget</b></span></li>
+      </ul>
+    </div>
+    <div class="well-stage rv d2">
+      <div class="iphone back" style="--w:300px"><div class="screen"><img src="images/home/wellness-expanded-light.jpg" alt="Wellness Score 50, Load Building: Call Load 55, Recharge 77, what's driving it and the last 14 days" loading="lazy" decoding="async"></div></div>
+      <div class="iphone front" style="--w:230px"><div class="screen"><img src="images/home/reflection-dark.jpg" alt="Guided Reflection journal prompt: What's one thing you're grateful for right now?" loading="lazy" decoding="async"></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     TRUST BAR
-══════════════════════════════════════════ -->
-<div class="trust-bar">
-  <div class="container">
-    <p>Built for <span>EMTs, Paramedics & EMS Providers</span> &nbsp;·&nbsp; <span>Live now</span> &nbsp;·&nbsp; Available on <span>iOS & Android</span></p>
-  </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════
-     PROBLEM
-══════════════════════════════════════════ -->
-<section class="problem">
-  <div class="container">
-    <div class="problem-grid">
-      <div class="problem-text">
-        <p class="section-label">The problem</p>
-        <h2>EMS providers carry<br>more than equipment.</h2>
-
-        <p>
-          Cardiac arrests. Pediatric codes. Overdoses. Traumas. You run the call, document, clear, and go again. <strong>Nobody asks how you're holding up.</strong>
-        </p>
-        <p>
-          The documentation tools built for EMS don't serve the provider — they serve the system. <strong>AfterCall is built for the person doing the work</strong>, for the moment after the call.
-        </p>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z"/></svg>
-          </div>
-          <div class="stat-num" data-count="30" data-suffix="%">0%</div>
-          <div class="stat-label">of EMS providers experience PTSD during their career</div>
-          <div class="stat-bar"><i class="stat-bar-fill" data-fill="30"></i></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
-          </div>
-          <div class="stat-num" data-count="46" data-suffix="%">0%</div>
-          <div class="stat-label">report symptoms of depression — often unaddressed</div>
-          <div class="stat-bar"><i class="stat-bar-fill" data-fill="46"></i></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg>
-          </div>
-          <div class="stat-num" data-count="0" data-suffix="">0</div>
-          <div class="stat-label">apps designed specifically for EMS provider mental wellness and clinical tracking</div>
-          <div class="stat-bar"><i class="stat-bar-fill" data-fill="2"></i></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>
-          </div>
-          <div class="stat-num" data-count="100" data-suffix="%">0%</div>
-          <div class="stat-label">of providers deserve a tool that understands their world</div>
-          <div class="stat-bar"><i class="stat-bar-fill" data-fill="100"></i></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     FEATURES
-══════════════════════════════════════════ -->
-<section class="features" id="features">
-  <div class="container">
-    <p class="section-label">What AfterCall does</p>
-    <h2>Seven features.<br>One app. Built for EMS.</h2>
-    <p class="section-sub">From the moment you clear a call to the end of a career — AfterCall covers every part of the job that matters.</p>
-
-    <!-- What's new — release highlight (1.2.4) -->
-    <div class="whatsnew" role="region" aria-label="What's new in AfterCall 1.2.4">
-      <div class="whatsnew-body">
-        <span class="whatsnew-pill">New in 1.2.4</span>
-        <h3>Every card on its own <span>clock</span></h3>
-        <p>NREMT, state license, ACLS, PALS, PHTLS — the certification tracker keeps each one on its own renewal cycle, banks CE hours as you earn them, and reminds you at 90, 30 and 7 days out. Nothing lapses mid-shift.</p>
-        <ul class="whatsnew-chips" aria-label="Also new in this release">
-          <li class="tag">Emoji reactions in chat</li>
-          <li class="tag">Threaded comment replies</li>
-          <li class="tag">3 free AfterCall AI narratives</li>
-          <li class="tag">Peer support chat upgrades</li>
-        </ul>
-      </div>
-      <div class="whatsnew-visual" aria-hidden="true">
-        <div class="cert-card">
-          <div class="cert-top"><span class="cert-name">NREMT-Paramedic</span><span class="cert-pill">Renews in 84 days</span></div>
-          <div class="cert-row"><span>CE hours</span><div class="bar"><i style="width:65%"></i></div><span>39 / 60</span></div>
-          <ul class="cert-list">
-            <li class="done">Complete CE hours</li>
-            <li class="done">Skills verified by training officer</li>
-            <li>Submit renewal to NREMT</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- What's new — release highlight (v1.2) -->
-    <div class="whatsnew" role="region" aria-label="What's new in AfterCall 1.2">
-      <div class="whatsnew-body">
-        <span class="whatsnew-pill">New in 1.2</span>
-        <h3>Meet your <span>Wellness Score</span></h3>
-        <p>Your call load and check-ins, combined into one score that catches buildup before burnout — so a heavy stretch shows up here before it catches you off guard.</p>
-        <ul class="whatsnew-chips" aria-label="Also new in this release">
-          <li class="tag">10 languages</li>
-          <li class="tag">Home-screen widgets &amp; Live Activity</li>
-          <li class="tag">Voice input everywhere</li>
-          <li class="tag">Post-shift check-ins</li>
-          <li class="tag">Shift calendar</li>
-        </ul>
-      </div>
-      <div class="whatsnew-visual" aria-hidden="true">
-        <div class="score-ring-card">
-          <div class="score-ring">
-            <svg viewBox="0 0 120 120" width="116" height="116">
-              <circle cx="60" cy="60" r="52" fill="none" stroke="#dbeafe" stroke-width="10"/>
-              <circle cx="60" cy="60" r="52" fill="none" stroke="#10B981" stroke-width="10"
-                stroke-linecap="round" stroke-dasharray="241.8 326.7"
-                transform="rotate(-90 60 60)"/>
-            </svg>
-            <div class="sr-center">
-              <span class="sr-num">74</span>
-              <span class="sr-tag">Steady</span>
-            </div>
-          </div>
-          <p class="sr-caption">Wellness Score</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="features-grid">
-
-      <!-- Feature 1 -->
-      <div class="feature-card">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-          </div>
-          <h3>Log Every Call</h3>
-          <p>An 8-step guided entry captures chief complaint, acuity, vitals, interventions, GCS, and outcome. Type it, speak it, or paste your CAD dispatch — AfterCall builds it into a structured, clinical narrative.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">Today's calls by acuity <span style="color:var(--text-light); font-weight:700;">12 total</span></div>
-            <div class="acuity-stack" role="img" aria-label="Acuity breakdown: 5 Minor, 4 Moderate, 2 Serious, 1 Critical">
-              <span style="background:#10B981; width:42%; animation-delay:.05s"></span>
-              <span style="background:#F59E0B; width:33%; animation-delay:.20s"></span>
-              <span style="background:#F97316; width:17%; animation-delay:.35s"></span>
-              <span style="background:#DC2626; width:8%;  animation-delay:.50s"></span>
-            </div>
-            <div class="acuity-legend">
-              <span><i style="background:#10B981"></i>Minor <b>5</b></span>
-              <span><i style="background:#F59E0B"></i>Moderate <b>4</b></span>
-              <span><i style="background:#F97316"></i>Serious <b>2</b></span>
-              <span><i style="background:#DC2626"></i>Critical <b>1</b></span>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">8-Step Call Flow</span>
-            <span class="tag">Voice Logging</span>
-            <span class="tag">CAD Dispatch Paste</span>
-            <span class="tag">PDF Export</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/new-call.png" alt="New call type selection screen showing cardiac, respiratory, neurological and more" onerror="this.style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature 2 -->
-      <div class="feature-card">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 8-9"/><path d="M14 6h7v7"/></svg>
-          </div>
-          <h3>Know Your Shifts</h3>
-          <p>Acuity breakdowns, category trends, and skill frequency across every shift you've worked — your clinical growth, visualized.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">Calls per shift · 30 days <span class="mini-trend">↗ +8%</span></div>
-            <div class="mini-line">
-              <svg viewBox="0 0 220 38" preserveAspectRatio="none">
-                <defs><linearGradient id="blueFade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3379CF" stop-opacity="0.30"/><stop offset="1" stop-color="#3379CF" stop-opacity="0"/></linearGradient></defs>
-                <path class="l-area" d="M0 30 L20 24 L40 26 L60 18 L80 20 L100 14 L120 17 L140 10 L160 13 L180 8 L200 11 L220 6 L220 38 L0 38 Z"/>
-                <path class="l-path" d="M0 30 L20 24 L40 26 L60 18 L80 20 L100 14 L120 17 L140 10 L160 13 L180 8 L200 11 L220 6"/>
-              </svg>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">Analytics</span>
-            <span class="tag">Skill Tracking</span>
-            <span class="tag">Shift Debrief</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/my-calls-analytics.png" alt="My Calls analytics showing 68 total calls, 14 critical, call activity chart" onerror="this.style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature 3 -->
-      <div class="feature-card">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M9 11a3 3 0 0 1 0-6h.5a2.5 2.5 0 0 1 5 0H15a3 3 0 0 1 0 6"/><path d="M9 11v3a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3v-3"/><path d="M12 17v4"/></svg>
-          </div>
-          <h3>Process What You Carry</h3>
-          <p>Guided reflections after tough calls, end-of-shift debriefs, and quick check-ins tracking mood, stress, energy, and sleep over time.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">This week's wellness</div>
-            <div class="mini-dial">
-              <svg class="dial-ring" viewBox="0 0 60 60" aria-hidden="true">
-                <circle class="ring-track" cx="30" cy="30" r="22"/>
-                <circle class="ring-fill"  cx="30" cy="30" r="22"/>
-              </svg>
-              <div>
-                <div class="dial-num">7.2 <span style="font-size:11px;color:var(--text-light);font-weight:600;">/ 10</span></div>
-                <div class="dial-label">Mood · Stress · Energy · Sleep</div>
-              </div>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">Wellness Journal</span>
-            <span class="tag">Guided Reflection</span>
-            <span class="tag">Shift Debrief</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/journal-checkin.png" alt="Journal check-in screen showing mood, stress, energy and sleep tracking" onerror="this.style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature 4 -->
-      <div class="feature-card">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c.5-3.5 3-5 6-5s5.5 1.5 6 5"/><path d="M14 19c.4-2 2-3 3.5-3s2.6.8 3.5 2.5"/></svg>
-          </div>
-          <h3>Connect With Your Crew</h3>
-          <p>Join your station, share calls, message your partner, and access peer support — a private space built for EMS culture, not a generic feed.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">MED 445 · Ventura County AMR <span class="mini-trend">● Online</span></div>
-            <div class="mini-avatars">
-              <span class="av">JA</span>
-              <span class="av" style="background:linear-gradient(135deg,#6ba6e8,#3379CF);">RM</span>
-              <span class="av" style="background:linear-gradient(135deg,#1F5FA3,#0f1923);">LK</span>
-              <span class="av" style="background:linear-gradient(135deg,#3379CF,#1F5FA3);">DT</span>
-              <span class="av av-more">+12</span>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">Stations</span>
-            <span class="tag">Peer Support</span>
-            <span class="tag">Private Messaging</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/community-org.png" alt="Station org page showing MED 445 Ventura County AMR" onerror="this.style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature 5 -->
-      <div class="feature-card">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M4 6h13a3 3 0 0 1 3 3v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/><path d="M4 6V4h11v2"/><path d="M7 10h7M7 14h7M7 18h5"/></svg>
-          </div>
-          <h3>Stay Ahead of the Job</h3>
-          <p>Trending protocol updates, industry news, and deep-dive breakdowns — curated, so you're not digging through Google before a shift.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">Trending in EMS now</div>
-            <div class="mini-chips">
-              <span class="mini-chip alt">● TXA in Trauma</span>
-              <span class="mini-chip">Push-dose Epi</span>
-              <span class="mini-chip">Spinal Motion 2.0</span>
-              <span class="mini-chip">Fentanyl IN</span>
-              <span class="mini-chip">EtCO₂ in Sepsis</span>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">Trending in EMS</span>
-            <span class="tag">Protocol Updates</span>
-            <span class="tag">Community Shares</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/trending.png" alt="AfterCall Feed showing trending EMS articles" onerror="this.style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature 6 -->
-      <div class="feature-card">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M14 4l6 6"/><path d="M11 7l6 6-6 6-3-3 1-2-3-3 2-1z"/><path d="M5 19l3-3"/></svg>
-          </div>
-          <h3>Own Your Clinical Edge</h3>
-          <p>IV/IOs, airways, medications, cardioversions — every intervention tracked, so you can see your skill momentum month over month.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">Skill momentum · 90 days</div>
-            <div class="mini-skill-rows">
-              <div class="skill-row"><span>IV/IO</span><div class="bar"><i style="width:88%; animation-delay:.1s"></i></div><span>88%</span></div>
-              <div class="skill-row"><span>Airway</span><div class="bar"><i style="width:64%; animation-delay:.25s"></i></div><span>64%</span></div>
-              <div class="skill-row"><span>Cardiac</span><div class="bar"><i style="width:42%; animation-delay:.4s"></i></div><span>42%</span></div>
-              <div class="skill-row"><span>Trauma</span><div class="bar"><i style="width:71%; animation-delay:.55s"></i></div><span>71%</span></div>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">Skill Momentum</span>
-            <span class="tag">Intervention Log</span>
-            <span class="tag">Clinical Growth</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/skills.png" alt="Skills by category donut chart showing clinical skill breakdown" onerror="this.style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-      <!-- Feature 7 -->
-      <div class="feature-card feature-card-wide">
-        <div class="feature-content">
-          <div class="feature-icon-svg" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M8.6 13.4L7 22l5-3 5 3-1.6-8.6"/></svg>
-          </div>
-          <h3>Keep Every Card Current</h3>
-          <p>NREMT, state license, ACLS, PALS, PHTLS — each certification on its own renewal clock, with CE hours banked as you earn them, a checklist for the paperwork, and reminders at 90, 30 and 7 days out.</p>
-          <div class="feature-mini" aria-hidden="true">
-            <div class="mini-label">Cycle progress · days to renewal</div>
-            <div class="mini-skill-rows">
-              <div class="skill-row"><span>NREMT-P</span><div class="bar"><i style="width:88%; animation-delay:.1s"></i></div><span>84d</span></div>
-              <div class="skill-row"><span>ACLS</span><div class="bar"><i style="width:71%; animation-delay:.25s"></i></div><span>212d</span></div>
-              <div class="skill-row"><span>PALS</span><div class="bar"><i style="width:94%; animation-delay:.4s"></i></div><span>41d</span></div>
-              <div class="skill-row"><span>State lic.</span><div class="bar"><i style="width:25%; animation-delay:.55s"></i></div><span>1y+</span></div>
-            </div>
-          </div>
-          <div class="feature-tags">
-            <span class="tag">Renewal Countdown</span>
-            <span class="tag">CE Hours</span>
-            <span class="tag">90 / 30 / 7-day Reminders</span>
-          </div>
-        </div>
-        <div class="feature-phone-wrap">
-          <div class="feature-phone">
-            <div class="feature-phone-screen">
-              <img src="images/certifications.png" alt="AfterCall certifications screen showing the next renewal due and CE progress" onerror="var c=this.closest('.feature-card-wide'); if(c){c.style.gridTemplateColumns='1fr';} this.closest('.feature-phone-wrap').style.display='none';" />
-            </div>
-          </div>
-        </div>
-      </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     SCROLLING GALLERY
-══════════════════════════════════════════ -->
-<div class="gallery">
-  <div class="gallery-header container">
-    <p class="section-label" style="text-align:center;">See it in action</p>
-    <h2 style="text-align:center;">Built by providers,<br>for providers.</h2>
-  </div>
-
-  <div class="scroll-wrapper">
-    <div class="scroll-track" id="scroll-track">
-      <!-- Light mode screens -->
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/dashboard.png" alt="Dashboard" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/new-call.png" alt="New call" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/journal-checkin.png" alt="Journal check-in" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/community-feed.png" alt="Community feed" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/my-calls-analytics.png" alt="Analytics" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/guided-reflection.png" alt="Guided reflection" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/community-org.png" alt="Station org" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/journal-wellness.png" alt="Wellness chart" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <!-- Dark mode screens -->
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/dashboard-dark.png" alt="Dashboard dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/new-call-patient.png" alt="Patient assessment" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/my-calls-analytics-dark.png" alt="Analytics dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/new-call-interventions.png" alt="Interventions" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/my-calls-stats-dark.png" alt="Stats dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/home-dark.png" alt="Home dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/shift-calendar.png" alt="Shift calendar" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <!-- Duplicate for seamless loop -->
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/dashboard.png" alt="Dashboard" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/new-call.png" alt="New call" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/journal-checkin.png" alt="Journal check-in" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/community-feed.png" alt="Community feed" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/my-calls-analytics.png" alt="Analytics" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/guided-reflection.png" alt="Guided reflection" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/community-org.png" alt="Station org" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/journal-wellness.png" alt="Wellness chart" onerror="this.parentElement.style.background='#eef4fd';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/dashboard-dark.png" alt="Dashboard dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/new-call-patient.png" alt="Patient assessment" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/my-calls-analytics-dark.png" alt="Analytics dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/new-call-interventions.png" alt="Interventions" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/my-calls-stats-dark.png" alt="Stats dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/home-dark.png" alt="Home dark" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-      <div class="scroll-phone"><div class="scroll-screen"><img src="images/shift-calendar.png" alt="Shift calendar" onerror="this.parentElement.style.background='#161b22';" /></div></div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════
-     DARK MODE SHOWCASE
-══════════════════════════════════════════ -->
-<section class="darkmode-section">
-  <div class="container">
-    <div class="darkmode-grid">
-      <div>
-        <p class="section-label">Designed for every shift</p>
-        <h2>Dark mode. Because 3am is real.</h2>
-        <p class="darkmode-sub">AfterCall works the way you work, including in the dark. Full dark mode throughout the entire app, so logging a call at 3am or journaling after a rough shift doesn't mean staring into a flashlight.</p>
-        <div class="darkmode-features">
-          <div class="dm-feature">
-            <div class="dm-icon">🌙</div>
-            <div>
-              <h4>Full dark mode</h4>
-              <p>Every screen, every flow, built in light and dark. Switches automatically with your system setting.</p>
-            </div>
-          </div>
-          <div class="dm-feature">
-            <div class="dm-icon">📅</div>
-            <div>
-              <h4>Shift calendar</h4>
-              <p>Plan and track your upcoming shifts. Your schedule lives alongside your call log, all in one place.</p>
-            </div>
-          </div>
-          <div class="dm-feature">
-            <div class="dm-icon">⚡</div>
-            <div>
-              <h4>Instant call logging</h4>
-              <p>The + button is always one tap away. Log a call between runs, no matter what else you're doing in the app.</p>
-            </div>
-          </div>
-          <div class="dm-feature">
-            <div class="dm-icon">🔒</div>
-            <div>
-              <h4>Your data, private</h4>
-              <p>Everything you log is yours. No data is shared without your consent. Built with provider privacy in mind.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="darkmode-phones">
-        <div class="dm-phone-lg">
-          <div class="dm-screen">
-            <img src="images/dashboard-dark.png" alt="AfterCall dark mode dashboard" onerror="this.parentElement.style.background='#161b22';" />
-          </div>
-        </div>
-        <div class="dm-phone-sm">
-          <div class="dm-screen-sm">
-            <img src="images/shift-calendar.png" alt="AfterCall shift calendar" onerror="this.parentElement.style.background='#161b22';" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     AI SHOWCASE
-══════════════════════════════════════════ -->
-<section class="ai-showcase">
-  <div class="container">
+<!-- AI (dark) -->
+<section class="ai pad" id="ai">
+  <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell">
     <div class="ai-grid">
-      <div class="ai-text">
-        <p class="section-label">✦ AfterCall AI</p>
-        <h2>The narrative writes itself. Because you already logged the call.</h2>
-        <p>Fill in the 8-step call flow — patient, vitals, acuity, interventions, GCS, outcome. Or just <strong>speak the call</strong> or <strong>paste your CAD dispatch</strong> and let it fill the fields. <span class="ai-purple">AfterCall AI</span> turns it into a <strong>tight, clinically accurate</strong> narrative in seconds. No filler. No template copy-paste.</p>
-        <p>The same <span class="ai-purple">AfterCall AI</span> powers your end-of-shift debrief and a private chat that reads across your calls and journal to surface <strong>feedback that actually means something.</strong></p>
-        <div style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px;">
-          <span class="ai-purple-pill">✦ Call Narrative</span>
-          <span class="ai-purple-pill">✦ Voice Logging</span>
-          <span class="ai-purple-pill">✦ CAD Paste</span>
-          <span class="ai-purple-pill">✦ AI Chat</span>
-          <span class="ai-purple-pill">✦ Shift Debrief</span>
-          <span class="ai-purple-pill">✦ Wellness Insights</span>
+      <div>
+        <div class="eyebrow rv">✦ 3 free · then Pro</div>
+        <h2 class="rv d1" style="margin-top:16px">AfterCall <span class="grad-text">AI</span></h2>
+        <p class="lede rv d2" style="margin-top:24px">Fill in the call, or just speak it, and AfterCall AI writes a tight, clinically accurate narrative in seconds. It also surfaces insights across your calls and journal, right on your Home screen.</p>
+        <div class="ai-points rv d3">
+          <div><b>Call Narratives</b></div>
+          <div><b>AI Insights</b></div>
+          <div><b>Home Card</b></div>
         </div>
       </div>
-      <div class="ai-terminal">
-        <div class="terminal-bar">
-          <div class="t-dot red"></div>
-          <div class="t-dot yellow"></div>
-          <div class="t-dot green"></div>
-          <span class="terminal-label">AfterCall AI · Narrative Generator</span>
-        </div>
-        <div class="terminal-body">
-          <div class="t-panels">
-            <!-- INPUT PANEL -->
-            <div class="t-panel t-panel-input">
-              <div class="t-panel-label input-label">📋 You entered</div>
-              <div class="t-field">
-                <span class="t-key">Patient</span>
-                <span class="t-val">19 y/o Male</span>
-              </div>
-              <div class="t-field">
-                <span class="t-key">Chief Complaint</span>
-                <span class="t-val">MVC — motorcycle vs. SUV, ejected</span>
-              </div>
-              <div class="t-field">
-                <span class="t-key">Acuity</span>
-                <span class="t-val">Critical</span>
-              </div>
-              <div class="t-field">
-                <span class="t-key">Vitals</span>
-                <span class="t-val">BP 84/56 · HR 128 · SpO2 91%</span>
-              </div>
-              <div class="t-field">
-                <span class="t-key">GCS</span>
-                <span class="t-val">8/15 (E2 V2 M4)</span>
-              </div>
-              <div class="t-field">
-                <span class="t-key">Interventions</span>
-                <span class="t-val">C-spine · Tourniquet R leg · Needle decompression R chest · 2× large bore IV · 1L NS · BVM</span>
-              </div>
-              <div class="t-field">
-                <span class="t-key">Outcome</span>
-                <span class="t-val">Trauma alert · Regional trauma center · SpO2 improved to 97%</span>
-              </div>
-            </div>
-            <!-- OUTPUT PANEL -->
-            <div class="t-panel">
-              <div class="t-panel-label output-label">✦ Narrative generated</div>
-              <div class="t-generating"><span class="t-dot-pulse"></span> Processing clinical data...</div>
-              <div class="t-output reveal-on-view">At <span class="highlight">16:22</span>, unit responded to a motorcycle vs. SUV collision on northbound I-101. Patient, a <span class="highlight">19-year-old male</span>, was found approximately 30 feet from point of impact — ejected, unresponsive. GCS on contact: <span class="highlight">8/15 (E2V2M4)</span>. Primary survey revealed diminished breath sounds right chest, HR <span class="highlight">128</span>, BP <span class="highlight">84/56</span>, SpO2 91% on room air. Tension pneumothorax suspected: <span class="highlight">needle thoracostomy</span> performed at 2nd ICS, midclavicular line with immediate improvement. <span class="highlight">Tourniquet</span> applied right lower extremity for suspected arterial hemorrhage. Two large-bore IVs established; <span class="highlight">1L NS</span> infused en route. BVM initiated — SpO2 improved to <span class="highlight">97%</span>. C-spine precautions maintained. <span class="highlight">Trauma alert</span> activated. Transported to Regional Trauma Center, ETA 8 min.<span class="t-cursor"></span></div>
-            </div>
+      <div class="ai-stage rv d2">
+        <div class="iphone" style="--w:300px"><div class="screen"><img src="images/home/home-wellness-ai-dark.jpg" alt="Wellness Score card and AfterCall AI insight: hard calls show up in your mood" loading="lazy" decoding="async"></div></div>
+      <div class="glass narr">
+          <div class="hd"><i></i>NARRATIVE GENERATED</div>
+          <div class="fields">
+            <div>Patient<b>19 y/o M</b></div><div>Acuity<b>Critical</b></div><div>GCS<b>8 / 15</b></div>
           </div>
+          <p id="type" data-text="Unit responded to a motorcycle vs. SUV collision. Patient, a 19-year-old male, found ejected and unresponsive. GCS 8/15. Diminished breath sounds right chest; needle decompression performed with immediate improvement. Tourniquet applied right lower extremity. Two large-bore IVs established. SpO2 improved to 97%. Trauma alert activated."></p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- ══════════════════════════════════════════
-     HOW IT WORKS
-══════════════════════════════════════════ -->
-<section class="hiw" id="how-it-works">
-  <div class="container">
-    <p class="section-label" style="text-align:center;">Simple by design</p>
-    <h2 style="text-align:center; margin-bottom:14px;">How AfterCall works</h2>
-    <p class="section-sub" style="text-align:center; margin-left:auto; margin-right:auto;">The whole flow takes a few minutes. The insight lasts a career.</p>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-glyph" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-        </div>
-        <h3>Log the call</h3>
-        <p>Walk through 8 guided steps: call type, patient, interventions, vitals, outcome. Fast, structured, and built around real EMS workflows.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-glyph" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2v3M19 5l-2 2M22 12h-3M19 19l-2-2M12 22v-3M5 19l2-2M2 12h3M5 5l2 2"/><circle cx="12" cy="12" r="4"/></svg>
-        </div>
-        <h3>Debrief your shift</h3>
-        <p>AI summarizes your calls, flags patterns, and checks in on your mental health. Five questions, five minutes.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-glyph" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 8-9"/><path d="M14 6h7v7"/></svg>
-        </div>
-        <h3>Track your growth</h3>
-        <p>See skill momentum, acuity trends, intervention frequency, and wellness data. Know where you're strong, and where to lean in.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     FOUNDER STORY
-══════════════════════════════════════════ -->
-<section class="founder" id="founder">
-  <div class="container">
-    <div class="founder-grid">
-
-      <div class="founder-card">
-        <div class="founder-avatar">
-          <img src="images/founder.jpg" alt="Jordan Appelbaum" onerror="this.style.display='none'; this.parentElement.style.fontSize='32px';" />
-        </div>
-        <div class="founder-name">Jordan Appelbaum</div>
-        <div class="founder-role">Founder &amp; CEO, AfterCall LLC</div>
-        <p class="founder-quote">
-          I've cleared brutal calls, driven back to quarters in silence, and had absolutely nothing waiting for me on the other side. No record of what I did. No space to process it. The tools in EMS were never built for us. They were built around us. AfterCall is what I wished existed when I needed it most.
-        </p>
-      </div>
-
-      <div class="founder-text">
-        <p class="section-label">Our story</p>
-        <h2>I built this because nobody else was going to.</h2>
-        <p>
-          EMS providers run into some of the worst moments of people's lives, every single shift. They do it with skill and they do it without flinching. And when the call is over, they document, clear the scene, and wait for the tones to drop again.
-        </p>
-        <p>
-          Nobody asks if they're okay. Nobody tracks what they're doing out there. Nobody built them a tool that actually understands this job.
-        </p>
-        <p>
-          That's what AfterCall is. I built it because I understood the culture, the burnout, the weight of a bad pediatric call at 3am, and the frustration of documentation software that treats you like a data entry clerk instead of a clinician.
-        </p>
-        <p>
-          This isn't a generic wellness app with an ambulance on the icon. <strong>Every single feature was designed around what EMS providers actually experience.</strong> The AI knows clinical language. The wellness tools understand compassion fatigue. The community is built around how crews actually talk to each other.
-        </p>
-        <p>
-          AfterCall LLC is an independent company. No corporate backing. Just a deep belief that the people who run toward emergencies deserve a tool that's genuinely on their side.
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     PRICING
-══════════════════════════════════════════ -->
-<!-- ══════════════════════════════════════════
-     COMPARISON TABLE
-══════════════════════════════════════════ -->
-<section class="compare-section">
-  <div class="container">
-    <p class="section-label" style="text-align:center;">Why AfterCall</p>
-    <h2>There's nothing else like it.</h2>
-    <p class="compare-sub">Note apps weren't built for EMS. PCR software was built for billing and compliance, not the provider. AfterCall was built to do both, and more.</p>
-
-    <div class="compare-wrap">
-    <table class="compare-table">
-      <colgroup><col /><col /><col /><col /></colgroup>
-      <thead>
-        <tr>
-          <th style="background:white;"></th>
-          <th class="th-aftercall">AfterCall<small>Built for EMS</small></th>
-          <th class="th-notes">Note Apps</th>
-          <th class="th-pcr">PCR Software</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <!-- CATEGORY: The Foundation -->
-        <tr class="cat-divider"><td colspan="4"><span>🏥</span> Built for the Provider</td></tr>
-        <tr>
-          <td>Built specifically for EMS providers</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-yes" style="background:#22c55e;">✓</span></td>
-        </tr>
-        <tr>
-          <td>Mobile-first, designed for on-shift use</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-yes" style="background:#22c55e;">✓</span></td>
-          <td><span class="c-yes" style="background:#22c55e;">✓</span></td>
-        </tr>
-        <tr>
-          <td>Free to start</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-yes" style="background:#22c55e;">✓</span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-        <tr>
-          <td>Dark mode</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-yes" style="background:#22c55e;">✓</span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-
-        <!-- CATEGORY: Call Logging -->
-        <tr class="cat-divider"><td colspan="4"><span>📋</span> Call Documentation</td></tr>
-        <tr class="key-row">
-          <td>Guided call logging with acuity &amp; interventions<span class="key-badge">Core</span></td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-partial">Partial</span></td>
-        </tr>
-        <tr class="key-row">
-          <td>Clinical skill &amp; intervention tracking<span class="key-badge">Core</span></td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-partial">Partial</span></td>
-        </tr>
-        <tr>
-          <td>Call narrative generation</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-        <tr class="key-row">
-          <td>Calls linked directly to journal entries<span class="key-badge">Unique</span></td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-
-        <!-- CATEGORY: Wellness -->
-        <tr class="cat-divider"><td colspan="4"><span>🧠</span> Provider Wellness &amp; Reflection</td></tr>
-        <tr class="key-row">
-          <td>Wellness journaling &amp; check-ins<span class="key-badge">Core</span></td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-        <tr>
-          <td>Post-call guided reflections</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-        <tr>
-          <td>End-of-shift debrief &amp; summary</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-
-        <!-- CATEGORY: Community -->
-        <tr class="cat-divider"><td colspan="4"><span>👥</span> Community &amp; Growth</td></tr>
-        <tr>
-          <td>Station community &amp; peer support</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-        <tr>
-          <td>Trending EMS news &amp; protocol updates</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-        <tr>
-          <td>Shift calendar &amp; scheduling</td>
-          <td class="col-af"><span class="c-yes">✓</span></td>
-          <td><span class="c-no"></span></td>
-          <td><span class="c-no"></span></td>
-        </tr>
-
-      </tbody>
-    </table>
-    </div>
-  </div>
-</section>
-
-
-<section class="pricing" id="pricing">
-  <div class="container">
-    <p class="section-label" style="text-align:center;">Simple, honest pricing</p>
-    <h2 style="text-align:center; margin-bottom:14px;">Free to start. Pro when you're ready.</h2>
-    <p class="section-sub" style="text-align:center; margin-left:auto; margin-right:auto;">Core features are free, always. Pro unlocks AI and advanced tools for providers who want everything.</p>
-
-    <div class="pricing-toggle-wrap">
-      <div class="pricing-toggle">
-        <button class="toggle-opt active" id="tog-annual" onclick="setPricing('annual')">Annual <span class="save-pill">Save 37%</span></button>
-        <button class="toggle-opt" id="tog-monthly" onclick="setPricing('monthly')">Monthly</button>
-      </div>
+<!-- JOURNAL + COMMUNITIES (mist w/ phones) -->
+<section class="mist pad">
+  <div class="shell center">
+    <div class="eyebrow rv">Journaling &amp; gratitude</div>
+    <h2 class="rv d1" style="font-size:clamp(44px,6vw,80px);margin-top:16px">Clearing the scene<br>doesn't clear your head.</h2>
+    <p class="lede rv d2" style="margin-top:22px">Take two minutes after a hard call or at the end of a shift. AfterCall gives you a private place to put it down, so you don't carry it home.</p>
+    <div class="phone-row rv d2">
+      <div class="iphone sm"><div class="screen"><img src="images/home/insights-dark.jpg" alt="AfterCall AI insight: stress higher on heavy call days" loading="lazy" decoding="async"></div></div>
+      <div class="iphone"><div class="screen"><img src="images/home/wellness-light.jpg" alt="Wellness screen with Wellness Score, streak and journaling prompts" loading="lazy" decoding="async"></div></div>
+      <div class="iphone sm"><div class="screen"><img src="images/home/community-org.jpg" alt="Communities and peer support" loading="lazy" decoding="async"></div></div>
     </div>
 
-    <div class="pricing-grid">
-
-      <div class="pricing-card">
-        <p class="pricing-tier">Free</p>
-        <div class="pricing-price">$0</div>
-        <div class="pricing-cadence">Always free</div>
-        <p class="pricing-desc">Everything you need to start logging calls and building your record. No credit card required.</p>
-        <ul class="pricing-features">
-          <li><span class="check">✓</span> Call logging (unlimited)</li>
-          <li><span class="check">✓</span> Basic shift summary</li>
-          <li><span class="check">✓</span> Journal &amp; wellness check-ins</li>
-          <li><span class="check">✓</span> Certification &amp; CE renewal tracker</li>
-          <li><span class="check">✓</span> Community, peer support &amp; messaging</li>
-          <li><span class="check">✓</span> Share de-identified calls to your crew</li>
-          <li><span class="check">✓</span> 30-day call history heatmap</li>
-          <li class="locked"><span class="check">✕</span> AfterCall AI &amp; call narratives</li>
-          <li class="locked"><span class="check">✕</span> Voice &amp; CAD dispatch logging</li>
-          <li class="locked"><span class="check">✕</span> PDF export</li>
-          <li class="locked"><span class="check">✕</span> 12-month call history</li>
+    <div class="duo">
+      <div class="duo-card rv">
+        <ul class="checklist">
+          <li><span><b>Guided reflection</b> after tough calls, written by EMS providers.</span></li>
+          <li><span><b>End-of-shift gratitude:</b> one thing that went right, one person who had your back.</span></li>
+          <li><span><b>Linked to your calls,</b> so you can see what's really weighing on you.</span></li>
+          <li><span><b>100% private.</b> Your agency never sees your journal.</span></li>
         </ul>
-        <a href="#download" class="btn btn-full" style="background:var(--bg-alt); color:var(--text-dark); border:2px solid var(--border);">Download Free</a>
+        <a class="btn btn-dark" href="#get" data-dl style="margin-top:28px">Start your journal free</a>
       </div>
-
-      <div class="pricing-card pro">
-        <div class="pro-badge">Most Popular</div>
-        <p class="pricing-tier">Pro</p>
-        <div id="pro-trial-badge" class="trial-badge">🎉 7-day free trial included</div>
-        <div class="pricing-price"><sub>$</sub><span id="pro-price">59.99</span></div>
-        <div class="pricing-cadence" id="pro-cadence">per year · that's $5/mo · cancel anytime</div>
-        <p class="pricing-desc">The full AfterCall experience. AI that actually understands EMS: clinically specific, never generic.</p>
-        <ul class="pricing-features">
-          <li><span class="check">✓</span> Everything in Free</li>
-          <li><span class="check">✓</span> AfterCall AI — chat, insights &amp; analysis</li>
-          <li><span class="check">✓</span> Voice call logging <span class="check" style="font-weight:600; color:var(--text-light);">(beta)</span></li>
-          <li><span class="check">✓</span> CAD dispatch paste &amp; auto-fill</li>
-          <li><span class="check">✓</span> Call narrative generation</li>
-          <li><span class="check">✓</span> Guided shift debrief &amp; summary</li>
-          <li><span class="check">✓</span> AI journal &amp; wellness insights</li>
-          <li><span class="check">✓</span> Guided reflections tailored to your calls</li>
-          <li><span class="check">✓</span> Advanced analytics — heatmaps &amp; trends</li>
-          <li><span class="check">✓</span> Full 12-month call history</li>
-          <li><span class="check">✓</span> Trending in EMS deep dives</li>
-          <li><span class="check">✓</span> PDF call &amp; shift export</li>
-          <li><span class="check">✓</span> Skill momentum tracking</li>
-          <li><span class="check">✓</span> Full dark mode</li>
-          <li><span class="check">✓</span> Priority support &amp; early feature access</li>
+      <div class="duo-card rv d1">
+        <div class="eyebrow">Communities</div>
+        <h3>Built individually. Stronger together.</h3>
+        <p>A private space for EMS crews, not a public social feed. The people who get it, one tap away.</p>
+        <ul class="checklist">
+          <li><span><b>Communities:</b> your unit, your shift, your people.</span></li>
+          <li><span><b>Peer support:</b> reach a trained peer when you need one, anonymously if you'd rather.</span></li>
+          <li><span><b>Share calls safely:</b> every shared call is screened by AI and verified, every time.</span></li>
+          <li><span><b>Private messaging</b> with your partner and crew.</span></li>
         </ul>
-        <a href="#download" class="btn btn-full" id="pro-cta">Start Free Trial</a>
       </div>
-
     </div>
   </div>
 </section>
 
-
-<!-- ══════════════════════════════════════════
-     CTA
-══════════════════════════════════════════ -->
-<section class="cta-section" id="download">
-  <h2>It's here.<br>AfterCall is on iOS &amp; Android.</h2>
-  <p>Built by EMS, for EMS. Free to download. Pro is one tap away.</p>
-
-  <div style="display:flex; justify-content:center; align-items:center; gap:16px; flex-wrap:wrap; margin: 8px auto 18px;">
-    <a href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener" class="app-store-btn lg on-blue" aria-label="Download AfterCall on the App Store">
-      <span class="apple-glyph" aria-hidden="true">
-        <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-      </span>
-      <span class="ast">
-        <span class="ast-small">Download on the</span>
-        <span class="ast-big">App Store</span>
-      </span>
-    </a>
-    <a href="https://play.google.com/store/apps/details?id=com.aftercallapp.android&amp;pcampaignid=web_share" target="_blank" rel="noopener" class="app-store-btn lg on-blue" aria-label="Get AfterCall on Google Play">
-      <span class="play-glyph" aria-hidden="true">
-        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l220.7-221.3 60.1 60.1L104.6 499z"/></svg>
-      </span>
-      <span class="ast">
-        <span class="ast-small">GET IT ON</span>
-        <span class="ast-big">Google Play</span>
-      </span>
-    </a>
-  </div>
-  <p class="cta-note">iOS &amp; Android · Free tier, no card required · Pro with 7-day free trial</p>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="logo footer-logo">
-      <img src="images/logo-transparent.png" class="logo-icon" alt="AfterCall logo" />
-      <span class="logo-wordmark">AfterCall</span>
-    </a>
-
-    <ul class="footer-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how-it-works">How It Works</a></li>
-      <li><a href="#founder">Our Story</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="teams.html">AfterCall Teams</a></li>
-      <li><a href="mailto:jordan@aftercallapp.com">Contact</a></li>
-      <li><a href="terms.html">Terms of Service</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-    </ul>
-
-    <div class="footer-right">
-      <div class="footer-tag">Your calls, captured.</div>
-      <div class="footer-copy">
-        © 2026 AfterCall LLC. All rights reserved.<br />
-        Built by EMS providers, for EMS providers.<br />
-        3915 Prado De Verde, Calabasas, CA 91302
-      </div>
+<!-- PRIVACY (dark glass) -->
+<section class="priv pad" id="privacy">
+  <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell">
+    <div class="center">
+      <div class="eyebrow rv">Privacy &amp; PHI</div>
+      <h2 class="rv d1" style="font-size:clamp(44px,6vw,80px);margin-top:16px">Built to keep PHI out.<br><span class="grad-text">From the first tap.</span></h2>
+      <p class="lede rv d2" style="margin-top:22px">AfterCall is a personal journal, not a chart. It's not an ePCR or a patient record, and it never writes into one.</p>
+    </div>
+    <div class="priv-cards">
+      <div class="glass rv"><div class="ico"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg></div><h3>PHI screen on your phone.</h3><p>Potential patient information is flagged and blocked on your phone before anything is saved. Every call you share is screened by AI and verified, every time.</p></div>
+      <div class="glass rv d1"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v10M8 9a4 4 0 0 0 8 0M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div><h3>Voice and CAD cleaned first.</h3><p>Names, addresses, dates and incident numbers are removed. The original audio and CAD text are never saved.</p></div>
+      <div class="glass rv"><div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Your reflections are yours.</h3><p>Your agency never sees your journal, check-ins, messages or peer support conversations.</p></div>
+      <div class="glass rv d1"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Never used against you.</h3><p>Nothing in AfterCall can be used in discipline, promotion or fitness-for-duty decisions.</p></div>
     </div>
   </div>
-</footer>
+</section>
 
+<!-- FOUNDER (white, centered) -->
+<section class="founder light center">
+  <div class="shell">
+    <div class="portrait rv"><img src="images/home/jordan-round.jpg" alt="Jordan Appelbaum, founder of AfterCall" width="200" height="200" loading="lazy" decoding="async"></div>
+    <div class="eyebrow rv" style="margin-top:36px">Our story</div>
+    <h2 class="rv d1" style="font-size:clamp(22px,2.4vw,28px);margin-top:14px;letter-spacing:-.02em">Built by a provider who needed it.</h2>
+    <blockquote class="rv d1">"I've cleared brutal calls, driven back to quarters in silence, and had nothing waiting for me on the other side. <span class="grad-text">AfterCall is what I wished existed when I needed it most.</span>"</blockquote>
+    <div class="who rv d2"><b>Jordan Appelbaum</b><small>Founder &amp; CEO, AfterCall LLC</small></div>
+    <p class="rv d3 founder-note">Built by a working EMT. AfterCall is independent: no corporate backing, no investors steering it. Every feature comes from what providers actually live through.</p>
+  </div>
+</section>
 
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════ -->
+<!-- AGENCIES (white) -->
+<section class="mist pad" id="agencies">
+  <div class="shell">
+    <div class="eyebrow rv">For agencies &amp; EMS leaders</div>
+    <h2 class="rv d1" style="font-size:clamp(40px,5.4vw,72px);margin-top:16px;max-width:18ch">Your agency already pays for peer support. AfterCall gets people to use it.</h2>
+    <div class="ag-grid">
+      <div class="ag-list">
+        <p class="lede rv" style="max-width:none">96% of agencies offer peer support, but only 15% of providers use it. The problem isn't caring. It's that nobody opens the tool. With AfterCall Teams, your peer team, your crisis line and a private agency workspace live inside the app your crews already open after every call.</p>
+        <div class="rv"><b>Get more from what you already pay for.</b>Your trained peer supporters, by name, in every pocket. Your crisis line one tap away, next to the 988 Lifeline.</div>
+        <div class="rv"><b>Keep your people.</b>Replacing one paramedic costs about $8,620, and one in three new hires leaves within a year.</div>
+        <div class="rv"><b>See the patterns, never the person.</b>Team stress trends, check-in rates, high-impact flags and peer conversations. All anonymous, and groups under five are hidden automatically.</div>
+        <div class="rv"><b>Full Pro for every seat.</b>AfterCall AI, voice and CAD logging, PDF export and the 12-month heatmap, with nothing to buy in the app store.</div>
+      </div>
+      <div class="roi rv d2">
+        <div class="aurora"><i></i><i></i><i></i></div>
+        <p style="font-size:13px;letter-spacing:.14em;font-weight:700;color:var(--peri)">THE COST OF TURNOVER</p>
+        <div class="n" style="margin-top:14px">$8,620</div>
+        <p style="color:#fff;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:10px">to replace one paramedic.</p>
+        <div class="math">
+          <div><span>New hires who leave within a year</span><b>1 in 3</b></div>
+        </div>
+        <p style="font-size:12px;color:var(--dim);margin-top:16px">Source: AAA / Newton 360 EMS Turnover Study</p>
+      </div>
+    </div>
+    <h3 class="rv" style="font-size:24px;margin-top:64px;letter-spacing:-.02em">What leadership sees, and what it never sees</h3>
+    <div class="sees rv">
+      <div class="yes"><h3>Leadership sees</h3><ul><li>Team stress trends &amp; check-in rates</li><li>High-impact flags &amp; peer conversations (counts only)</li><li>Acuity mix &amp; station activity</li><li>Roster, roles &amp; stations</li></ul></div>
+      <div class="no"><h3>Leadership never sees</h3><ul><li>Any individual journal or reflection</li><li>The content of any peer support conversation</li><li>Direct messages between crew members</li><li>Any one person's wellness, stress or sleep score</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING (dark glass) -->
+<section class="pad center" id="pricing" style="overflow:hidden">
+  <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell" style="position:relative">
+    <div class="eyebrow rv">Pricing</div>
+    <h2 class="rv d1" style="font-size:clamp(44px,6vw,80px);margin-top:16px">For you, or for your<br>whole agency.</h2>
+    <div class="seg rv d2" role="group" aria-label="Plan type">
+      <button aria-pressed="true" data-p="ind">Individuals</button><button aria-pressed="false" data-p="ag">Agencies</button>
+    </div>
+    <div class="plans" id="p-ind">
+      <div class="plan glass rv"><div class="nm">Free</div><div class="pr">$0</div><div class="sub">Always free. No credit card.</div>
+        <ul><li>Unlimited call logging</li><li>Journal &amp; check-ins</li><li>Certification &amp; CE tracker</li><li>Communities &amp; peer support</li><li>3 free AfterCall AI narratives</li></ul>
+        <a class="btn btn-glass" href="#get" data-dl>Download free</a></div>
+      <div class="plan glass rv d1"><div class="nm">Pro Monthly</div><div class="pr">$9.99<small>/mo</small></div><div class="sub">7-day free trial.</div>
+        <ul><li>Everything in Free</li><li>Unlimited AfterCall AI narratives &amp; insights</li><li>Voice logging &amp; CAD paste</li><li>PDF export</li><li>Skills Tracker &amp; Trending in EMS</li><li>Advanced analytics &amp; 12-month heatmap</li></ul>
+        <a class="btn btn-glass" href="#get" data-dl>Start your 7-day free trial</a></div>
+      <div class="plan glass hot rv d2"><span class="tagline">BEST VALUE · SAVE 33%</span><div class="nm">Pro Annual</div><div class="pr">$79.99<small>/yr</small></div><div class="sub">That's $6.67/mo. 7-day free trial.</div>
+        <ul><li>Everything in Pro Monthly</li><li>Save 33%</li><li>7-day free trial</li></ul>
+        <a class="btn btn-grad" href="#get" data-dl>Start your 7-day free trial</a></div>
+    </div>
+    <div class="plans two" id="p-ag" hidden>
+      <div class="plan glass"><div class="nm">Teams Essentials</div><div class="pr">$4.99<small>/seat/mo</small></div><div class="sub">Per seat, per month.</div>
+        <ul><li>Private agency workspace &amp; roster</li><li>Your crisis line in-app, beside 988</li><li>Peer supporter roster &amp; routing</li><li>Agency feed &amp; peer support channel</li><li>Critical incident alerts</li><li>Monthly leadership summary</li></ul>
+        <a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough">Book a walkthrough</a></div>
+      <div class="plan glass hot"><span class="tagline">MAXIMUM IMPACT</span><div class="nm">Teams Pro</div><div class="pr">$7.99<small>/seat/mo</small></div><div class="sub">Per seat, per month.</div>
+        <ul><li>Everything in Essentials</li><li>Full AfterCall Pro on every seat</li><li>The full leadership dashboard</li><li>Operations, exposure &amp; skills reporting</li></ul>
+        <a class="btn btn-grad" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough">Book a walkthrough</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- GRANTS (mist) -->
+<section class="light pad">
+  <div class="shell">
+    <div class="center">
+      <div class="eyebrow rv">Funding for agencies</div>
+      <h2 class="rv d1" style="font-size:clamp(40px,5.4vw,72px);margin-top:16px">Your wellness budget<br>may already exist.</h2>
+      <p class="lede rv d2" style="margin-top:22px">Federal, state and private grants fund first-responder wellness. Here's where agencies are finding the money:</p>
+    </div>
+    <div class="grants">
+      <a class="grant rv" href="https://www.fema.gov/grants/preparedness/firefighters" target="_blank" rel="noopener"><small>Federal · FEMA</small><b>Assistance to Firefighters Grant (AFG)</b><p>Open to fire and EMS agencies, and covers wellness and behavioral health programs. The application window usually opens each spring.</p><span class="link">Learn more</span></a>
+      <a class="grant rv d1" href="https://www.dcjs.virginia.gov/grants/programs/fy-2026-office-first-responder-wellness-grant-program" target="_blank" rel="noopener"><small>State · Virginia</small><span class="amt">Up to $30K</span><b>First Responder Wellness Grant</b><p>Virginia's First Responder Wellness Grant.</p><span class="link">Learn more</span></a>
+      <a class="grant rv d2" href="https://www.pa.gov/agencies/health/newsroom/-6-million-investment-for-ems-professionals-in-2026-2027-propose" target="_blank" rel="noopener"><small>State · Pennsylvania</small><span class="amt">Up to $5K a year</span><b>EMS recruitment &amp; retention funds</b><p>Pennsylvania's EMS recruitment &amp; retention funds.</p><span class="link">Learn more</span></a>
+      <a class="grant rv d3" href="https://www.vfistx.com/health-wellness-grant.html" target="_blank" rel="noopener"><small>State · Texas</small><span class="amt">Up to $5K</span><b>VFIS Health &amp; Wellness Grant</b><p>Texas's VFIS Health &amp; Wellness Grant.</p><span class="link">Learn more</span></a>
+      <a class="grant rv" href="https://foundationhoc.org/give-to-the-community/fund-directory/hero-fund-america-fund" target="_blank" rel="noopener"><small>Private foundation</small><b>Hero Fund America</b><p>Hero Fund America supports EMS mental health, with applications each June.</p><span class="link">Learn more</span></a>
+    </div>
+    <p class="rv center" style="margin-top:32px;font-size:15px"><b style="color:var(--graphite)">Also check:</b> your state EMS office and Grants.gov (search "first responder wellness").</p>
+  </div>
+</section>
+
+<!-- FAQ (white) -->
+<section class="mist pad">
+  <div class="shell">
+    <div class="center"><div class="eyebrow rv">FAQ</div><h2 class="rv d1" style="font-size:clamp(40px,5.4vw,72px);margin-top:16px">Your questions, answered.</h2></div>
+    <div class="faq">
+      <h4>For providers</h4>
+      <details><summary>Is it really free?</summary><p>Yes. Call logging, journaling, check-ins, CE tracking and Communities are free, always, plus 3 free AfterCall AI narratives. Pro adds unlimited AfterCall AI and advanced tools.</p></details>
+      <details><summary>Can my agency see what I write?</summary><p>No. Your journal, check-ins, messages and peer support conversations are private to you.</p></details>
+      <details><summary>Does it replace my ePCR?</summary><p>No. Your PCR stays the legal record. AfterCall is your personal log and wellness tool.</p></details>
+      <details><summary>Is patient information safe?</summary><p>PHI is screened and blocked on your phone before anything is saved. Voice and CAD text are cleaned first, and the originals are never stored.</p></details>
+      <details><summary>What happens to my data if I leave my agency?</summary><p>It's yours. You keep your entire history: calls, journals, shifts and badges. The seat ends; your account stays.</p></details>
+      <details><summary>Can I cancel Pro anytime?</summary><p>Yes. Try it free for 7 days and cancel anytime.</p></details>
+      <h4>For agencies</h4>
+      <details><summary>Does AfterCall replace our peer support team or EAP?</summary><p>No. It makes them easier to reach. Your peer supporters, crisis line and EAP live right inside the app.</p></details>
+      <details><summary>What does leadership actually see?</summary><p>Anonymous team trends only. Groups under five are hidden automatically. You never see the person, the journal or the conversation.</p></details>
+      <details><summary>Does it integrate with our ePCR?</summary><p>No. AfterCall doesn't write into ESO, ImageTrend or Zoll, and no patient identifier is retained.</p></details>
+      <details><summary>What does it cost?</summary><p>Teams Essentials is $4.99 per seat per month and Teams Pro is $7.99 per seat per month.</p></details>
+      <details><summary>Can we use grant money?</summary><p>Many agencies can. Wellness programs qualify under FEMA AFG and several state and private grants.</p></details>
+      <details><summary>Can AfterCall be used in discipline?</summary><p>Never. Nothing in AfterCall may be used in discipline, promotion, assignment or fitness-for-duty decisions, and we'll put that in writing alongside your labor group.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL (dark) -->
+<section class="final" id="get">
+  <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell" style="position:relative">
+    <h2 class="rv">Some calls stay with you.<br><span class="grad-text">Now they have somewhere to go.</span></h2>
+    <p class="lede rv d1" style="margin:24px auto 0">Free on iOS and Android. Pro adds AfterCall AI with a 7-day free trial. Cancel anytime.</p>
+    <div class="stores rv d2">
+      <a class="store glass" href="https://apps.apple.com/us/app/aftercall/id6762097660" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4z"/></svg><div><small>Download on the</small><b>App Store</b></div></a>
+      <a class="store glass" href="https://play.google.com/store/apps/details?id=com.aftercallapp.android" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M3.6 1.8c-.3.3-.4.7-.4 1.2v18c0 .5.1.9.4 1.2l10-10.2zM14.9 13.3l2.9 2.9-11.6 6.6c-.4.2-.8.2-1.1 0zM21 10.9c.8.5.8 1.7 0 2.2l-2.5 1.4-3.1-3.1 3.1-3zM5.1 1.2c.3-.2.7-.2 1.1 0l11.6 6.6-2.9 2.9z"/></svg><div><small>Get it on</small><b>Google Play</b></div></a>
+    </div>
+    <p class="rv d3" style="margin-top:22px"><a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough">Book an agency walkthrough</a></p>
+  </div>
+  <footer>
+    <div class="shell">
+      <div style="display:flex;align-items:center;gap:10px"><img src="images/home/logo.png" alt="" style="width:22px;height:22px;border-radius:5px"><span>© 2026 AfterCall LLC · Your calls, captured.</span></div>
+      <a class="crisis glass" href="tel:988"><i></i>In crisis? Call or text 988.</a>
+      <nav aria-label="Footer"><a href="teams.html">For agencies</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
+    </div>
+  </footer>
+</section>
+
 <script>
-  // ── Pricing Toggle
-  function setPricing(plan) {
-    const monthly = plan === 'monthly';
-    document.getElementById('tog-annual').classList.toggle('active', !monthly);
-    document.getElementById('tog-monthly').classList.toggle('active', monthly);
-    document.getElementById('pro-price').textContent   = monthly ? '7.99' : '59.99';
-    document.getElementById('pro-cadence').textContent = monthly ? 'per month · cancel anytime' : 'per year · that\'s $5/mo · cancel anytime';
-    document.getElementById('pro-trial-badge').style.display = monthly ? 'none' : 'inline-block';
-    document.getElementById('pro-cta').textContent = monthly ? 'Get Pro Access' : 'Start Free Trial';
-  }
+// reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
-  // ── Nav shrink on scroll
-  const navEl = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      navEl.style.borderBottomColor = 'rgba(226,232,240,0.8)';
-    } else {
-      navEl.style.borderBottomColor = 'var(--border)';
-    }
-  }, { passive: true });
+// scroll background morph + nav tint
+(function(){
+  const nav=document.getElementById('nav'), bg=document.getElementById('pageBg');
+  const secs=[...document.querySelectorAll('body > section')];
+  const colorOf=sec=>sec.classList.contains('mist')?'#F5F6FA':sec.classList.contains('light')?'#FFFFFF':'#05091C';
+  secs.forEach(sec=>{sec.dataset.theme=sec.classList.contains('light')||sec.classList.contains('mist')?'light':'dark'});
+  let current=null;
+  const apply=()=>{
+    const line=innerHeight*0.5;
+    let act=secs[0];
+    for(const sec of secs){const r=sec.getBoundingClientRect(); if(r.top<=line&&r.bottom>line){act=sec;break}}
+    // header follows whatever sits under it
+    const under=secs.find(sec=>{const r=sec.getBoundingClientRect();return r.top<=28&&r.bottom>28})||act;
+    nav.classList.toggle('on-light',under.dataset.theme==='light');
+    if(act===current) return; current=act;
+    bg.style.setProperty('--page-bg',colorOf(act));
+    bg.style.setProperty('--glow',act.dataset.theme==='dark'?1:0);
+    secs.forEach(sec=>sec.classList.toggle('off-theme',sec.dataset.theme!==act.dataset.theme));
+  };
+  let tick=false;
+  addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(()=>{apply();tick=false})}},{passive:true});
+  addEventListener('resize',apply);
+  apply();
+})();
 
-  // ── Intersection observer for fade-in
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.08 });
+// counters
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;cio.unobserve(e.target);const el=e.target,to=+el.dataset.count,suf=el.dataset.suffix||'';if(reduce){el.textContent=to+suf;return}const t0=performance.now();const step=t=>{const k=Math.min(1,(t-t0)/1400),v=Math.round(to*(1-Math.pow(1-k,3)));el.textContent=v+suf;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
 
-  document.querySelectorAll('.feature-card, .stat-card, .step, .pricing-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
-    observer.observe(el);
+
+// statement highlight
+const st=document.getElementById('statement');
+new IntersectionObserver(es=>es.forEach(e=>st.querySelector('span').style.color=e.isIntersecting?'#fff':''),{threshold:.8}).observe(st);
+
+// typing narrative
+const ty=document.getElementById('type');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(!e.isIntersecting)return;o.disconnect();const txt=ty.dataset.text;if(reduce){ty.textContent=txt;return}let i=0;const tick=()=>{ty.textContent=txt.slice(0,i+=2);if(i<txt.length)setTimeout(tick,18)};tick()}),{threshold:.4}).observe(ty);
+
+
+// product video carousel (behavior from /start)
+(function(){
+  const rail=document.getElementById('productVideoRail'); if(!rail) return;
+  const cards=[...rail.querySelectorAll('.pv-card')], videos=[...rail.querySelectorAll('.pv-video')];
+  const center=c=>rail.scrollTo({left:c.offsetLeft-(rail.clientWidth-c.clientWidth)/2,behavior:'smooth'});
+  const active=()=>{const mid=rail.scrollLeft+rail.clientWidth/2;let b=0,d=1e9;cards.forEach((c,i)=>{const x=Math.abs(c.offsetLeft+c.clientWidth/2-mid);if(x<d){d=x;b=i}});return b};
+  const mark=()=>{const a=active();cards.forEach((c,i)=>c.classList.toggle('is-active',i===a))};
+  rail.addEventListener('scroll',()=>requestAnimationFrame(mark),{passive:true});mark();
+  videos.forEach(v=>{
+    v.addEventListener('play',()=>{videos.forEach(o=>o!==v&&o.pause());v.closest('.pv-card').classList.add('is-playing','is-started');v.controls=true});
+    v.addEventListener('pause',()=>v.closest('.pv-card').classList.remove('is-playing'));
+    v.addEventListener('ended',()=>{v.currentTime=0;v.closest('.pv-card').classList.remove('is-playing','is-started');v.controls=false});
   });
+  rail.querySelectorAll('.pv-play').forEach(b=>b.addEventListener('click',()=>{const c=b.closest('.pv-card'),v=c.querySelector('video');center(c);v.play().catch(()=>{v.controls=true})}));
+  const go=d=>{videos.forEach(v=>v.pause());center(cards[Math.max(0,Math.min(cards.length-1,active()+d))])};
+  document.getElementById('productVideoPrev').onclick=()=>go(-1);
+  document.getElementById('productVideoNext').onclick=()=>go(1);
+})();
 
-  // ── Animated stat counters (problem section)
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      counterObserver.unobserve(el);
-      const target = parseInt(el.dataset.count || '0', 10);
-      const suffix = el.dataset.suffix || '';
-      const duration = 1500;
-      const start = performance.now();
-      function tick(now) {
-        const t = Math.min(1, (now - start) / duration);
-        const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = Math.round(target * eased) + suffix;
-        if (t < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
+// smart download: on phones, send download buttons straight to the right store
+(function(){
+  const ua=navigator.userAgent, android=/Android/i.test(ua), ios=!android&&(/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1));
+  const url=android?'https://play.google.com/store/apps/details?id=com.aftercallapp.android':ios?'https://apps.apple.com/us/app/aftercall/id6762097660':null;
+  if(url) document.querySelectorAll('a[data-dl]').forEach(a=>{a.href=url;a.target='_blank';a.rel='noopener'});
+})();
 
-  // ── Stat bar fill on view
-  const barObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      barObserver.unobserve(entry.target);
-      const fill = parseFloat(entry.target.dataset.fill || '0');
-      entry.target.style.width = fill + '%';
-    });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('.stat-bar-fill').forEach(el => barObserver.observe(el));
-
-  // ── AI narrative typewriter reveal
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.35 });
-  document.querySelectorAll('.reveal-on-view').forEach(el => revealObserver.observe(el));
+// pricing toggle
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.getElementById('p-ind').hidden=b.dataset.p!=='ind';document.getElementById('p-ag').hidden=b.dataset.p!=='ag';document.querySelectorAll('#p-ind .rv,#p-ag .rv').forEach(x=>x.classList.add('in'))});
 </script>
-
 </body>
 </html>
