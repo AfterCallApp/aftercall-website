@@ -6,7 +6,7 @@
 <title>AfterCall Teams — Peer support inside the app your crews already open</title>
 <meta name="description" content="AfterCall Teams gives EMS agencies a private workspace, their own crisis line in-app, peer supporter routing, and an aggregate-only leadership dashboard — inside the app crews already use to close out calls.">
 <meta property="og:title" content="AfterCall Teams — For EMS agencies">
-<meta property="og:description" content="Nobody decides to seek support. They decide to close out a call, and the rest is already on the screen. Peer support, crisis routing, and aggregate-only reporting for EMS agencies.">
+<meta property="og:description" content="Your peer team, in every pocket. Peer support, crisis routing, and aggregate-only reporting for EMS agencies, inside the app crews already open after every call.">
 <meta property="og:url" content="https://aftercallapp.com/teams.html">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
@@ -410,6 +410,32 @@ footer nav a:hover{color:#fff}
 .crisis{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:99px;color:#fff;font-weight:600;font-size:14px}
 .crisis i{width:8px;height:8px;border-radius:50%;background:#F87171;box-shadow:0 0 0 4px rgba(248,113,113,.2)}
 
+/* STORY */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:900px){.story-grid{grid-template-columns:1fr;gap:48px}}
+.story-photos{position:relative;padding:0 14% 18% 0}
+.story-photos figure{margin:0;border-radius:30px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(20,30,80,.6)}
+.story-photos img{display:block;width:100%;height:100%;object-fit:cover}
+.story-photos .ph-a{aspect-ratio:3/4}
+.story-photos .ph-b{position:absolute;right:0;bottom:0;width:46%;aspect-ratio:3/4;border:6px solid #fff;border-radius:26px}
+.story blockquote{font-size:clamp(22px,2.3vw,30px);font-weight:700;letter-spacing:-.02em;line-height:1.3;color:var(--graphite);margin:26px 0 24px}
+.story .who b{display:block;color:var(--graphite);font-size:17px}
+.story .who small{color:var(--slate);font-size:14px}
+.story-note{margin-top:22px;font-size:15px;color:var(--slate);max-width:52ch}
+
+
+.bframe{border-radius:14px;overflow:hidden;background:#0d0f15;border:1px solid rgba(255,255,255,.1);box-shadow:0 60px 120px -50px rgba(0,0,0,.6),0 30px 80px -40px rgba(76,90,255,.35)}
+.light .bframe,.mist .bframe{border-color:rgba(0,0,0,.08);box-shadow:0 60px 120px -60px rgba(20,30,80,.5)}
+.bbar{display:flex;align-items:center;gap:7px;height:34px;padding:0 14px;background:#151826;border-bottom:1px solid rgba(255,255,255,.06)}
+.bbar i{width:10px;height:10px;border-radius:50%;background:#3a3e4f}
+.bbar i:nth-child(1){background:#ff5f57}.bbar i:nth-child(2){background:#febc2e}.bbar i:nth-child(3){background:#28c840}
+.bbar span{margin-left:12px;font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bframe img{display:block;width:100%;height:auto}
+.bframe{max-width:100%;min-width:0}.bbar span{min-width:0}.bbar{overflow:hidden}.dash-pair>*,.peer-dash,.dash-main{min-width:0}.t-stage{min-width:0}.t-hero .shell>*{min-width:0}
+.peer-dash{margin-top:72px}
+.dash-main{max-width:1100px;margin:48px auto 0}
+.dash-pair{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px}
+@media(max-width:900px){.dash-pair{grid-template-columns:1fr}}
 /* ===== TEAMS PAGE ===== */
 .brand-teams{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .nav .btn{white-space:nowrap}
@@ -417,7 +443,7 @@ footer nav a:hover{color:#fff}
 @media(max-width:480px){.nav .btn .lg{display:none}.nav .btn .sm{display:inline}.brand{font-size:16px}}
 @media(max-width:380px){.nav .shell{gap:10px}.brand{gap:7px;font-size:15px}.brand img{width:24px;height:24px}.nav .btn{padding:0 12px;font-size:12px}.seg button{padding:9px 13px;font-size:13px}}
 .t-hero .shell{gap:56px}
-.t-hero h1{font-size:clamp(40px,5.2vw,70px)}
+.t-hero h1{font-size:clamp(46px,7vw,96px)}
 .t-hero{--ov:120px}
 .t-hero~.statement{--ov:120px}
 .t-stage{position:relative;max-width:1000px;width:100%;margin:0 auto;padding-right:6%}
@@ -511,19 +537,16 @@ footer nav a:hover{color:#fff}
   <div class="shell">
     <div>
       <div class="pill glass rv"><span class="ekg" aria-hidden="true"><svg viewBox="0 0 64 24"><path d="M0 12h14l4-7 5 14 5-18 5 15 3-4h28"/></svg></span>AfterCall Teams · For EMS agencies</div>
-      <h1 class="rv d1">Nobody decides to seek support.<br><span class="grad-text">They decide to close out a call.</span></h1>
-      <p class="lede rv d2">AfterCall Teams puts your peer support team, your crisis line, and a private agency workspace inside the app your crews already open, and gives leadership the signals they've never had, without ever seeing anyone's content.</p>
+      <h1 class="rv d1">Your peer team,<br><span class="grad-text">in every pocket.</span></h1>
+      <p class="lede rv d2">Your peer supporters, your crisis line and your agency's own space, inside the app your crews already open after every call.</p>
       <div class="ctas rv d3">
         <a class="btn btn-grad" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough">Book a 30-minute walkthrough</a>
         <a class="btn btn-glass" href="#dashboard">See the dashboard&nbsp;<span aria-hidden="true">↓</span></a>
       </div>
-      <p class="fine rv d3">From $4.99 per seat per month · Purchase orders and checks accepted</p>
+      <p class="fine rv d3">From $4.99 per seat per month</p>
     </div>
     <div class="t-stage rv d2">
-      <div class="laptop">
-        <div class="lid"><div class="cam"></div><div class="scr"><img src="images/home/teams-overview-light.jpg" alt="AfterCall Teams leadership dashboard overview: weekly active, seats deployed, calls logged, check-in attach, team stress, team fatigue and peer alerts" decoding="async"></div></div>
-        <div class="base"></div>
-      </div>
+      <div class="bframe "><div class="bbar"><i></i><i></i><i></i><span>aftercallapp.com/teams-dashboard</span></div><img src="images/home/dash-overview-dark.jpg" alt="AfterCall Teams leadership dashboard: workload and wellbeing week by week, adoption, and stations at a glance" loading="lazy" decoding="async"></div>
       <div class="iphone t-phone"><div class="screen"><img src="images/home/teams-dashboard-phone-dark.jpg" alt="Peer supporter's dashboard: 6 teammates waiting for a check-in" decoding="async"></div></div>
     </div>
   </div>
@@ -534,7 +557,7 @@ footer nav a:hover{color:#fff}
   <div class="shell">
     <div class="eyebrow rv" style="margin-bottom:22px">The engagement problem</div>
     <p class="big" id="statement">You don't need another wellness resource. <span>You need one your crews will actually open.</span></p>
-    <p class="lede rv" style="margin-top:28px;max-width:58ch">Almost every agency already offers something. Almost nobody uses it, because traditional support asks a provider to recognize they're struggling, raise their hand, and ask. AfterCall meets them earlier: a medic opens it to log a call, and the check-in, the reflection, and peer support are already on that screen.</p>
+    <p class="lede rv" style="margin-top:28px;max-width:58ch">Almost every agency already offers something. Almost nobody uses it because traditional support asks a provider to recognize they're struggling, raise their hand, and ask. AfterCall meets them earlier.</p>
     <div class="stats stats-4">
       <div class="stat glass rv"><div class="n" data-count="96" data-suffix="%">0%</div><p>of agencies already offer some form of wellness support</p></div>
       <div class="stat glass rv d1"><div class="n" data-count="15" data-suffix="%">0%</div><p>of providers use the peer support they're offered</p></div>
@@ -600,7 +623,7 @@ footer nav a:hover{color:#fff}
   <div class="shell peer-grid">
     <div>
       <div class="eyebrow rv">For your peer support team</div>
-      <h2 class="rv d1" style="font-size:clamp(36px,4.2vw,58px);margin-top:16px">Who needs a check-in.<br><span class="grad-text">Never what they wrote.</span></h2>
+      <h2 class="rv d1" style="font-size:clamp(32px,3.5vw,50px);margin-top:16px">Your peer team knows who needs a check-in.<br><span class="grad-text">Never what they wrote.</span></h2>
       <p class="lede rv d2" style="margin-top:22px">A flag opens when a member marks a call high-impact, has a heavy run (4+ Serious or Critical calls, or 3+ Critical, within 24 hours), or taps "Ask for a check-in" after a rough call. Your peer supporters get a signal-only ping: who and why, never the call, never the content.</p>
       <div class="route rv d3">
         <div class="route-h">When a call is flagged high-impact</div>
@@ -615,6 +638,7 @@ footer nav a:hover{color:#fff}
       <div class="iphone back"><div class="screen"><img src="images/home/peer-queue-light.jpg" alt="Peer support queue: needs a check-in, being handled, completed, with I've got this and Check in actions" loading="lazy" decoding="async"></div></div>
     </div>
   </div>
+  <div class="shell"><div class="peer-dash rv"><div class="bframe "><div class="bbar"><i></i><i></i><i></i><span>aftercallapp.com/teams-dashboard</span></div><img src="images/home/dash-peer-dark.jpg" alt="Peer support tab: the alert loop, how fast alerts get picked up, why alerts opened, and peer team capacity" loading="lazy" decoding="async"></div><p class="dash-cap">The peer support tab: every alert raised, picked up and followed up. Counts only, never who.</p></div></div>
 </section>
 
 <!-- DASHBOARD (white) -->
@@ -624,24 +648,12 @@ footer nav a:hover{color:#fff}
       <div class="eyebrow rv">What leadership sees</div>
       <h2 class="rv d1" style="font-size:clamp(34px,4.4vw,60px);margin-top:16px">Your crews have always carried the signals.<br>Now you can see the patterns.</h2>
       <p class="lede rv d2" style="margin-top:22px;max-width:62ch">Every chart ships in the leadership dashboard today, generated by people doing their job: no survey to send, no response rate to chase. Aggregate-only on every plan; any group under five members is suppressed automatically.</p>
-      <div class="seg seg-light rv d2" role="tablist" aria-label="Dashboard views">
-        <button role="tab" aria-pressed="true" data-dash="0">Overview</button><button role="tab" aria-pressed="false" data-dash="1">Wellbeing</button><button role="tab" aria-pressed="false" data-dash="2">Fatigue</button>
-      </div>
     </div>
-    <div class="laptop dash-laptop rv d2">
-      <div class="lid"><div class="cam"></div><div class="scr">
-        <img class="dash-img on" src="images/home/teams-overview-light.jpg" alt="Overview: weekly active, seats, calls logged, check-in attach, team stress, team fatigue, peer alerts, team activity and signals routed by week" loading="lazy" decoding="async">
-        <img class="dash-img" src="images/home/teams-wellbeing-dark.jpg" alt="Wellbeing: mood distribution, stress bands, journaling participation, peer alert response and peer support utilization" loading="lazy" decoding="async">
-        <img class="dash-img" src="images/home/teams-fatigue-dark.jpg" alt="Wellbeing: team stress trend, check-in attach rate by week, team fatigue trend and fatigue bands" loading="lazy" decoding="async">
-      </div></div>
-      <div class="base"></div>
-    </div>
+    <div class="dash-main rv d2"><div class="bframe "><div class="bbar"><i></i><i></i><i></i><span>aftercallapp.com/teams-dashboard · Wellbeing</span></div><img src="images/home/dash-wellbeing-light.jpg" alt="Wellbeing tab: post-call stress, fatigue, journal mood, check-in rate and how check-ins landed" loading="lazy" decoding="async"></div></div>
     <p class="center dash-cap">AfterCall EMS Demo agency. Charts show representative figures, not live customer data.</p>
-    <div class="dash-points">
-      <div class="rv"><b>Team stress trend</b>Average post-call check-in (1–10), by week. Under five contributors, nothing reports.</div>
-      <div class="rv d1"><b>Check-in attach rate</b>Share of logged calls carrying a voluntary check-in: the adoption number no other wellness line item can show you.</div>
-      <div class="rv d2"><b>High-impact flags &amp; peer support</b>Flags raised and peer conversations opened, by week. Counts and trends, never the person, never the call.</div>
-      <div class="rv d3"><b>Acuity mix &amp; operations</b>What your people are actually running: acuity mix, top call categories, and per-station activity.</div>
+    <div class="dash-pair">
+      <div class="rv"><div class="bframe "><div class="bbar"><i></i><i></i><i></i><span>aftercallapp.com/teams-dashboard · Workload</span></div><img src="images/home/dash-workload-dark.jpg" alt="Workload tab: calls logged, serious or critical share, busiest day, overnight calls, calls per week by acuity, and when calls happen" loading="lazy" decoding="async"></div><p class="dash-cap"><b>Workload.</b> What your people are actually running: acuity mix, busiest days, and when calls happen.</p></div>
+      <div class="rv d1"><div class="bframe "><div class="bbar"><i></i><i></i><i></i><span>aftercallapp.com/teams-dashboard · Stations</span></div><img src="images/home/dash-stations-light.jpg" alt="Stations tab: stations to check in on and a station comparison table" loading="lazy" decoding="async"></div><p class="dash-cap"><b>Stations.</b> Which station to check in on, compared against your agency's normal. Stations under 5 members are never flagged.</p></div>
     </div>
     <p class="center rv dash-controls">Leadership also gets full self-serve controls: roster and roles, peer supporter assignments, station groupings, crisis resources that update in every member's app instantly, private channels, join-code management, and billing.</p>
   </div>
@@ -663,6 +675,23 @@ footer nav a:hover{color:#fff}
         <li>Wellness reporting is aggregate-only, on every plan</li><li>Groups under five members are suppressed</li><li>Alerts carry the signal, never the content</li><li>A member who leaves keeps their own history</li><li>Members can leave the workspace at any time</li></ul></div>
     </div>
     <p class="trust-note rv">AfterCall is not an ePCR and not a patient record system. It does not write into ESO, ImageTrend, or Zoll, and no patient identifier is retained: every share passes a five-layer PHI screen with a signed attestation. Nothing in AfterCall may be used in discipline, promotion, assignment, or a fitness-for-duty determination; we will sign that alongside your labor group. AfterCall is designed to keep PHI out and therefore a BAA is not currently necessary; SOC 2 Type II is on the roadmap and not in place today. We'd rather tell you exactly where each item stands than imply otherwise.</p>
+  </div>
+</section>
+
+<!-- STORY (mist, human) -->
+<section class="mist pad story" id="story">
+  <div class="shell story-grid">
+    <div class="story-photos rv">
+      <figure class="ph-a"><img src="images/home/jordan-story.jpg" alt="Jordan Appelbaum, founder of AfterCall, in front of an ambulance at EMS World" loading="lazy" decoding="async"></figure>
+      <figure class="ph-b"><img src="images/home/story-scrubs.jpg" alt="Jordan at a patient bedside training simulator" loading="lazy" decoding="async"></figure>
+    </div>
+    <div>
+      <div class="eyebrow rv">Our story</div>
+      <h2 class="rv d1" style="font-size:clamp(40px,5.2vw,72px);margin-top:16px">Built by a provider who needed it.</h2>
+      <blockquote class="rv d1">"I've cleared brutal calls, driven back to quarters in silence, and had nothing waiting for me on the other side. <span class="grad-text">AfterCall is what I wished existed when I needed it most.</span>"</blockquote>
+      <div class="who rv d2"><b>Jordan Appelbaum</b><small>Founder &amp; CEO, AfterCall LLC</small></div>
+      <p class="rv d3 story-note">Built by a working EMT. AfterCall is independent: no corporate backing, no investors steering it. Every feature comes from what providers actually live through.</p>
+    </div>
   </div>
 </section>
 
@@ -689,21 +718,18 @@ footer nav a:hover{color:#fff}
 <section class="pad center" id="plans" style="overflow:hidden">
   <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
   <div class="shell" style="position:relative">
-    <div class="eyebrow rv">Plans</div>
-    <h2 class="rv d1" style="font-size:clamp(40px,5.8vw,80px);margin-top:16px">From $1.15 a week to support<br>the person behind the uniform.</h2>
-    <p class="lede rv d2" style="margin:22px auto 0">Simple per-seat pricing. Purchase orders and checks accepted, which matters for municipal and parish buyers.</p>
+    <div class="eyebrow rv">Pricing</div>
+    <h2 class="rv d1" style="font-size:clamp(40px,5.8vw,80px);margin-top:16px">Simple per-seat pricing.</h2>
     <div class="plans">
-      <div class="plan glass rv"><div class="nm">Teams Essentials</div><div class="pr">$4.99<small>/seat/mo</small></div><div class="sub">Per seat, per month.</div>
-        <ul><li>Private agency workspace and roster</li><li>Your crisis line in-app, beside 988</li><li>Agency-only feed and peer support channel</li><li>Peer supporter roster and routing</li><li>Critical incident alerts</li><li>Monthly leadership summary</li></ul>
-        <a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20Essentials">Talk to us</a></div>
-      <div class="plan glass hot rv d1"><span class="tagline">MAXIMUM IMPACT</span><div class="nm">Teams Pro</div><div class="pr">$7.99<small>/seat/mo</small></div><div class="sub">Per seat, per month.</div>
-        <ul><li>Everything in Essentials</li><li>Full AfterCall Pro on every seat</li><li>AfterCall AI and call narratives</li><li>Voice and CAD logging, PDF export</li><li>12-month heatmap and advanced analytics</li><li>The full leadership dashboard</li><li>Operations, exposure and skills reporting</li></ul>
-        <a class="btn btn-grad" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20Pro">Book a walkthrough</a></div>
-      <div class="plan glass rv d2"><div class="nm">Command</div><div class="pr">Custom</div><div class="sub">100+ seats, quoted separately.</div>
-        <ul><li>Everything in Teams Pro</li><li>SSO and SCIM provisioning</li><li>ePCR integration</li><li>BAA and custom terms</li><li>Dedicated onboarding</li></ul>
-        <a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Command">Talk to us</a></div>
-    </div>
-    <p class="plan-note rv">SSO, SCIM, ePCR integration, and a BAA are Command roadmap items. Timing is a plan, not a commitment, and anything you're counting on goes in the agreement.</p>
+      <div class="plan glass"><div class="nm">Teams Essentials</div><div class="pr">$4.99<small>/seat/mo</small></div><div class="sub">Per seat, per month.</div>
+        <ul><li>Private agency workspace &amp; roster</li><li>Your crisis line in-app, beside 988</li><li>Peer supporter roster &amp; routing</li><li>Agency feed &amp; peer support channel</li><li>Critical incident alerts</li><li>Monthly leadership summary</li></ul>
+        <a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough">Book a walkthrough</a></div>
+      <div class="plan glass hot"><span class="tagline">MAXIMUM IMPACT</span><div class="nm">Teams Pro</div><div class="pr">$7.99<small>/seat/mo</small></div><div class="sub">Per seat, per month.</div>
+        <ul><li>Everything in Essentials</li><li>Full AfterCall Pro on every seat</li><li>The full leadership dashboard</li><li>Operations, exposure &amp; skills reporting</li></ul>
+        <a class="btn btn-grad" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough">Book a walkthrough</a></div>
+      <div class="plan glass"><div class="nm">Enterprise</div><div class="pr">Custom</div><div class="sub">For larger agencies and systems.</div>
+        <ul><li>Everything in Teams Pro</li><li>Tailored pricing for your size</li><li>Features configured for your organization</li><li>Dedicated onboarding and support</li></ul>
+        <a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Enterprise">Talk to us</a></div>
   </div>
 </section>
 
@@ -716,7 +742,7 @@ footer nav a:hover{color:#fff}
       <details><summary>Why would providers actually use it?</summary><p>Because they open it for themselves first: to log calls, track skills and keep certifications current. That habit is what puts your peer support one tap away after a hard call.</p></details>
       <details><summary>What does leadership actually see?</summary><p>Anonymous team trends only. Groups under five are hidden automatically. You never see the person, the journal or the conversation.</p></details>
       <details><summary>Does it integrate with our ePCR?</summary><p>No. AfterCall doesn't write into ESO, ImageTrend or Zoll, and no patient identifier is retained.</p></details>
-      <details><summary>What does it cost?</summary><p>Teams Essentials is $4.99 per seat per month and Teams Pro is $7.99 per seat per month. Command is quoted separately for 100+ seats.</p></details>
+      <details><summary>What does it cost?</summary><p>Teams Essentials is $4.99 per seat per month and Teams Pro is $7.99 per seat per month. Larger agencies get Enterprise pricing tailored to their size.</p></details>
       <details><summary>Can we use grant money?</summary><p>Many agencies can. Wellness programs qualify under FEMA AFG and several state and private grants.</p></details>
       <details><summary>Can AfterCall be used in discipline?</summary><p>Never. Nothing in AfterCall may be used in discipline, promotion, assignment or fitness-for-duty decisions, and we'll put that in writing alongside your labor group.</p></details>
       <details><summary>What happens when a provider leaves the agency?</summary><p>They keep their entire history: calls, journals, shifts and badges. The seat ends; their account stays theirs.</p></details>
