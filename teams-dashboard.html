@@ -40,6 +40,16 @@
       --tooltip-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
       --chip-owner: #B79AF8;
       --chip-supervisor: #E2A33F;
+      /* status (reserved; always shipped with an icon + a label) */
+      --st-good: #0ca30c; --st-good-soft: rgba(12,163,12,0.16); --st-good-ink: #6bdc6b;
+      --st-warning: #fab219; --st-warning-soft: rgba(250,178,25,0.15); --st-warning-ink: #fbc548;
+      --st-serious: #ec835a; --st-serious-soft: rgba(236,131,90,0.16); --st-serious-ink: #f4a07e;
+      --st-critical: #d03b3b; --st-critical-soft: rgba(208,59,59,0.2); --st-critical-ink: #f08a8a;
+      --hero-glow: rgba(51,121,207,0.22);
+      --hover-col: rgba(148,163,184,0.08);
+      --zone-key: rgba(208,59,59,0.35);
+      --div-grad: linear-gradient(90deg, rgba(78,143,224,0.65), rgba(148,163,184,0.12) 50%, rgba(236,131,90,0.65));
+      --hatch: rgba(148,163,184,0.22);
     }
     /* Light mode — same validated palette family on a light surface. */
     :root[data-theme="light"] {
@@ -59,6 +69,15 @@
       --tooltip-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
       --chip-owner: #7C3AED;
       --chip-supervisor: #B45309;
+      --st-good-soft: rgba(12,163,12,0.12); --st-good-ink: #0b6e0b;
+      --st-warning-soft: rgba(250,178,25,0.18); --st-warning-ink: #8a5a00;
+      --st-serious-soft: rgba(236,131,90,0.18); --st-serious-ink: #a8481f;
+      --st-critical-soft: rgba(208,59,59,0.12); --st-critical-ink: #b42828;
+      --hero-glow: rgba(51,121,207,0.13);
+      --hover-col: rgba(15,23,42,0.05);
+      --zone-key: rgba(208,59,59,0.22);
+      --div-grad: linear-gradient(90deg, rgba(51,121,207,0.6), rgba(15,23,42,0.06) 50%, rgba(236,131,90,0.65));
+      --hatch: rgba(15,23,42,0.12);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -167,7 +186,7 @@
     .kpi .lab { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); }
     .kpi .val { font-size: 27px; font-weight: 900; letter-spacing: -1px; margin-top: 3px; font-variant-numeric: tabular-nums; }
     .kpi .sub { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
-    .kpi svg { display: block; margin-top: 8px; width: 100%; height: 26px; }
+    .kpi > svg { display: block; margin-top: 8px; width: 100%; height: 26px; }
     .suppressed-val { color: var(--muted); font-size: 18px; font-weight: 700; }
 
     .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
@@ -261,6 +280,220 @@
     .stpill.ok { background: rgba(148,163,184,0.12); color: var(--muted); }
     .rulegrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     @media (max-width: 860px) { .rulegrid { grid-template-columns: 1fr 1fr; } }
+
+    /* ── 1.3.0 command brief ── */
+    .ico-svg { width: 16px; height: 16px; flex: 0 0 auto; vertical-align: -3px; }
+    .ico-svg.tiny { width: 12px; height: 12px; vertical-align: -1px; }
+    .ico { display: inline-flex; align-items: center; }
+    .ico.lg .ico-svg { width: 26px; height: 26px; }
+    .btn .ico-svg { width: 14px; height: 14px; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .card-head h3 { margin: 0; }
+    .head-note { font-size: 12px; color: var(--muted); }
+    .head-link { font-size: 12.5px; font-weight: 700; color: var(--s1); cursor: pointer; text-decoration: none; }
+    .head-link:hover { text-decoration: underline; }
+    .empty { font-size: 13px; color: var(--muted); padding: 10px 0; }
+    .unit { font-size: 0.48em; font-weight: 700; color: var(--muted); letter-spacing: 0; margin-left: 2px; }
+    .kfloor.withicon { display: flex; gap: 8px; align-items: flex-start; }
+    .kfloor .ico-svg { margin-top: 2px; color: var(--s1); }
+    .suppressed-val { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 17px; font-weight: 700; letter-spacing: 0; }
+
+    .hero { position: relative; overflow: hidden; display: flex; gap: 20px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;
+      background: radial-gradient(900px 260px at 0% 0%, var(--hero-glow), transparent 70%), var(--card);
+      border: 1px solid var(--border); border-radius: 18px; padding: 24px 26px; }
+    .hero::after { content: ''; position: absolute; right: -40px; bottom: -60px; width: 320px; height: 160px; opacity: 0.5; pointer-events: none;
+      background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 80'%3E%3Cpolyline points='0,50 90,50 110,50 122,20 134,72 146,8 158,50 320,50' fill='none' stroke='%233379CF' stroke-opacity='0.35' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .hero-main { flex: 1 1 520px; min-width: 0; position: relative; z-index: 1; }
+    .hero-side { position: relative; z-index: 1; }
+    .hero-eyebrow { font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--s1); }
+    .hero-title { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; line-height: 1.15; margin-top: 6px; }
+    .hero-sub { font-size: 14px; color: var(--ink2); margin-top: 8px; max-width: 760px; }
+    .hero-glance { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .glance { display: flex; align-items: center; gap: 10px; background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 9px 14px; }
+    .glance .ico-svg { color: var(--s1); }
+    .glance b { display: block; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .glance span { display: block; font-size: 11.5px; color: var(--muted); }
+
+    .attn-item { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; border: 1px solid var(--border); border-left: 4px solid var(--sev);
+      border-radius: 12px; background: var(--card2); padding: 12px 14px; margin-bottom: 10px; }
+    .attn-item:last-child { margin-bottom: 0; }
+    .attn-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      background: var(--sev-soft); color: var(--sev-ink); flex: 0 0 auto; }
+    .attn-body { flex: 1 1 300px; min-width: 0; }
+    .attn-title { font-size: 14.5px; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .attn-text { font-size: 13px; color: var(--ink2); margin-top: 3px; line-height: 1.5; }
+    .attn-act { flex: 0 0 auto; display: flex; gap: 8px; align-items: center; align-self: center; }
+    .sev-label { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;
+      border-radius: 999px; padding: 2px 8px; background: var(--sev-soft); color: var(--sev-ink); }
+    .sev-critical { --sev: var(--st-critical); --sev-soft: var(--st-critical-soft); --sev-ink: var(--st-critical-ink); }
+    .sev-serious { --sev: var(--st-serious); --sev-soft: var(--st-serious-soft); --sev-ink: var(--st-serious-ink); }
+    .sev-warning { --sev: var(--st-warning); --sev-soft: var(--st-warning-soft); --sev-ink: var(--st-warning-ink); }
+    .sev-info { --sev: var(--s1); --sev-soft: var(--blue-soft); --sev-ink: var(--s1); }
+    .allclear { display: flex; gap: 10px; align-items: center; font-size: 13.5px; color: var(--ink2); }
+    .allclear .ico-svg { color: var(--good); width: 20px; height: 20px; }
+    .allclear.big { padding: 6px 2px; line-height: 1.55; }
+    .allclear.big .ico-svg { width: 30px; height: 30px; }
+
+    .pillars { grid-template-columns: repeat(4, 1fr); }
+    .pillar { position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .pillar::before { content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--accent); }
+    .pillar-head { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); }
+    .pillar-icon { width: 26px; height: 26px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+      color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent); }
+    .pillar-icon .ico-svg { width: 14px; height: 14px; }
+    .pillar-val { font-size: 38px; font-weight: 900; letter-spacing: -1.4px; margin-top: 10px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+    .pillar-lab { font-size: 12.5px; color: var(--ink2); margin-top: 4px; min-height: 2.6em; }
+    .pillar-delta { margin-top: 6px; min-height: 22px; }
+    .pillar .spark { display: block; width: 100%; height: 44px; margin-top: 8px; }
+    .pillar .scalebar { margin-top: 14px; }
+    .pillar-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+    .pillar-stats b { display: block; font-size: 15px; font-variant-numeric: tabular-nums; }
+    .pillar-stats span { display: block; font-size: 11px; color: var(--muted); line-height: 1.35; }
+    .pillar-delta + .spark, .pillar-delta + .scalebar { margin-bottom: 12px; }
+
+    .delta { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px;
+      background: rgba(148,163,184,0.12); color: var(--muted); white-space: nowrap; }
+    .delta .ico-svg { width: 12px; height: 12px; }
+    .delta.good { background: var(--st-good-soft); color: var(--st-good-ink); }
+    .delta.bad { background: var(--st-critical-soft); color: var(--st-critical-ink); }
+    .delta.neutral { background: var(--blue-soft); color: var(--s1); }
+    .kdelta { margin-top: 8px; }
+
+    .scalebar { position: relative; height: 10px; border-radius: 999px; background: var(--card2); overflow: visible; }
+    .scalebar i { position: absolute; top: 0; bottom: 0; }
+    .scalebar i:first-child { border-radius: 999px 0 0 999px; }
+    .scalebar i:last-of-type { border-radius: 0 999px 999px 0; }
+    .sb-mark { position: absolute; top: -5px; width: 4px; height: 20px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--card); }
+    .sb-ends { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--muted); margin-top: 4px; }
+
+    .chart-wrap svg .hitcol { fill: transparent; cursor: crosshair; }
+    .chart-wrap svg .hitcol:hover { fill: var(--hover-col); }
+    .legend .zone-key { background: var(--zone-key); }
+
+    .kpis4 { grid-template-columns: repeat(4, 1fr); }
+    .kpi .val .unit { font-size: 0.5em; }
+
+    .fstep { display: grid; grid-template-columns: 150px 1fr 74px; gap: 12px; align-items: center; padding: 7px 0; }
+    .fstep-l b { display: block; font-size: 13px; }
+    .fstep-l span { display: block; font-size: 11px; color: var(--muted); }
+    .fstep-track { height: 22px; background: var(--card2); border-radius: 6px; overflow: hidden; }
+    .fstep-fill { height: 100%; border-radius: 0 6px 6px 0; }
+    .fstep-v { text-align: right; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .fstep-v em { display: block; font-style: normal; font-size: 11px; color: var(--muted); font-weight: 600; }
+
+    .sg-row { display: grid; grid-template-columns: minmax(120px, 160px) 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .sg-row:last-child { border-bottom: none; }
+    .sg-name { font-size: 13.5px; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sg-name span { display: block; font-size: 11px; color: var(--muted); font-weight: 500; }
+    .sg-bar { position: relative; height: 10px; background: var(--card2); border-radius: 999px; overflow: hidden; }
+    .sg-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; }
+    .sg-bar .sg-heavy { border-radius: 999px 0 0 999px; }
+
+    .promise { display: flex; gap: 16px; align-items: flex-start; background: linear-gradient(135deg, var(--blue-soft), transparent 60%), var(--card); }
+    .promise-icon { color: var(--s1); padding-top: 2px; }
+    .promise-title { font-size: 14.5px; font-weight: 800; }
+    .promise-body { font-size: 13px; color: var(--ink2); line-height: 1.65; margin-top: 4px; }
+
+    .strip { display: flex; gap: 2px; height: 30px; border-radius: 8px; overflow: hidden; }
+    .strip-seg { display: flex; align-items: center; justify-content: center; min-width: 3px; font-size: 11.5px; font-weight: 800; cursor: default; }
+    .strip-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .strip-legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink2); }
+    .strip-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .strip-legend em { font-style: normal; color: var(--muted); }
+    .dist { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .dist:last-child { border-bottom: none; }
+    .dist-l { font-size: 13px; font-weight: 700; padding-top: 6px; }
+
+    .hbar { display: grid; grid-template-columns: minmax(110px, 200px) 1fr 96px; gap: 12px; align-items: center; padding: 5px 0; }
+    .hbar-l { font-size: 12.5px; font-weight: 600; color: var(--ink2); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hbar-track { height: 22px; }
+    .hbar-fill { height: 100%; border-radius: 0 4px 4px 0; }
+    .hbar-v { font-size: 12.5px; color: var(--ink2); font-variant-numeric: tabular-nums; }
+
+    .acuity-big { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+    .acuity-big div { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+    .acuity-big b { display: block; font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .acuity-big em { font-style: normal; font-size: 11.5px; color: var(--muted); }
+    .adot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+
+    .heatscroll { overflow-x: auto; }
+    .seq-legend, .heat-legend { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+    .seq-legend i { width: 140px; height: 10px; border-radius: 999px; display: inline-block; }
+    .heat-legend { margin: 0 0 10px; }
+    .heat-legend .hl-bar { width: 160px; height: 10px; border-radius: 999px; display: inline-block; background: var(--div-grad); }
+    .hl-supp { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; }
+    .hatch, td.supp { background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 7px); }
+    .hatch { width: 14px; height: 10px; border-radius: 3px; display: inline-block; border: 1px solid var(--border); }
+    table.heat td { border-bottom: 1px solid var(--border); }
+    table.heat td.heatc, table.heat td.supp { border-left: 2px solid var(--card); font-weight: 700; }
+    td.supp span { color: var(--muted); }
+    .th-sub { font-weight: 600; letter-spacing: 0.2px; text-transform: none; color: var(--muted); }
+    .minibar { display: inline-block; width: 46px; height: 6px; border-radius: 999px; background: var(--card2); margin-right: 8px; vertical-align: middle; overflow: hidden; }
+    .minibar i { display: block; height: 100%; background: var(--s1); border-radius: 999px; }
+    .stpill { display: inline-flex; align-items: center; gap: 5px; }
+    .stpill .ico-svg { width: 12px; height: 12px; }
+    .stpill.steady { background: var(--st-good-soft); color: var(--st-good-ink); }
+    .strow .t { display: flex; align-items: center; gap: 8px; }
+
+    .loop { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
+    .loop-stage { flex: 1 1 140px; border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 12px; background: var(--card2); padding: 14px 16px; }
+    .loop-n { font-size: 34px; font-weight: 900; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+    .loop-l { font-size: 13.5px; font-weight: 800; }
+    .loop-s { font-size: 11.5px; color: var(--muted); }
+    .loop-arrow { flex: 0 0 68px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--ink2); }
+    .loop-arrow i { display: block; width: 40px; height: 2px; background: var(--muted); position: relative; margin-top: 6px; }
+    .loop-arrow i::after { content: ''; position: absolute; right: -2px; top: -4px; border: 5px solid transparent; border-left-color: var(--muted); border-right: 0; }
+    .loop-open { flex: 0 0 auto; margin-left: 18px; display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 12px;
+      background: var(--st-good-soft); color: var(--st-good-ink); }
+    .loop-open.has { background: var(--st-warning-soft); color: var(--st-warning-ink); }
+    .loop-open b { display: block; font-size: 22px; font-weight: 900; }
+    .loop-open span { display: block; font-size: 11.5px; }
+    .loop-open .ico-svg { width: 22px; height: 22px; }
+
+    .bullet { margin-bottom: 14px; }
+    .bullet-track { position: relative; height: 16px; border-radius: 999px; overflow: visible; background: var(--card2); }
+    .bullet-track .bz { position: absolute; top: 0; bottom: 0; left: 0; }
+    .bz.good { background: var(--st-good-soft); border-radius: 999px 0 0 999px; }
+    .bz.ok { background: var(--st-warning-soft); }
+    .bz.slow { background: var(--st-critical-soft); border-radius: 0 999px 999px 0; }
+    .bullet-mark { position: absolute; top: -6px; width: 6px; height: 28px; margin-left: -3px; border-radius: 3px; background: var(--ink); box-shadow: 0 0 0 2px var(--card); cursor: default; }
+    .bullet-target { position: absolute; top: -4px; bottom: -4px; width: 0; border-left: 2px dashed var(--muted); }
+    .bullet-ends { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--muted); margin-top: 6px; }
+    .stat.row-stat { display: flex; align-items: baseline; gap: 12px; }
+    .stat.row-stat .sv { min-width: 86px; }
+    td.nowrap { white-space: nowrap; }
+
+    .page { animation: pagein 0.18s ease-out; }
+    @keyframes pagein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .page { animation: none; } }
+
+    @media (max-width: 1180px) { .pillars, .kpis4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) {
+      .pillars, .kpis4 { grid-template-columns: 1fr; }
+      .chart-wrap svg.sm-svg { min-width: 760px; }
+      .hero { padding: 18px; } .hero-title { font-size: 22px; }
+      .fstep { grid-template-columns: 110px 1fr 56px; }
+      .dist { grid-template-columns: 1fr; gap: 6px; }
+      .hbar { grid-template-columns: 100px 1fr 74px; }
+      .acuity-big { grid-template-columns: repeat(2, 1fr); }
+      .loop-arrow { flex-basis: 100%; flex-direction: row; gap: 8px; padding: 6px 0; }
+      .loop-arrow i { transform: rotate(90deg); margin: 0; width: 20px; }
+      .loop-open { margin: 10px 0 0; flex-basis: 100%; }
+      .sg-row { grid-template-columns: 1fr auto; }
+      .sg-row .sg-bar { grid-column: 1 / -1; order: 3; }
+    }
+
+    /* Print / save as PDF — the overview as a one-page brief. */
+    @media print {
+      @page { margin: 12mm; }
+      body { background: #fff !important; }
+      .topbar, .tabs, .noprint, #billingBanner, .attn-act, .gate, #tooltip, .head-link { display: none !important; }
+      .app { display: block !important; }
+      .page { display: none !important; padding: 0; max-width: none; animation: none; }
+      #page-overview { display: block !important; }
+      .card, .hero { break-inside: avoid; box-shadow: none; }
+      .footer-meta { padding: 8px 0; }
+    }
 
     .footer-meta { max-width: 1240px; margin: 0 auto; padding: 8px 22px 40px; font-size: 12px; color: var(--muted); }
 
@@ -390,158 +623,116 @@
     <div class="tabs" id="tabs">
       <button class="tab active" data-page="overview">Overview</button>
       <button class="tab" data-page="wellbeing">Wellbeing</button>
-      <button class="tab" data-page="operations">Operations</button>
+      <button class="tab" data-page="operations">Workload</button>
+      <button class="tab" data-page="stations">Stations</button>
+      <button class="tab" data-page="peer">Peer support</button>
       <button class="tab admin-only" data-page="roster">Roster</button>
       <button class="tab" data-page="resources">Resources</button>
       <button class="tab" data-page="channels">Channels</button>
       <button class="tab" data-page="settings">Settings</button>
     </div>
 
-    <!-- ── Overview ── -->
+    <!-- ── Overview: the chief's brief ── -->
     <div class="page active" id="page-overview">
-      <div class="grid kpis">
-        <div class="card kpi"><div class="lab">Weekly active</div><div class="val" id="kWeekly">—</div><div class="sub" id="kWeeklySub">of active seats</div><svg id="spActive"></svg></div>
-        <div class="card kpi"><div class="lab">Seats deployed</div><div class="val" id="kSeats">—</div><div class="sub" id="kSeatsSub">&nbsp;</div><svg id="spSeats"></svg></div>
-        <div class="card kpi"><div class="lab">Calls logged</div><div class="val" id="kCalls">—</div><div class="sub">in window</div><svg id="spCalls"></svg></div>
-        <div class="card kpi"><div class="lab">Check-in attach</div><div class="val" id="kAttach">—</div><div class="sub">of calls, voluntary</div><svg id="spAttach"></svg></div>
-        <div class="card kpi"><div class="lab">Team stress</div><div class="val" id="kStress">—</div><div class="sub">avg post-call, 1–10</div><svg id="spStress"></svg></div>
-        <div class="card kpi"><div class="lab">Team fatigue</div><div class="val" id="kFatigue">—</div><div class="sub" id="kFatigueSub">avg self-rated, 1–7</div><svg id="spFatigue"></svg></div>
-        <div class="card kpi"><div class="lab">Peer alerts</div><div class="val" id="kFlags">—</div><div class="sub" id="kFlagsSub">check-ins flagged</div><svg id="spFlags"></svg></div>
+      <div class="hero">
+        <div class="hero-main">
+          <div class="hero-eyebrow" id="heroEyebrow">Agency brief</div>
+          <h1 class="hero-title" id="heroTitle">Loading your team's numbers…</h1>
+          <div class="hero-sub" id="heroSub">&nbsp;</div>
+          <div class="hero-glance" id="heroGlance"></div>
+        </div>
+        <div class="hero-side">
+          <button class="btn ghost sm noprint" id="printBtn" title="Print or save this brief as a PDF for a staff or board meeting"><span class="ico" data-ico="printer"></span>Print brief</button>
+        </div>
       </div>
 
       <div class="card mt">
-        <h3>Stations to check in on</h3>
-        <div id="stationAlerts"></div>
-        <div class="subnote" id="stationAlertsNote">Station-level only: a station shows here when, over the last
-          14 days, it has run well above your agency's normal share of Serious / Critical calls, its average
-          post-call stress is a full point above normal, or its members have had repeated heavy-run peer alerts.
-          It never says who, which call, or anything anyone wrote — and stations under
-          <span class="kmin">5</span> members are never flagged. Marking a station checked in quiets it for 7 days.</div>
+        <div class="card-head"><h3>Needs your attention</h3><span class="head-note" id="attnCount"></span></div>
+        <div id="attnList"></div>
         <div id="stationMsg" class="msg"></div>
       </div>
 
-      <div class="grid cols-2 mt">
-        <div class="card">
-          <h3>Team activity by week</h3>
-          <div class="legend"><span><i style="background:var(--s1)"></i>Calls logged</span><span><i style="background:var(--s3)"></i>Journal entries</span></div>
-          <div class="chart-wrap" id="chActivity"></div>
+      <div class="grid pillars mt" id="pillars"></div>
+
+      <div class="card mt">
+        <div class="card-head">
+          <h3>Workload and wellbeing, week by week</h3>
+          <span class="head-note">Hover a week to compare everything at once</span>
         </div>
-        <div class="card">
-          <h3>Signals routed by week</h3>
-          <div class="legend"><span><i style="background:var(--s4)"></i>Peer alerts</span><span><i style="background:var(--s2)"></i>Peer conversations</span></div>
-          <div class="chart-wrap" id="chSignals"></div>
-          <div class="subnote">Counts only. An alert routes to your peer support team — leadership never sees who, or the call.</div>
-        </div>
+        <div class="legend" id="smLegend"></div>
+        <div class="chart-wrap" id="chMultiples"></div>
+        <div class="subnote">Read top to bottom: when the share of Serious / Critical calls climbs, watch the stress and
+          fatigue rows in the same weeks. Gaps are the privacy floor working — a week with fewer than
+          <span class="kmin">5</span> people checking in reports nothing.</div>
       </div>
 
       <div class="grid cols-2e mt">
         <div class="card">
-          <h3>Active members by week</h3>
-          <div class="chart-wrap" id="chActive"></div>
+          <div class="card-head"><h3>Adoption</h3><span class="head-note">Are people actually using it?</span></div>
+          <div id="funnel"></div>
+          <div class="subnote" id="funnelNote"></div>
         </div>
         <div class="card">
-          <h3>What this dashboard will never show</h3>
-          <div style="font-size: 13.5px; color: var(--ink2); line-height: 1.75;">
-            ✕ Any individual journal, reflection, or message<br />
-            ✕ The content of any peer support conversation<br />
-            ✕ Any one person's wellness, stress, or sleep score<br />
-            ✕ Who opened a peer support request<br />
-            <span style="color: var(--good); font-weight:700;">✓</span> Aggregates only, suppressed under
-            <span id="kminNote">5</span> contributors — written into your agreement.
-          </div>
+          <div class="card-head"><h3>Stations at a glance</h3><a class="head-link" data-goto="stations">All stations →</a></div>
+          <div id="stationGlance"></div>
+        </div>
+      </div>
+
+      <div class="card mt promise">
+        <div class="promise-icon"><span class="ico lg" data-ico="shield"></span></div>
+        <div>
+          <div class="promise-title">What this dashboard will never show</div>
+          <div class="promise-body">Any journal, reflection or message · the content of any peer conversation · any one
+            person's stress, fatigue or mood · who asked for help or which call it was. Every wellbeing number is an
+            aggregate of at least <b><span id="kminNote">5</span> people</b>, and nothing here may be used for
+            discipline, promotion, assignment or fitness-for-duty — that is written into your agreement.</div>
         </div>
       </div>
     </div>
 
     <!-- ── Wellbeing ── -->
     <div class="page" id="page-wellbeing">
-      <div class="grid cols-2">
+      <div class="grid kpis4">
+        <div class="card kpi" id="wkStress"></div>
+        <div class="card kpi" id="wkFatigue"></div>
+        <div class="card kpi" id="wkMood"></div>
+        <div class="card kpi" id="wkAttach"></div>
+      </div>
+
+      <div class="grid cols-2e mt">
         <div class="card">
-          <h3>Team stress trend — avg post-call check-in (1–10)</h3>
+          <div class="card-head"><h3>Post-call stress</h3><span class="head-note">weekly average · 1–10</span></div>
           <div class="chart-wrap" id="chStress"></div>
-          <div class="subnote">Gaps are the k-floor working: a week where fewer than <span class="kmin">5</span> members checked in reports nothing, by design.</div>
+          <div class="subnote">The shaded band is the high-stress zone (7–10); the dashed line is the average for the
+            whole window. A single week above the line is a busy week — three in a row is a pattern.</div>
         </div>
         <div class="card">
-          <h3>Check-in attach rate by week</h3>
-          <div class="chart-wrap" id="chAttach"></div>
-          <div class="subnote">Share of logged calls carrying a voluntary post-call check-in. Falling attach usually
-            comes before falling wellbeing — it means people stopped telling you.</div>
-        </div>
-      </div>
-
-      <div class="grid cols-2 mt">
-        <div class="card">
-          <h3>Team fatigue trend — self-rated (1–7)</h3>
+          <div class="card-head"><h3>Fatigue</h3><span class="head-note">weekly average · Samn-Perelli 1–7</span></div>
           <div class="chart-wrap" id="chFatigue"></div>
-          <div class="subnote">The Samn-Perelli scale used in aviation and EMS fatigue research: 1 fully alert, 4 a little
-            tired, 5 moderately tired, 7 completely exhausted. Asked on the post-call check-in and on daily check-ins
-            (app 1.3.0 and later). Same k-floor as stress.</div>
-        </div>
-        <div class="card">
-          <h3>Fatigue bands — all check-ins</h3>
-          <div class="chart-wrap" id="chFatigueBands" style="margin-top:22px;"></div>
-          <div class="subnote" id="fatigueNote"></div>
+          <div class="subnote">The scale used in aviation and EMS fatigue research: 1 fully alert · 4 a little tired ·
+            5 moderately tired · 7 completely exhausted. The shaded band (5–7) is the level fatigue research treats as a
+            safety risk. Asked on post-call and daily check-ins (app 1.3.0 and later).</div>
         </div>
       </div>
 
-      <div class="grid cols-3 mt">
-        <div class="card">
-          <h3>Mood distribution — journal check-ins</h3>
-          <div class="chart-wrap" id="chMood"></div>
-          <div class="subnote" id="moodNote"></div>
-        </div>
-        <div class="card">
-          <h3>Stress bands — post-call check-ins</h3>
-          <div class="chart-wrap" id="chBands" style="margin-top:22px;"></div>
-          <div class="subnote" id="bandsNote"></div>
-        </div>
-        <div class="card">
-          <h3>Journaling participation</h3>
-          <div class="chart-wrap" id="chParticipation"></div>
-          <div class="subnote">Members who journaled at least once in the window. Participation is the health of the
-            habit — every score on this page only means something while this stays high.</div>
-        </div>
+      <div class="card mt">
+        <div class="card-head"><h3>How check-ins landed</h3><span class="head-note">every check-in in the window — the shape, not just the average</span></div>
+        <div id="distStrips"></div>
+        <div class="subnote" id="distNote"></div>
       </div>
 
       <div class="grid cols-2 mt">
         <div class="card">
-          <h3>Peer alert response</h3>
-          <div id="noSupportersWarn" class="stat" style="display:none; border-color:var(--warn); margin-bottom:12px;">
-            <div class="sv" style="font-size:15px; color:var(--warn);">No peer supporters assigned</div>
-            <div class="sl">Alerts are being raised but there is nobody to route them to. Mark trained peer supporters on the
-              Roster tab — until then members' check-in requests reach no one.</div>
-          </div>
-          <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
-            <div class="chart-wrap" id="chLifecycle" style="flex:1 1 250px; min-width:230px;"></div>
-            <div class="statgrid vert" style="flex:1 1 190px;">
-              <div class="stat"><div class="sv" id="rMedian">—</div><div class="sl">median time to acknowledge</div></div>
-              <div class="stat"><div class="sv" id="rWithin48">—</div><div class="sl">acknowledged within 48 hours</div></div>
-              <div class="stat"><div class="sv" id="rStale">—</div><div class="sl">still open after 7 days</div></div>
-            </div>
-          </div>
-          <div class="statgrid" style="margin-top:12px;">
-            <div class="stat"><div class="sv" id="rHighImpact">—</div><div class="sl">marked a call high-impact</div></div>
-            <div class="stat"><div class="sv" id="rHeavyRun">—</div><div class="sl">automatic: a run of Serious / Critical calls</div></div>
-            <div class="stat"><div class="sv" id="rRequested">—</div><div class="sl">asked for a check-in</div></div>
-          </div>
-          <div class="subnote">How an alert works: a flag <b>opens</b> when a member marks a call high-impact, has a heavy
-            run (<span id="ruleSentence">4+ Serious or Critical calls, or 3+ Critical, within 24 hours</span>), or taps
-            “Ask for a check-in” after a rough call. Your peer supporters get a signal-only ping — who and why, never the call,
-            never the content. It becomes
-            <b>acknowledged</b> when a supporter picks it up and reaches out, and <b>closed</b> when the follow-up
-            is done. These three numbers are the health of that loop: if the median creeps up or flags sit open
-            past a week, the peer team needs more hands.</div>
+          <div class="card-head"><h3>Check-in rate</h3><span class="head-note">share of logged calls with a voluntary check-in</span></div>
+          <div class="chart-wrap" id="chAttach"></div>
+          <div class="subnote">Falling check-in rates usually come before falling wellbeing — it means people stopped telling
+            you. It is the first number to watch after a hard stretch.</div>
         </div>
         <div class="card">
-          <h3>Peer support utilization</h3>
-          <div class="statgrid">
-            <div class="stat"><div class="sv" id="pConvos">—</div><div class="sl">peer conversations opened</div></div>
-            <div class="stat"><div class="sv" id="pAnon">—</div><div class="sl">opened anonymously</div></div>
-            <div class="stat"><div class="sv" id="pPer">—</div><div class="sl">conversations per supporter</div></div>
-          </div>
-          <div class="chart-wrap mt" id="chPeerWeekly"></div>
-          <div class="subnote">Counts only — never who, never a word of any conversation. A healthy anonymous share
-            means people trust the door; conversations-per-supporter tells you when to grow the team.</div>
+          <div class="card-head"><h3>Journaling</h3><span class="head-note">members who journaled in the window</span></div>
+          <div class="chart-wrap" id="chParticipation"></div>
+          <div class="subnote">Participation is the health of the habit. Every score on this page only means something
+            while this stays high.</div>
         </div>
       </div>
 
@@ -556,29 +747,135 @@
       </div>
     </div>
 
-    <!-- ── Operations ── -->
+    <!-- ── Workload ── -->
     <div class="page" id="page-operations">
-      <div class="grid cols-2">
+      <div class="grid kpis4">
+        <div class="card kpi" id="okCalls"></div>
+        <div class="card kpi" id="okHeavy"></div>
+        <div class="card kpi" id="okPeak"></div>
+        <div class="card kpi" id="okNight"></div>
+      </div>
+
+      <div class="grid cols-2 mt">
         <div class="card">
-          <h3>Acuity mix — calls in window</h3>
-          <div class="chart-wrap" id="chAcuity"></div>
+          <div class="card-head"><h3>Calls per week, by acuity</h3><span class="head-note">Serious + Critical stacked on the rest</span></div>
+          <div class="legend" id="acuityWeekLegend"></div>
+          <div class="chart-wrap" id="chAcuityWeekly"></div>
         </div>
         <div class="card">
-          <h3>Top call categories</h3>
-          <div class="chart-wrap" id="chTypes"></div>
+          <div class="card-head"><h3>Acuity mix</h3><span class="head-note">all calls in the window</span></div>
+          <div id="chAcuity"></div>
         </div>
       </div>
+
       <div class="card mt">
-        <h3>Stations</h3>
+        <div class="card-head">
+          <h3>When calls happen</h3>
+          <div class="seg noprint" id="timingSeg">
+            <button data-mode="calls" class="on">All calls</button>
+            <button data-mode="highAcuity">Serious &amp; Critical</button>
+          </div>
+        </div>
+        <div class="chart-wrap" id="chTiming"></div>
+        <div class="subnote" id="timingNote"></div>
+      </div>
+
+      <div class="card mt">
+        <div class="card-head"><h3>Top call types</h3><span class="head-note">calls in the window</span></div>
+        <div class="chart-wrap" id="chTypes"></div>
+      </div>
+    </div>
+
+    <!-- ── Stations ── -->
+    <div class="page" id="page-stations">
+      <div class="card">
+        <div class="card-head"><h3>Stations to check in on</h3><span class="head-note" id="stationAlertsHead"></span></div>
+        <div id="stationAlerts"></div>
+        <div class="subnote" id="stationAlertsNote">Station-level only: a station shows here when, over the last
+          14 days, it has run well above your agency's normal share of Serious / Critical calls, its average
+          post-call stress is a full point above normal, or its members have had repeated heavy-run peer alerts.
+          It never says who, which call, or anything anyone wrote — and stations under
+          <span class="kmin">5</span> members are never flagged. Marking a station checked in quiets it for 7 days.</div>
+        <div id="stationMsg2" class="msg"></div>
+      </div>
+
+      <div class="card mt">
+        <div class="card-head">
+          <h3>Station comparison</h3>
+          <button class="btn ghost sm noprint" id="stationCsv"><span class="ico" data-ico="download"></span>Download CSV</button>
+        </div>
+        <div class="heat-legend">
+          <span>Better than your agency's normal</span>
+          <i class="hl-bar"></i>
+          <span>Worse than normal</span>
+          <span class="hl-supp"><i class="hatch"></i><span>Withheld (under <span class="kmin">5</span>)</span></span>
+        </div>
         <div class="tablewrap">
-          <table>
-            <thead><tr><th>Station</th><th class="num">Members</th><th class="num">Active</th><th class="num">Calls</th><th class="num">Check-in %</th><th class="num">Avg stress</th><th class="num">Avg fatigue</th><th class="num">Serious / Critical, 14d</th><th class="num">Stress, 14d</th><th class="num">Peer alerts, 14d</th><th>Check-in</th></tr></thead>
+          <table class="heat">
+            <thead><tr>
+              <th>Station</th><th class="num">Members</th><th class="num">Active</th><th class="num">Calls</th>
+              <th class="num">Check-in rate</th><th class="num">Avg stress</th><th class="num">Avg fatigue</th>
+              <th class="num">Serious / Critical<br/><span class="th-sub">last 14 days</span></th>
+              <th class="num">Stress<br/><span class="th-sub">last 14 days</span></th>
+              <th class="num">Peer alerts<br/><span class="th-sub">last 14 days</span></th>
+              <th>Status</th></tr></thead>
             <tbody id="stationBody"></tbody>
           </table>
         </div>
-        <div class="subnote">Avg stress is suppressed for any station under <span class="kmin">5</span> members or contributors, and
-          the 14-day station signals for any station under <span class="kmin">5</span> members. Peer alerts are counts of
-          check-ins routed to your peer team — never who. Assign stations on the Roster tab.</div>
+        <div class="subnote">Color shows how far a station sits from your agency-wide number — the number in the cell is
+          the station's own. Wellbeing cells are withheld for any station under <span class="kmin">5</span> members or
+          contributors, and the 14-day signals for any station under <span class="kmin">5</span> members. Peer alerts are
+          counts of check-ins routed to your peer team — never who. Assign stations on the Roster tab.</div>
+      </div>
+    </div>
+
+    <!-- ── Peer support ── -->
+    <div class="page" id="page-peer">
+      <div id="noSupportersWarn" class="attn-item sev-critical" style="display:none; margin-bottom:14px;">
+        <div class="attn-icon"><span class="ico" data-ico="alert"></span></div>
+        <div class="attn-body">
+          <div class="attn-title"><span class="sev-label">Critical</span>No peer supporters assigned</div>
+          <div class="attn-text">Alerts are being raised but there is nobody to route them to. Mark trained peer supporters
+            on the Roster tab — until then members' check-in requests reach no one.</div>
+        </div>
+        <div class="attn-act admin-only"><button class="btn sm" data-goto="roster">Open roster</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>The alert loop</h3><span class="head-note">every peer alert in the window</span></div>
+        <div id="loop"></div>
+        <div class="subnote">A flag <b>opens</b> when a member marks a call high-impact, has a heavy run
+          (<span id="ruleSentence">4+ Serious or Critical calls, or 3+ Critical, within 24 hours</span>), or taps
+          “Ask for a check-in”. Your peer supporters get a signal-only ping — never the call, never the content. It is
+          <b>picked up</b> when a supporter reaches out, and <b>followed up</b> when that conversation is done.
+          <a class="head-link" data-goto="settings">Edit the heavy-run rule →</a></div>
+      </div>
+
+      <div class="grid cols-2e mt">
+        <div class="card">
+          <div class="card-head"><h3>How fast alerts get picked up</h3></div>
+          <div id="response"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Why alerts opened</h3></div>
+          <div id="reasons"></div>
+          <div class="subnote">“Asked for a check-in” is the healthiest number on this page: it means members trust the
+            door enough to knock.</div>
+        </div>
+      </div>
+
+      <div class="grid cols-2 mt">
+        <div class="card">
+          <div class="card-head"><h3>Alerts and conversations by week</h3></div>
+          <div class="legend" id="peerLegend"></div>
+          <div class="chart-wrap" id="chSignals"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Peer team capacity</h3></div>
+          <div class="statgrid vert" id="capacity"></div>
+          <div class="subnote">Counts only — never who, never a word of any conversation. A healthy anonymous share means
+            people trust the door; conversations per supporter tells you when to grow the team.</div>
+        </div>
       </div>
     </div>
 
@@ -842,10 +1139,19 @@
     const THEMES = {
       dark: { s1: '#4E8FE0', s2: '#0E9E6E', s3: '#8B5CF6', s4: '#C97B06',
         grid: 'rgba(148,163,184,0.12)', ink: '#E8EEF5', ink2: '#B9C7D6', muted: '#8FA3B8',
-        ring: 'rgba(148,163,184,0.15)', ptStroke: '#16212E' },
+        ring: 'rgba(148,163,184,0.15)', ptStroke: '#16212E',
+        // risk zones, the sequential heat ramp (one hue), the diverging pair, mood (diverging, gray midpoint)
+        zone: '#d03b3b', seq: '#4E8FE0', empty: 'rgba(148,163,184,0.07)', warm: '#ec835a', cool: '#4E8FE0',
+        zLow: 'rgba(16,185,129,0.4)', zMid: 'rgba(245,158,11,0.4)', zHigh: 'rgba(220,38,38,0.45)',
+        zLowS: '#10B981', zMidS: '#F59E0B', zHighS: '#DC2626',
+        mood: ['#d03b3b', '#ec835a', '#4b5563', '#6da7ec', '#3987e5'] },
       light: { s1: '#3379CF', s2: '#0E9E6E', s3: '#8B5CF6', s4: '#C97B06',
         grid: 'rgba(15,23,42,0.08)', ink: '#0F172A', ink2: '#334155', muted: '#64748B',
-        ring: 'rgba(15,23,42,0.10)', ptStroke: '#FFFFFF' },
+        ring: 'rgba(15,23,42,0.10)', ptStroke: '#FFFFFF',
+        zone: '#d03b3b', seq: '#256abf', empty: 'rgba(15,23,42,0.045)', warm: '#ec835a', cool: '#3379CF',
+        zLow: 'rgba(16,185,129,0.35)', zMid: 'rgba(245,158,11,0.38)', zHigh: 'rgba(220,38,38,0.35)',
+        zLowS: '#10B981', zMidS: '#F59E0B', zHighS: '#DC2626',
+        mood: ['#d03b3b', '#ec835a', '#c9ccd1', '#6da7ec', '#2a78d6'] },
     };
     const C = Object.assign(
       { acuity: { Minor: '#10B981', Moderate: '#F59E0B', Serious: '#F97316', Critical: '#DC2626' } },
@@ -946,221 +1252,143 @@
     function flash(id, cls, text) { const e = $(id); e.className = 'msg ' + cls; e.textContent = text; }
     function clearMsg(id) { const e = $(id); e.className = 'msg'; e.textContent = ''; }
 
+    // ── Icons (Feather, MIT) — every status color ships with an icon + a label ──
+    const ICONS = {
+      alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+      check: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+      clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+      users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+      activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+      heart: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+      buoy: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/>',
+      home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+      info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+      shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+      printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+      download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+      moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+      key: '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
+      trend: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+    };
+    function ico(name, cls) {
+      return '<svg class="ico-svg' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+    }
+    function hydrateIcons(root) {
+      (root || document).querySelectorAll('[data-ico]').forEach((el) => {
+        if (!el.dataset.icoDone) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.ico)); el.dataset.icoDone = '1'; }
+      });
+    }
+    hydrateIcons();
+
     // ── Tooltip layer ──
     const tip = $('tooltip');
+    function showTip(html, ev) {
+      tip.innerHTML = html;
+      tip.style.display = 'block';
+      const w = tip.offsetWidth, h = tip.offsetHeight;
+      let left = ev.clientX + 14, top = ev.clientY + 14;
+      if (left + w > window.innerWidth - 12) left = Math.max(8, ev.clientX - w - 14);
+      if (top + h > window.innerHeight - 12) top = Math.max(8, ev.clientY - h - 14);
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+    }
+    function hideTip() { tip.style.display = 'none'; }
     function bindTips(root) {
       root.querySelectorAll('[data-tip]').forEach((el) => {
-        el.addEventListener('mousemove', (ev) => {
-          tip.innerHTML = el.dataset.tip;
-          tip.style.display = 'block';
-          const w = tip.offsetWidth;
-          tip.style.left = Math.min(ev.clientX + 14, window.innerWidth - w - 12) + 'px';
-          tip.style.top = (ev.clientY + 14) + 'px';
-        });
-        el.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+        el.addEventListener('mousemove', (ev) => showTip(el.dataset.tip, ev));
+        el.addEventListener('mouseleave', hideTip);
+        // Touch: a tap shows the tooltip where the finger is.
+        el.addEventListener('touchstart', (ev) => { const t = ev.touches[0]; if (t) showTip(el.dataset.tip, t); }, { passive: true });
       });
     }
+    document.addEventListener('touchstart', (ev) => { if (!ev.target.closest('[data-tip]')) hideTip(); }, { passive: true });
+    window.addEventListener('scroll', hideTip, { passive: true });
 
-    // ── SVG chart helpers (one y-axis, thin marks, recessive grid) ──
+    // ── Shared helpers ──
     const W = 560, PAD = { l: 34, r: 20, t: 10, b: 22 };
-    function scaleBand(n, w) { return (i) => PAD.l + (w - PAD.l - PAD.r) * (n <= 1 ? 0.5 : i / (n - 1)); }
     function niceMax(v) { if (v <= 5) return 5; const p = Math.pow(10, Math.floor(Math.log10(v))); const u = v / p; const m = u <= 2 ? 2 : u <= 5 ? 5 : 10; return m * p; }
-
-    function gridAndAxis(h, ymax, fmtY) {
-      let out = '';
-      for (let g = 0; g <= 4; g++) {
-        const y = PAD.t + (h - PAD.t - PAD.b) * (g / 4);
-        const val = ymax * (1 - g / 4);
-        out += `<line x1="${PAD.l}" y1="${y}" x2="${W - PAD.r}" y2="${y}" stroke="${C.grid}" stroke-width="1"/>`;
-        out += `<text x="${PAD.l - 6}" y="${y + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${fmtY ? fmtY(val) : Math.round(val)}</text>`;
-      }
-      return out;
+    const nn = (v) => v != null && Number.isFinite(Number(v));
+    const mean = (arr) => { const v = arr.filter(nn).map(Number); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+    const sum = (arr) => arr.filter(nn).reduce((a, b) => a + Number(b), 0);
+    const r1 = (v) => (v == null ? null : Math.round(v * 10) / 10);
+    const pct = (a, b) => (b > 0 ? Math.round((100 * a) / b) : null);
+    function hexA(hex, a) {
+      const h = hex.replace('#', '');
+      const n = parseInt(h.length === 3 ? h.split('').map((c) => c + c).join('') : h, 16);
+      return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
     }
-    function xLabels(labels, h, every) {
-      const x = scaleBand(labels.length, W);
-      let out = '';
-      labels.forEach((lab, i) => {
-        if (i % every !== 0 && i !== labels.length - 1) return;
-        out += `<text x="${x(i)}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(lab)}</text>`;
-      });
-      return out;
+    function weekLabel(iso) {
+      const d = new Date(iso + 'T12:00:00');
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     }
-    const yOf = (h, ymax) => (v) => PAD.t + (h - PAD.t - PAD.b) * (1 - v / ymax);
+    function plural(n, one, many) { return n + ' ' + (n === 1 ? one : (many || one + 's')); }
 
-    // Multi-series line/area chart with per-point hover targets. Series:
-    // {key, color, area?, data:[num|null]}. Null = k-floor gap (line breaks).
-    function lineChart(el, labels, series, opts) {
+    // Complete weeks only (the current week is still filling in), then the last
+    // n vs the n before. n shrinks for short windows; under 2 per side: no delta.
+    function compareWeeks(weekly, pick) {
+      const thisWeek = isoWeekStartLocal(new Date());
+      const done = weekly.filter((w) => w.weekStart < thisWeek);
+      const n = Math.min(4, Math.floor(done.length / 2));
+      if (n < 2) return null;
+      const recent = done.slice(-n).map(pick), prior = done.slice(-2 * n, -n).map(pick);
+      if (recent.filter(nn).length < 2 || prior.filter(nn).length < 2) return null;
+      return { now: mean(recent), before: mean(prior), weeks: n };
+    }
+    function isoWeekStartLocal(d) {
+      const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+      const dow = (x.getUTCDay() + 6) % 7;
+      x.setUTCDate(x.getUTCDate() - dow);
+      return x.toISOString().slice(0, 10);
+    }
+    // A delta chip: arrow + words, colored only when the direction has a meaning
+    // (higher stress is worse; more people active is better; more calls is neither).
+    function deltaChip(cmp, opts) {
+      if (!cmp || cmp.now == null || cmp.before == null) return '<span class="delta flat">no trend yet</span>';
+      const diff = cmp.now - cmp.before;
+      const rel = opts.relative ? (cmp.before ? diff / Math.abs(cmp.before) : 0) : null;
+      const threshold = opts.threshold ?? 0.05;
+      const moved = opts.relative ? Math.abs(rel) >= threshold : Math.abs(diff) >= threshold;
+      if (!moved) return '<span class="delta flat">' + ico('activity') + 'steady vs prior ' + cmp.weeks + ' wks</span>';
+      const up = diff > 0;
+      const tone = opts.goodWhen == null ? 'neutral' : (up === (opts.goodWhen === 'up') ? 'good' : 'bad');
+      const mag = opts.relative ? Math.round(Math.abs(rel) * 100) + '%' : (opts.fmt ? opts.fmt(Math.abs(diff)) : r1(Math.abs(diff)));
+      return '<span class="delta ' + tone + '">' + (up ? '▲' : '▼') + ' ' + mag + ' vs prior ' + cmp.weeks + ' wks</span>';
+    }
+
+    function spark(data, color, opts) {
       opts = opts || {};
-      const h = opts.height || 240;
-      const ymax = opts.ymax || niceMax(Math.max(1, ...series.flatMap((s) => s.data.filter((v) => v != null))));
-      const x = scaleBand(labels.length, W);
-      const y = yOf(h, ymax);
-      let svg = gridAndAxis(h, ymax, opts.fmtY);
-      for (const s of series) {
-        let path = '', pen = false;
-        s.data.forEach((v, i) => {
-          if (v == null) { pen = false; return; }
-          path += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
-          pen = true;
-        });
-        if (s.area) {
-          let ap = '', run = [];
-          const flush = () => {
-            if (!run.length) return;
-            ap += 'M' + run.map((p) => p.join(' ')).join(' L ');
-            ap += ` L ${run[run.length - 1][0]} ${y(0)} L ${run[0][0]} ${y(0)} Z `;
-            run = [];
-          };
-          s.data.forEach((v, i) => { if (v == null) flush(); else run.push([x(i).toFixed(1), y(v).toFixed(1)]); });
-          flush();
-          svg += `<path d="${ap}" fill="${s.color}" opacity="0.14"/>`;
-        }
-        svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
-        s.data.forEach((v, i) => {
-          if (v == null) return;
-          svg += `<circle cx="${x(i)}" cy="${y(v)}" r="2.6" fill="${s.color}" stroke="${C.ptStroke}" stroke-width="1.5"/>`;
-        });
-      }
-      // hover hit columns (bigger than the marks)
-      labels.forEach((lab, i) => {
-        const parts = series.map((s) => {
-          const v = s.data[i];
-          return `<span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${v == null ? (s.suppressedLabel || '—') : v + (opts.suf || '')}</b>`;
-        }).join('<br/>');
-        const cw = (W - PAD.l - PAD.r) / Math.max(1, labels.length - 1);
-        const tipHtml = `<b>Week of ${esc(lab)}</b><br/>${parts}`;
-        svg += `<rect x="${x(i) - cw / 2}" y="${PAD.t}" width="${cw}" height="${h - PAD.t - PAD.b}" fill="transparent" data-tip="${esc(tipHtml)}"/>`;
-      });
-      svg += xLabels(labels, h, Math.ceil(labels.length / 7));
-      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}">${svg}</svg>`;
-      bindTips(el);
-    }
-
-    // Grouped bar chart. Series: {key, color, data:[num]}.
-    function barChart(el, labels, series, opts) {
-      opts = opts || {};
-      const h = opts.height || 240;
-      const ymax = opts.ymax || niceMax(Math.max(1, ...series.flatMap((s) => s.data)));
-      const y = yOf(h, ymax);
-      const n = labels.length, k = series.length;
-      const slot = (W - PAD.l - PAD.r) / n;
-      const bw = Math.min(14, (slot - 6) / k);
-      let svg = gridAndAxis(h, ymax, opts.fmtY);
-      series.forEach((s, si) => {
-        s.data.forEach((v, i) => {
-          const bx = PAD.l + slot * i + slot / 2 - (bw * k + 2 * (k - 1)) / 2 + si * (bw + 2);
-          const by = y(v), bh = Math.max(0, y(0) - by);
-          const tipHtml = `<b>Week of ${esc(labels[i])}</b><br/><span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${v}</b>`;
-          svg += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" rx="3" fill="${s.color}" data-tip="${esc(tipHtml)}"/>`;
-        });
-      });
-      // x labels under group centers
-      const xc = (i) => PAD.l + slot * i + slot / 2;
-      labels.forEach((lab, i) => {
-        if (i % Math.ceil(n / 7) !== 0 && i !== n - 1) return;
-        svg += `<text x="${xc(i)}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(lab)}</text>`;
-      });
-      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}">${svg}</svg>`;
-      bindTips(el);
-    }
-
-    // Horizontal labeled bars (single measure → single hue, direct labels).
-    function hBars(el, rows, opts) {
-      opts = opts || {};
-      const rh = 30, gap = 8, labW = 150;
-      const h = rows.length * (rh + gap) + 8;
-      const max = Math.max(1, ...rows.map((r) => r.value));
-      let svg = '';
-      rows.forEach((r, i) => {
-        const yy = i * (rh + gap) + 4;
-        const bw = Math.max(3, (W - labW - 70) * (r.value / max));
-        const color = r.color || C.s1;
-        svg += `<text x="${labW - 8}" y="${yy + rh / 2 + 4}" text-anchor="end" font-size="12" fill="${C.ink2}" font-weight="600">${esc(r.label)}</text>`;
-        svg += `<rect x="${labW}" y="${yy}" width="${bw.toFixed(1)}" height="${rh}" rx="4" fill="${color}" data-tip="${esc(`<b>${esc(r.label)}</b><br/>${esc(r.tip || r.value)}`)}"/>`;
-        svg += `<text x="${labW + bw + 8}" y="${yy + rh / 2 + 4}" font-size="12" fill="${C.ink2}" font-variant-numeric="tabular-nums">${esc(String(r.valueLabel != null ? r.valueLabel : r.value))}</text>`;
-      });
-      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}">${svg}</svg>`;
-      bindTips(el);
-    }
-
-    // Vertical direct-labeled columns (small-n distributions — no axis needed).
-    function vBars(el, items, opts) {
-      opts = opts || {};
-      const h = opts.height || 185;
-      const padT = 18, padB = 22, padL = 12, padR = 12;
-      const max = Math.max(1, ...items.map((r) => r.value));
-      const n = items.length;
-      const slot = (W - padL - padR) / n;
-      const bw = Math.min(56, slot * 0.62);
-      let svg = '';
-      items.forEach((r, i) => {
-        const bx = padL + slot * i + (slot - bw) / 2;
-        const bh = (h - padT - padB) * (r.value / max);
-        const by = h - padB - bh;
-        svg += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw}" height="${Math.max(0, bh).toFixed(1)}" rx="4" fill="${r.color}" data-tip="${esc(r.tip || `<b>${esc(r.label)}</b>: ${r.value}`)}"/>`;
-        svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${(by - 5).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="${C.ink}">${r.value}</text>`;
-        svg += `<text x="${(bx + bw / 2).toFixed(1)}" y="${h - 6}" text-anchor="middle" font-size="10" fill="${C.muted}">${esc(r.label)}</text>`;
-      });
-      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}">${svg}</svg>`;
-      bindTips(el);
-    }
-
-    // Ring gauge (a single percentage).
-    function ring(el, pct, color, subLabel) {
-      if (pct == null) {
-        el.innerHTML = '<div class="kfloor" style="margin-top:4px;">No activity in this window yet.</div>';
-        return;
-      }
-      const size = 190, cx = size / 2, cy = size / 2, R = 70, sw = 18;
-      const clamped = Math.max(0, Math.min(100, pct));
-      const circ = 2 * Math.PI * R;
-      const dash = (clamped / 100) * circ;
-      el.innerHTML = `<div style="display:flex;justify-content:center;"><svg viewBox="0 0 ${size} ${size}" style="max-width:200px;">
-        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.ring}" stroke-width="${sw}"/>
-        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"
-          stroke-dasharray="${dash.toFixed(1)} ${(circ - dash).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"
-          data-tip="${esc(`<b>${clamped}%</b> ${esc(subLabel)}`)}"/>
-        <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="${C.ink}">${clamped}%</text>
-        <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(subLabel)}</text>
-      </svg></div>`;
-      bindTips(el);
-    }
-
-    // Donut with center label. Parts: {label, value, color}.
-    function donut(el, parts, centerBig, centerSmall) {
-      const size = 200, cx = size / 2, cy = size / 2, R = 78, r = 54;
-      const total = parts.reduce((a, p) => a + p.value, 0);
-      let a0 = -Math.PI / 2, svg = '';
-      const arc = (a1, a2, big) => {
-        const p = (rad, a) => [cx + rad * Math.cos(a), cy + rad * Math.sin(a)];
-        const [x1, y1] = p(R, a1), [x2, y2] = p(R, a2), [x3, y3] = p(r, a2), [x4, y4] = p(r, a1);
-        return `M${x1} ${y1} A${R} ${R} 0 ${big} 1 ${x2} ${y2} L${x3} ${y3} A${r} ${r} 0 ${big} 0 ${x4} ${y4} Z`;
+      const w = 220, h = 44;
+      const vals = data.map((v) => (nn(v) ? Number(v) : null));
+      const real = vals.filter((v) => v != null);
+      if (real.length < 2) return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '"></svg>';
+      const lo = opts.min != null ? opts.min : 0;
+      const hi = Math.max(opts.max != null ? opts.max : 0, ...real, lo + 1);
+      const x = (i) => 2 + (i / Math.max(1, vals.length - 1)) * (w - 4);
+      const y = (v) => h - 4 - ((v - lo) / (hi - lo)) * (h - 10);
+      let line = '', area = '', run = [];
+      const flush = () => {
+        if (run.length > 1) area += 'M' + run.map((p) => p.join(' ')).join(' L ') + ` L ${run[run.length - 1][0]} ${h} L ${run[0][0]} ${h} Z `;
+        run = [];
       };
-      for (const p of parts) {
-        if (!p.value) continue;
-        const frac = p.value / Math.max(1, total);
-        const a1 = a0 + 0.02, a2 = a0 + frac * Math.PI * 2 - 0.02;
-        svg += `<path d="${arc(a1, Math.max(a1 + 0.001, a2), frac > 0.5 ? 1 : 0)}" fill="${p.color}" data-tip="${esc(`<b>${esc(p.label)}</b>: ${p.value} (${Math.round(frac * 100)}%)`)}"/>`;
-        a0 += frac * Math.PI * 2;
-      }
-      svg += `<text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="26" font-weight="800" fill="${C.ink}">${esc(centerBig)}</text>`;
-      svg += `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="10.5" fill="${C.muted}">${esc(centerSmall)}</text>`;
-      const legend = parts.map((p) => `<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:${C.ink2};font-weight:600;margin:2px 10px 2px 0;"><i style="width:9px;height:9px;border-radius:3px;background:${p.color};display:inline-block;"></i>${esc(p.label)} <b style="color:${C.ink}">${p.value}</b></span>`).join('');
-      el.innerHTML = `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;"><svg viewBox="0 0 ${size} ${size}" style="max-width:190px;flex:0 0 auto;">${svg}</svg><div>${legend}</div></div>`;
-      bindTips(el);
+      let pen = false;
+      vals.forEach((v, i) => {
+        if (v == null) { pen = false; flush(); return; }
+        line += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
+        run.push([x(i).toFixed(1), y(v).toFixed(1)]);
+        pen = true;
+      });
+      flush();
+      let last = vals.length - 1; while (last >= 0 && vals[last] == null) last--;
+      return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">'
+        + '<path d="' + area + '" fill="' + color + '" opacity="0.12"/>'
+        + '<path d="' + line + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
+        + (last >= 0 ? '<circle cx="' + x(last) + '" cy="' + y(vals[last]) + '" r="3" fill="' + color + '"/>' : '')
+        + '</svg>';
     }
 
-    function spark(el, data, color) {
-      const w = 120, h = 26, vals = data.map((v) => (v == null ? 0 : v));
-      const max = Math.max(1, ...vals);
-      const pts = vals.map((v, i) => `${(i / Math.max(1, vals.length - 1)) * w},${h - 3 - (v / max) * (h - 6)}`).join(' ');
-      el.setAttribute('viewBox', `0 0 ${w} ${h}`);
-      el.innerHTML = `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round"/>`;
-    }
-
-    const suppressedBlock = (kMin) =>
-      `<div class="kfloor" style="margin-top:4px;">Suppressed — fewer than ${kMin} members contributed in this
-       window. The chart appears once the group is large enough to stay anonymous.</div>`;
+    const suppressedBlock = (kMin, what) =>
+      `<div class="kfloor withicon">${ico('shield')}<span>Withheld — fewer than ${kMin} members contributed${what ? ' ' + what : ''} in this
+       window. It appears once the group is large enough to stay anonymous.</span></div>`;
 
     // Format an hour count the way a chief reads it: 9h, 36h, 3.2d.
     function fmtDur(hours) {
@@ -1170,8 +1398,302 @@
       return (Math.round(hours / 2.4) / 10) + 'd';
     }
 
-    // ── Render: analytics ──
-    const MOOD_LABELS = ['1 · Rough', '2 · Low', '3 · Okay', '4 · Good', '5 · Great'];
+    // ── Small multiples: several measures stacked on ONE shared week axis ──
+    // (never a dual axis). Each panel has its own scale; one hover column per
+    // week spans every panel and lists every value for that week.
+    function smallMultiples(el, weeks, panels, tipFor) {
+      const WW = 1100, L = 150, R = 18, GAP = 18, AX = 22;
+      const n = weeks.length;
+      if (!n) { el.innerHTML = '<div class="empty">No weeks in this window yet.</div>'; return; }
+      const slot = (WW - L - R) / n;
+      const xc = (i) => L + slot * i + slot / 2;
+      let y0 = 4, svg = '';
+      panels.forEach((p) => {
+        const ph = p.height || 92;
+        const vals = p.series.flatMap((s) => s.data).filter(nn).map(Number);
+        const lo = p.min != null ? p.min : 0;
+        const stackedMax = p.kind === 'stack' ? Math.max(1, ...weeks.map((_, i) => p.series.reduce((a, s) => a + (Number(s.data[i]) || 0), 0))) : 0;
+        const hi = p.max != null ? p.max : niceMax(Math.max(1, stackedMax, ...vals));
+        const y = (v) => y0 + ph - ((v - lo) / (hi - lo)) * ph;
+        // panel title + scale ends (left gutter), recessive baseline
+        svg += `<text x="0" y="${y0 + 13}" font-size="13" font-weight="700" fill="${C.ink}">${esc(p.title)}</text>`;
+        if (p.subtitle) svg += `<text x="0" y="${y0 + 30}" font-size="11" fill="${C.muted}">${esc(p.subtitle)}</text>`;
+        svg += `<text x="${L - 8}" y="${y0 + 9}" text-anchor="end" font-size="10" fill="${C.muted}">${p.fmt ? p.fmt(hi) : hi}</text>`;
+        svg += `<text x="${L - 8}" y="${y0 + ph}" text-anchor="end" font-size="10" fill="${C.muted}">${p.fmt ? p.fmt(lo) : lo}</text>`;
+        svg += `<line x1="${L}" y1="${y0 + ph}" x2="${WW - R}" y2="${y0 + ph}" stroke="${C.grid}"/>`;
+        svg += `<line x1="${L}" y1="${y0}" x2="${WW - R}" y2="${y0}" stroke="${C.grid}" stroke-dasharray="2 4"/>`;
+        if (p.zone) {
+          const zt = y(Math.min(hi, p.zone[1])), zb = y(Math.max(lo, p.zone[0]));
+          svg += `<rect x="${L}" y="${zt}" width="${WW - L - R}" height="${Math.max(0, zb - zt)}" fill="${hexA(C.zone, 0.09)}"/>`;
+          svg += `<text x="${WW - R - 4}" y="${zt + 11}" text-anchor="end" font-size="9.5" fill="${C.muted}">${esc(p.zoneLabel || '')}</text>`;
+        }
+        if (p.kind === 'stack') {
+          const bw = Math.max(4, Math.min(34, slot * 0.62));
+          weeks.forEach((_, i) => {
+            let acc = 0;
+            p.series.forEach((s, si) => {
+              const v = Number(s.data[i]) || 0;
+              if (!v) return;
+              const top = y(acc + v), bot = y(acc);
+              const gap = acc > 0 ? 2 : 0; // 2px surface gap between stacked segments
+              const hgt = Math.max(0, bot - top - gap);
+              const isTop = !p.series.slice(si + 1).some((t) => Number(t.data[i]) > 0);
+              svg += isTop ? roundTopRect(xc(i) - bw / 2, top, bw, hgt, Math.min(4, hgt), s.color)
+                : `<rect x="${(xc(i) - bw / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${hgt.toFixed(1)}" fill="${s.color}"/>`;
+              acc += v;
+            });
+          });
+        } else {
+          if (p.ref != null) {
+            svg += `<line x1="${L}" y1="${y(p.ref)}" x2="${WW - R}" y2="${y(p.ref)}" stroke="${C.muted}" stroke-dasharray="5 4" stroke-width="1"/>`;
+            svg += `<text x="${L + 4}" y="${y(p.ref) - 4}" font-size="9.5" fill="${C.muted}">window avg ${p.ref}</text>`;
+          }
+          p.series.forEach((s) => {
+            let path = '', pen = false;
+            s.data.forEach((v, i) => {
+              if (!nn(v)) { pen = false; return; }
+              path += (pen ? 'L' : 'M') + xc(i).toFixed(1) + ' ' + y(Number(v)).toFixed(1) + ' ';
+              pen = true;
+            });
+            if (s.area) {
+              let ap = '', run = [];
+              const flush = () => { if (run.length > 1) ap += 'M' + run.join(' L ') + ` L ${run[run.length - 1].split(' ')[0]} ${y(lo)} L ${run[0].split(' ')[0]} ${y(lo)} Z `; run = []; };
+              s.data.forEach((v, i) => { if (!nn(v)) flush(); else run.push(xc(i).toFixed(1) + ' ' + y(Number(v)).toFixed(1)); });
+              flush();
+              svg += `<path d="${ap}" fill="${s.color}" opacity="0.12"/>`;
+            }
+            svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+            s.data.forEach((v, i) => {
+              if (!nn(v)) {
+                if (p.gapMark) svg += `<text x="${xc(i)}" y="${y0 + ph - 4}" text-anchor="middle" font-size="9" fill="${C.muted}">·</text>`;
+                return;
+              }
+              svg += `<circle cx="${xc(i)}" cy="${y(Number(v))}" r="3.4" fill="${s.color}" stroke="${C.ptStroke}" stroke-width="2"/>`;
+            });
+          });
+        }
+        y0 += ph + GAP + (p.subtitle ? 6 : 0);
+      });
+      const H = y0 + AX - GAP;
+      const every = Math.ceil(n / 9);
+      weeks.forEach((w, i) => {
+        if (i % every !== 0 && i !== n - 1) return;
+        svg += `<text x="${xc(i)}" y="${H - 4}" text-anchor="middle" font-size="10.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+      });
+      weeks.forEach((w, i) => {
+        svg += `<rect class="hitcol" x="${(L + slot * i).toFixed(1)}" y="0" width="${slot.toFixed(1)}" height="${H - AX}" data-tip="${esc(tipFor(w, i))}"/>`;
+      });
+      el.innerHTML = `<div class="heatscroll"><svg class="sm-svg" viewBox="0 0 ${WW} ${H}" role="img" aria-label="Weekly workload and wellbeing">${svg}</svg></div>`;
+      bindTips(el);
+    }
+    function roundTopRect(x, y, w, h, r, fill) {
+      if (h <= 0) return '';
+      r = Math.min(r, w / 2, h);
+      return `<path d="M${x.toFixed(1)} ${(y + h).toFixed(1)} V${(y + r).toFixed(1)} Q${x.toFixed(1)} ${y.toFixed(1)} ${(x + r).toFixed(1)} ${y.toFixed(1)} H${(x + w - r).toFixed(1)} Q${(x + w).toFixed(1)} ${y.toFixed(1)} ${(x + w).toFixed(1)} ${(y + r).toFixed(1)} V${(y + h).toFixed(1)} Z" fill="${fill}"/>`;
+    }
+
+    // One measure over the weeks, with an optional risk zone + average line.
+    function trendChart(el, weeks, s, opts) {
+      opts = opts || {};
+      const h = opts.height || 230;
+      const lo = opts.min != null ? opts.min : 0;
+      const hi = opts.max != null ? opts.max : niceMax(Math.max(1, ...s.data.filter(nn).map(Number)));
+      const n = weeks.length;
+      const x = (i) => PAD.l + (W - PAD.l - PAD.r) * (n <= 1 ? 0.5 : i / (n - 1));
+      const y = (v) => PAD.t + (h - PAD.t - PAD.b) * (1 - (v - lo) / (hi - lo));
+      let svg = '';
+      if (opts.zone) {
+        const zt = y(Math.min(hi, opts.zone[1])), zb = y(Math.max(lo, opts.zone[0]));
+        svg += `<rect x="${PAD.l}" y="${zt}" width="${W - PAD.l - PAD.r}" height="${zb - zt}" fill="${hexA(C.zone, 0.1)}"/>`;
+        svg += `<text x="${W - PAD.r - 4}" y="${zt + 12}" text-anchor="end" font-size="9.5" fill="${C.muted}">${esc(opts.zoneLabel || '')}</text>`;
+      }
+      const ticks = opts.ticks || [lo, lo + (hi - lo) / 2, hi];
+      ticks.forEach((t) => {
+        svg += `<line x1="${PAD.l}" y1="${y(t)}" x2="${W - PAD.r}" y2="${y(t)}" stroke="${C.grid}"/>`;
+        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${opts.fmtY ? opts.fmtY(t) : r1(t)}</text>`;
+      });
+      if (opts.ref != null) {
+        svg += `<line x1="${PAD.l}" y1="${y(opts.ref)}" x2="${W - PAD.r}" y2="${y(opts.ref)}" stroke="${C.muted}" stroke-dasharray="5 4"/>`;
+        svg += `<text x="${PAD.l + 4}" y="${y(opts.ref) - 4}" font-size="9.5" fill="${C.muted}">avg ${opts.ref}${opts.suf || ''}</text>`;
+      }
+      let path = '', pen = false, ap = '', run = [];
+      const flush = () => { if (run.length > 1) ap += 'M' + run.join(' L ') + ` L ${run[run.length - 1].split(' ')[0]} ${y(lo)} L ${run[0].split(' ')[0]} ${y(lo)} Z `; run = []; };
+      s.data.forEach((v, i) => {
+        if (!nn(v)) { pen = false; flush(); return; }
+        path += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(Number(v)).toFixed(1) + ' ';
+        run.push(x(i).toFixed(1) + ' ' + y(Number(v)).toFixed(1));
+        pen = true;
+      });
+      flush();
+      if (opts.area) svg += `<path d="${ap}" fill="${s.color}" opacity="0.13"/>`;
+      svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+      s.data.forEach((v, i) => { if (nn(v)) svg += `<circle cx="${x(i)}" cy="${y(Number(v))}" r="3" fill="${s.color}" stroke="${C.ptStroke}" stroke-width="1.5"/>`; });
+      const every = Math.ceil(n / 7);
+      weeks.forEach((w, i) => {
+        if (i % every === 0 || i === n - 1) svg += `<text x="${x(i)}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+        const cw = (W - PAD.l - PAD.r) / Math.max(1, n - 1);
+        const v = s.data[i];
+        const t = `<b>Week of ${esc(weekLabel(w.weekStart))}</b><br/><span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${nn(v) ? v + (opts.suf || '') : (s.suppressedLabel || '—')}</b>`;
+        svg += `<rect class="hitcol" x="${x(i) - cw / 2}" y="${PAD.t}" width="${cw}" height="${h - PAD.t - PAD.b}" data-tip="${esc(t)}"/>`;
+      });
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}" role="img" aria-label="${esc(s.key)} by week">${svg}</svg>`;
+      bindTips(el);
+    }
+
+    // Grouped weekly bars (two counts of the same unit). Series: {key, color, data}.
+    function barChart(el, weeks, series, opts) {
+      opts = opts || {};
+      const h = opts.height || 220;
+      const ymax = niceMax(Math.max(1, ...series.flatMap((s) => s.data.filter(nn))));
+      const y = (v) => PAD.t + (h - PAD.t - PAD.b) * (1 - v / ymax);
+      const n = weeks.length, k = series.length;
+      const slot = (W - PAD.l - PAD.r) / Math.max(1, n);
+      const bw = Math.max(3, Math.min(14, (slot - 6) / k - 2));
+      let svg = '';
+      [0, ymax / 2, ymax].forEach((t) => {
+        svg += `<line x1="${PAD.l}" y1="${y(t)}" x2="${W - PAD.r}" y2="${y(t)}" stroke="${C.grid}"/>`;
+        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${Math.round(t)}</text>`;
+      });
+      weeks.forEach((w, i) => {
+        const gx = PAD.l + slot * i + slot / 2 - (bw * k + 2 * (k - 1)) / 2;
+        series.forEach((s, si) => {
+          const v = Number(s.data[i]) || 0;
+          const by = y(v), bh = Math.max(0, y(0) - by);
+          svg += roundTopRect(gx + si * (bw + 2), by, bw, bh, 3, s.color);
+        });
+        const t = `<b>Week of ${esc(weekLabel(w.weekStart))}</b><br/>` + series.map((s) => `<span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${Number(s.data[i]) || 0}</b>`).join('<br/>');
+        svg += `<rect class="hitcol" x="${PAD.l + slot * i}" y="${PAD.t}" width="${slot}" height="${h - PAD.t - PAD.b}" data-tip="${esc(t)}"/>`;
+      });
+      const every = Math.ceil(n / 7);
+      weeks.forEach((w, i) => {
+        if (i % every === 0 || i === n - 1) svg += `<text x="${PAD.l + slot * i + slot / 2}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+      });
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}" role="img">${svg}</svg>`;
+      bindTips(el);
+    }
+
+    // Horizontal labeled bars (single measure → single hue, direct labels).
+    function hBars(el, rows) {
+      if (!rows.length) { el.innerHTML = '<div class="empty">Nothing logged in this window yet.</div>'; return; }
+      const max = Math.max(1, ...rows.map((r) => r.value));
+      el.innerHTML = rows.map((r) => `
+        <div class="hbar" data-tip="${esc(`<b>${esc(r.label)}</b><br/>${esc(r.tip || r.value)}`)}">
+          <div class="hbar-l">${esc(r.label)}</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(1.5, (100 * r.value) / max)}%; background:${r.color || C.s1};"></div></div>
+          <div class="hbar-v">${esc(String(r.valueLabel != null ? r.valueLabel : r.value))}</div>
+        </div>`).join('');
+      bindTips(el);
+    }
+
+    // 100% strip with direct labels + legend underneath. Parts: {label, value, color, icon?}.
+    function strip(parts, opts) {
+      opts = opts || {};
+      const total = parts.reduce((a, p) => a + (p.value || 0), 0);
+      if (!total) return '<div class="empty">No check-ins in this window yet.</div>';
+      const segs = parts.filter((p) => p.value > 0).map((p) => {
+        const share = (100 * p.value) / total;
+        return `<div class="strip-seg" style="flex:${p.value} 1 0; background:${p.color};" data-tip="${esc(`<b>${esc(p.label)}</b><br/>${p.value} ${esc(opts.unit || '')} · ${Math.round(share)}%`)}">${share >= 9 ? `<span style="color:${p.ink || '#fff'}">${Math.round(share)}%</span>` : ''}</div>`;
+      }).join('');
+      const legend = parts.map((p) => `<span><i style="background:${p.color}"></i>${esc(p.label)} <b>${p.value}</b> <em>${total ? Math.round((100 * p.value) / total) : 0}%</em></span>`).join('');
+      return `<div class="strip">${segs}</div><div class="strip-legend">${legend}</div>`;
+    }
+
+    // Ring gauge (a single percentage).
+    function ring(el, value, color, subLabel) {
+      if (value == null) { el.innerHTML = '<div class="empty">No activity in this window yet.</div>'; return; }
+      const size = 190, cx = size / 2, cy = size / 2, R = 70, sw = 16;
+      const clamped = Math.max(0, Math.min(100, value));
+      const circ = 2 * Math.PI * R;
+      const dash = (clamped / 100) * circ;
+      el.innerHTML = `<div style="display:flex;justify-content:center;"><svg viewBox="0 0 ${size} ${size}" style="max-width:200px;" role="img" aria-label="${clamped}% ${esc(subLabel)}">
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.ring}" stroke-width="${sw}"/>
+        <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"
+          stroke-dasharray="${dash.toFixed(1)} ${(circ - dash).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"
+          data-tip="${esc(`<b>${clamped}%</b> ${esc(subLabel)}`)}"/>
+        <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="32" font-weight="800" fill="${C.ink}">${Math.round(clamped)}%</text>
+        <text x="${cx}" y="${cy + 24}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(subLabel)}</text>
+      </svg></div>`;
+      bindTips(el);
+    }
+
+    // A value on a fixed scale (stress 1–10, fatigue 1–7): a track with the
+    // zones underneath and a marker — reads at a glance without a chart.
+    function scaleBar(value, lo, hi, zones) {
+      const pos = (v) => ((v - lo) / (hi - lo)) * 100;
+      const zs = zones.map((z) => `<i style="left:${pos(z[0])}%; width:${pos(z[1]) - pos(z[0])}%; background:${z[2]};"></i>`).join('');
+      const mk = value == null ? '' : `<b class="sb-mark" style="left:${pos(Math.max(lo, Math.min(hi, value)))}%"></b>`;
+      return `<div class="scalebar">${zs}${mk}</div><div class="sb-ends"><span>${lo}</span><span>${hi}</span></div>`;
+    }
+
+    // ── Weekday × hour heat map (sequential, one hue) ──
+    let TIMING_MODE = 'calls';
+    function renderTiming(d) {
+      const el = $('chTiming');
+      const t = d.callTiming;
+      if (!t) {
+        el.innerHTML = d.callTiming === null && d.activity.callsLogged
+          ? suppressedBlock(d.kMin, '')
+          : '<div class="empty">Call timing appears here once the dashboard API is updated and calls are logged.</div>';
+        $('timingNote').textContent = '';
+        return;
+      }
+      const grid = t[TIMING_MODE] || t.calls;
+      const max = Math.max(1, ...grid.flat());
+      const cell = 38, gap = 3, L = 44, T = 22;
+      const WW = L + 24 * (cell + gap), H = T + 7 * (cell * 0.72 + gap) + 4;
+      const ch = cell * 0.72;
+      let svg = '';
+      for (let hr = 0; hr < 24; hr += 3) {
+        const lab = hr === 0 ? '12a' : hr < 12 ? hr + 'a' : hr === 12 ? '12p' : (hr - 12) + 'p';
+        svg += `<text x="${L + hr * (cell + gap) + cell / 2}" y="14" text-anchor="middle" font-size="11" fill="${C.muted}">${lab}</text>`;
+      }
+      t.days.forEach((day, di) => {
+        const yy = T + di * (ch + gap);
+        svg += `<text x="${L - 8}" y="${yy + ch / 2 + 4}" text-anchor="end" font-size="11.5" font-weight="600" fill="${C.ink2}">${day}</text>`;
+        grid[di].forEach((v, hr) => {
+          const a = v ? 0.12 + 0.88 * Math.sqrt(v / max) : 0;
+          const fill = v ? hexA(C.seq, a.toFixed(3)) : C.empty;
+          const hrLab = (h) => (h % 12 === 0 ? 12 : h % 12) + (h < 12 ? ' am' : ' pm');
+          const heavy = t.highAcuity[di][hr], all = t.calls[di][hr];
+          const tipHtml = `<b>${day} · ${hrLab(hr)}–${hrLab((hr + 1) % 24)}</b><br/>${plural(all, 'call')}${heavy ? ' · ' + heavy + ' Serious / Critical' : ''}`;
+          svg += `<rect x="${L + hr * (cell + gap)}" y="${yy}" width="${cell}" height="${ch}" rx="4" fill="${fill}" data-tip="${esc(tipHtml)}"/>`;
+        });
+      });
+      el.innerHTML = `<div class="heatscroll"><svg viewBox="0 0 ${WW} ${H}" style="min-width:640px" role="img" aria-label="Calls by weekday and hour">${svg}</svg></div>
+        <div class="seq-legend"><span>Fewer</span><i style="background:linear-gradient(90deg, ${hexA(C.seq, 0.12)}, ${hexA(C.seq, 1)})"></i><span>More ${TIMING_MODE === 'calls' ? 'calls' : 'Serious / Critical calls'}</span></div>`;
+      bindTips(el);
+      const blocks = busiestBlock(t.calls);
+      $('timingNote').innerHTML = 'Times are in your time zone (' + esc(t.tz) + '). The busiest 4-hour block is <b>'
+        + esc(blocks.label) + '</b> (' + plural(blocks.count, 'call') + '). Staffing and peer-supporter coverage that match these blocks are the cheapest wellbeing intervention there is.';
+    }
+    function busiestBlock(grid) {
+      let best = { count: -1, label: '—' };
+      const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const hl = (h) => (h % 12 === 0 ? 12 : h % 12) + (h < 12 ? ' am' : ' pm');
+      grid.forEach((row, di) => {
+        for (let h = 0; h < 24; h++) {
+          let c = 0; for (let k = 0; k < 4; k++) c += row[(h + k) % 24] || 0;
+          if (c > best.count) best = { count: c, label: DAYS[di] + ' ' + hl(h) + '–' + hl((h + 4) % 24) };
+        }
+      });
+      return best;
+    }
+    function timingFacts(t) {
+      if (!t) return null;
+      const all = t.calls.flat().reduce((a, b) => a + b, 0);
+      if (!all) return null;
+      let night = 0, byDay = t.calls.map((r) => r.reduce((a, b) => a + b, 0));
+      t.calls.forEach((row) => row.forEach((v, h) => { if (h >= 22 || h < 6) night += v; }));
+      const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const top = byDay.indexOf(Math.max(...byDay));
+      return { nightPct: pct(night, all), busiestDay: DAYS[top], busiestDayPct: pct(byDay[top], all), block: busiestBlock(t.calls) };
+    }
+    document.querySelectorAll('#timingSeg button').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll('#timingSeg button').forEach((x) => x.classList.toggle('on', x === b));
+      TIMING_MODE = b.dataset.mode;
+      if (DATA) renderTiming(DATA);
+    }));
+
     // ── Station check-in signals ──
     const SIGNAL_LABEL = { high_acuity: 'High-acuity run', stress: 'Stress above normal', heavy_runs: 'Repeated peer alerts' };
     function daysAgo(iso) {
@@ -1179,10 +1701,10 @@
       return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days + ' days ago';
     }
     function stationStatusPill(s) {
-      if (s.signalsSuppressed) return '<span class="stpill ok">under 5 members</span>';
-      if (s.checkInDue) return '<span class="stpill due">Check in</span>';
-      if (s.needsCheckIn) return '<span class="stpill done">Checked in ' + esc(daysAgo(s.lastCheckInAt)) + '</span>';
-      return '<span class="stpill ok">Steady</span>';
+      if (s.signalsSuppressed) return '<span class="stpill ok">' + ico('shield') + 'Under 5 members</span>';
+      if (s.checkInDue) return '<span class="stpill due">' + ico('alert') + 'Check in</span>';
+      if (s.needsCheckIn) return '<span class="stpill done">' + ico('check') + 'Checked in ' + esc(daysAgo(s.lastCheckInAt)) + '</span>';
+      return '<span class="stpill steady">' + ico('check') + 'Steady</span>';
     }
     function signalDetail(sig, s, base) {
       const r = s.recent || {};
@@ -1194,40 +1716,107 @@
         + (r.heavyRuns ? ', ' + r.heavyRuns + ' heavy run' + (r.heavyRuns === 1 ? '' : 's') : '');
       return SIGNAL_LABEL[sig] || sig;
     }
+    function checkinButton(s) {
+      return '<button class="btn sm" data-checkin="' + esc(s.station) + '" data-signals="' + esc(s.signals.join(',')) + '">Mark checked in</button>';
+    }
+    function bindCheckins(root, msgId) {
+      root.querySelectorAll('[data-checkin]').forEach((b) => b.addEventListener('click', () => {
+        b.disabled = true; b.textContent = 'Saving…';
+        post('leader_station_checkin', { station: b.dataset.checkin, signals: (b.dataset.signals || '').split(',').filter(Boolean) })
+          .then(() => { flash(msgId, 'ok', b.dataset.checkin + ' marked checked in.'); return refreshDashboard(); })
+          .catch((e) => { flash(msgId, 'err', e.message); b.disabled = false; b.textContent = 'Mark checked in'; });
+      }));
+    }
     function renderStationAlerts(d) {
       const base = (d.stationSignals && d.stationSignals.baseline) || {};
       const flagged = (d.stationBreakdown || []).filter((s) => s.needsCheckIn)
         .sort((a, b) => Number(b.checkInDue) - Number(a.checkInDue) || b.signals.length - a.signals.length);
       const el = $('stationAlerts');
+      const due = flagged.filter((s) => s.checkInDue).length;
+      $('stationAlertsHead').textContent = due ? plural(due, 'station') + ' due' : '';
       if (!flagged.length) {
         const anyEligible = (d.stationBreakdown || []).some((s) => !s.signalsSuppressed);
-        el.innerHTML = '<div style="font-size:13.5px; color:var(--ink2);">'
-          + (anyEligible ? '✓ No station stands out over the last ' + ((d.stationSignals && d.stationSignals.days) || 14) + ' days.'
+        el.innerHTML = '<div class="allclear">' + ico('check') + '<span>'
+          + (anyEligible ? 'No station stands out over the last ' + ((d.stationSignals && d.stationSignals.days) || 14) + ' days.'
             : 'No station has 5 or more members yet — assign stations on the Roster tab to see station signals.')
-          + '</div>';
+          + '</span></div>';
         return;
       }
       el.innerHTML = flagged.map((s) => `
         <div class="strow${s.checkInDue ? '' : ' handled'}">
           <div style="min-width:0; flex:1 1 260px;">
-            <div class="t">${esc(s.station)}</div>
+            <div class="t">${ico('home')}${esc(s.station)}</div>
             <div class="m">${s.members} members · ${s.recent ? s.recent.calls : 0} calls in the last ${s.recent ? s.recent.days : 14} days
               ${s.lastCheckInAt ? ' · last checked in ' + esc(daysAgo(s.lastCheckInAt)) : ''}</div>
             <div class="sigchips">${s.signals.map((g) => '<span class="sigchip">' + esc(signalDetail(g, s, base)) + '</span>').join('')}</div>
           </div>
           <div style="flex:0 0 auto;">
-            ${s.checkInDue
-              ? '<button class="btn sm" data-checkin="' + esc(s.station) + '" data-signals="' + esc(s.signals.join(',')) + '">Mark checked in</button>'
-              : '<span class="stpill done">Checked in ' + esc(daysAgo(s.lastCheckInAt)) + '</span>'}
+            ${s.checkInDue ? checkinButton(s) : '<span class="stpill done">' + ico('check') + 'Checked in ' + esc(daysAgo(s.lastCheckInAt)) + '</span>'}
           </div>
         </div>`).join('');
-      el.querySelectorAll('[data-checkin]').forEach((b) => b.addEventListener('click', () => {
-        b.disabled = true; b.textContent = 'Saving…';
-        post('leader_station_checkin', { station: b.dataset.checkin, signals: (b.dataset.signals || '').split(',').filter(Boolean) })
-          .then(() => { flash('stationMsg', 'ok', b.dataset.checkin + ' marked checked in.'); return refreshDashboard(); })
-          .catch((e) => { flash('stationMsg', 'err', e.message); b.disabled = false; b.textContent = 'Mark checked in'; });
-      }));
+      bindCheckins(el, 'stationMsg2');
     }
+
+    // ── Station comparison heat table (diverging vs the agency's own number) ──
+    // Each cell keeps its real value; the tint says how far it sits from the
+    // agency number, in the direction that is worse (warm) or better (cool).
+    function heatCell(value, display, base, spread, worseWhen, tipLabel) {
+      if (value == null) return `<td class="num supp" data-tip="${esc('<b>' + tipLabel + '</b><br/>Withheld — under the privacy floor')}"><span>—</span></td>`;
+      let bg = 'transparent', note = '';
+      if (base != null && spread) {
+        const dev = Math.max(-1, Math.min(1, (value - base) / spread));
+        const worse = worseWhen === 'up' ? dev : -dev;
+        const a = Math.abs(worse) < 0.12 ? 0 : 0.1 + 0.55 * Math.abs(worse);
+        bg = a ? hexA(worse > 0 ? C.warm : C.cool, a.toFixed(2)) : 'transparent';
+        const diff = r1(value - base);
+        note = '<br/>Agency: ' + base + ' (' + (diff > 0 ? '+' : '') + diff + ')';
+      }
+      return `<td class="num heatc" style="background:${bg}" data-tip="${esc('<b>' + tipLabel + '</b>: ' + display + note)}">${display}</td>`;
+    }
+    function renderStationTable(d) {
+      const base = (d.stationSignals && d.stationSignals.baseline) || {};
+      const agencyActivePct = pct(d.activity.activeInWindow, d.seats.activeMembers);
+      const maxCalls = Math.max(1, ...(d.stationBreakdown || []).map((s) => s.callsLogged));
+      const rows = (d.stationBreakdown || []).map((s) => {
+        const r = s.recent;
+        const activePct = pct(s.activeMembers, s.members);
+        const name = esc(s.station);
+        return `<tr>
+          <td><b>${name}</b></td>
+          <td class="num">${s.members}</td>
+          ${heatCell(activePct, activePct == null ? '—' : activePct + '%', agencyActivePct, 30, 'down', s.station + ' · active in window')}
+          <td class="num nowrap"><div class="minibar"><i style="width:${(100 * s.callsLogged) / maxCalls}%"></i></div>${s.callsLogged}</td>
+          ${heatCell(s.checkInPct, s.checkInPct == null ? '—' : s.checkInPct + '%', d.activity.checkInAttachPct, 30, 'down', s.station + ' · check-in rate')}
+          ${heatCell(s.avgPostCallStress, s.avgPostCallStress, d.wellness.avgPostCallStress, 2, 'up', s.station + ' · avg stress (1–10)')}
+          ${heatCell(s.avgFatigue, s.avgFatigue, d.wellness.avgFatigue, 1.5, 'up', s.station + ' · avg fatigue (1–7)')}
+          ${heatCell(r ? r.highAcuityPct : null, r ? (r.highAcuity + (r.highAcuityPct == null ? '' : ' · ' + r.highAcuityPct + '%')) : '', base.highAcuityPct, 25, 'up', s.station + ' · Serious / Critical, 14 days')}
+          ${heatCell(r ? r.avgPostCallStress : null, r ? r.avgPostCallStress : '', base.avgPostCallStress, 2, 'up', s.station + ' · stress, 14 days')}
+          ${heatCell(r ? r.peerAlerts : null, r ? r.peerAlerts : '', 0, 4, 'up', s.station + ' · peer alerts, 14 days')}
+          <td>${stationStatusPill(s)}</td>
+        </tr>`;
+      }).join('');
+      $('stationBody').innerHTML = rows || '<tr><td colspan="11" class="empty">No stations yet — assign stations on the Roster tab.</td></tr>';
+      bindTips($('stationBody'));
+    }
+    function stationCsv() {
+      if (!DATA) return;
+      const head = ['Station', 'Members', 'Active members', 'Calls', 'Check-in rate %', 'Avg stress (1-10)', 'Avg fatigue (1-7)',
+        'Serious/Critical 14d', 'Serious/Critical 14d %', 'Stress 14d', 'Peer alerts 14d', 'Status'];
+      const q = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+      const lines = (DATA.stationBreakdown || []).map((s) => {
+        const r = s.recent || {};
+        const status = s.signalsSuppressed ? 'Under 5 members' : s.checkInDue ? 'Check in' : s.needsCheckIn ? 'Checked in' : 'Steady';
+        return [s.station, s.members, s.activeMembers, s.callsLogged, s.checkInPct, s.avgPostCallStress, s.avgFatigue,
+          s.recent ? r.highAcuity : '', s.recent ? r.highAcuityPct : '', s.recent ? r.avgPostCallStress : '', s.recent ? r.peerAlerts : '', status].map(q).join(',');
+      });
+      const blob = new Blob([[head.map(q).join(',')].concat(lines).join('\n')], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (DATA.agency.slug || 'agency') + '-stations-' + DATA.generatedAt.slice(0, 10) + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    }
+    $('stationCsv').addEventListener('click', stationCsv);
 
     // ── Peer alert rules (Settings) ──
     function ruleSentence(p) {
@@ -1295,6 +1884,101 @@
         .catch((e) => flash('prMsg', 'err', e.message));
     });
 
+    // ── Render: analytics ──
+    const MOOD_LABELS = ['Rough', 'Low', 'Okay', 'Good', 'Great'];
+    const ACUITY_KEYS = ['Minor', 'Moderate', 'Serious', 'Critical'];
+
+    // What a chief should do next, most urgent first. Built only from the
+    // aggregates above — every item names a station or a count, never a person.
+    function buildAttention(d, ctx) {
+      const items = [];
+      const admin = AGENCY && AGENCY.role === 'admin';
+      const hi = d.highImpact || {};
+      if (hi.noPeerSupporters) {
+        items.push({ sev: 'critical', icon: 'buoy', title: hi.total ? 'Peer alerts have nowhere to go' : 'No peer supporters assigned',
+          text: hi.total ? plural(hi.total, 'alert') + ' opened in this window, and nobody is assigned to receive them. Mark trained peer supporters on the Roster.'
+            : 'When a member asks for a check-in, nobody will get it. Mark trained peer supporters on the Roster.',
+          action: admin ? { label: 'Open roster', goto: 'roster' } : null });
+      }
+      const stale = (hi.response && hi.response.openOver7d) || 0;
+      if (stale > 0) {
+        items.push({ sev: 'serious', icon: 'clock', title: plural(stale, 'peer alert') + ' waiting more than a week',
+          text: 'Nobody has picked ' + (stale === 1 ? 'it' : 'them') + ' up. Ask your peer team lead whether they need more hands — you never see who it is.',
+          action: { label: 'Peer support', goto: 'peer' } });
+      }
+      (d.stationBreakdown || []).filter((s) => s.checkInDue).forEach((s) => {
+        const base = (d.stationSignals && d.stationSignals.baseline) || {};
+        items.push({ sev: 'warning', icon: 'home', title: s.station + ': check in with the crew',
+          text: s.signals.map((g) => signalDetail(g, s, base)).join(' · ') + '. Stop by, ask how the last couple of weeks went, then mark it here.',
+          station: s });
+      });
+      const w = d.wellness || {};
+      if (w.highFatiguePct != null && w.highFatiguePct >= 30) {
+        items.push({ sev: 'warning', icon: 'moon', title: w.highFatiguePct + '% of check-ins report moderate fatigue or worse',
+          text: 'That is the level fatigue research treats as a safety risk. Look at shift length, holdovers and rest between shifts first.',
+          action: { label: 'Wellbeing', goto: 'wellbeing' } });
+      }
+      if (ctx.stressCmp && ctx.stressCmp.now - ctx.stressCmp.before >= 0.5) {
+        items.push({ sev: 'warning', icon: 'trend', title: 'Team stress is rising',
+          text: 'Post-call stress averaged ' + r1(ctx.stressCmp.now) + ' over the last ' + ctx.stressCmp.weeks + ' weeks, up from ' + r1(ctx.stressCmp.before) + '. Check the acuity mix for the same weeks.',
+          action: { label: 'See the trend', goto: 'wellbeing' } });
+      }
+      if (ctx.attachCmp && ctx.attachCmp.before - ctx.attachCmp.now >= 10) {
+        items.push({ sev: 'warning', icon: 'activity', title: 'Fewer calls are getting a check-in',
+          text: 'Down from ' + Math.round(ctx.attachCmp.before) + '% to ' + Math.round(ctx.attachCmp.now) + '% of calls. When people stop checking in, they usually stopped telling you before anything else changed.',
+          action: { label: 'Wellbeing', goto: 'wellbeing' } });
+      }
+      const seatsPct = d.seats.seatLimit > 0 ? pct(d.seats.activeMembers, d.seats.seatLimit) : null;
+      if (seatsPct != null && seatsPct < 60) {
+        items.push({ sev: 'info', icon: 'key', title: plural(d.seats.seatLimit - d.seats.activeMembers, 'seat') + ' not claimed yet',
+          text: 'Only ' + seatsPct + '% of your seats are in use. Share the roster join code at roll call or in your next shift email.',
+          action: admin ? { label: 'Join code', goto: 'settings' } : null });
+      }
+      if (d.activity.weeklyActivePct != null && d.seats.activeMembers >= 5 && d.activity.weeklyActivePct < 40) {
+        items.push({ sev: 'info', icon: 'users', title: 'Only ' + d.activity.weeklyActivePct + '% of members used AfterCall this week',
+          text: 'Habits form in the first weeks. A supervisor mentioning the post-call check-in at shift change does more than any reminder.',
+          action: null });
+      }
+      return items;
+    }
+    const SEV_LABEL = { critical: 'Critical', serious: 'Serious', warning: 'Check', info: 'Note' };
+    function renderAttention(d, ctx) {
+      const items = buildAttention(d, ctx);
+      const el = $('attnList');
+      $('attnCount').textContent = items.length ? plural(items.length, 'item') : '';
+      if (!items.length) {
+        el.innerHTML = '<div class="allclear big">' + ico('check') + '<div><b>Nothing needs you right now.</b><br/>'
+          + 'No station stands out, no peer alert has waited more than a week, and the trends are steady.</div></div>';
+        return items;
+      }
+      el.innerHTML = items.map((it) => `
+        <div class="attn-item sev-${it.sev}">
+          <div class="attn-icon">${ico(it.icon)}</div>
+          <div class="attn-body">
+            <div class="attn-title"><span class="sev-label">${ico(it.sev === 'info' ? 'info' : 'alert', 'tiny')}${SEV_LABEL[it.sev]}</span>${esc(it.title)}</div>
+            <div class="attn-text">${esc(it.text)}</div>
+          </div>
+          <div class="attn-act">
+            ${it.station ? checkinButton(it.station) + ' <button class="btn ghost sm" data-goto="stations">Details</button>'
+              : it.action ? '<button class="btn ghost sm" data-goto="' + it.action.goto + '">' + esc(it.action.label) + '</button>' : ''}
+          </div>
+        </div>`).join('');
+      bindCheckins(el, 'stationMsg');
+      return items;
+    }
+
+    function pillar(o) {
+      return `<div class="card pillar" style="--accent:${o.color}">
+        <div class="pillar-head"><span class="pillar-icon">${ico(o.icon)}</span>${esc(o.name)}</div>
+        <div class="pillar-val">${o.value}${o.unit ? '<span class="unit">' + o.unit + '</span>' : ''}</div>
+        <div class="pillar-lab">${o.label}</div>
+        <div class="pillar-delta">${o.delta || ''}</div>
+        ${o.extra || ''}
+        ${o.spark || ''}
+        <div class="pillar-stats">${o.stats.map((s) => `<div><b>${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>
+      </div>`;
+    }
+
     function renderDashboard(d) {
       DATA = d;
       $('agencyName').textContent = d.agency.name;
@@ -1304,171 +1988,345 @@
       $('kminNote').textContent = d.kMin;
 
       const wk = d.weekly || [];
-      const labels = wk.map((w) => w.weekStart.slice(5));
-
-      $('kWeekly').textContent = fmt(d.activity.weeklyActivePct, '%');
-      $('kWeeklySub').textContent = d.activity.weeklyActiveMembers + ' of ' + d.seats.activeMembers + ' members this week';
-      $('kSeats').textContent = d.seats.activeMembers + ' / ' + d.seats.seatLimit;
-      $('kSeatsSub').textContent = d.seats.peerSupporters + ' peer supporters · ' + d.seats.joinedInWindow + ' joined in window';
-      $('kCalls').textContent = d.activity.callsLogged;
-      $('kAttach').textContent = fmt(d.activity.checkInAttachPct, '%');
-      const stressEl = $('kStress');
-      if (d.wellness.avgPostCallStress == null) { stressEl.innerHTML = '<span class="suppressed-val">suppressed (k&lt;' + d.kMin + ')</span>'; }
-      else stressEl.textContent = d.wellness.avgPostCallStress;
-      // Fatigue (teams-admin ≥ 1.3.0; older payloads have no avgFatigue).
-      const fatigueEl = $('kFatigue');
-      if (d.wellness.avgFatigue == null) {
-        fatigueEl.innerHTML = '<span class="suppressed-val">' + (d.wellness.contributors && 'fatigueMetKFloor' in d.wellness.contributors
-          ? 'suppressed (k&lt;' + d.kMin + ')' : '—') + '</span>';
-        $('kFatigueSub').textContent = 'avg self-rated, 1–7';
-      } else {
-        fatigueEl.textContent = d.wellness.avgFatigue;
-        $('kFatigueSub').textContent = fmt(d.wellness.highFatiguePct, '%') + ' of check-ins at 5+';
-      }
-      $('kFlags').textContent = d.highImpact.total;
-      $('kFlagsSub').textContent = d.highImpact.lifecycle.open + ' open · ' + d.peerSupport.conversationsOpened + ' peer convos';
-      // Why alerts opened (teams-admin ≥ 1.3.0; older payloads have no byReason).
-      const why = d.highImpact.byReason || null;
-      $('rHighImpact').textContent = why ? fmt(why.high_impact) : fmt(d.highImpact.total);
-      $('rHeavyRun').textContent = why ? fmt(why.heavy_run) : '—';
-      $('rRequested').textContent = why ? fmt(why.requested) : '—';
-      $('noSupportersWarn').style.display = d.highImpact.noPeerSupporters ? '' : 'none';
-
-      spark($('spActive'), wk.map((w) => w.activeMembers), C.s1);
-      spark($('spSeats'), wk.map((w) => w.activeMembers), C.s3);
-      spark($('spCalls'), wk.map((w) => w.callsLogged), C.s1);
-      spark($('spAttach'), wk.map((w) => w.checkInRate), C.s2);
-      spark($('spStress'), wk.map((w) => w.avgPostCallStress), C.s4);
-      spark($('spFatigue'), wk.map((w) => w.avgFatigue ?? null), C.s4);
-      spark($('spFlags'), wk.map((w) => w.highImpactFlags), C.s4);
-
-      lineChart($('chActivity'), labels, [
-        { key: 'Calls logged', color: C.s1, area: true, data: wk.map((w) => w.callsLogged) },
-        { key: 'Journal entries', color: C.s3, data: wk.map((w) => w.journals) },
-      ]);
-      barChart($('chSignals'), labels, [
-        { key: 'Peer alerts', color: C.s4, data: wk.map((w) => w.highImpactFlags) },
-        { key: 'Peer conversations', color: C.s2, data: wk.map((w) => w.peerConversations) },
-      ]);
-      lineChart($('chActive'), labels, [
-        { key: 'Active members', color: C.s1, area: true, data: wk.map((w) => w.activeMembers) },
-      ]);
-
-      lineChart($('chStress'), labels, [
-        { key: 'Avg post-call stress', color: C.s1, data: wk.map((w) => w.avgPostCallStress), suppressedLabel: 'suppressed (k<' + d.kMin + ')' },
-      ], { ymax: 10 });
-      lineChart($('chFatigue'), labels, [
-        { key: 'Avg self-rated fatigue', color: C.s4, data: wk.map((w) => w.avgFatigue ?? null), suppressedLabel: 'suppressed (k<' + d.kMin + ')' },
-      ], { ymax: 7 });
-      const fb = d.wellness.fatigueBands;
-      if (fb) {
-        const fTotal = (fb.alert + fb.tired + fb.high) || 1;
-        const fp = (v) => Math.round(100 * v / fTotal);
-        hBars($('chFatigueBands'), [
-          { label: 'Alert (1–2)', value: fb.alert, color: C.acuity.Minor, valueLabel: fb.alert + ' · ' + fp(fb.alert) + '%', tip: fb.alert + ' check-ins (' + fp(fb.alert) + '%)' },
-          { label: 'A little tired (3–4)', value: fb.tired, color: C.acuity.Moderate, valueLabel: fb.tired + ' · ' + fp(fb.tired) + '%', tip: fb.tired + ' check-ins (' + fp(fb.tired) + '%)' },
-          { label: 'Moderately tired or worse (5–7)', value: fb.high, color: C.acuity.Critical, valueLabel: fb.high + ' · ' + fp(fb.high) + '%', tip: fb.high + ' check-ins (' + fp(fb.high) + '%)' },
-        ]);
-        $('fatigueNote').innerHTML = '<b>' + fp(fb.high) + '%</b> of check-ins rated 5 or higher — the level fatigue research treats as a safety risk.'
-          + ' Read it next to shift length and rest gaps before reading it as a people problem.';
-      } else {
-        $('chFatigueBands').innerHTML = suppressedBlock(d.kMin);
-        $('fatigueNote').textContent = '';
-      }
-      lineChart($('chAttach'), labels, [
-        { key: 'Check-in rate', color: C.s2, area: true, data: wk.map((w) => w.checkInRate) },
-      ], { ymax: 100, suf: '%', fmtY: (v) => Math.round(v) + '%' });
-
-      // Mood distribution — the shape, not just the average.
-      const md = d.wellness.moodDist;
-      if (md) {
-        const moodTotal = md.reduce((a, b) => a + b, 0) || 1;
-        vBars($('chMood'), md.map((v, i) => ({
-          label: MOOD_LABELS[i], value: v, color: C.s3,
-          tip: `<b>${MOOD_LABELS[i]}</b><br/>${v} check-ins (${Math.round(100 * v / moodTotal)}%)`,
-        })));
-        const lowShare = Math.round(100 * (md[0] + md[1]) / moodTotal);
-        $('moodNote').innerHTML = 'Window average <b>' + fmt(d.wellness.avgJournalMood) + ' / 5</b> · <b>'
-          + lowShare + '%</b> of check-ins landed at 1–2. The shape matters more than the average — the left tail grows before the average moves.';
-      } else {
-        $('chMood').innerHTML = suppressedBlock(d.kMin);
-        $('moodNote').textContent = '';
-      }
-
-      // Stress bands — status colors, direct-labeled.
-      const sb = d.wellness.stressBands;
-      if (sb) {
-        const bandTotal = (sb.low + sb.moderate + sb.high) || 1;
-        const pctOf = (v) => Math.round(100 * v / bandTotal);
-        hBars($('chBands'), [
-          { label: 'Low (1–3)', value: sb.low, color: C.acuity.Minor, valueLabel: sb.low + ' · ' + pctOf(sb.low) + '%', tip: sb.low + ' check-ins (' + pctOf(sb.low) + '%)' },
-          { label: 'Moderate (4–6)', value: sb.moderate, color: C.acuity.Moderate, valueLabel: sb.moderate + ' · ' + pctOf(sb.moderate) + '%', tip: sb.moderate + ' check-ins (' + pctOf(sb.moderate) + '%)' },
-          { label: 'High (7–10)', value: sb.high, color: C.acuity.Critical, valueLabel: sb.high + ' · ' + pctOf(sb.high) + '%', tip: sb.high + ' check-ins (' + pctOf(sb.high) + '%)' },
-        ]);
-        $('bandsNote').innerHTML = 'The number to move is <b>High</b>: <b>' + pctOf(sb.high)
-          + '%</b> of post-call check-ins right now. Pair a rising High share with the acuity mix on Operations before assuming it is the workload.';
-      } else {
-        $('chBands').innerHTML = suppressedBlock(d.kMin);
-        $('bandsNote').textContent = '';
-      }
-
-      ring($('chParticipation'), d.wellness.journalParticipationPct, C.s2, 'of active members journaled');
-
-      donut($('chLifecycle'), [
-        { label: 'Open', value: d.highImpact.lifecycle.open, color: C.s4 },
-        { label: 'Acknowledged', value: d.highImpact.lifecycle.acknowledged, color: C.s1 },
-        { label: 'Closed', value: d.highImpact.lifecycle.closed, color: C.s2 },
-      ], String(d.highImpact.total), 'flags in window');
-
-      const resp = (d.highImpact && d.highImpact.response) || {};
-      $('rMedian').textContent = fmtDur(resp.medianAckHours);
-      $('rWithin48').textContent = fmt(resp.ackWithin48Pct, '%');
-      const stale = resp.openOver7d ?? 0;
-      const staleEl = $('rStale');
-      staleEl.textContent = String(stale);
-      staleEl.style.color = stale > 0 ? 'var(--warn)' : 'var(--good)';
-
-      const ps = d.peerSupport || {};
-      $('pConvos').textContent = fmt(ps.conversationsOpened);
-      $('pAnon').textContent = fmt(ps.anonymousPct, '%');
-      $('pPer').textContent = fmt(ps.perSupporter);
-      barChart($('chPeerWeekly'), labels, [
-        { key: 'Peer conversations', color: C.s2, data: wk.map((w) => w.peerConversations) },
-      ], { height: 170 });
-
-      // Acuity: reserved status colors, always direct-labeled.
+      const hasAcuityWeeks = wk.some((w) => 'highAcuityCalls' in w);
+      const w = d.wellness || {};
+      const supp = (what) => '<span class="suppressed-val">' + ico('shield') + 'withheld</span>';
+      const totalCalls = d.activity.callsLogged;
       const am = d.acuityMix || {};
-      hBars($('chAcuity'), ['Minor', 'Moderate', 'Serious', 'Critical'].map((k) => ({
-        label: k, value: am[k] || 0, color: C.acuity[k],
-        tip: (am[k] || 0) + ' calls (' + Math.round(100 * (am[k] || 0) / Math.max(1, d.activity.callsLogged)) + '% of window)',
-      })));
-      hBars($('chTypes'), (d.topCallTypes || []).map((t) => ({ label: t.type, value: t.count, color: C.s1 })));
+      const heavyPct = pct((am.Serious || 0) + (am.Critical || 0), totalCalls);
 
-      const supp = '<span style="color:var(--muted)">suppressed</span>';
-      $('stationBody').innerHTML = (d.stationBreakdown || []).map((s) => {
+      const ctx = {
+        stressCmp: compareWeeks(wk, (x) => x.avgPostCallStress),
+        fatigueCmp: compareWeeks(wk, (x) => x.avgFatigue ?? null),
+        attachCmp: compareWeeks(wk, (x) => x.checkInRate),
+        activeCmp: compareWeeks(wk, (x) => x.activeMembers),
+        callsCmp: compareWeeks(wk, (x) => x.callsLogged),
+        flagsCmp: compareWeeks(wk, (x) => x.highImpactFlags),
+      };
+
+      // ── Hero ──
+      const items = renderAttention(d, ctx);
+      const urgent = items.filter((i) => i.sev === 'critical' || i.sev === 'serious').length;
+      const checks = items.filter((i) => i.sev === 'warning').length;
+      $('heroEyebrow').textContent = d.agency.name + ' · last ' + d.range.sinceDays + ' days';
+      $('heroTitle').textContent = urgent
+        ? (items.length > urgent ? plural(items.length, 'thing') + ' to look at — ' + urgent + ' urgent' : plural(urgent, 'thing needs', 'things need') + ' your attention')
+        : checks ? plural(checks, 'thing') + ' worth a look this week'
+          : 'Your team looks steady';
+      const stressWord = !ctx.stressCmp ? null : ctx.stressCmp.now - ctx.stressCmp.before >= 0.3 ? 'rising'
+        : ctx.stressCmp.before - ctx.stressCmp.now >= 0.3 ? 'easing' : 'steady';
+      $('heroSub').textContent = [
+        plural(totalCalls, 'call') + ' logged' + (heavyPct != null ? ', ' + heavyPct + '% Serious or Critical' : ''),
+        stressWord ? 'post-call stress ' + stressWord : null,
+        d.highImpact.total ? plural(d.highImpact.total, 'peer alert') + ', ' + (d.highImpact.lifecycle.open ? d.highImpact.lifecycle.open + ' still open' : 'all picked up') : 'no peer alerts',
+      ].filter(Boolean).join(' · ') + '.';
+      $('heroGlance').innerHTML = [
+        [ico('users'), d.seats.activeMembers + ' members', d.seats.peerSupporters + ' peer supporters'],
+        [ico('home'), (d.stationBreakdown || []).filter((s) => s.station !== 'Unassigned').length + ' stations', (d.stationBreakdown || []).filter((s) => s.checkInDue).length + ' due a check-in'],
+        [ico('activity'), d.activity.activeInWindow + ' active', 'in the window'],
+      ].map((g) => `<div class="glance">${g[0]}<div><b>${g[1]}</b><span>${g[2]}</span></div></div>`).join('');
+
+      // ── Pillars ──
+      const lastWeeks = wk.slice(-13);
+      $('pillars').innerHTML = [
+        pillar({ name: 'Engagement', icon: 'users', color: C.s1,
+          value: d.activity.weeklyActivePct == null ? '—' : Math.round(d.activity.weeklyActivePct), unit: d.activity.weeklyActivePct == null ? '' : '%',
+          label: 'active this week · ' + d.activity.weeklyActiveMembers + ' of ' + d.seats.activeMembers + ' members',
+          delta: deltaChip(ctx.activeCmp, { goodWhen: 'up', relative: true, threshold: 0.08 }),
+          spark: spark(lastWeeks.map((x) => x.activeMembers), C.s1),
+          stats: [[d.seats.activeMembers + ' / ' + d.seats.seatLimit, 'seats claimed'], [fmt(d.activity.checkInAttachPct, '%'), 'calls with a check-in']] }),
+        pillar({ name: 'Workload', icon: 'activity', color: C.s3,
+          value: totalCalls.toLocaleString(), label: 'calls logged · ' + (heavyPct == null ? '—' : heavyPct + '%') + ' Serious or Critical',
+          delta: deltaChip(ctx.callsCmp, { goodWhen: null, relative: true, threshold: 0.1 }),
+          spark: spark(lastWeeks.map((x) => x.callsLogged), C.s3),
+          stats: [[(am.Critical || 0).toLocaleString(), 'Critical calls'], [d.activity.journalsLogged.toLocaleString(), 'journal entries']] }),
+        pillar({ name: 'Wellbeing', icon: 'heart', color: C.s2,
+          value: w.avgPostCallStress == null ? supp() : w.avgPostCallStress, unit: w.avgPostCallStress == null ? '' : ' / 10',
+          label: 'avg post-call stress',
+          delta: w.avgPostCallStress == null ? '' : deltaChip(ctx.stressCmp, { goodWhen: 'down', threshold: 0.3 }),
+          extra: w.avgPostCallStress == null ? '' : scaleBar(w.avgPostCallStress, 1, 10, [[1, 3.5, C.zLow], [3.5, 6.5, C.zMid], [6.5, 10, C.zHigh]]),
+          stats: [[w.avgFatigue == null ? '—' : w.avgFatigue + ' / 7', 'avg fatigue'], [w.avgJournalMood == null ? '—' : w.avgJournalMood + ' / 5', 'avg mood']] }),
+        pillar({ name: 'Peer support', icon: 'buoy', color: C.s4,
+          value: d.highImpact.total, label: 'peer alerts · ' + d.highImpact.lifecycle.open + ' open now',
+          delta: deltaChip(ctx.flagsCmp, { goodWhen: null, relative: true, threshold: 0.15 }),
+          spark: spark(lastWeeks.map((x) => x.highImpactFlags), C.s4),
+          stats: [[fmtDur(d.highImpact.response && d.highImpact.response.medianAckHours), 'median time to pick up'], [fmt(d.peerSupport.conversationsOpened), 'peer conversations']] }),
+      ].join('');
+
+      // ── Small multiples ──
+      const smPanels = [];
+      if (hasAcuityWeeks) {
+        smPanels.push({ title: 'Calls', subtitle: 'per week', kind: 'stack', height: 96, series: [
+          { key: 'Other calls', color: C.s1, data: wk.map((x) => x.callsLogged - (x.highAcuityCalls || 0)) },
+          { key: 'Serious / Critical', color: C.acuity.Serious, data: wk.map((x) => x.highAcuityCalls || 0) },
+        ] });
+      } else {
+        smPanels.push({ title: 'Calls', subtitle: 'per week', kind: 'stack', height: 96, series: [{ key: 'Calls', color: C.s1, data: wk.map((x) => x.callsLogged) }] });
+      }
+      smPanels.push({ title: 'Post-call stress', subtitle: 'avg, 1–10', kind: 'line', min: 1, max: 10, height: 80, zone: [7, 10], zoneLabel: 'high (7–10)', ref: w.avgPostCallStress, gapMark: true,
+        series: [{ key: 'Stress', color: C.s2, data: wk.map((x) => x.avgPostCallStress) }] });
+      if (wk.some((x) => nn(x.avgFatigue))) {
+        smPanels.push({ title: 'Fatigue', subtitle: 'avg, 1–7', kind: 'line', min: 1, max: 7, height: 80, zone: [5, 7], zoneLabel: 'moderately tired+ (5–7)', ref: w.avgFatigue, gapMark: true,
+          series: [{ key: 'Fatigue', color: C.s4, data: wk.map((x) => x.avgFatigue ?? null) }] });
+      }
+      smPanels.push({ title: 'Active members', subtitle: 'per week', kind: 'line', height: 70, series: [{ key: 'Active', color: C.s3, area: true, data: wk.map((x) => x.activeMembers) }] });
+      $('smLegend').innerHTML = (hasAcuityWeeks
+        ? `<span><i style="background:${C.s1}"></i>Other calls</span><span><i style="background:${C.acuity.Serious}"></i>Serious / Critical calls</span>`
+        : `<span><i style="background:${C.s1}"></i>Calls</span>`)
+        + `<span><i style="background:${C.s2}"></i>Stress</span>` + (wk.some((x) => nn(x.avgFatigue)) ? `<span><i style="background:${C.s4}"></i>Fatigue</span>` : '')
+        + `<span><i style="background:${C.s3}"></i>Active members</span><span><i class="zone-key"></i>Risk zone</span>`;
+      const withheld = 'withheld (under ' + d.kMin + ')';
+      smallMultiples($('chMultiples'), wk, smPanels, (x) => {
+        const rows = [
+          ['Calls', x.callsLogged + (hasAcuityWeeks ? ' · ' + (x.highAcuityCalls || 0) + ' Serious / Critical' : '')],
+          ['Stress', nn(x.avgPostCallStress) ? x.avgPostCallStress + ' / 10' : withheld],
+          ['Fatigue', nn(x.avgFatigue) ? x.avgFatigue + ' / 7' : withheld],
+          ['Check-in rate', x.checkInRate == null ? '—' : x.checkInRate + '%'],
+          ['Active members', x.activeMembers],
+          ['Peer alerts', x.highImpactFlags],
+        ];
+        return '<b>Week of ' + esc(weekLabel(x.weekStart)) + '</b><br/>' + rows.map((r) => esc(r[0]) + ': <b>' + esc(String(r[1])) + '</b>').join('<br/>');
+      });
+
+      // ── Adoption funnel ──
+      const fsteps = [
+        ['Seats', d.seats.seatLimit, 'in your plan'],
+        ['Claimed', d.seats.activeMembers, 'joined with the code'],
+        ['Active in window', d.activity.activeInWindow, 'opened or logged anything'],
+        ['Active this week', d.activity.weeklyActiveMembers, 'in the last 7 days'],
+        ['Journaling', w.journalParticipationPct == null ? null : Math.round((w.journalParticipationPct / 100) * d.seats.activeMembers), 'wrote at least once'],
+      ].filter((s) => s[1] != null);
+      const fmax = Math.max(1, ...fsteps.map((s) => s[1]));
+      $('funnel').innerHTML = fsteps.map((s, i) => `
+        <div class="fstep" data-tip="${esc('<b>' + s[0] + '</b>: ' + s[1] + (i ? ' (' + pct(s[1], fsteps[0][1]) + '% of seats)' : ''))}">
+          <div class="fstep-l"><b>${esc(s[0])}</b><span>${esc(s[2])}</span></div>
+          <div class="fstep-track"><div class="fstep-fill" style="width:${Math.max(2, (100 * s[1]) / fmax)}%; background:${hexA(C.s1, (1 - i * 0.15).toFixed(2))};"></div></div>
+          <div class="fstep-v">${s[1].toLocaleString()}${i ? '<em>' + pct(s[1], fsteps[0][1]) + '%</em>' : ''}</div>
+        </div>`).join('');
+      bindTips($('funnel'));
+      $('funnelNote').textContent = d.seats.joinedInWindow
+        ? plural(d.seats.joinedInWindow, 'member') + ' joined in this window. Weekly active is the number to grow — it is what makes every wellbeing number meaningful.'
+        : 'Weekly active is the number to grow — it is what makes every wellbeing number meaningful.';
+
+      // ── Stations at a glance ──
+      const stations = (d.stationBreakdown || []).slice().sort((a, b) =>
+        Number(b.checkInDue) - Number(a.checkInDue) || Number(b.needsCheckIn) - Number(a.needsCheckIn) || b.callsLogged - a.callsLogged);
+      const smax = Math.max(1, ...stations.map((s) => s.callsLogged));
+      $('stationGlance').innerHTML = stations.length ? stations.slice(0, 8).map((s) => {
         const r = s.recent;
-        return `
-        <tr>
-          <td><b>${esc(s.station)}</b></td>
-          <td class="num">${s.members}</td>
-          <td class="num">${s.activeMembers}</td>
-          <td class="num">${s.callsLogged}</td>
-          <td class="num">${s.checkInPct == null ? '—' : s.checkInPct + '%'}</td>
-          <td class="num">${s.avgPostCallStress == null ? supp : s.avgPostCallStress}</td>
-          <td class="num">${s.avgFatigue == null ? supp : s.avgFatigue}</td>
-          <td class="num">${!r ? supp : r.highAcuity + (r.highAcuityPct == null ? '' : ' <span style="color:var(--muted)">(' + r.highAcuityPct + '%)</span>')}</td>
-          <td class="num">${!r || r.avgPostCallStress == null ? supp : r.avgPostCallStress}</td>
-          <td class="num">${!r ? supp : r.peerAlerts}</td>
-          <td>${stationStatusPill(s)}</td>
-        </tr>`;
-      }).join('');
+        const heavy = r ? r.highAcuity : null;
+        const share = r && r.calls ? r.highAcuity / r.calls : 0;
+        return `<div class="sg-row" data-tip="${esc('<b>' + esc(s.station) + '</b><br/>' + s.members + ' members · ' + s.callsLogged + ' calls in window' + (heavy != null ? '<br/>Last 14 days: ' + r.calls + ' calls, ' + heavy + ' Serious / Critical' : ''))}">
+          <div class="sg-name">${esc(s.station)}<span>${s.members} members</span></div>
+          <div class="sg-bar"><i style="width:${(100 * s.callsLogged) / smax}%; background:${C.s1};"></i>${r ? `<i class="sg-heavy" style="width:${(100 * s.callsLogged * share) / smax}%; background:${C.acuity.Serious};"></i>` : ''}</div>
+          <div class="sg-st">${stationStatusPill(s)}</div>
+        </div>`;
+      }).join('') + (stations.length > 8 ? '<div class="subnote">+ ' + (stations.length - 8) + ' more on the Stations tab.</div>' : '')
+        : '<div class="empty">No stations yet — assign stations on the Roster tab.</div>';
+      bindTips($('stationGlance'));
+
+      // ── Wellbeing tab ──
+      const kpi = (el, label, value, sub, delta, extra) => {
+        $(el).innerHTML = `<div class="lab">${label}</div><div class="val">${value}</div><div class="sub">${sub}</div>${delta ? '<div class="kdelta">' + delta + '</div>' : ''}${extra || ''}`;
+      };
+      kpi('wkStress', 'Post-call stress', w.avgPostCallStress == null ? supp() : w.avgPostCallStress + '<span class="unit"> / 10</span>',
+        w.stressBands ? pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '% of check-ins at 7+' : 'average, 1–10',
+        w.avgPostCallStress == null ? '' : deltaChip(ctx.stressCmp, { goodWhen: 'down', threshold: 0.3 }));
+      kpi('wkFatigue', 'Fatigue', w.avgFatigue == null ? supp() : w.avgFatigue + '<span class="unit"> / 7</span>',
+        w.highFatiguePct == null ? 'Samn-Perelli, 1–7' : w.highFatiguePct + '% of check-ins at 5+',
+        w.avgFatigue == null ? '' : deltaChip(ctx.fatigueCmp, { goodWhen: 'down', threshold: 0.3 }));
+      kpi('wkMood', 'Journal mood', w.avgJournalMood == null ? supp() : w.avgJournalMood + '<span class="unit"> / 5</span>',
+        w.moodDist ? pct(w.moodDist[0] + w.moodDist[1], w.moodDist.reduce((a, b) => a + b, 0)) + '% of check-ins rough or low' : 'average, 1–5', '');
+      kpi('wkAttach', 'Check-in rate', fmt(d.activity.checkInAttachPct, '%'), 'of calls carry a check-in',
+        deltaChip(ctx.attachCmp, { goodWhen: 'up', threshold: 3, fmt: (v) => Math.round(v) + ' pts' }));
+
+      const suppLabel = 'withheld (under ' + d.kMin + ')';
+      if (wk.some((x) => nn(x.avgPostCallStress))) {
+        trendChart($('chStress'), wk, { key: 'Avg post-call stress', color: C.s2, data: wk.map((x) => x.avgPostCallStress), suppressedLabel: suppLabel },
+          { min: 1, max: 10, ticks: [1, 4, 7, 10], zone: [7, 10], zoneLabel: 'high stress', ref: w.avgPostCallStress });
+      } else $('chStress').innerHTML = suppressedBlock(d.kMin, ' in any week');
+      if (wk.some((x) => nn(x.avgFatigue))) {
+        trendChart($('chFatigue'), wk, { key: 'Avg fatigue', color: C.s4, data: wk.map((x) => x.avgFatigue ?? null), suppressedLabel: suppLabel },
+          { min: 1, max: 7, ticks: [1, 3, 5, 7], zone: [5, 7], zoneLabel: 'moderately tired or worse', ref: w.avgFatigue });
+      } else $('chFatigue').innerHTML = suppressedBlock(d.kMin, ' fatigue answers in any week');
+
+      const strips = [];
+      if (w.stressBands) strips.push(['Post-call stress', strip([
+        { label: 'Low 1–3', value: w.stressBands.low, color: C.zLowS },
+        { label: 'Moderate 4–6', value: w.stressBands.moderate, color: C.zMidS, ink: '#1a1a19' },
+        { label: 'High 7–10', value: w.stressBands.high, color: C.zHighS },
+      ], { unit: 'check-ins' })]);
+      if (w.fatigueBands) strips.push(['Fatigue', strip([
+        { label: 'Alert 1–2', value: w.fatigueBands.alert, color: C.zLowS },
+        { label: 'A little tired 3–4', value: w.fatigueBands.tired, color: C.zMidS, ink: '#1a1a19' },
+        { label: 'Moderately tired or worse 5–7', value: w.fatigueBands.high, color: C.zHighS },
+      ], { unit: 'check-ins' })]);
+      if (w.moodDist) strips.push(['Journal mood', strip(MOOD_LABELS.map((l, i) => ({
+        label: (i + 1) + ' · ' + l, value: w.moodDist[i], color: C.mood[i], ink: i === 2 ? C.ink : '#fff',
+      })), { unit: 'check-ins' })]);
+      $('distStrips').innerHTML = strips.length ? strips.map((s) => `<div class="dist"><div class="dist-l">${s[0]}</div><div class="dist-r">${s[1]}</div></div>`).join('')
+        : suppressedBlock(d.kMin, '');
+      bindTips($('distStrips'));
+      const notes = [];
+      if (w.stressBands) notes.push('<b>' + pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '%</b> of post-call check-ins were high-stress');
+      if (w.fatigueBands) notes.push('<b>' + fmt(w.highFatiguePct, '%') + '</b> reported moderate fatigue or worse');
+      if (w.moodDist) notes.push('<b>' + pct(w.moodDist[0] + w.moodDist[1], w.moodDist.reduce((a, b) => a + b, 0)) + '%</b> of journal moods were rough or low');
+      $('distNote').innerHTML = notes.length ? notes.join(' · ') + '. The left and right tails grow before an average moves — watch the red segment, and read it next to the acuity mix before reading it as a people problem.' : '';
+
+      if (wk.some((x) => nn(x.checkInRate))) {
+        trendChart($('chAttach'), wk, { key: 'Check-in rate', color: C.s1, data: wk.map((x) => x.checkInRate) },
+          { min: 0, max: 100, ticks: [0, 50, 100], fmtY: (v) => v + '%', suf: '%', area: true, ref: d.activity.checkInAttachPct });
+      } else $('chAttach').innerHTML = '<div class="empty">No calls logged in this window yet.</div>';
+      ring($('chParticipation'), w.journalParticipationPct, C.s2, 'of members journaled');
+
+      // ── Workload tab ──
+      const tf = timingFacts(d.callTiming);
+      kpi('okCalls', 'Calls logged', totalCalls.toLocaleString(), 'in the last ' + d.range.sinceDays + ' days',
+        deltaChip(ctx.callsCmp, { goodWhen: null, relative: true, threshold: 0.1 }));
+      kpi('okHeavy', 'Serious or Critical', heavyPct == null ? '—' : heavyPct + '<span class="unit">%</span>',
+        ((am.Serious || 0) + (am.Critical || 0)).toLocaleString() + ' calls · ' + (am.Critical || 0) + ' Critical', '');
+      kpi('okPeak', 'Busiest day', tf ? tf.busiestDay : '—', tf ? tf.busiestDayPct + '% of calls' : 'needs call timing', '');
+      kpi('okNight', 'Overnight calls', tf ? tf.nightPct + '<span class="unit">%</span>' : '—', '10 pm – 6 am, when fatigue bites hardest', '');
+
+      if (hasAcuityWeeks) {
+        $('acuityWeekLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Minor / Moderate</span><span><i style="background:${C.acuity.Serious}"></i>Serious</span><span><i style="background:${C.acuity.Critical}"></i>Critical</span>`;
+        stackedWeeks($('chAcuityWeekly'), wk, [
+          { key: 'Minor / Moderate', color: C.s1, data: wk.map((x) => x.callsLogged - (x.highAcuityCalls || 0)) },
+          { key: 'Serious', color: C.acuity.Serious, data: wk.map((x) => (x.highAcuityCalls || 0) - (x.criticalCalls || 0)) },
+          { key: 'Critical', color: C.acuity.Critical, data: wk.map((x) => x.criticalCalls || 0) },
+        ]);
+      } else {
+        $('acuityWeekLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Calls</span>`;
+        stackedWeeks($('chAcuityWeekly'), wk, [{ key: 'Calls', color: C.s1, data: wk.map((x) => x.callsLogged) }]);
+      }
+      $('chAcuity').innerHTML = strip(ACUITY_KEYS.map((k) => ({ label: k, value: am[k] || 0, color: C.acuity[k], ink: k === 'Moderate' ? '#1a1a19' : '#fff' })), { unit: 'calls' })
+        + '<div class="acuity-big">' + ACUITY_KEYS.map((k) => `<div><span class="adot" style="background:${C.acuity[k]}"></span><b>${(am[k] || 0).toLocaleString()}</b><em>${k}</em></div>`).join('') + '</div>';
+      bindTips($('chAcuity'));
+      renderTiming(d);
+      hBars($('chTypes'), (d.topCallTypes || []).map((t) => ({ label: t.type, value: t.count, color: C.s1,
+        valueLabel: t.count + ' · ' + pct(t.count, totalCalls) + '%', tip: t.count + ' calls (' + pct(t.count, totalCalls) + '% of the window)' })));
+
+      // ── Stations tab ──
       renderStationAlerts(d);
+      renderStationTable(d);
+
+      // ── Peer support tab ──
+      const hiD = d.highImpact;
+      $('noSupportersWarn').style.display = hiD.noPeerSupporters ? '' : 'none';
+      const lc = hiD.lifecycle;
+      const picked = lc.acknowledged + lc.closed;
+      const stages = [
+        ['Raised', hiD.total, 'alerts opened', C.s4],
+        ['Picked up', picked, 'a supporter reached out', C.s1],
+        ['Followed up', lc.closed, 'conversation done', C.s2],
+      ];
+      $('loop').innerHTML = '<div class="loop">' + stages.map((s, i) => `
+        ${i ? '<div class="loop-arrow" title="share of the stage before">' + (stages[i - 1][1] ? pct(s[1], stages[i - 1][1]) + '%' : '') + '<i></i></div>' : ''}
+        <div class="loop-stage" style="--accent:${s[3]}">
+          <div class="loop-n">${s[1]}</div><div class="loop-l">${s[0]}</div><div class="loop-s">${s[2]}</div>
+        </div>`).join('') + `<div class="loop-open ${lc.open ? 'has' : ''}">${ico(lc.open ? 'clock' : 'check')}<div><b>${lc.open}</b><span>open right now</span></div></div></div>`;
+
+      const resp = hiD.response || {};
+      const med = resp.medianAckHours;
+      const scaleMax = Math.max(72, med || 0);
+      $('response').innerHTML = `
+        <div class="bullet">
+          <div class="bullet-track">
+            <i class="bz good" style="width:${(24 / scaleMax) * 100}%"></i><i class="bz ok" style="left:${(24 / scaleMax) * 100}%; width:${(24 / scaleMax) * 100}%"></i>
+            <i class="bz slow" style="left:${(48 / scaleMax) * 100}%; width:${100 - (48 / scaleMax) * 100}%"></i>
+            ${med != null ? `<b class="bullet-mark" style="left:${Math.min(100, (med / scaleMax) * 100)}%" data-tip="${esc('<b>Median</b>: ' + fmtDur(med))}"></b>` : ''}
+            <span class="bullet-target" style="left:${(48 / scaleMax) * 100}%"></span>
+          </div>
+          <div class="bullet-ends"><span>0h</span><span>24h</span><span>48h target</span><span>${Math.round(scaleMax)}h</span></div>
+        </div>
+        <div class="statgrid">
+          <div class="stat"><div class="sv">${fmtDur(med)}</div><div class="sl">median time to pick up</div></div>
+          <div class="stat"><div class="sv">${fmt(resp.ackWithin48Pct, '%')}</div><div class="sl">picked up within 48 hours</div></div>
+          <div class="stat"><div class="sv" style="color:${(resp.openOver7d || 0) > 0 ? 'var(--warn)' : 'var(--good)'}">${resp.openOver7d ?? 0}</div><div class="sl">still open after 7 days</div></div>
+        </div>`;
+      bindTips($('response'));
+      const why = hiD.byReason || null;
+      $('reasons').innerHTML = why ? strip([
+        { label: 'Asked for a check-in', value: why.requested, color: C.s2 },
+        { label: 'Marked a call high-impact', value: why.high_impact, color: C.s1 },
+        { label: 'Automatic heavy run', value: why.heavy_run, color: C.s4 },
+      ], { unit: 'alerts' }) : '<div class="empty">Reasons appear once the dashboard API is updated.</div>';
+      bindTips($('reasons'));
+      $('peerLegend').innerHTML = `<span><i style="background:${C.s4}"></i>Peer alerts</span><span><i style="background:${C.s2}"></i>Peer conversations</span>`;
+      barChart($('chSignals'), wk, [
+        { key: 'Peer alerts', color: C.s4, data: wk.map((x) => x.highImpactFlags) },
+        { key: 'Peer conversations', color: C.s2, data: wk.map((x) => x.peerConversations) },
+      ]);
+      const ps = d.peerSupport || {};
+      $('capacity').innerHTML = [
+        [d.seats.peerSupporters, 'peer supporters on the roster'],
+        [fmt(ps.conversationsOpened), 'peer conversations opened'],
+        [fmt(ps.anonymousPct, '%'), 'opened anonymously'],
+        [fmt(ps.perSupporter), 'conversations per supporter'],
+      ].map((s) => `<div class="stat row-stat"><div class="sv">${s[0]}</div><div class="sl">${s[1]}</div></div>`).join('');
       if (d.peerAlerts) $('ruleSentence').textContent = ruleSentence(d.peerAlerts);
 
-      $('genMeta').textContent = 'Generated ' + d.generatedAt + ' · window since ' + d.range.since.slice(0, 10)
+      hydrateIcons();
+      $('genMeta').textContent = 'Generated ' + new Date(d.generatedAt).toLocaleString() + ' · window since ' + d.range.since.slice(0, 10)
         + ' · wellbeing suppression floor: ' + d.kMin + ' members · AfterCall Teams';
     }
 
+    // Stacked weekly columns (acuity), one axis, 2px gaps between segments.
+    function stackedWeeks(el, weeks, series) {
+      const h = 230;
+      const totals = weeks.map((_, i) => series.reduce((a, s) => a + Math.max(0, Number(s.data[i]) || 0), 0));
+      const ymax = niceMax(Math.max(1, ...totals));
+      const y = (v) => PAD.t + (h - PAD.t - PAD.b) * (1 - v / ymax);
+      const n = weeks.length;
+      const slot = (W - PAD.l - PAD.r) / Math.max(1, n);
+      const bw = Math.max(4, Math.min(26, slot * 0.6));
+      let svg = '';
+      [0, ymax / 2, ymax].forEach((t) => {
+        svg += `<line x1="${PAD.l}" y1="${y(t)}" x2="${W - PAD.r}" y2="${y(t)}" stroke="${C.grid}"/>`;
+        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${Math.round(t)}</text>`;
+      });
+      weeks.forEach((w, i) => {
+        const cx = PAD.l + slot * i + slot / 2;
+        let acc = 0;
+        series.forEach((s, si) => {
+          const v = Math.max(0, Number(s.data[i]) || 0);
+          if (!v) return;
+          const top = y(acc + v), bot = y(acc), gap = acc > 0 ? 2 : 0;
+          const isTop = !series.slice(si + 1).some((t) => Number(t.data[i]) > 0);
+          svg += isTop ? roundTopRect(cx - bw / 2, top, bw, Math.max(0, bot - top - gap), 4, s.color)
+            : `<rect x="${(cx - bw / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw}" height="${Math.max(0, bot - top - gap).toFixed(1)}" fill="${s.color}"/>`;
+          acc += v;
+        });
+        const t = `<b>Week of ${esc(weekLabel(w.weekStart))}</b><br/>` + series.map((s) => `<span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${Math.max(0, Number(s.data[i]) || 0)}</b>`).join('<br/>') + `<br/>Total: <b>${totals[i]}</b>`;
+        svg += `<rect class="hitcol" x="${PAD.l + slot * i}" y="${PAD.t}" width="${slot}" height="${h - PAD.t - PAD.b}" data-tip="${esc(t)}"/>`;
+        if (i % Math.ceil(n / 7) === 0 || i === n - 1) svg += `<text x="${cx}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+      });
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}" role="img" aria-label="Calls per week by acuity">${svg}</svg>`;
+      bindTips(el);
+    }
+
+    // Anything with data-goto switches tabs (delegated — rows are re-rendered).
+    document.addEventListener('click', (ev) => {
+      const g = ev.target.closest('[data-goto]');
+      if (!g) return;
+      ev.preventDefault();
+      const page = g.dataset.goto;
+      if (!$('page-' + page)) return;
+      showPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Print / save as PDF: the overview, always in the light palette.
+    $('printBtn').addEventListener('click', () => window.print());
+    let PRINT_THEME = null;
+    window.addEventListener('beforeprint', () => {
+      PRINT_THEME = document.documentElement.dataset.theme;
+      if (PRINT_THEME !== 'light') applyTheme('light', true);
+    });
+    window.addEventListener('afterprint', () => {
+      if (PRINT_THEME && PRINT_THEME !== 'light') applyTheme(PRINT_THEME, true);
+      PRINT_THEME = null;
+    });
     // ── Roster ──
     let ROSTER = [];
     function renderRoster() {
@@ -2020,11 +2878,11 @@
 
     // ── Theme ──
     // Dark is the default command-center look; the choice persists per browser.
-    function applyTheme(mode) {
+    function applyTheme(mode, transient) {
       const light = mode === 'light';
       document.documentElement.dataset.theme = light ? 'light' : 'dark';
       Object.assign(C, THEMES[light ? 'light' : 'dark']);
-      try { localStorage.setItem('ac_teams_theme', light ? 'light' : 'dark'); } catch { /* private mode */ }
+      if (!transient) { try { localStorage.setItem('ac_teams_theme', light ? 'light' : 'dark'); } catch { /* private mode */ } }
       $('themeBtn').textContent = light ? '☾' : '☀';
       $('themeBtn').title = light ? 'Switch to dark mode' : 'Switch to light mode';
       if (DATA) renderDashboard(DATA); // charts bake colors into SVG — repaint
@@ -2048,7 +2906,9 @@
     document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => showPage(t.dataset.page)));
 
     function refreshDashboard() {
-      return post('dashboard', { sinceDays: parseInt($('days').value, 10) }).then(renderDashboard);
+      let tz = 'UTC';
+      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { /* old browser */ }
+      return post('dashboard', { sinceDays: parseInt($('days').value, 10), tz }).then(renderDashboard);
     }
     // One Refresh button, everything: analytics, roster, resources, channels, settings.
     function refreshAll() {
