@@ -6,37 +6,85 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Teams Ops — AfterCall</title>
   <style>
-    :root { --blue: #3379CF; --blue-dark: #1F5FA3; --ink: #111827; --muted: #6B7280; --border: #E5E7EB; --bg: #F9FAFB; --green: #059669; --red: #DC2626; }
+    :root { --blue: #3379CF; --blue-dark: #1F5FA3; --blue-soft: #EEF4FC; --ink: #111827; --muted: #6B7280; --border: #E5E7EB; --bg: #F5F7FA; --green: #059669; --green-soft: #ECFDF5; --red: #DC2626; --red-soft: #FEF2F2; --amber: #B45309; --amber-soft: #FFFBEB; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+    .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
     h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    h3 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: var(--muted); }
     .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
-    .card h2 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+    .card > h2, .sec { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+    .sec { margin: 20px 0 10px; }
     label { font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px; }
-    input, select { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; font-family: inherit; background: #fff; }
-    .row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
-    .row > div { flex: 1; min-width: 140px; }
-    button { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    input, select, textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; font-family: inherit; background: #fff; color: var(--ink); }
+    input:focus, select:focus { outline: 2px solid var(--blue-soft); border-color: var(--blue); }
+    .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+    .row > div { flex: 1; min-width: 150px; }
+    .row > .shrink { flex: 0 0 auto; min-width: 0; }
+    button { background: var(--blue); color: #fff; border: 1px solid var(--blue); border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
     button:hover { background: var(--blue-dark); }
-    button:disabled { opacity: 0.6; cursor: default; }
-    button.mini { padding: 5px 9px; font-size: 12px; }
-    button.warn { background: #fff; color: var(--red); border: 1px solid var(--red); }
-    .out { font-size: 13px; margin-top: 10px; display: none; padding: 9px 11px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; }
-    .out.err { display: block; background: #FEF2F2; color: var(--red); }
-    .out.ok { display: block; background: #ECFDF5; color: var(--green); }
-    .hidden { display: none; }
+    button:disabled { opacity: 0.55; cursor: default; }
+    button.ghost { background: #fff; color: var(--blue); border-color: var(--border); }
+    button.ghost:hover { background: var(--blue-soft); }
+    button.mini { padding: 5px 10px; font-size: 12px; }
+    button.warn { background: #fff; color: var(--red); border-color: #FCA5A5; }
+    button.warn:hover { background: var(--red-soft); }
+    a { color: var(--blue); }
+    .out { font-size: 13px; margin-top: 10px; display: none; padding: 9px 11px; border-radius: 8px; white-space: pre-wrap; word-break: break-word; }
+    .out.err { display: block; background: var(--red-soft); color: var(--red); }
+    .out.ok { display: block; background: var(--green-soft); color: var(--green); }
+    .hidden { display: none !important; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    th { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
-    code { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; font-size: 12px; }
-    .pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
-    .pill.active { background: #ECFDF5; color: var(--green); }
-    .pill.suspended { background: #FFFBEB; color: #D97706; }
-    .pill.churned { background: #FEF2F2; color: var(--red); }
-    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 800; }
+    tr.click { cursor: pointer; }
+    tr.click:hover td { background: #FAFBFD; }
+    tr.sel td { background: var(--blue-soft) !important; }
+    code { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; font-size: 12.5px; }
+    .pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--bg); color: var(--muted); white-space: nowrap; }
+    .pill.good { background: var(--green-soft); color: var(--green); }
+    .pill.warnp { background: var(--amber-soft); color: var(--amber); }
+    .pill.bad { background: var(--red-soft); color: var(--red); }
+    .pill.info { background: var(--blue-soft); color: var(--blue-dark); }
+    .small { font-size: 11.5px; color: var(--muted); }
     .tablewrap { overflow-x: auto; }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .tile { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .tile .k { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+    .tile .v { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .tile .d { font-size: 12px; color: var(--muted); }
+    .attn { list-style: none; }
+    .attn li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+    .attn li:last-child { border-bottom: 0; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: var(--amber); }
+    .dot.bad { background: var(--red); }
+    .bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 4px; min-width: 70px; }
+    .bar > i { display: block; height: 100%; background: var(--blue); }
+    .bar > i.full { background: var(--amber); }
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin: 14px -18px 16px; padding: 0 18px; overflow-x: auto; }
+    .tabs button { background: none; color: var(--muted); border: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 9px 12px; }
+    .tabs button:hover { color: var(--ink); background: none; }
+    .tabs button.on { color: var(--blue); border-bottom-color: var(--blue); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+    .box { border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .kv { display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px; font-size: 13.5px; }
+    .kv dt { color: var(--muted); }
+    .kv dd { font-weight: 600; word-break: break-word; }
+    .quote { background: var(--bg); border-radius: 8px; padding: 10px 12px; font-size: 13px; margin-top: 10px; white-space: pre-wrap; }
+    .badge-mode { font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
+    .steps { counter-reset: s; list-style: none; font-size: 13.5px; }
+    .steps li { counter-increment: s; position: relative; padding: 4px 0 4px 30px; }
+    .steps li::before { content: counter(s); position: absolute; left: 0; top: 4px; width: 20px; height: 20px; border-radius: 50%; background: var(--blue-soft); color: var(--blue-dark); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+    details.help summary { cursor: pointer; font-weight: 700; font-size: 13.5px; }
+    details.help[open] summary { margin-bottom: 10px; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+    .toolbar input { max-width: 260px; }
+    .toolbar select { max-width: 170px; }
+    @media (max-width: 520px) { .tiles { grid-template-columns: 1fr 1fr; } .tile .v { font-size: 20px; } .tile .d { display: none; } }
   /* ── Ops sign-in (staff account + emailed code; identical block on every ops page) ── */
   .oa { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:flex-end; }
   .oa[hidden], .oa-msg[hidden] { display:none; }
@@ -57,11 +105,19 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>AfterCall Teams — Ops</h1>
-    <div class="sub">Provision agencies, manage rosters and join codes, and grant dashboard access. Private — do not share this URL.</div>
+    <div class="top">
+      <div>
+        <h1>AfterCall Teams — Ops</h1>
+        <div class="sub">Agencies, billing, rosters and dashboard access in one place. Private — do not share this URL.</div>
+      </div>
+      <div class="row" style="align-items:center;gap:8px;">
+        <span id="modeBadge" class="badge-mode hidden"></span>
+        <button id="loadBtn" class="ghost mini" hidden>Refresh</button>
+      </div>
+    </div>
 
-    <div class="card">
-      <h2>Access</h2>
+    <div class="card" id="authCard">
+      <h2>Sign in</h2>
     <!-- Ops sign-in: your AfterCall staff account + the code we email you
          (migration 097). Identical block on every ops page. -->
     <form class="oa" id="oaSignIn" hidden novalidate>
@@ -80,97 +136,237 @@
       <span>Signed in as <b id="oaWho"></b></span><a id="oaOut">Sign out</a>
     </div>
     <div class="oa-msg" id="oaMsg" hidden></div>
-      <div style="margin-top: 12px;"><button id="loadBtn" hidden>Reload agencies</button></div>
       <div id="err" class="out"></div>
       <div id="okmsg" class="out"></div>
     </div>
 
     <div id="results" class="hidden">
-      <div class="card">
-        <h2>Create agency</h2>
-        <div class="row">
-          <div><label>Name</label><input id="cName" placeholder="East Jefferson EMS" /></div>
-          <div><label>Slug</label><input id="cSlug" placeholder="east-jefferson-ems" /></div>
-          <div><label>Plan</label>
-            <select id="cPlan">
-              <option value="pilot" selected>pilot (90d, grants Pro)</option>
-              <option value="crew">crew</option>
-              <option value="essentials">essentials</option>
-              <option value="teams_pro">teams_pro</option>
-              <option value="command">command</option>
-            </select>
-          </div>
-          <div><label>Seats</label><input id="cSeats" type="number" value="40" /></div>
+      <!-- At a glance -->
+      <div class="tiles" id="tiles"></div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Needs your attention</h2>
+          <ul class="attn" id="attn"></ul>
         </div>
-        <div class="row" style="margin-top: 10px;">
-          <div><label>Contact name</label><input id="cContact" /></div>
-          <div><label>Billing email</label><input id="cEmail" /></div>
-          <div><label>Pilot days</label><input id="cPilotDays" type="number" value="90" /></div>
-          <div style="flex: 0;"><button id="createBtn">Create</button></div>
+        <div class="card">
+          <h2>Quick guide</h2>
+          <details class="help" open>
+            <summary>Onboard a new agency</summary>
+            <ol class="steps">
+              <li><b>New agency</b> below: name, plan, seats, contact + billing email.</li>
+              <li>Open it → <b>Dashboard access</b>: invite the chief / wellness lead (they set their own password).</li>
+              <li>Send the <b>join code</b> to the agency — members enter it in the app (Profile → Join your agency).</li>
+              <li>In <b>Roster</b>, mark the peer supporters and set stations.</li>
+              <li><b>Billing</b>: they pay by card from their dashboard, or you send an annual / pilot invoice here.</li>
+            </ol>
+          </details>
+          <details class="help" style="margin-top:10px;">
+            <summary>Plans and prices</summary>
+            <div class="small" style="font-size:13px;color:var(--ink);">
+              <b>Essentials</b> $4.99 / person / month ($59.88 / seat / year) — peer support program, no Pro.<br />
+              <b>Teams Pro</b> $7.99 / person / month ($95.88 / seat / year) — Essentials + AfterCall Pro on every seat.<br />
+              <b>Enterprise</b> — custom price per agency, invoiced (plan id <code>command</code>, grants Pro).<br />
+              <b>Pilot</b> — Teams Pro for a set number of days, invoiced once.<br />
+              At least 10 seats are billed. Discounts are per-agency contract terms.
+            </div>
+          </details>
         </div>
-        <div id="createOut" class="out"></div>
       </div>
 
+      <!-- Agencies -->
       <div class="card">
-        <h2>Agencies</h2>
+        <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div class="sec" style="margin:0;">Agencies</div>
+          <button id="newToggle" class="mini">+ New agency</button>
+        </div>
+
+        <div id="newBox" class="box hidden" style="margin-bottom:14px;">
+          <h3>New agency</h3>
+          <div class="row" style="margin-top:8px;">
+            <div><label>Agency name</label><input id="cName" placeholder="East Jefferson EMS" /></div>
+            <div><label>Short id (slug)</label><input id="cSlug" placeholder="east-jefferson-ems" /><div class="hint">Filled in from the name.</div></div>
+            <div><label>Plan</label>
+              <select id="cPlan">
+                <option value="pilot" selected>Pilot (grants Pro)</option>
+                <option value="essentials">Essentials — $4.99</option>
+                <option value="teams_pro">Teams Pro — $7.99</option>
+                <option value="command">Enterprise (custom)</option>
+              </select>
+            </div>
+            <div><label>Seats</label><input id="cSeats" type="number" min="1" value="40" /></div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div><label>Contact name</label><input id="cContact" placeholder="Chief Jane Doe" /></div>
+            <div><label>Billing email</label><input id="cEmail" type="email" placeholder="billing@agency.org" /></div>
+            <div id="cPilotWrap"><label>Pilot length (days)</label><input id="cPilotDays" type="number" min="1" value="90" /></div>
+            <div class="shrink"><button id="createBtn">Create agency</button></div>
+          </div>
+          <div id="createOut" class="out"></div>
+        </div>
+
+        <div class="toolbar">
+          <input id="fSearch" placeholder="Search agencies" />
+          <select id="fPlan"><option value="">All plans</option><option value="pilot">Pilot</option><option value="essentials">Essentials</option><option value="teams_pro">Teams Pro</option><option value="command">Enterprise</option></select>
+          <select id="fStatus"><option value="">All statuses</option><option value="active">Active</option><option value="suspended">Suspended</option><option value="churned">Churned</option></select>
+        </div>
         <div class="tablewrap">
           <table>
             <thead>
-              <tr><th>Agency</th><th>Plan</th><th>Status</th><th>Billing</th><th>Seats</th><th>Join code</th><th>Pilot ends</th><th>Actions</th></tr>
+              <tr><th>Agency</th><th>Plan</th><th>Status</th><th>Billing</th><th>Seats</th><th>Join code</th><th>Per year</th></tr>
             </thead>
             <tbody id="agencyBody"></tbody>
           </table>
         </div>
       </div>
 
-      <div class="card hidden" id="rosterCard">
-        <h2 id="rosterTitle">Roster</h2>
-        <div class="row" style="margin-bottom: 10px;">
-          <div><label>Member email</label><input id="mEmail" placeholder="medic@agency.org" /></div>
-          <div><label>Role</label>
-            <select id="mRole">
-              <option value="">(keep)</option>
-              <option value="member">member</option>
-              <option value="supervisor">supervisor</option>
-              <option value="admin">admin</option>
-              <option value="owner">owner</option>
-            </select>
+      <!-- One agency -->
+      <div class="card hidden" id="detail">
+        <div class="row" style="justify-content:space-between;align-items:flex-start;">
+          <div>
+            <h3 id="dName" style="font-size:19px;"></h3>
+            <div class="small" id="dMeta"></div>
           </div>
-          <div><label>Peer supporter</label>
-            <select id="mPeer">
-              <option value="">(keep)</option>
-              <option value="true">yes</option>
-              <option value="false">no</option>
-            </select>
+          <button class="ghost mini" id="dClose">Close</button>
+        </div>
+        <div class="tabs" id="tabs">
+          <button data-tab="overview" class="on">Overview</button>
+          <button data-tab="billing">Billing</button>
+          <button data-tab="roster">Roster</button>
+          <button data-tab="access">Dashboard access</button>
+        </div>
+        <div id="dOut" class="out"></div>
+
+        <!-- Overview -->
+        <div data-pane="overview">
+          <div class="grid2">
+            <div class="box">
+              <h3>Plan &amp; seats</h3>
+              <div class="row" style="margin-top:8px;">
+                <div><label>Plan</label>
+                  <select id="ePlan">
+                    <option value="pilot">Pilot (grants Pro)</option>
+                    <option value="essentials">Essentials — $4.99</option>
+                    <option value="teams_pro">Teams Pro — $7.99</option>
+                    <option value="command">Enterprise (custom)</option>
+                  </select>
+                </div>
+                <div><label>Seat limit</label><input id="eSeats" type="number" min="1" /></div>
+              </div>
+              <div class="row" style="margin-top:10px;">
+                <div><label>Status</label>
+                  <select id="eStatus"><option value="active">Active</option><option value="suspended">Suspended (seats stop granting Pro)</option><option value="churned">Churned</option></select>
+                </div>
+                <div id="ePilotWrap"><label>Pilot ends</label><input id="ePilotEnds" type="date" /></div>
+              </div>
+              <div class="hint" id="eStripeNote"></div>
+            </div>
+            <div class="box">
+              <h3>Contact</h3>
+              <div class="row" style="margin-top:8px;">
+                <div><label>Contact name</label><input id="eContact" /></div>
+              </div>
+              <div class="row" style="margin-top:10px;">
+                <div><label>Billing email</label><input id="eEmail" type="email" /><div class="hint">Stripe sends invoices and receipts here.</div></div>
+              </div>
+            </div>
           </div>
-          <div><label>Station</label><input id="mStation" placeholder="(keep)" /></div>
-          <div style="flex: 0;"><button id="setMemberBtn" class="mini">Apply</button></div>
-        </div>
-        <div id="rosterOut" class="out"></div>
-        <div class="tablewrap">
-          <table>
-            <thead>
-              <tr><th>Name</th><th>Email</th><th>Role</th><th>Peer</th><th>Station</th><th>Status</th><th>Joined</th><th></th></tr>
-            </thead>
-            <tbody id="rosterBody"></tbody>
-          </table>
-        </div>
-        <h2 style="margin-top: 22px;">Dashboard access</h2>
-        <div class="sub" style="margin-bottom: 10px;">Leaders sign in to teams-dashboard.html with their own AfterCall account + an emailed code.
-          Roster owners/admins have access automatically; invite anyone else here (they get an email and create their own password).</div>
-        <div class="row" style="margin-bottom: 10px;">
-          <div><label>Email</label><input id="dEmail" placeholder="chief@agency.org" /></div>
-          <div><label>Access</label>
-            <select id="dRole"><option value="admin">admin</option><option value="viewer">viewer (read-only)</option></select>
+          <div class="row" style="margin-top:12px;justify-content:flex-end;">
+            <div class="shrink"><button id="saveBtn">Save changes</button></div>
           </div>
-          <div style="flex: 0;"><button id="inviteBtn" class="mini">Invite</button></div>
+          <div class="box" style="margin-top:14px;">
+            <h3>Join code</h3>
+            <div class="row" style="align-items:center;margin-top:6px;">
+              <div><code id="dCode" style="font-size:16px;padding:4px 10px;"></code> <span class="small">members enter it in the app to take a seat</span></div>
+              <div class="shrink"><button class="ghost mini" id="copyCode">Copy</button> <button class="warn mini" id="rotateCode">New code</button></div>
+            </div>
+          </div>
         </div>
-        <div id="accessOut" class="out"></div>
-        <div class="tablewrap">
-          <table>
-            <thead><tr><th>Who</th><th>Access</th><th>Source</th><th>Status</th><th></th></tr></thead>
-            <tbody id="accessBody"></tbody>
-          </table>
+
+        <!-- Billing -->
+        <div data-pane="billing" class="hidden">
+          <div class="grid2">
+            <div class="box">
+              <h3>Status</h3>
+              <dl class="kv" id="bKv" style="margin-top:8px;"></dl>
+              <div class="row" style="margin-top:12px;gap:6px;" id="bLinks"></div>
+            </div>
+            <div class="box">
+              <h3>Contract discount</h3>
+              <div class="row" style="margin-top:8px;">
+                <div style="max-width:120px;"><label>% off list</label><input id="bPct" type="number" min="0" max="99.99" step="0.01" /></div>
+                <div><label>Note (which contract / why)</label><input id="bNote" /></div>
+                <div class="shrink"><button id="bDiscBtn" class="mini">Save discount</button></div>
+              </div>
+              <div class="hint">Applies to Checkout, new invoices, and a live subscription from its next invoice. 0 = list price.</div>
+            </div>
+          </div>
+          <div class="box" style="margin-top:14px;">
+            <h3>Send an invoice</h3>
+            <div class="small" style="margin-bottom:8px;">For agencies paying by PO, check or bank transfer. Stripe emails it to the billing email, due in 30 days. Card-paying agencies don't need this — their admin pays from the Teams dashboard.</div>
+            <div class="row">
+              <div><label>Type</label>
+                <select id="iKind"><option value="annual">Annual subscription (renews yearly)</option><option value="pilot">Pilot (one time, Teams Pro at list)</option></select>
+              </div>
+              <div id="iMonthsWrap" class="hidden" style="max-width:150px;"><label>Pilot months</label><input id="iMonths" type="number" min="1" value="3" /></div>
+              <div><label>PO number (optional)</label><input id="iPo" /></div>
+              <div class="shrink"><button class="ghost" id="iQuoteBtn">Preview</button></div>
+            </div>
+            <div id="iQuote" class="quote hidden"></div>
+            <div class="row hidden" id="iSendRow" style="margin-top:10px;justify-content:flex-end;">
+              <div class="shrink"><button id="iSendBtn">Send invoice</button></div>
+            </div>
+          </div>
+          <div class="box" style="margin-top:14px;">
+            <h3>Paid outside Stripe</h3>
+            <div class="row" style="align-items:center;">
+              <div class="small">Agency pays you directly (no Stripe at all)? Mark billing active so it shows as paid here.</div>
+              <div class="shrink"><button class="ghost mini" id="markInvoiced">Mark paid by invoice</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Roster -->
+        <div data-pane="roster" class="hidden">
+          <div class="box" style="margin-bottom:12px;">
+            <h3>Change a member</h3>
+            <div class="row" style="margin-top:8px;">
+              <div><label>Member email</label><input id="mEmail" placeholder="medic@agency.org" /><div class="hint">Or click a row below.</div></div>
+              <div><label>Role</label>
+                <select id="mRole"><option value="">(keep)</option><option value="member">Member</option><option value="supervisor">Supervisor</option><option value="admin">Admin</option><option value="owner">Owner</option></select>
+              </div>
+              <div><label>Peer supporter</label>
+                <select id="mPeer"><option value="">(keep)</option><option value="true">Yes</option><option value="false">No</option></select>
+              </div>
+              <div><label>Station</label><input id="mStation" placeholder="(keep)" /></div>
+              <div class="shrink"><button id="setMemberBtn">Apply</button></div>
+            </div>
+          </div>
+          <div class="small" id="rosterSummary" style="margin-bottom:6px;"></div>
+          <div class="tablewrap">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Peer</th><th>Station</th><th>Status</th><th>Joined</th><th></th></tr></thead>
+              <tbody id="rosterBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dashboard access -->
+        <div data-pane="access" class="hidden">
+          <div class="small" style="margin-bottom:10px;">Leaders sign in at <a href="/teams-dashboard.html" target="_blank" rel="noopener">aftercallapp.com/teams-dashboard.html</a> with their own account + an emailed code. Roster owners / admins have access automatically; invite anyone else here (they get an email and create their own password).</div>
+          <div class="row" style="margin-bottom:12px;">
+            <div><label>Email</label><input id="dEmail" placeholder="chief@agency.org" /></div>
+            <div><label>Access</label>
+              <select id="dRole"><option value="admin">Admin (billing, settings)</option><option value="viewer">Viewer (read-only)</option></select>
+            </div>
+            <div class="shrink"><button id="inviteBtn">Invite</button></div>
+          </div>
+          <div class="tablewrap">
+            <table>
+              <thead><tr><th>Who</th><th>Access</th><th>Source</th><th>Status</th><th></th></tr></thead>
+              <tbody id="accessBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -178,77 +374,184 @@
 
   <script>
     var API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-admin';
-    var currentRosterAgency = null;
+    // Contract discounts and Stripe invoices (pilot / annual by PO) live in
+    // teams-billing; same staff session.
+    var BILLING_API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-billing';
+
+    // List price per seat per year, in cents (Stripe prices). Enterprise
+    // (command) is custom and pilots are invoiced once, so neither is here.
+    var YEARLY_CENTS = { essentials: 5988, teams_pro: 9588 };
+    var MIN_BILLED_SEATS = 10;
+    var PLAN_LABEL = { pilot: 'Pilot', essentials: 'Essentials', teams_pro: 'Teams Pro', command: 'Enterprise', crew: 'Crew (retired)' };
+
+    var agencies = [];
+    var stripeMode = 'off';
+    var current = null;      // the agency open in the detail panel
+    var lastQuote = null;
 
     function $(id) { return document.getElementById(id); }
     function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
     function banner(id, cls, msg) { var e = $(id); e.className = 'out ' + cls; e.textContent = msg; e.style.display = 'block'; }
     function clearBanner(id) { $(id).style.display = 'none'; }
-
-    // Every ops call carries your signed-in staff session (see OpsAuth below).
-    function post(body) {
-      return OpsAuth.call(API, body);
+    function post(body) { return OpsAuth.call(API, body); }
+    function postBilling(body) { return OpsAuth.call(BILLING_API, body); }
+    function usd(cents, whole) {
+      return '$' + (Number(cents || 0) / 100).toLocaleString('en-US', whole
+        ? { maximumFractionDigits: 0 }
+        : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-    // Contract discounts and Stripe invoices (pilot / annual by PO) live in
-    // teams-billing; same staff session.
-    var BILLING_API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-billing';
-    function postBilling(body) {
-      return OpsAuth.call(BILLING_API, body);
-    }
-    function usd(cents) {
-      return '$' + (Number(cents || 0) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
     function fmtDate(d) { return d ? String(d).slice(0, 10) : '—'; }
-
-    function renderAgencies(list) {
-      var rows = '';
-      list.forEach(function (a) {
-        rows += '<tr>'
-          + '<td><strong>' + esc(a.name) + '</strong><br /><span style="color:var(--muted);font-size:11.5px;">' + esc(a.slug) + '</span></td>'
-          + '<td>' + esc(a.plan) + '</td>'
-          + '<td><span class="pill ' + esc(a.status) + '">' + esc(a.status) + '</span></td>'
-          + '<td>' + esc(a.billing_status === 'past_due' ? 'awaiting payment' : (a.billing_status || 'none')) + (a.billing_method && a.billing_method !== 'none' ? '<br /><span style="color:var(--muted);font-size:11px;">' + esc(a.billing_method) + '</span>' : '')
-          + (a.billing_cancel_at && a.billing_status !== 'canceled' ? '<br /><span style="color:var(--muted);font-size:11px;">cancels ' + esc(String(a.billing_cancel_at).slice(0, 10)) + '</span>' : '')
-          // Failed payment: pay-by date while in grace; "billing hold" once the
-          // hold suspended it (paying reactivates automatically).
-          + (a.billing_suspended ? '<br /><span style="color:var(--bad, #ef6666);font-size:11px;">billing hold — reactivates on payment</span>'
-            : a.billing_status === 'past_due' && a.billing_grace_until ? '<br /><span style="color:var(--bad, #ef6666);font-size:11px;">pay by ' + esc(String(a.billing_grace_until).slice(0, 10)) + '</span>' : '')
-          + (Number(a.billing_discount_pct) > 0 ? '<br /><span style="color:var(--muted);font-size:11px;" title="' + esc(a.billing_discount_note || '') + '">' + esc(Number(a.billing_discount_pct)) + '% contract discount</span>' : '')
-          + '</td>'
-          + '<td>' + esc(a.activeSeats) + ' / ' + esc(a.seat_limit) + '</td>'
-          + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
-          + '<td>' + esc(fmtDate(a.pilot_ends_at)) + '</td>'
-          + '<td><div class="actions">'
-          + '<button class="mini" data-act="roster" data-id="' + esc(a.id) + '" data-name="' + esc(a.name) + '">Roster</button>'
-          + '<button class="mini" data-act="plan" data-id="' + esc(a.id) + '">Plan</button>'
-          + '<button class="mini" data-act="seats" data-id="' + esc(a.id) + '">Seats</button>'
-          + '<button class="mini" data-act="discount" data-id="' + esc(a.id) + '" data-pct="' + esc(Number(a.billing_discount_pct) || 0) + '" data-note="' + esc(a.billing_discount_note || '') + '">Discount</button>'
-          + '<button class="mini" data-act="annual_invoice" data-id="' + esc(a.id) + '">Annual invoice</button>'
-          + '<button class="mini" data-act="pilot_invoice" data-id="' + esc(a.id) + '">Pilot invoice</button>'
-          + '<button class="mini" data-act="mark_invoiced" data-id="' + esc(a.id) + '">Mark invoiced</button>'
-          + '<button class="mini" data-act="rotate_code" data-id="' + esc(a.id) + '">New code</button>'
-          + '</div></td>'
-          + '</tr>';
-      });
-      $('agencyBody').innerHTML = rows || '<tr><td colspan="8" style="color:var(--muted);">No agencies yet.</td></tr>';
+    function daysUntil(d) { return d ? Math.ceil((new Date(d).getTime() - Date.now()) / 86400000) : null; }
+    function planLabel(p) { return PLAN_LABEL[p] || p; }
+    function busy(btn, on, label) {
+      if (on) { btn.dataset.label = btn.textContent; btn.textContent = label || 'Working…'; btn.disabled = true; }
+      else { btn.textContent = btn.dataset.label || btn.textContent; btn.disabled = false; }
     }
+
+    // What the agency pays per year at list after its contract discount;
+    // null for plans priced outside Stripe.
+    function yearlyCents(a) {
+      var list = YEARLY_CENTS[a.plan];
+      if (!list) return null;
+      var seats = Math.max(MIN_BILLED_SEATS, Number(a.seat_limit) || 0);
+      return Math.round(seats * list * (1 - (Number(a.billing_discount_pct) || 0) / 100));
+    }
+    function isPaying(a) { return a.billing_status === 'active' && !a.billing_suspended; }
+
+    function billingPill(a) {
+      if (a.billing_suspended) return '<span class="pill bad">billing hold</span>';
+      switch (a.billing_status) {
+        case 'active': return '<span class="pill good">paid' + (a.billing_method === 'invoice' ? ' · invoice' : a.billing_method === 'stripe' ? ' · Stripe' : '') + '</span>';
+        case 'past_due': return '<span class="pill bad">awaiting payment</span>';
+        case 'checkout_pending': return '<span class="pill warnp">invoice / checkout sent</span>';
+        case 'canceled': return '<span class="pill">canceled</span>';
+        default: return a.plan === 'pilot' ? '<span class="pill info">pilot</span>' : '<span class="pill warnp">not set up</span>';
+      }
+    }
+    function statusPill(s) {
+      return '<span class="pill ' + (s === 'active' ? 'good' : s === 'suspended' ? 'warnp' : 'bad') + '">' + esc(s) + '</span>';
+    }
+
+    // ── Overview: tiles + "needs your attention" ───────────────────────────
+    function attentionItems() {
+      var items = [];
+      agencies.forEach(function (a) {
+        if (a.status === 'churned') return;
+        var name = esc(a.name);
+        if (a.billing_suspended) items.push({ bad: true, a: a, tab: 'billing', text: name + ' — on billing hold (unpaid past the grace period). Seats stopped granting Pro.' });
+        else if (a.billing_status === 'past_due') items.push({ bad: true, a: a, tab: 'billing', text: name + ' — payment failed' + (a.billing_grace_until ? ', pay by ' + fmtDate(a.billing_grace_until) : '') + '.' });
+        if (a.plan === 'pilot' && a.pilot_ends_at) {
+          var d = daysUntil(a.pilot_ends_at);
+          if (d < 0) items.push({ bad: true, a: a, tab: 'overview', text: name + ' — pilot ended ' + fmtDate(a.pilot_ends_at) + '. Move to a paid plan or extend it.' });
+          else if (d <= 21) items.push({ a: a, tab: 'overview', text: name + ' — pilot ends in ' + d + ' day' + (d === 1 ? '' : 's') + ' (' + fmtDate(a.pilot_ends_at) + ').' });
+        }
+        if (a.plan !== 'pilot' && a.status === 'active' && (!a.billing_status || a.billing_status === 'none')) {
+          items.push({ a: a, tab: 'billing', text: name + ' — on ' + planLabel(a.plan) + ' but billing isn’t set up.' });
+        }
+        if (!a.billing_email) items.push({ a: a, tab: 'overview', text: name + ' — no billing email (needed for invoices).' });
+        if (a.seat_limit && a.activeSeats >= a.seat_limit) items.push({ a: a, tab: 'overview', text: name + ' — all ' + a.seat_limit + ' seats are taken; new members can’t join.' });
+        if (a.billing_cancel_at && a.billing_status !== 'canceled') items.push({ a: a, tab: 'billing', text: name + ' — subscription cancels ' + fmtDate(a.billing_cancel_at) + '.' });
+      });
+      return items;
+    }
+
+    function renderOverview() {
+      var live = agencies.filter(function (a) { return a.status !== 'churned'; });
+      var seats = 0, limit = 0, billed = 0, payingCount = 0, pilots = 0;
+      live.forEach(function (a) {
+        seats += a.activeSeats || 0; limit += Number(a.seat_limit) || 0;
+        if (a.plan === 'pilot') pilots++;
+        if (isPaying(a)) { payingCount++; billed += yearlyCents(a) || 0; }
+      });
+      var items = attentionItems();
+      $('tiles').innerHTML =
+          tile('Agencies', live.length, payingCount + ' paying · ' + pilots + ' pilot' + (pilots === 1 ? '' : 's'))
+        + tile('Seats in use', seats + ' / ' + limit, limit ? Math.round(100 * seats / limit) + '% of seat limits' : '')
+        + tile('Billed per year', usd(billed, true), 'Essentials + Teams Pro paying now, after discounts (Enterprise not included)')
+        + tile('Needs attention', items.length, items.length ? 'see the list below' : 'all clear');
+      $('attn').innerHTML = items.length
+        ? items.map(function (it, i) {
+            return '<li><span><span class="dot' + (it.bad ? ' bad' : '') + '"></span>' + it.text + '</span>'
+              + '<button class="ghost mini" data-attn="' + i + '">Open</button></li>';
+          }).join('')
+        : '<li><span class="small">Nothing needs you right now.</span></li>';
+      $('attn').onclick = function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        var it = items[Number(b.dataset.attn)]; openDetail(it.a.id, it.tab);
+      };
+    }
+    function tile(k, v, d) { return '<div class="tile"><div class="k">' + esc(k) + '</div><div class="v">' + esc(v) + '</div><div class="d">' + esc(d) + '</div></div>'; }
+
+    function renderModeBadge() {
+      var b = $('modeBadge'); b.classList.remove('hidden');
+      if (stripeMode === 'live') { b.textContent = 'Stripe: LIVE'; b.className = 'badge-mode pill good'; b.title = 'Real charges.'; }
+      else if (stripeMode === 'test') { b.textContent = 'Stripe: TEST'; b.className = 'badge-mode pill warnp'; b.title = 'Sandbox keys — no real money.'; }
+      else { b.textContent = 'Stripe: not connected'; b.className = 'badge-mode pill'; b.title = 'Set the STRIPE_* secrets in Supabase.'; }
+    }
+
+    // ── Agency table ───────────────────────────────────────────────────────
+    function renderAgencies() {
+      var q = $('fSearch').value.trim().toLowerCase(), fp = $('fPlan').value, fs = $('fStatus').value;
+      var list = agencies.filter(function (a) {
+        return (!q || (a.name + ' ' + a.slug + ' ' + (a.contact_name || '') + ' ' + (a.billing_email || '')).toLowerCase().indexOf(q) >= 0)
+          && (!fp || a.plan === fp) && (!fs || a.status === fs);
+      });
+      $('agencyBody').innerHTML = list.map(function (a) {
+        var pct = a.seat_limit ? Math.min(100, Math.round(100 * (a.activeSeats || 0) / a.seat_limit)) : 0;
+        var y = yearlyCents(a);
+        return '<tr class="click' + (current && current.id === a.id ? ' sel' : '') + '" data-id="' + esc(a.id) + '">'
+          + '<td><strong>' + esc(a.name) + '</strong><br /><span class="small">' + esc(a.contact_name || a.slug) + '</span></td>'
+          + '<td>' + esc(planLabel(a.plan)) + (a.plan === 'pilot' && a.pilot_ends_at ? '<br /><span class="small">ends ' + esc(fmtDate(a.pilot_ends_at)) + '</span>' : '') + '</td>'
+          + '<td>' + statusPill(a.status) + '</td>'
+          + '<td>' + billingPill(a) + (Number(a.billing_discount_pct) > 0 ? '<br /><span class="small">' + esc(Number(a.billing_discount_pct)) + '% off</span>' : '') + '</td>'
+          + '<td>' + esc(a.activeSeats || 0) + ' / ' + esc(a.seat_limit) + '<div class="bar"><i style="width:' + pct + '%"' + (pct >= 100 ? ' class="full"' : '') + '></i></div></td>'
+          + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
+          + '<td>' + (y != null ? usd(y, true) : a.plan === 'command' ? '<span class="small">custom</span>' : '—') + '</td>'
+          + '</tr>';
+      }).join('') || '<tr><td colspan="7" class="small">' + (agencies.length ? 'No agencies match.' : 'No agencies yet — click “New agency”.') + '</td></tr>';
+    }
+    $('agencyBody').addEventListener('click', function (e) {
+      var tr = e.target.closest('tr[data-id]'); if (tr) openDetail(tr.dataset.id);
+    });
+    ['fSearch', 'fPlan', 'fStatus'].forEach(function (id) { $(id).addEventListener('input', renderAgencies); });
 
     function load() {
       clearBanner('err'); clearBanner('okmsg');
-      var btn = $('loadBtn'); btn.disabled = true; btn.textContent = 'Loading…';
-      post({ action: 'list_agencies' })
-        .then(function (d) { renderAgencies(d.agencies || []); $('results').classList.remove('hidden'); })
+      var btn = $('loadBtn'); btn.disabled = true;
+      return post({ action: 'list_agencies' })
+        .then(function (d) {
+          agencies = d.agencies || [];
+          stripeMode = d.stripeMode || 'off';
+          renderModeBadge(); renderOverview(); renderAgencies();
+          $('results').classList.remove('hidden');
+          if (current) {
+            var fresh = agencies.filter(function (a) { return a.id === current.id; })[0];
+            if (fresh) { current = fresh; fillDetail(); } else closeDetail();
+          }
+        })
         .catch(function (e) {
           // Sign-in problems are shown by the sign-in block itself.
           if (['sign_in_required', 'mfa_required', 'not_staff'].indexOf(e.code) < 0) banner('err', 'err', e.message);
         })
-        .finally(function () { btn.disabled = false; btn.textContent = 'Reload agencies'; });
+        .finally(function () { btn.disabled = false; });
     }
 
-    function createAgency() {
+    // ── New agency ─────────────────────────────────────────────────────────
+    $('newToggle').addEventListener('click', function () {
+      var box = $('newBox'); box.classList.toggle('hidden');
+      $('newToggle').textContent = box.classList.contains('hidden') ? '+ New agency' : 'Cancel';
+      if (!box.classList.contains('hidden')) $('cName').focus();
+    });
+    var slugTouched = false;
+    $('cSlug').addEventListener('input', function () { slugTouched = true; });
+    $('cName').addEventListener('input', function () {
+      if (!slugTouched) $('cSlug').value = $('cName').value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48);
+    });
+    $('cPlan').addEventListener('change', function () { $('cPilotWrap').classList.toggle('hidden', $('cPlan').value !== 'pilot'); });
+
+    $('createBtn').addEventListener('click', function () {
       clearBanner('createOut');
-      var btn = $('createBtn'); btn.disabled = true;
+      var btn = $('createBtn'); busy(btn, true, 'Creating…');
       post({
         action: 'create_agency',
         name: $('cName').value.trim(),
@@ -260,200 +563,283 @@
         pilotDays: parseInt($('cPilotDays').value, 10) || 90,
       })
         .then(function (d) {
-          banner('createOut', 'ok',
-            'Created.\n'
-            + 'Join code: ' + d.joinCode + '\n'
-            + 'Dashboard: ' + d.dashboardUrl + '\n'
-            + 'Next: open its Roster and invite leadership under "Dashboard access" — they create their own password and sign in with a code.');
-          load();
+          banner('createOut', 'ok', 'Created. Join code: ' + d.joinCode + '\nNext: invite leadership under Dashboard access (opened for you below).');
+          ['cName', 'cSlug', 'cContact', 'cEmail'].forEach(function (id) { $(id).value = ''; });
+          slugTouched = false;
+          var id = d.agency && d.agency.id;
+          return load().then(function () { if (id) openDetail(id, 'access'); });
         })
         .catch(function (e) { banner('createOut', 'err', e.message); })
-        .finally(function () { btn.disabled = false; });
-    }
-
-    function renderRoster(members) {
-      var rows = '';
-      members.forEach(function (m) {
-        rows += '<tr>'
-          + '<td>' + esc(m.name || '—') + '</td>'
-          + '<td>' + esc(m.email || '—') + '</td>'
-          + '<td>' + esc(m.role) + '</td>'
-          + '<td>' + (m.is_peer_supporter ? 'yes' : '—') + '</td>'
-          + '<td>' + esc(m.station || '—') + '</td>'
-          + '<td><span class="pill ' + (m.status === 'active' ? 'active' : 'churned') + '">' + esc(m.status) + '</span></td>'
-          + '<td>' + esc(fmtDate(m.joined_at)) + '</td>'
-          + '<td>' + (m.status === 'active'
-            ? '<button class="mini warn" data-act="remove_member" data-uid="' + esc(m.user_id) + '">Remove</button>'
-            : '') + '</td>'
-          + '</tr>';
-      });
-      $('rosterBody').innerHTML = rows || '<tr><td colspan="8" style="color:var(--muted);">No members yet — hand out the join code.</td></tr>';
-    }
-
-    function openRoster(agencyId, name) {
-      currentRosterAgency = agencyId;
-      $('rosterTitle').textContent = 'Roster — ' + name;
-      $('rosterCard').classList.remove('hidden');
-      clearBanner('rosterOut');
-      post({ action: 'roster', agencyId: agencyId })
-        .then(function (d) { renderRoster(d.members || []); $('rosterCard').scrollIntoView({ behavior: 'smooth' }); })
-        .catch(function (e) { banner('rosterOut', 'err', e.message); });
-      loadAccess();
-    }
-
-    function loadAccess() {
-      if (!currentRosterAgency) return;
-      clearBanner('accessOut');
-      post({ action: 'dashboard_users', agencyId: currentRosterAgency })
-        .then(function (d) {
-          var rows = '';
-          (d.seatAdmins || []).forEach(function (p) {
-            rows += '<tr><td>' + esc(p.name || '—') + '<br><span style="color:var(--muted);">' + esc(p.email || '') + '</span></td>'
-              + '<td>admin</td><td>roster ' + esc(p.role) + '</td><td><span class="pill active">active</span></td><td></td></tr>';
-          });
-          (d.invites || []).forEach(function (i) {
-            rows += '<tr><td>' + esc(i.email) + (i.invitedBy ? '<br><span style="color:var(--muted);">by ' + esc(i.invitedBy) + '</span>' : '') + '</td>'
-              + '<td>' + esc(i.role) + '</td><td>invite</td>'
-              + '<td><span class="pill ' + (i.status === 'active' ? 'active' : 'churned') + '">' + esc(i.status) + '</span></td>'
-              + '<td><button class="mini warn" data-act="revoke_access" data-id="' + esc(i.id) + '">Remove</button></td></tr>';
-          });
-          $('accessBody').innerHTML = rows || '<tr><td colspan="5" style="color:var(--muted);">No one yet — invite the chief or wellness lead.</td></tr>';
-        })
-        .catch(function (e) { banner('accessOut', 'err', e.message); });
-    }
-    $('inviteBtn').addEventListener('click', function () {
-      if (!currentRosterAgency) return;
-      var email = $('dEmail').value.trim();
-      if (!email) { banner('accessOut', 'err', 'Enter an email.'); return; }
-      post({ action: 'invite_dashboard_user', agencyId: currentRosterAgency, email: email, role: $('dRole').value })
-        .then(function (d) {
-          banner('accessOut', 'ok', d.emailed ? 'Invited ' + email + ' (email sent).' : 'Access added for ' + email + ', but the email did not send — send them the dashboard link.');
-          $('dEmail').value = '';
-          loadAccess();
-        })
-        .catch(function (e) { banner('accessOut', 'err', e.message); });
+        .finally(function () { busy(btn, false); });
     });
-    $('accessBody').addEventListener('click', function (e) {
-      var btn = e.target.closest('button'); if (!btn || btn.dataset.act !== 'revoke_access') return;
-      if (!confirm('Remove this dashboard access? It ends immediately.')) return;
-      post({ action: 'revoke_dashboard_user', agencyId: currentRosterAgency, id: btn.dataset.id })
-        .then(function () { banner('accessOut', 'ok', 'Access removed.'); loadAccess(); })
-        .catch(function (err) { banner('accessOut', 'err', err.message); });
-    });
+
+    // ── Agency detail ──────────────────────────────────────────────────────
+    function openDetail(id, tab) {
+      current = agencies.filter(function (a) { return a.id === id; })[0];
+      if (!current) return;
+      clearBanner('dOut');
+      $('detail').classList.remove('hidden');
+      fillDetail();
+      showTab(tab || 'overview');
+      renderAgencies();
+      $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function closeDetail() { current = null; $('detail').classList.add('hidden'); renderAgencies(); }
+    $('dClose').addEventListener('click', closeDetail);
+
+    function showTab(tab) {
+      Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.tab === tab); });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-pane]'), function (p) { p.classList.toggle('hidden', p.dataset.pane !== tab); });
+      if (tab === 'roster') loadRoster();
+      if (tab === 'access') loadAccess();
+    }
+    $('tabs').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) showTab(b.dataset.tab); });
+
+    function fillDetail() {
+      var a = current;
+      $('dName').textContent = a.name;
+      $('dMeta').innerHTML = esc(planLabel(a.plan)) + ' · ' + statusPill(a.status) + ' · ' + billingPill(a)
+        + ' · ' + esc(a.activeSeats || 0) + ' of ' + esc(a.seat_limit) + ' seats · created ' + esc(fmtDate(a.created_at));
+      // Overview form
+      var planSel = $('ePlan');
+      Array.prototype.forEach.call(planSel.querySelectorAll('option[data-legacy]'), function (o) { o.remove(); });
+      if (!PLAN_LABEL[a.plan] || a.plan === 'crew') {
+        var o = document.createElement('option'); o.value = a.plan; o.textContent = planLabel(a.plan); o.dataset.legacy = '1'; planSel.appendChild(o);
+      }
+      planSel.value = a.plan;
+      $('eSeats').value = a.seat_limit;
+      $('eStatus').value = a.status;
+      $('ePilotEnds').value = a.pilot_ends_at ? String(a.pilot_ends_at).slice(0, 10) : '';
+      $('eContact').value = a.contact_name || '';
+      $('eEmail').value = a.billing_email || '';
+      togglePilotEnds();
+      $('dCode').textContent = a.joinCode || '—';
+      // Billing tab
+      var period = a.current_period_end ? fmtDate(a.current_period_end) : '—';
+      var y = yearlyCents(a);
+      $('bKv').innerHTML =
+          kv('Status', billingPill(a), true)
+        + kv('Paid by', a.billing_method && a.billing_method !== 'none' ? a.billing_method : '—')
+        + kv('Current period ends', period)
+        + (a.billing_cancel_at && a.billing_status !== 'canceled' ? kv('Cancels on', fmtDate(a.billing_cancel_at)) : '')
+        + (a.billing_grace_until && a.billing_status === 'past_due' ? kv('Pay by', fmtDate(a.billing_grace_until)) : '')
+        + kv('Per year at list', y != null ? usd(y) + (Math.max(MIN_BILLED_SEATS, a.seat_limit) > a.seat_limit ? ' (10-seat minimum)' : '') : a.plan === 'command' ? 'custom (Enterprise)' : a.plan === 'pilot' ? 'pilot — invoiced once' : '—')
+        + kv('Billing email', a.billing_email || 'not set');
+      var base = 'https://dashboard.stripe.com/' + (stripeMode === 'test' ? 'test/' : '');
+      $('bLinks').innerHTML = (a.stripe_customer_id ? '<a class="pill info" target="_blank" rel="noopener" href="' + base + 'customers/' + esc(a.stripe_customer_id) + '">Open customer in Stripe ↗</a>' : '')
+        + (a.stripe_subscription_id ? '<a class="pill info" target="_blank" rel="noopener" href="' + base + 'subscriptions/' + esc(a.stripe_subscription_id) + '">Open subscription ↗</a>' : '')
+        + (!a.stripe_customer_id ? '<span class="small">Not in Stripe yet — it appears after Checkout or the first invoice.</span>' : '');
+      $('bPct').value = Number(a.billing_discount_pct) || 0;
+      $('bNote').value = a.billing_discount_note || '';
+      $('eStripeNote').textContent = a.stripe_subscription_id
+        ? 'Changing the plan or seats updates the Stripe subscription and invoices the difference right away.' : '';
+      resetQuote();
+    }
+    function kv(k, v, raw) { return '<dt>' + esc(k) + '</dt><dd>' + (raw ? v : esc(v)) + '</dd>'; }
+    function togglePilotEnds() { $('ePilotWrap').classList.toggle('hidden', $('ePlan').value !== 'pilot'); }
+    $('ePlan').addEventListener('change', togglePilotEnds);
 
     // update_agency pushes seat / plan changes to a Stripe-billed agency's
     // subscription and reports the outcome as `stripeSync`.
-    function stripeBanner(d, msg) {
+    function stripeMsg(d, msg) {
       var s = d && d.stripeSync;
-      if (!s) { banner('okmsg', 'ok', msg); return; }
-      if (s.ok) { banner('okmsg', 'ok', msg + ' Stripe subscription updated (prorated invoice sent).'); return; }
-      banner('err', 'err', msg + ' Stripe was NOT updated (' + (s.error || s.skipped) + ') \u2014 fix the subscription in the Stripe dashboard.');
+      if (!s) return { ok: true, msg: msg };
+      if (s.ok) return { ok: true, msg: msg + ' Stripe subscription updated (difference invoiced).' };
+      return { ok: false, msg: msg + ' Stripe was NOT updated (' + (s.error || s.skipped) + ') — fix the subscription in Stripe.' };
     }
 
-    $('agencyBody').addEventListener('click', function (e) {
-      var btn = e.target.closest('button'); if (!btn) return;
-      var act = btn.dataset.act, id = btn.dataset.id;
-      if (act === 'roster') { openRoster(id, btn.dataset.name); return; }
-      if (act === 'plan') {
-        var plan = prompt('New plan (pilot / crew / essentials / teams_pro / command):');
-        if (!plan) return;
-        post({ action: 'update_agency', agencyId: id, plan: plan.trim() })
-          .then(function (d) { stripeBanner(d, 'Plan updated.'); load(); })
-          .catch(function (err) { banner('err', 'err', err.message); });
-        return;
-      }
-      if (act === 'seats') {
-        var seats = prompt('New seat limit:');
-        if (!seats) return;
-        post({ action: 'update_agency', agencyId: id, seatLimit: parseInt(seats, 10) })
-          .then(function (d) { stripeBanner(d, 'Seat limit updated.'); load(); })
-          .catch(function (err) { banner('err', 'err', err.message); });
-        return;
-      }
-      if (act === 'discount') {
-        var pct = prompt('Contract discount for this agency, in percent off list (0 = list price). It applies to Checkout, invoices, and a live subscription from its next invoice:', btn.dataset.pct || '0');
-        if (pct === null) return;
-        var note = Number(pct) > 0 ? prompt('Which contract / why (shown here only):', btn.dataset.note || '') : '';
-        if (note === null) return;
-        postBilling({ action: 'founder_set_discount', agencyId: id, pct: Number(pct), note: note })
-          .then(function (d) {
-            var s = d.stripeSync || {};
-            var msg = d.discountPct ? 'Contract discount set to ' + d.discountPct + '%.' : 'Discount removed — list price.';
-            if (s.ok === false) banner('err', 'err', msg + ' Stripe subscription NOT updated (' + s.error + ').');
-            else banner('okmsg', 'ok', msg + (s.skipped ? '' : ' Live subscription updated.'));
-            load();
-          })
-          .catch(function (err) { banner('err', 'err', err.message); });
-        return;
-      }
-      if (act === 'annual_invoice' || act === 'pilot_invoice') {
-        var pilot = act === 'pilot_invoice';
-        var months = 3;
-        if (pilot) {
-          var m = prompt('Pilot length in months (Teams Pro at list, invoiced once, no auto-renewal):', '3');
-          if (m === null) return;
-          months = parseInt(m, 10) || 3;
-        }
-        postBilling({ action: 'founder_billing_quote', agencyId: id, kind: pilot ? 'pilot' : 'annual', months: months })
-          .then(function (q) {
-            if (!q.ok) throw new Error(q.error || 'Could not price this agency.');
-            var lines = (pilot ? 'Send a PILOT invoice (one time, no auto-renewal)?' : 'Start an INVOICED annual subscription (renews yearly)?')
-              + '\n\n' + q.summary
-              + (q.minimumApplied ? '\n(10-seat minimum applied — seat limit is ' + q.seatLimit + ')' : '')
-              + '\nTotal: ' + usd(q.totalCents)
-              + '\n\nStripe emails it to the agency\'s billing email, due in 30 days. They pay by card or bank on the invoice page; for a check, mark it paid in Stripe.';
-            if (!confirm(lines)) return null;
-            var po = prompt('PO number (optional — printed on the invoice):', '');
-            if (po === null) return null;
-            return postBilling({ action: pilot ? 'founder_send_pilot_invoice' : 'founder_send_annual_invoice', agencyId: id, months: months, poNumber: po });
-          })
-          .then(function (d) {
-            if (!d) return;
-            banner('okmsg', 'ok', 'Invoice sent' + (d.amountDue != null ? ' for ' + usd(d.amountDue) : '') + '.' + (d.invoiceUrl ? ' Invoice page: ' + d.invoiceUrl : ''));
-            load();
-          })
-          .catch(function (err) { banner('err', 'err', err.message); });
-        return;
-      }
-      if (act === 'mark_invoiced') {
-        if (!confirm('Mark this agency as paid by invoice/PO (billing active)?')) return;
-        post({ action: 'set_billing', agencyId: id, billingStatus: 'active', billingMethod: 'invoice' })
-          .then(function () { banner('okmsg', 'ok', 'Billing marked as invoiced + active.'); load(); })
-          .catch(function (err) { banner('err', 'err', err.message); });
-        return;
-      }
-      if (act === 'rotate_code') {
-        if (!confirm('Rotate the join code? The old code stops working immediately.')) return;
-        post({ action: 'rotate_join_code', agencyId: id })
-          .then(function (d) { banner('okmsg', 'ok', 'New join code: ' + d.joinCode); load(); })
-          .catch(function (err) { banner('err', 'err', err.message); });
-        return;
-      }
+    $('saveBtn').addEventListener('click', function () {
+      var a = current; if (!a) return;
+      var body = { action: 'update_agency', agencyId: a.id }, changed = [];
+      if ($('ePlan').value !== a.plan) { body.plan = $('ePlan').value; changed.push('plan → ' + planLabel(body.plan)); }
+      var seats = parseInt($('eSeats').value, 10);
+      if (seats && seats !== Number(a.seat_limit)) { body.seatLimit = seats; changed.push('seats → ' + seats); }
+      if ($('eStatus').value !== a.status) { body.status = $('eStatus').value; changed.push('status → ' + body.status); }
+      var pe = $('ePilotEnds').value, oldPe = a.pilot_ends_at ? String(a.pilot_ends_at).slice(0, 10) : '';
+      if ($('ePlan').value === 'pilot' && pe !== oldPe) { body.pilotEndsAt = pe || null; changed.push('pilot ends → ' + (pe || 'none')); }
+      if ($('eContact').value.trim() !== (a.contact_name || '')) { body.contactName = $('eContact').value.trim(); changed.push('contact'); }
+      if ($('eEmail').value.trim() !== (a.billing_email || '')) { body.billingEmail = $('eEmail').value.trim(); changed.push('billing email'); }
+      if (!changed.length) { banner('dOut', 'ok', 'Nothing changed.'); return; }
+      if ((body.plan || body.seatLimit) && a.stripe_subscription_id
+          && !confirm('This agency pays through Stripe. Saving updates its subscription and invoices the difference now.\n\n' + changed.join('\n') + '\n\nContinue?')) return;
+      if (body.status === 'suspended' && !confirm('Suspend ' + a.name + '? Its seats stop granting Pro until you set it back to Active.')) return;
+      var btn = $('saveBtn'); busy(btn, true, 'Saving…');
+      post(body)
+        .then(function (d) { var r = stripeMsg(d, 'Saved: ' + changed.join(', ') + '.'); banner('dOut', r.ok ? 'ok' : 'err', r.msg); return load(); })
+        .catch(function (e) { banner('dOut', 'err', e.message); })
+        .finally(function () { busy(btn, false); });
     });
 
+    $('copyCode').addEventListener('click', function () {
+      var c = current && current.joinCode; if (!c) return;
+      (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject())
+        .then(function () { banner('dOut', 'ok', 'Join code copied.'); })
+        .catch(function () { banner('dOut', 'ok', 'Join code: ' + c); });
+    });
+    $('rotateCode').addEventListener('click', function () {
+      if (!current || !confirm('Make a new join code? The old code stops working immediately (members already in keep their seats).')) return;
+      post({ action: 'rotate_join_code', agencyId: current.id })
+        .then(function (d) { banner('dOut', 'ok', 'New join code: ' + d.joinCode); return load(); })
+        .catch(function (e) { banner('dOut', 'err', e.message); });
+    });
+
+    // ── Billing actions ────────────────────────────────────────────────────
+    $('bDiscBtn').addEventListener('click', function () {
+      if (!current) return;
+      var pct = Number($('bPct').value) || 0;
+      var btn = $('bDiscBtn'); busy(btn, true, 'Saving…');
+      postBilling({ action: 'founder_set_discount', agencyId: current.id, pct: pct, note: pct > 0 ? $('bNote').value.trim() : '' })
+        .then(function (d) {
+          var s = d.stripeSync || {};
+          var msg = d.discountPct ? 'Contract discount set to ' + d.discountPct + '%.' : 'Discount removed — list price.';
+          if (s.ok === false) banner('dOut', 'err', msg + ' Stripe subscription NOT updated (' + s.error + ').');
+          else banner('dOut', 'ok', msg + (s.skipped ? '' : ' Live subscription updated.'));
+          return load();
+        })
+        .catch(function (e) { banner('dOut', 'err', e.message); })
+        .finally(function () { busy(btn, false); });
+    });
+
+    function resetQuote() { lastQuote = null; $('iQuote').classList.add('hidden'); $('iSendRow').classList.add('hidden'); }
+    $('iKind').addEventListener('change', function () { $('iMonthsWrap').classList.toggle('hidden', $('iKind').value !== 'pilot'); resetQuote(); });
+    $('iMonths').addEventListener('input', resetQuote);
+    $('iQuoteBtn').addEventListener('click', function () {
+      if (!current) return;
+      var kind = $('iKind').value, months = parseInt($('iMonths').value, 10) || 3;
+      var btn = $('iQuoteBtn'); busy(btn, true, 'Pricing…');
+      postBilling({ action: 'founder_billing_quote', agencyId: current.id, kind: kind, months: months })
+        .then(function (q) {
+          if (!q.ok) throw new Error(q.error || 'Could not price this agency.');
+          lastQuote = { kind: kind, months: months };
+          $('iQuote').textContent = (kind === 'pilot' ? 'Pilot invoice — one time, no auto-renewal' : 'Annual subscription — invoiced now, renews yearly')
+            + '\n' + q.summary
+            + (q.minimumApplied ? '\n10-seat minimum applied (seat limit is ' + q.seatLimit + ').' : '')
+            + '\nTotal: ' + usd(q.totalCents)
+            + '\nEmailed to ' + (current.billing_email || '(no billing email — add one on Overview first)') + ', due in 30 days.';
+          $('iQuote').classList.remove('hidden');
+          $('iSendRow').classList.toggle('hidden', !current.billing_email);
+        })
+        .catch(function (e) { banner('dOut', 'err', e.message); })
+        .finally(function () { busy(btn, false); });
+    });
+    $('iSendBtn').addEventListener('click', function () {
+      if (!current || !lastQuote) return;
+      if (!confirm('Send this invoice to ' + current.billing_email + ' now?')) return;
+      var btn = $('iSendBtn'); busy(btn, true, 'Sending…');
+      postBilling({ action: lastQuote.kind === 'pilot' ? 'founder_send_pilot_invoice' : 'founder_send_annual_invoice', agencyId: current.id, months: lastQuote.months, poNumber: $('iPo').value.trim() })
+        .then(function (d) {
+          banner('dOut', 'ok', 'Invoice sent' + (d.amountDue != null ? ' for ' + usd(d.amountDue) : '') + '.' + (d.invoiceUrl ? '\nInvoice page: ' + d.invoiceUrl : ''));
+          $('iPo').value = ''; resetQuote();
+          return load();
+        })
+        .catch(function (e) { banner('dOut', 'err', e.message); })
+        .finally(function () { busy(btn, false); });
+    });
+    $('markInvoiced').addEventListener('click', function () {
+      if (!current || !confirm('Mark ' + current.name + ' as paid by invoice outside Stripe (billing active)?')) return;
+      post({ action: 'set_billing', agencyId: current.id, billingStatus: 'active', billingMethod: 'invoice' })
+        .then(function () { banner('dOut', 'ok', 'Billing marked paid by invoice.'); return load(); })
+        .catch(function (e) { banner('dOut', 'err', e.message); });
+    });
+
+    // ── Roster ─────────────────────────────────────────────────────────────
+    function loadRoster() {
+      if (!current) return;
+      var id = current.id;
+      $('rosterBody').innerHTML = '<tr><td colspan="8" class="small">Loading…</td></tr>';
+      post({ action: 'roster', agencyId: id })
+        .then(function (d) { if (current && current.id === id) renderRoster(d.members || []); })
+        .catch(function (e) { banner('dOut', 'err', e.message); });
+    }
+    function renderRoster(members) {
+      var active = members.filter(function (m) { return m.status === 'active'; });
+      var peers = active.filter(function (m) { return m.is_peer_supporter; }).length;
+      $('rosterSummary').textContent = active.length + ' active member' + (active.length === 1 ? '' : 's') + ' · ' + peers + ' peer supporter' + (peers === 1 ? '' : 's')
+        + (peers === 0 && active.length ? ' — mark at least one so high-impact alerts reach someone.' : '');
+      $('rosterBody').innerHTML = members.map(function (m) {
+        return '<tr class="click" data-email="' + esc(m.email || '') + '">'
+          + '<td>' + esc(m.name || '—') + '</td>'
+          + '<td>' + esc(m.email || '—') + '</td>'
+          + '<td>' + esc(m.role) + '</td>'
+          + '<td>' + (m.is_peer_supporter ? '<span class="pill info">yes</span>' : '—') + '</td>'
+          + '<td>' + esc(m.station || '—') + '</td>'
+          + '<td>' + statusPill(m.status === 'active' ? 'active' : 'churned').replace('churned', esc(m.status)) + '</td>'
+          + '<td>' + esc(fmtDate(m.joined_at)) + '</td>'
+          + '<td>' + (m.status === 'active' ? '<button class="mini warn" data-act="remove_member" data-uid="' + esc(m.user_id) + '" data-name="' + esc(m.name || m.email || '') + '">Remove</button>' : '') + '</td>'
+          + '</tr>';
+      }).join('') || '<tr><td colspan="8" class="small">No members yet — send the join code.</td></tr>';
+    }
     $('rosterBody').addEventListener('click', function (e) {
-      var btn = e.target.closest('button'); if (!btn || btn.dataset.act !== 'remove_member') return;
-      if (!currentRosterAgency) return;
-      if (!confirm('Remove this member? Their seat ends (and Pro with it); their account and data are untouched.')) return;
-      post({ action: 'remove_member', agencyId: currentRosterAgency, userId: btn.dataset.uid })
-        .then(function () { banner('rosterOut', 'ok', 'Member removed.'); openRoster(currentRosterAgency, $('rosterTitle').textContent.replace('Roster — ', '')); })
-        .catch(function (err) { banner('rosterOut', 'err', err.message); });
+      var btn = e.target.closest('button');
+      if (btn && btn.dataset.act === 'remove_member') {
+        if (!confirm('Remove ' + (btn.dataset.name || 'this member') + '? Their seat ends (and Pro with it); their account and data are untouched.')) return;
+        post({ action: 'remove_member', agencyId: current.id, userId: btn.dataset.uid })
+          .then(function () { banner('dOut', 'ok', 'Member removed.'); loadRoster(); load(); })
+          .catch(function (err) { banner('dOut', 'err', err.message); });
+        return;
+      }
+      var tr = e.target.closest('tr[data-email]');
+      if (tr && tr.dataset.email) { $('mEmail').value = tr.dataset.email; $('mEmail').focus(); }
     });
-
     $('setMemberBtn').addEventListener('click', function () {
-      if (!currentRosterAgency) return;
-      clearBanner('rosterOut');
-      var body = { action: 'set_member', agencyId: currentRosterAgency, email: $('mEmail').value.trim() };
+      if (!current) return;
+      var body = { action: 'set_member', agencyId: current.id, email: $('mEmail').value.trim() };
+      if (!body.email) { banner('dOut', 'err', 'Enter the member’s email (or click their row).'); return; }
       if ($('mRole').value) body.role = $('mRole').value;
       if ($('mPeer').value) body.isPeerSupporter = $('mPeer').value === 'true';
       if ($('mStation').value.trim()) body.station = $('mStation').value.trim();
       post(body)
-        .then(function () { banner('rosterOut', 'ok', 'Member updated.'); openRoster(currentRosterAgency, $('rosterTitle').textContent.replace('Roster — ', '')); })
-        .catch(function (err) { banner('rosterOut', 'err', err.message); });
+        .then(function () {
+          banner('dOut', 'ok', 'Member updated.');
+          ['mEmail', 'mStation'].forEach(function (id) { $(id).value = ''; }); $('mRole').value = ''; $('mPeer').value = '';
+          loadRoster();
+        })
+        .catch(function (err) { banner('dOut', 'err', err.message); });
+    });
+
+    // ── Dashboard access ───────────────────────────────────────────────────
+    function loadAccess() {
+      if (!current) return;
+      var id = current.id;
+      post({ action: 'dashboard_users', agencyId: id })
+        .then(function (d) {
+          if (!current || current.id !== id) return;
+          var rows = '';
+          (d.seatAdmins || []).forEach(function (p) {
+            rows += '<tr><td>' + esc(p.name || '—') + '<br><span class="small">' + esc(p.email || '') + '</span></td>'
+              + '<td>admin</td><td>roster ' + esc(p.role) + '</td><td><span class="pill good">active</span></td><td></td></tr>';
+          });
+          (d.invites || []).forEach(function (i) {
+            rows += '<tr><td>' + esc(i.email) + (i.invitedBy ? '<br><span class="small">by ' + esc(i.invitedBy) + '</span>' : '') + '</td>'
+              + '<td>' + esc(i.role) + '</td><td>invite</td>'
+              + '<td><span class="pill ' + (i.status === 'active' ? 'good' : 'warnp') + '">' + esc(i.status) + '</span></td>'
+              + '<td><button class="mini warn" data-act="revoke_access" data-id="' + esc(i.id) + '">Remove</button></td></tr>';
+          });
+          $('accessBody').innerHTML = rows || '<tr><td colspan="5" class="small">No one yet — invite the chief or wellness lead.</td></tr>';
+        })
+        .catch(function (e) { banner('dOut', 'err', e.message); });
+    }
+    $('inviteBtn').addEventListener('click', function () {
+      if (!current) return;
+      var email = $('dEmail').value.trim();
+      if (!email) { banner('dOut', 'err', 'Enter an email.'); return; }
+      post({ action: 'invite_dashboard_user', agencyId: current.id, email: email, role: $('dRole').value })
+        .then(function (d) {
+          banner('dOut', 'ok', d.emailed ? 'Invited ' + email + ' (email sent).' : 'Access added for ' + email + ', but the email did not send — send them the dashboard link.');
+          $('dEmail').value = '';
+          loadAccess();
+        })
+        .catch(function (e) { banner('dOut', 'err', e.message); });
+    });
+    $('accessBody').addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn || btn.dataset.act !== 'revoke_access') return;
+      if (!confirm('Remove this dashboard access? It ends immediately.')) return;
+      post({ action: 'revoke_dashboard_user', agencyId: current.id, id: btn.dataset.id })
+        .then(function () { banner('dOut', 'ok', 'Access removed.'); loadAccess(); })
+        .catch(function (err) { banner('dOut', 'err', err.message); });
     });
 
     $('loadBtn').addEventListener('click', load);
-    $('createBtn').addEventListener('click', createAgency);
 
   // ── Ops sign-in (migration 097) ──────────────────────────────────────────
   // Identical block on every ops page. Your own AfterCall account: password,
@@ -636,12 +1022,14 @@
     };
   })();
 
-    OpsAuth.onReady(function () { $('loadBtn').hidden = false; load(); });
+    OpsAuth.onReady(function () { $('loadBtn').hidden = false; $('authCard').querySelector('h2').textContent = 'Signed in'; load(); });
     OpsAuth.onSignedOut(function () {
       $('loadBtn').hidden = true;
+      $('modeBadge').classList.add('hidden');
+      $('authCard').querySelector('h2').textContent = 'Sign in';
       $('results').classList.add('hidden');
-      $('rosterCard').classList.add('hidden');
-      currentRosterAgency = null;
+      closeDetail();
+      agencies = [];
     });
     OpsAuth.start();
   </script>
