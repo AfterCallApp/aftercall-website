@@ -189,6 +189,15 @@
     function post(body) {
       return OpsAuth.call(API, body);
     }
+    // Contract discounts and Stripe invoices (pilot / annual by PO) live in
+    // teams-billing; same staff session.
+    var BILLING_API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/teams-billing';
+    function postBilling(body) {
+      return OpsAuth.call(BILLING_API, body);
+    }
+    function usd(cents) {
+      return '$' + (Number(cents || 0) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
     function fmtDate(d) { return d ? String(d).slice(0, 10) : '—'; }
 
@@ -205,6 +214,7 @@
           // hold suspended it (paying reactivates automatically).
           + (a.billing_suspended ? '<br /><span style="color:var(--bad, #ef6666);font-size:11px;">billing hold — reactivates on payment</span>'
             : a.billing_status === 'past_due' && a.billing_grace_until ? '<br /><span style="color:var(--bad, #ef6666);font-size:11px;">pay by ' + esc(String(a.billing_grace_until).slice(0, 10)) + '</span>' : '')
+          + (Number(a.billing_discount_pct) > 0 ? '<br /><span style="color:var(--muted);font-size:11px;" title="' + esc(a.billing_discount_note || '') + '">' + esc(Number(a.billing_discount_pct)) + '% contract discount</span>' : '')
           + '</td>'
           + '<td>' + esc(a.activeSeats) + ' / ' + esc(a.seat_limit) + '</td>'
           + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
@@ -213,6 +223,9 @@
           + '<button class="mini" data-act="roster" data-id="' + esc(a.id) + '" data-name="' + esc(a.name) + '">Roster</button>'
           + '<button class="mini" data-act="plan" data-id="' + esc(a.id) + '">Plan</button>'
           + '<button class="mini" data-act="seats" data-id="' + esc(a.id) + '">Seats</button>'
+          + '<button class="mini" data-act="discount" data-id="' + esc(a.id) + '" data-pct="' + esc(Number(a.billing_discount_pct) || 0) + '" data-note="' + esc(a.billing_discount_note || '') + '">Discount</button>'
+          + '<button class="mini" data-act="annual_invoice" data-id="' + esc(a.id) + '">Annual invoice</button>'
+          + '<button class="mini" data-act="pilot_invoice" data-id="' + esc(a.id) + '">Pilot invoice</button>'
           + '<button class="mini" data-act="mark_invoiced" data-id="' + esc(a.id) + '">Mark invoiced</button>'
           + '<button class="mini" data-act="rotate_code" data-id="' + esc(a.id) + '">New code</button>'
           + '</div></td>'
@@ -354,6 +367,51 @@
         if (!seats) return;
         post({ action: 'update_agency', agencyId: id, seatLimit: parseInt(seats, 10) })
           .then(function (d) { stripeBanner(d, 'Seat limit updated.'); load(); })
+          .catch(function (err) { banner('err', 'err', err.message); });
+        return;
+      }
+      if (act === 'discount') {
+        var pct = prompt('Contract discount for this agency, in percent off list (0 = list price). It applies to Checkout, invoices, and a live subscription from its next invoice:', btn.dataset.pct || '0');
+        if (pct === null) return;
+        var note = Number(pct) > 0 ? prompt('Which contract / why (shown here only):', btn.dataset.note || '') : '';
+        if (note === null) return;
+        postBilling({ action: 'founder_set_discount', agencyId: id, pct: Number(pct), note: note })
+          .then(function (d) {
+            var s = d.stripeSync || {};
+            var msg = d.discountPct ? 'Contract discount set to ' + d.discountPct + '%.' : 'Discount removed — list price.';
+            if (s.ok === false) banner('err', 'err', msg + ' Stripe subscription NOT updated (' + s.error + ').');
+            else banner('okmsg', 'ok', msg + (s.skipped ? '' : ' Live subscription updated.'));
+            load();
+          })
+          .catch(function (err) { banner('err', 'err', err.message); });
+        return;
+      }
+      if (act === 'annual_invoice' || act === 'pilot_invoice') {
+        var pilot = act === 'pilot_invoice';
+        var months = 3;
+        if (pilot) {
+          var m = prompt('Pilot length in months (Teams Pro at list, invoiced once, no auto-renewal):', '3');
+          if (m === null) return;
+          months = parseInt(m, 10) || 3;
+        }
+        postBilling({ action: 'founder_billing_quote', agencyId: id, kind: pilot ? 'pilot' : 'annual', months: months })
+          .then(function (q) {
+            if (!q.ok) throw new Error(q.error || 'Could not price this agency.');
+            var lines = (pilot ? 'Send a PILOT invoice (one time, no auto-renewal)?' : 'Start an INVOICED annual subscription (renews yearly)?')
+              + '\n\n' + q.summary
+              + (q.minimumApplied ? '\n(10-seat minimum applied — seat limit is ' + q.seatLimit + ')' : '')
+              + '\nTotal: ' + usd(q.totalCents)
+              + '\n\nStripe emails it to the agency\'s billing email, due in 30 days. They pay by card or bank on the invoice page; for a check, mark it paid in Stripe.';
+            if (!confirm(lines)) return null;
+            var po = prompt('PO number (optional — printed on the invoice):', '');
+            if (po === null) return null;
+            return postBilling({ action: pilot ? 'founder_send_pilot_invoice' : 'founder_send_annual_invoice', agencyId: id, months: months, poNumber: po });
+          })
+          .then(function (d) {
+            if (!d) return;
+            banner('okmsg', 'ok', 'Invoice sent' + (d.amountDue != null ? ' for ' + usd(d.amountDue) : '') + '.' + (d.invoiceUrl ? ' Invoice page: ' + d.invoiceUrl : ''));
+            load();
+          })
           .catch(function (err) { banner('err', 'err', err.message); });
         return;
       }

@@ -2736,6 +2736,9 @@
           'Status: <b>' + esc(statusLabel) + '</b>'
           + ' · Method: <b>' + esc(s.method === 'stripe' ? 'Stripe' : s.method === 'invoice' ? 'Invoice / PO' : '—') + '</b>'
           + ' · Seats on plan: <b>' + esc(s.seatLimit) + '</b>'
+          // Ten-seat billing minimum and the agency's contract discount.
+          + (s.billedSeats && s.billedSeats > s.seatLimit ? ' <span style="color:var(--muted);">(billed as ' + esc(s.billedSeats) + ', the 10-seat minimum)</span>' : '')
+          + (s.discountPct ? ' · Contract discount: <b>' + esc(s.discountPct) + '%</b>' : '')
           + (canceling ? ' · Cancels: <b>' + day(s.cancelAt) + '</b>'
             : s.currentPeriodEnd && s.status !== 'canceled' ? ' · Renews: <b>' + day(s.currentPeriodEnd) + '</b>' : '')
           + (note ? '<br/><span style="color:var(--bad);">' + note + '</span>' : '')
