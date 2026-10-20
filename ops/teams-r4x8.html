@@ -158,7 +158,7 @@
               <li>Open it → <b>Dashboard access</b>: invite the chief / wellness lead (they set their own password).</li>
               <li>Send the <b>join code</b> to the agency — members enter it in the app (Profile → Join your agency).</li>
               <li>In <b>Roster</b>, mark the peer supporters and set stations.</li>
-              <li><b>Billing</b>: they pay by card from their dashboard, or you send an annual / pilot invoice here.</li>
+              <li><b>Billing</b>: paid plans stay off until paid — their admin pays by card on the dashboard, or you send an annual invoice here (or activate a trusted PO agency early). Pilots start right away.</li>
             </ol>
           </details>
           <details class="help" style="margin-top:10px;">
@@ -317,6 +317,13 @@
               <div class="shrink"><button id="iSendBtn">Send invoice</button></div>
             </div>
           </div>
+          <div class="box hidden" id="earlyBox" style="margin-top:14px;border-color:#FCD34D;">
+            <h3>Not active yet — waiting for the first payment</h3>
+            <div class="row" style="align-items:center;">
+              <div class="small" style="font-size:13px;">Members can't join and the agency's dashboard only shows billing until they pay. For a PO agency you trust, you can let them in now — remember to collect payment.</div>
+              <div class="shrink"><button class="ghost mini" id="activateEarly">Activate before payment</button></div>
+            </div>
+          </div>
           <div class="box" style="margin-top:14px;">
             <h3>Paid outside Stripe</h3>
             <div class="row" style="align-items:center;">
@@ -418,7 +425,11 @@
     }
     function isPaying(a) { return a.billing_status === 'active' && !a.billing_suspended; }
 
+    // Paid before use: a paid plan sits on the billing hold until its first
+    // payment (Checkout, a paid invoice, or "Mark paid by invoice" here).
+    function awaitingFirst(a) { return a.status === 'suspended' && a.billing_suspended && a.billing_status !== 'past_due'; }
     function billingPill(a) {
+      if (awaitingFirst(a)) return '<span class="pill warnp">' + (a.billing_status === 'checkout_pending' ? 'invoice sent · unpaid' : 'waiting for first payment') + '</span>';
       if (a.billing_suspended) return '<span class="pill bad">billing hold</span>';
       switch (a.billing_status) {
         case 'active': return '<span class="pill good">paid' + (a.billing_method === 'invoice' ? ' · invoice' : a.billing_method === 'stripe' ? ' · Stripe' : '') + '</span>';
@@ -427,6 +438,9 @@
         case 'canceled': return '<span class="pill">canceled</span>';
         default: return a.plan === 'pilot' ? '<span class="pill info">pilot</span>' : '<span class="pill warnp">not set up</span>';
       }
+    }
+    function agencyStatusPill(a) {
+      return awaitingFirst(a) ? '<span class="pill warnp">not active yet</span>' : statusPill(a.status);
     }
     function statusPill(s) {
       return '<span class="pill ' + (s === 'active' ? 'good' : s === 'suspended' ? 'warnp' : 'bad') + '">' + esc(s) + '</span>';
@@ -438,15 +452,16 @@
       agencies.forEach(function (a) {
         if (a.status === 'churned') return;
         var name = esc(a.name);
-        if (a.billing_suspended) items.push({ bad: true, a: a, tab: 'billing', text: name + ' — on billing hold (unpaid past the grace period). Seats stopped granting Pro.' });
+        if (awaitingFirst(a)) items.push({ a: a, tab: 'billing', text: name + ' — not active until the first payment (members can’t join yet). Send an invoice, or have their admin pay by card on the dashboard.' });
+        else if (a.billing_suspended) items.push({ bad: true, a: a, tab: 'billing', text: name + ' — on billing hold (unpaid past the grace period). Seats stopped granting Pro.' });
         else if (a.billing_status === 'past_due') items.push({ bad: true, a: a, tab: 'billing', text: name + ' — payment failed' + (a.billing_grace_until ? ', pay by ' + fmtDate(a.billing_grace_until) : '') + '.' });
         if (a.plan === 'pilot' && a.pilot_ends_at) {
           var d = daysUntil(a.pilot_ends_at);
           if (d < 0) items.push({ bad: true, a: a, tab: 'overview', text: name + ' — pilot ended ' + fmtDate(a.pilot_ends_at) + '. Move to a paid plan or extend it.' });
           else if (d <= 21) items.push({ a: a, tab: 'overview', text: name + ' — pilot ends in ' + d + ' day' + (d === 1 ? '' : 's') + ' (' + fmtDate(a.pilot_ends_at) + ').' });
         }
-        if (a.plan !== 'pilot' && a.status === 'active' && (!a.billing_status || a.billing_status === 'none')) {
-          items.push({ a: a, tab: 'billing', text: name + ' — on ' + planLabel(a.plan) + ' but billing isn’t set up.' });
+        if (a.plan !== 'pilot' && a.status === 'active' && (!a.billing_status || a.billing_status === 'none' || a.billing_status === 'checkout_pending')) {
+          items.push({ a: a, tab: 'billing', text: name + ' — active on ' + planLabel(a.plan) + ' before payment (you let them in). Make sure it gets paid.' });
         }
         if (!a.billing_email) items.push({ a: a, tab: 'overview', text: name + ' — no billing email (needed for invoices).' });
         if (a.seat_limit && a.activeSeats >= a.seat_limit) items.push({ a: a, tab: 'overview', text: name + ' — all ' + a.seat_limit + ' seats are taken; new members can’t join.' });
@@ -502,7 +517,7 @@
         return '<tr class="click' + (current && current.id === a.id ? ' sel' : '') + '" data-id="' + esc(a.id) + '">'
           + '<td><strong>' + esc(a.name) + '</strong><br /><span class="small">' + esc(a.contact_name || a.slug) + '</span></td>'
           + '<td>' + esc(planLabel(a.plan)) + (a.plan === 'pilot' && a.pilot_ends_at ? '<br /><span class="small">ends ' + esc(fmtDate(a.pilot_ends_at)) + '</span>' : '') + '</td>'
-          + '<td>' + statusPill(a.status) + '</td>'
+          + '<td>' + agencyStatusPill(a) + '</td>'
           + '<td>' + billingPill(a) + (Number(a.billing_discount_pct) > 0 ? '<br /><span class="small">' + esc(Number(a.billing_discount_pct)) + '% off</span>' : '') + '</td>'
           + '<td>' + esc(a.activeSeats || 0) + ' / ' + esc(a.seat_limit) + '<div class="bar"><i style="width:' + pct + '%"' + (pct >= 100 ? ' class="full"' : '') + '></i></div></td>'
           + '<td>' + (a.joinCode ? '<code>' + esc(a.joinCode) + '</code>' : '—') + '</td>'
@@ -598,7 +613,7 @@
     function fillDetail() {
       var a = current;
       $('dName').textContent = a.name;
-      $('dMeta').innerHTML = esc(planLabel(a.plan)) + ' · ' + statusPill(a.status) + ' · ' + billingPill(a)
+      $('dMeta').innerHTML = esc(planLabel(a.plan)) + ' · ' + agencyStatusPill(a) + ' · ' + billingPill(a)
         + ' · ' + esc(a.activeSeats || 0) + ' of ' + esc(a.seat_limit) + ' seats · created ' + esc(fmtDate(a.created_at));
       // Overview form
       var planSel = $('ePlan');
@@ -629,6 +644,7 @@
       $('bLinks').innerHTML = (a.stripe_customer_id ? '<a class="pill info" target="_blank" rel="noopener" href="' + base + 'customers/' + esc(a.stripe_customer_id) + '">Open customer in Stripe ↗</a>' : '')
         + (a.stripe_subscription_id ? '<a class="pill info" target="_blank" rel="noopener" href="' + base + 'subscriptions/' + esc(a.stripe_subscription_id) + '">Open subscription ↗</a>' : '')
         + (!a.stripe_customer_id ? '<span class="small">Not in Stripe yet — it appears after Checkout or the first invoice.</span>' : '');
+      $('earlyBox').classList.toggle('hidden', !awaitingFirst(a));
       $('bPct').value = Number(a.billing_discount_pct) || 0;
       $('bNote').value = a.billing_discount_note || '';
       $('eStripeNote').textContent = a.stripe_subscription_id
@@ -734,6 +750,12 @@
         })
         .catch(function (e) { banner('dOut', 'err', e.message); })
         .finally(function () { busy(btn, false); });
+    });
+    $('activateEarly').addEventListener('click', function () {
+      if (!current || !confirm('Activate ' + current.name + ' now, before it has paid? Members can join and seats get their plan right away.')) return;
+      post({ action: 'update_agency', agencyId: current.id, status: 'active' })
+        .then(function () { banner('dOut', 'ok', 'Activated before payment. It stays on your attention list until it’s paid.'); return load(); })
+        .catch(function (e) { banner('dOut', 'err', e.message); });
     });
     $('markInvoiced').addEventListener('click', function () {
       if (!current || !confirm('Mark ' + current.name + ' as paid by invoice outside Stripe (billing active)?')) return;

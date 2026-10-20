@@ -143,6 +143,15 @@
     .viewonly-pill { display: none; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px;
       background: rgba(148,163,184,0.14); color: var(--muted); white-space: nowrap; }
     body.viewer .viewonly-pill { display: inline-block; }
+    /* Paid before use: an agency waiting on payment sees only activation,
+       billing and dashboard access. */
+    body.locked .tabs, body.locked #days, body.locked #billingBanner, body.locked #joinCard,
+    body.locked #page-settings > .card.mt:not(#accessCard) { display: none !important; }
+    body.locked #page-settings .cols-2e { grid-template-columns: 1fr; }
+    #activateCard { display: none; border-color: var(--accent, #3379CF); }
+    body.locked #activateCard { display: block; }
+    #activateCard .act-price { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin: 6px 0 2px; }
+    #activateCard ul { margin: 10px 0 0 18px; line-height: 1.7; font-size: 13.5px; color: var(--ink2); }
     body.viewer #page-settings .cols-2e { grid-template-columns: 1fr; }
 
     /* ── App shell ── */
@@ -1031,8 +1040,14 @@
 
     <!-- ── Settings ── -->
     <div class="page" id="page-settings">
+      <div class="card" id="activateCard" style="margin-bottom:16px;">
+        <h3 id="actTitle">Activate AfterCall Teams</h3>
+        <div id="actBody" style="font-size:14px; color:var(--ink2); line-height:1.65;"></div>
+        <div class="row mt" id="actButtons"></div>
+        <div id="actMsg" class="msg"></div>
+      </div>
       <div class="grid cols-2e">
-        <div class="card admin-only">
+        <div class="card admin-only" id="joinCard">
           <h3>Roster join code</h3>
           <div class="code-display" id="joinCode">········</div>
           <div style="display:flex; gap:10px;">
@@ -1216,6 +1231,7 @@
       mfa_required: 'Enter the code we emailed you to finish signing in.',
       sign_in_required: 'Your session ended. Please sign in again.',
       key_retired: 'Dashboard keys are retired. Sign in with your own account.',
+      billing_required: 'This agency isn’t active yet — finish billing to turn it on.',
     };
     // One authenticated call to an edge function. Losing the session, the
     // two-step state or the agency grant sends the page back to the right
@@ -1233,7 +1249,7 @@
           const code = data.error || (res.status === 401 ? 'sign_in_required' : '');
           // An expired or revoked access token: refresh once and retry.
           if (res.status === 401 && !retried && code !== 'key_retired') return freshToken(true).then(() => callFn(url, payload, true));
-          throw Object.assign(new Error(FRIENDLY[code] || data.message || code || 'Request failed.'), { code });
+          throw Object.assign(new Error(FRIENDLY[code] || data.message || code || 'Request failed.'), { code, data });
         }))
         .catch((e) => {
           if (AUTH_CODES.includes(e.code)) setTimeout(() => authLost(e.code), 0);
@@ -2713,10 +2729,12 @@
         const onStripe = s.method === 'stripe' && (s.status === 'active' || s.status === 'past_due');
         const pastDue = s.method === 'stripe' && s.status === 'past_due';
         const canceling = onStripe && s.cancelAt;
-        const held = s.suspended && s.billingHold;   // suspended by the billing hold
+        const first = !!s.awaitingFirstPayment;      // paid plan, nothing paid yet
+        const held = s.suspended && s.billingHold && !first;   // unpaid past the grace window
         const inv = s.openInvoice;
         const owed = inv && inv.amountDue != null ? money(inv.amountDue, inv.currency) : '';
-        const statusLabel = held ? 'Suspended — payment needed'
+        const statusLabel = first ? (s.status === 'checkout_pending' ? 'Waiting for payment' : 'Not active yet — waiting for first payment')
+          : held ? 'Suspended — payment needed'
           : s.suspended ? 'Suspended'
           : ({ active: 'Active', past_due: 'Awaiting payment', checkout_pending: 'Checkout started', canceled: 'Canceled', none: 'Not set up' })[s.status || 'none'] || s.status;
         let note = '';
@@ -2724,6 +2742,8 @@
           note = 'Payment' + (owed ? ' of <b>' + esc(owed) + '</b>' : '') + ' wasn’t received by ' + day(s.graceUntil)
             + ', so AfterCall Pro is paused for your members. The workspace, peer support and crisis resources stay on. '
             + 'Paying the open invoice turns everything back on within a minute.';
+        } else if (first) {
+          note = '';
         } else if (s.suspended) {
           note = 'This agency is suspended. Contact AfterCall to reactivate it.';
         } else if (pastDue) {
@@ -2731,7 +2751,7 @@
             + (s.graceUntil ? 'Pay it by <b>' + day(s.graceUntil) + '</b> to keep AfterCall Pro on for your members — ' : 'Please pay it to keep AfterCall Pro on for your members — ')
             + 'everything stays active until then. You can use a different card on the invoice page or update the card on file.';
         }
-        renderBillingBanner(held, s.suspended, pastDue, s.graceUntil, owed);
+        renderBillingBanner(held, s.suspended && !first, pastDue, s.graceUntil, owed);
         $('billingSummary').innerHTML =
           'Status: <b>' + esc(statusLabel) + '</b>'
           + ' · Method: <b>' + esc(s.method === 'stripe' ? 'Stripe' : s.method === 'invoice' ? 'Invoice / PO' : '—') + '</b>'
@@ -2750,7 +2770,8 @@
         // leaves no gap in the row.
         $('checkoutBtn').style.display = '';
         $('portalBtn').style.display = '';
-        $('checkoutBtn').parentElement.style.display = b.stripeEnabled && !onStripe ? '' : 'none';
+        // Waiting on the first payment: the activation card carries the pay button.
+        $('checkoutBtn').parentElement.style.display = b.stripeEnabled && !onStripe && !first ? '' : 'none';
         $('portalBtn').parentElement.style.display = s.hasStripeCustomer ? '' : 'none';
         // Owing money: the open invoice is the primary action; the card on
         // file is secondary (primary only if we have no invoice link).
@@ -2798,6 +2819,7 @@
           loadSettings().then((b) => {
             const s = (b && b.billing) || {};
             if (s.status === 'active' && !s.suspended) {
+              if (LOCKED) { openAgency(AGENCY); return; }
               flash('billingMsg', 'ok', 'Payment received — billing is active and AfterCall Pro is on for your members.');
             } else if (++tries < 120) poll();
           });
@@ -2870,11 +2892,11 @@
     });
     // Stripe sends people back to the dashboard URL; remember to reopen the
     // Billing card (Settings) when they return, from Checkout or the portal.
-    function billingRedirect(action, btn) {
+    function billingRedirect(action, btn, msgId) {
       try { sessionStorage.setItem('ac_teams_return', action === 'create_portal_session' ? 'portal' : 'checkout'); } catch (e) {}
       btn.disabled = true;
       postBilling(action).then((d) => { if (d.url) window.location.href = d.url; else throw new Error('No redirect URL.'); })
-        .catch((e) => { flash('billingMsg', 'err', e.message); btn.disabled = false; });
+        .catch((e) => { flash(msgId || 'billingMsg', 'err', e.message); btn.disabled = false; });
     }
     $('checkoutBtn').addEventListener('click', function () { billingRedirect('create_checkout_session', this); });
     $('portalBtn').addEventListener('click', function () { billingRedirect('create_portal_session', this); });
@@ -2915,7 +2937,11 @@
     }
     // One Refresh button, everything: analytics, roster, resources, channels, settings.
     function refreshAll() {
-      refreshDashboard().catch((e) => { if (!AUTH_CODES.includes(e.code)) alert(e.message); });
+      if (LOCKED) { openAgency(AGENCY); return; }
+      refreshDashboard().catch((e) => {
+        if (e.code === 'billing_required') { enterLocked(e.data || {}); return; }
+        if (!AUTH_CODES.includes(e.code)) alert(e.message);
+      });
       const admin = AGENCY && AGENCY.role === 'admin';
       if (admin) loadRoster();
       loadResources(); loadChannels(); loadSettings(); loadPeerRules();
@@ -3091,10 +3117,82 @@
     function openAgency(a) {
       setAgency(a);
       return post('dashboard', { sinceDays: parseInt($('days').value, 10) })
-        .then((d) => { renderDashboard(d); enterApp(); showBillingReturn(); })
-        .catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vPick', e.message); });
+        .then((d) => { setLocked(false); renderDashboard(d); enterApp(); showBillingReturn(); })
+        .catch((e) => {
+          if (e.code === 'billing_required') { enterLocked(e.data || {}); return; }
+          if (!AUTH_CODES.includes(e.code)) showGate('vPick', e.message);
+        });
     }
-    $('switchBtn').addEventListener('click', () => { setAgency(null); loadAgencies(); });
+
+    // ── Paid before use ──
+    // Until the agency's plan is paid (or a pilot is live) the server answers
+    // every analytics / roster / settings call with 402 billing_required. The
+    // page then shows only Settings: an activation card (pay by card, ask for
+    // an invoice), the billing card and dashboard access.
+    let LOCKED = null;   // the 402 payload while locked
+    function setLocked(info) {
+      LOCKED = info || null;
+      document.body.classList.toggle('locked', !!LOCKED);
+    }
+    const PLAN_NAMES = { essentials: 'Essentials', teams_pro: 'Teams Pro', command: 'Enterprise', pilot: 'Pilot' };
+    function enterLocked(info) {
+      setLocked(info);
+      $('gate').style.display = 'none';
+      $('app').style.display = 'block';
+      $('switchBtn').style.display = AGENCIES.length > 1 ? '' : 'none';
+      $('lockBtn').title = AUTH && AUTH.email ? 'Signed in as ' + AUTH.email : '';
+      $('agencyName').textContent = AGENCY.name || '';
+      $('planPill').textContent = PLAN_NAMES[info.plan] || info.plan || '';
+      showPage('settings');
+      $('actBody').textContent = 'Loading…';
+      $('actButtons').innerHTML = '';
+      loadSettings().then((b) => { renderActivation(b); showBillingReturn(); });
+      if (AGENCY.role === 'admin') loadDashboardUsers();
+    }
+    function renderActivation(b) {
+      if (!LOCKED) return;
+      const s = (b && b.billing) || {};
+      const plan = (b && b.plan) || LOCKED.plan;
+      const admin = AGENCY && AGENCY.role === 'admin';
+      const mail = 'mailto:jordan@aftercallapp.com?subject=' + encodeURIComponent('AfterCall Teams — ' + (AGENCY.name || 'our agency'));
+      const perSeat = s.listYearlyCentsPerSeat;
+      const seats = s.billedSeats || s.seatLimit || LOCKED.seatLimit;
+      const yearly = perSeat && seats ? Math.round(perSeat * seats * (1 - (Number(s.discountPct) || 0) / 100)) : null;
+      let title = 'Activate AfterCall Teams', body = '', buttons = '';
+      const what = '<ul><li>Members join with your agency code and get their seat</li>'
+        + (plan === 'essentials' ? '' : '<li>AfterCall Pro on every seat</li>')
+        + '<li>Peer support alerts, your crisis resources and agency channels</li>'
+        + '<li>This dashboard: wellbeing, workload, stations and peer support</li></ul>';
+      if (LOCKED.reason === 'pilot_ended' || s.pilotEnded) {
+        title = 'Your pilot has ended';
+        body = 'Thanks for piloting AfterCall Teams. To keep your team on it, choose a plan — we’ll set it up and send the invoice or a card checkout link.';
+        buttons = '<div class="fix"><a class="btn sm" href="' + mail + '">Choose a plan</a></div>';
+      } else if (s.status === 'past_due' || (s.billingHold && !s.awaitingFirstPayment)) {
+        title = 'Payment needed';
+        body = 'A payment for ' + esc(AGENCY.name) + ' wasn’t received, so the agency is paused. Pay the open invoice and everything turns back on within a minute.';
+        if (admin && s.openInvoice && s.openInvoice.url) buttons = '<div class="fix"><button class="btn sm" id="actPayInvoice">Pay invoice' + (s.openInvoice.amountDue != null ? ' · ' + esc(money(s.openInvoice.amountDue, s.openInvoice.currency)) : '') + '</button></div>';
+      } else {
+        title = 'Activate ' + (PLAN_NAMES[plan] || 'your plan');
+        body = 'Your ' + esc(({ essentials: 'AfterCall Teams Essentials', teams_pro: 'AfterCall Teams Pro', command: 'AfterCall Teams Enterprise' })[plan] || 'AfterCall Teams') + ' plan for <b>' + esc(s.seatLimit || LOCKED.seatLimit) + ' seats</b> is ready. '
+          + 'It switches on the moment the first payment goes through.'
+          + (yearly != null ? '<div class="act-price">' + esc(money(yearly, 'usd')) + ' <span style="font-size:14px;font-weight:600;color:var(--muted);">per year</span></div>'
+            + '<div style="font-size:12.5px;color:var(--muted);">' + esc(seats) + ' seats × ' + esc(money(perSeat, 'usd')) + ' per seat per year'
+            + (s.discountPct ? ', ' + esc(s.discountPct) + '% contract discount' : '') + (s.billedSeats > s.seatLimit ? ' (10-seat minimum)' : '') + '. Billed annually.</div>' : '')
+          + what
+          + (s.status === 'checkout_pending' && s.hasStripeCustomer ? '<p style="margin-top:10px;">If we sent you an invoice, it’s in your billing email — the agency switches on as soon as it’s paid.</p>' : '');
+        if (admin) {
+          if (b && b.stripeEnabled) buttons += '<div class="fix"><button class="btn sm" id="actCheckout">Pay by card</button></div>';
+          buttons += '<div class="fix"><a class="btn ' + (b && b.stripeEnabled ? 'ghost ' : '') + 'sm" href="' + mail + '">Pay by invoice or PO</a></div>';
+        }
+      }
+      if (!admin) body += '<p style="margin-top:10px;color:var(--muted);">An admin of your agency needs to finish this. Your access is view-only.</p>';
+      $('actTitle').textContent = title;
+      $('actBody').innerHTML = body;
+      $('actButtons').innerHTML = buttons;
+      const c = $('actCheckout'); if (c) c.addEventListener('click', function () { billingRedirect('create_checkout_session', this, 'actMsg'); });
+      const p = $('actPayInvoice'); if (p) p.addEventListener('click', () => $('payInvoiceBtn').click());
+    }
+    $('switchBtn').addEventListener('click', () => { setLocked(false); setAgency(null); loadAgencies(); });
 
     // Forgot / reset password
     // The Supabase "Reset password" email carries a 6-digit code ({{ .Token }}) —
@@ -3181,6 +3279,7 @@
       const tok = AUTH && AUTH.access_token;
       // scope=local ends only THIS browser session, never the leader's app sign-in.
       if (tok) gotrue('logout?scope=local', null, tok).catch(() => {});
+      setLocked(false);
       forgetSession();
       showGate('vSignIn');
     }
@@ -3206,6 +3305,7 @@
         loadSettings().then((b) => {
           const s = (b && b.billing) || {};
           if (s.status === 'active' && s.method === 'stripe') {
+            if (LOCKED && !s.suspended) { openAgency(AGENCY); return; }
             flash('billingMsg', 'ok', 'Success — billing is active'
               + (s.currentPeriodEnd ? ' and renews ' + String(s.currentPeriodEnd).slice(0, 10) : '')
               + '. Receipts and invoices are under Manage billing.');
