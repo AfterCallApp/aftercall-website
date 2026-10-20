@@ -486,6 +486,35 @@ footer nav a:hover{color:#fff}
 body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
 /* news: homepage-style dark hero with brand glow; no scroll morph */
 .news-hero,.art-head{background:#05091C}
+/* ===== MOBILE MENU ===== */
+.nav-burger{display:none;width:40px;height:40px;margin-right:-8px;border:0;background:none;cursor:pointer;position:relative;color:#fff;-webkit-tap-highlight-color:transparent}
+.nav-burger span{position:absolute;left:11px;right:11px;height:1.5px;border-radius:2px;background:currentColor;transition:transform .35s var(--ease,cubic-bezier(.2,.8,.2,1)),top .35s var(--ease,cubic-bezier(.2,.8,.2,1))}
+.nav-burger span:nth-child(1){top:16px}.nav-burger span:nth-child(2){top:23px}
+.nav.open .nav-burger span:nth-child(1){top:19.5px;transform:rotate(45deg)}
+.nav.open .nav-burger span:nth-child(2){top:19.5px;transform:rotate(-45deg)}
+.nav.on-light .nav-burger{color:var(--graphite)}
+.mnav{position:fixed;top:56px;left:0;right:0;z-index:99;max-height:calc(100dvh - 56px);overflow-y:auto;background:rgba(5,9,28,.94);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--line);padding:8px 24px 28px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .3s,transform .3s,visibility 0s .3s}
+.mnav.open{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s}
+.mnav a{display:flex;justify-content:space-between;align-items:center;padding:16px 2px;font-size:18px;font-weight:600;letter-spacing:-.01em;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.mnav a::after{content:"›";color:rgba(255,255,255,.35);font-size:20px;font-weight:400}
+.mnav a[aria-current]{color:#A5B4FF}
+.mnav a.nav-teams{margin-top:18px;justify-content:center;border:1px solid rgba(124,143,245,.45);background:rgba(124,143,245,.12);border-radius:99px;padding:14px;font-size:16px}
+.mnav a.nav-teams::after{content:none}
+.mnav.light{background:rgba(255,255,255,.96);border-color:var(--hair)}
+.mnav.light a{color:var(--graphite);border-color:rgba(10,15,40,.08)}
+.mnav.light a::after{color:rgba(10,15,40,.3)}
+.mnav.light a[aria-current]{color:#4F46E5}
+.mnav.light a.nav-teams{color:#4F46E5;border-color:rgba(79,70,229,.35);background:rgba(79,70,229,.06)}
+@media(max-width:900px){
+  .nav-burger{display:block}
+  .nav .shell{display:grid;grid-template-columns:1fr auto 1fr;gap:12px}
+  .nav .shell>.btn{justify-self:center}
+  .nav-burger{justify-self:end}
+}
+@media(min-width:901px){.mnav{display:none}}
+@media(max-width:900px){.nav .shell{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.nav .brand{font-size:16px;gap:8px;white-space:nowrap;min-width:0}.nav .brand img{width:26px;height:26px}}
+@media(max-width:480px){.brand-word-teams{display:none}}
+@media(max-width:350px){.nav .brand .bw{display:none}}
 </style>
 <script src="/cookie-consent.js" defer></script>
 <script src="/meta-pixel.js" defer></script>
@@ -496,11 +525,12 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
 <div class="page-bg" id="pageBg" aria-hidden="true"></div>
 <header class="nav" id="nav">
   <div class="shell">
-    <a class="brand" href="/"><img src="/images/home/logo.png" alt="">AfterCall</a>
+    <a class="brand" href="/"><img src="/images/home/logo.png" alt=""><span class="bw">AfterCall</span></a>
     <nav class="navlinks" aria-label="Primary">
       <a href="/#features">Features</a><a href="/#ai">AfterCall AI</a><a href="/#wellness">Wellness</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/news" aria-current="page">News</a><a class="nav-teams" href="/teams.html">AfterCall Teams →</a>
     </nav>
     <a class="btn btn-grad" href="/#get" data-dl>Get the app</a>
+    <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
   </div>
 </header>
 <!-- ARTICLE HEAD (dark) -->
@@ -585,6 +615,23 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
   const ua=navigator.userAgent, android=/Android/i.test(ua), ios=!android&&(/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1));
   const url=android?'https://play.google.com/store/apps/details?id=com.aftercallapp.android':ios?'https://apps.apple.com/us/app/aftercall/id6762097660':null;
   if(url) document.querySelectorAll('a[data-dl]').forEach(a=>{a.href=url;a.target='_blank';a.rel='noopener'});
+})();
+</script>
+<script>
+// mobile menu: mirrors the desktop nav links
+(function(){
+  const nav=document.getElementById('nav'), links=nav&&nav.querySelector('.navlinks');
+  if(!links) return;
+  const btn=nav.querySelector('.nav-burger'), panel=document.createElement('nav');
+  panel.className='mnav'; panel.id='mnav'; panel.setAttribute('aria-label','Mobile');
+  links.querySelectorAll('a').forEach(a=>panel.appendChild(a.cloneNode(true)));
+  nav.after(panel);
+  const set=open=>{nav.classList.toggle('open',open);panel.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);btn.setAttribute('aria-label',open?'Close menu':'Open menu');if(open)panel.classList.toggle('light',nav.classList.contains('on-light'))};
+  btn.addEventListener('click',()=>set(!panel.classList.contains('open')));
+  panel.addEventListener('click',e=>{if(e.target.closest('a'))set(false)});
+  addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
+  addEventListener('scroll',()=>{if(panel.classList.contains('open'))set(false)},{passive:true});
+  addEventListener('resize',()=>{if(innerWidth>900)set(false)});
 })();
 </script>
 </body>
