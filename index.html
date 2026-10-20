@@ -152,6 +152,8 @@ section.off-theme>.aurora,section.off-theme>.grain{opacity:0}
 .pill .pill-link{margin-left:4px;padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.14);color:#fff;font-weight:600;white-space:nowrap;transition:background .3s}
 .pill .pill-link:hover{background:rgba(255,255,255,.24)}
 @media(max-width:600px){.pill{flex-wrap:wrap;justify-content:center;row-gap:8px}}
+.award-badge{display:block;width:auto;height:104px;margin:0 auto 22px;filter:drop-shadow(0 0 .6px #fff) drop-shadow(0 0 .6px #fff) drop-shadow(0 0 .6px #fff) drop-shadow(0 14px 26px rgba(0,0,0,.45))}
+@media(max-width:600px){.award-badge{height:84px;margin-bottom:18px}}
 .pill .ekg{width:46px;height:24px;border-radius:99px;background:var(--grad);display:grid;place-items:center;box-shadow:0 6px 18px -6px rgba(139,92,246,.8)}
 .pill .ekg svg{width:36px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:90;stroke-dashoffset:90;animation:ekg 2.4s ease-in-out infinite}
 @keyframes ekg{0%{stroke-dashoffset:90}55%,100%{stroke-dashoffset:0}}
@@ -464,6 +466,7 @@ footer nav a:hover{color:#fff}
   <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
   <div class="shell">
     <div>
+      <img class="award-badge rv" src="images/home/emsworld-finalist-2026.png" alt="2026 EMS World Innovation Awards Finalist" width="201" height="260">
       <div class="pill glass rv"><span class="ekg" aria-hidden="true"><svg viewBox="0 0 64 24"><path d="M0 12h14l4-7 5 14 5-18 5 15 3-4h28"/></svg></span>Built by EMS. Built for EMS.</div>
       <h1 class="rv d1">The call ends,<br><span class="grad-text">the impact doesn't.</span></h1>
       <p class="lede rv d2">AfterCall helps EMS providers keep a record of every call and skill, gives them a private place to process what the job leaves behind, and connects them with a community of providers and peer supporters for the days they don't want to carry it alone.</p>
