@@ -480,6 +480,14 @@ footer nav a:hover{color:#fff}
 .art-body a{color:#4F46E5;font-weight:600}
 .art-cta{display:flex;gap:12px;flex-wrap:wrap;margin:40px 0 0}
 .art-contact{margin-top:48px;padding-top:28px;border-top:1px solid var(--hair);font-size:15px;color:var(--slate)}
+body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
+/* news: solid brand-gradient hero, no aurora */
+.news-hero,.art-head{background:linear-gradient(115deg,#5B74F6 0%,#7A63F6 55%,#8B5CF6 100%)}
+.news-hero .aurora,.news-hero .grain,.art-head .aurora,.art-head .grain{display:none}
+.news-hero .eyebrow,.art-head .crumb,.art-head .crumb a{color:rgba(255,255,255,.82)}
+.news-hero h1,.art-head h1,.news-hero .grad-text{color:#fff;background:none;-webkit-text-fill-color:#fff}
+.news-hero .lede,.art-head .dek,.art-head .art-meta{color:rgba(255,255,255,.9)}
+.art-head .tag{background:rgba(255,255,255,.18);color:#fff}
 </style>
 <script src="/cookie-consent.js" defer></script>
 <script src="/meta-pixel.js" defer></script>
@@ -550,24 +558,16 @@ footer nav a:hover{color:#fff}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
-// scroll background morph + nav tint
+// nav tint
 (function(){
-  const nav=document.getElementById('nav'), bg=document.getElementById('pageBg');
+  const nav=document.getElementById('nav');
   const secs=[...document.querySelectorAll('body > section')];
   const colorOf=sec=>sec.classList.contains('mist')?'#F5F6FA':sec.classList.contains('light')?'#FFFFFF':'#05091C';
   secs.forEach(sec=>{sec.dataset.theme=sec.classList.contains('light')||sec.classList.contains('mist')?'light':'dark'});
-  let current=null;
+  // news pages: no background morph, sections keep their own color
   const apply=()=>{
-    const line=innerHeight*0.5;
-    let act=secs[0];
-    for(const sec of secs){const r=sec.getBoundingClientRect(); if(r.top<=line&&r.bottom>line){act=sec;break}}
-    // header follows whatever sits under it
-    const under=secs.find(sec=>{const r=sec.getBoundingClientRect();return r.top<=28&&r.bottom>28})||act;
+    const under=secs.find(sec=>{const r=sec.getBoundingClientRect();return r.top<=28&&r.bottom>28})||secs[0];
     nav.classList.toggle('on-light',under.dataset.theme==='light');
-    if(act===current) return; current=act;
-    bg.style.setProperty('--page-bg',colorOf(act));
-    bg.style.setProperty('--glow',act.dataset.theme==='dark'?1:0);
-    secs.forEach(sec=>sec.classList.toggle('off-theme',sec.dataset.theme!==act.dataset.theme));
   };
   let tick=false;
   addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(()=>{apply();tick=false})}},{passive:true});
