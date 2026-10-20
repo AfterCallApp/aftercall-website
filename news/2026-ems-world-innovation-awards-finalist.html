@@ -470,9 +470,10 @@ footer nav a:hover{color:#fff}
 .art-meta .tag{background:rgba(124,143,245,.16);color:#c7d0ff}
 .crumb{font-size:14px;color:var(--dim)}
 .crumb a{color:var(--peri);font-weight:600}
-.art{padding:0 0 120px}
+.art{padding:72px 0 120px}
+@media(max-width:600px){.art{padding:44px 0 96px}}
 .art .shell{max-width:860px}
-.art-img{margin:-10px 0 56px;border-radius:28px;overflow:hidden;box-shadow:0 60px 120px -60px rgba(20,30,80,.55)}
+.art-img{margin:0 0 56px;border-radius:28px;overflow:hidden;box-shadow:0 60px 120px -60px rgba(20,30,80,.55)}
 .art-img img{display:block;width:100%;height:auto}
 .art-body{max-width:68ch;margin:0 auto;font-size:18px;line-height:1.75;color:#3a3d46}
 .art-body p{margin:0 0 22px}
@@ -483,13 +484,8 @@ footer nav a:hover{color:#fff}
 .art-cta .btn-outline:hover{background:rgba(139,92,246,.08);transform:translateY(-2px)}
 .art-contact{margin-top:48px;padding-top:28px;border-top:1px solid var(--hair);font-size:15px;color:var(--slate)}
 body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
-/* news: solid brand-gradient hero, no aurora */
-.news-hero,.art-head{background:linear-gradient(115deg,#5B74F6 0%,#7A63F6 55%,#8B5CF6 100%)}
-.news-hero .aurora,.news-hero .grain,.art-head .aurora,.art-head .grain{display:none}
-.news-hero .eyebrow,.art-head .crumb,.art-head .crumb a{color:rgba(255,255,255,.82)}
-.news-hero h1,.art-head h1,.news-hero .grad-text{color:#fff;background:none;-webkit-text-fill-color:#fff}
-.news-hero .lede,.art-head .dek,.art-head .art-meta{color:rgba(255,255,255,.9)}
-.art-head .tag{background:rgba(255,255,255,.18);color:#fff}
+/* news: homepage-style dark hero with brand glow; no scroll morph */
+.news-hero,.art-head{background:#05091C}
 </style>
 <script src="/cookie-consent.js" defer></script>
 <script src="/meta-pixel.js" defer></script>
@@ -502,7 +498,7 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
   <div class="shell">
     <a class="brand" href="/"><img src="/images/home/logo.png" alt="">AfterCall</a>
     <nav class="navlinks" aria-label="Primary">
-      <a href="/#features">Features</a><a href="/#ai">AfterCall AI</a><a href="/#wellness">Wellness</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/news.html" aria-current="page">News</a><a class="nav-teams" href="/teams.html">AfterCall Teams →</a>
+      <a href="/#features">Features</a><a href="/#ai">AfterCall AI</a><a href="/#wellness">Wellness</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/news" aria-current="page">News</a><a class="nav-teams" href="/teams.html">AfterCall Teams →</a>
     </nav>
     <a class="btn btn-grad" href="/#get" data-dl>Get the app</a>
   </div>
@@ -511,7 +507,7 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
 <section class="art-head">
   <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
   <div class="shell" style="position:relative">
-    <div class="crumb rv"><a href="/news.html">News</a> / Award</div>
+    <div class="crumb rv"><a href="/news">News</a> / Award</div>
     <h1 class="rv d1">AfterCall named a 2026 EMS World Innovation Awards Finalist</h1>
     <p class="dek rv d2">AfterCall, the app built by EMS providers for EMS providers, has been named a finalist in the 2026 EMS World Innovation Awards.</p>
     <div class="art-meta rv d2" style="margin-top:22px"><span class="tag">Award</span><span>October 2026</span></div>
@@ -521,7 +517,7 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
 <!-- ARTICLE (white) -->
 <section class="light art">
   <div class="shell">
-    <figure class="art-img rv" style="margin-top:56px"><img src="/images/news/ems-world-2026-finalist.jpg" alt="2026 EMS World Innovation Awards Finalist ribbon"></figure>
+    <figure class="art-img rv"><img src="/images/news/ems-world-2026-finalist.jpg" alt="2026 EMS World Innovation Awards Finalist ribbon"></figure>
     <div class="art-body">
       <p>AfterCall has been named a finalist in the 2026 EMS World Innovation Awards.</p>
       <p>The EMS World Innovation Awards recognize the year's most innovative new products in EMS, showcased at EMS World Expo. AfterCall was at EMS World Expo 2026 in Orlando, where providers and agency leaders saw the app for themselves.</p>
@@ -556,7 +552,7 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
     <div class="shell">
       <div style="display:flex;align-items:center;gap:10px"><img src="/images/home/logo.png" alt="" style="width:22px;height:22px;border-radius:5px"><span>© 2026 AfterCall LLC · Your calls, captured.</span></div>
       <a class="crisis glass" href="tel:988"><i></i>In crisis? Call or text 988.</a>
-      <nav aria-label="Footer"><a href="/news.html">News</a><a href="/teams.html">For agencies</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
+      <nav aria-label="Footer"><a href="/news">News</a><a href="/teams.html">For agencies</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
     </div>
   </footer>
 </section>
