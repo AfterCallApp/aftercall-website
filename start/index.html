@@ -578,6 +578,7 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;background:var(--ink
   .caret{opacity:1}
 }
 </style>
+  <script src="/cookie-consent.js" defer></script>
   <script src="/meta-pixel.js" defer></script>
   <script defer src="/aftercall-analytics.js"></script>
 </head>
@@ -1053,9 +1054,8 @@ Nothing here is legal, tax, medical or insurance advice.
     /* [CONVERT] Lead conversion hooks. */
     var attr = window.aftercallGetAttribution ? window.aftercallGetAttribution() : {};
     var payload = Object.assign({currency:'USD',value:1,lead_source:'hubspot_start_form'}, attr || {});
-    if(window.gtag) gtag('event','generate_lead',payload);
-    if(window.dataLayer) dataLayer.push(Object.assign({event:'aftercall_lead', source:'hubspot_start_form'}, attr || {}));
-    if(window.fbq) fbq('track','Lead',payload);
+    if(window.aftercallTrackGa) aftercallTrackGa('generate_lead',payload);
+    if(window.aftercallMetaEvent) aftercallMetaEvent('track','Lead',payload);
   }
 
   /* HubSpot posts this message on a successful submit */

@@ -2,7 +2,20 @@
  * Dataset / Pixel ID: 1393918442566153
  * Business: Aftercall App
  */
-(function (f, b, e, v, n, t, s) {
+function aftercallMarketingAllowed() {
+  if (navigator.globalPrivacyControl === true) return false;
+  try {
+    return JSON.parse(localStorage.getItem('aftercall_cookie_consent_v1') || '{}').marketing === true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function aftercallStartMeta() {
+  if (!aftercallMarketingAllowed() || /^\/(ops(?:\/|$)|u(?:\/|$)|teams-dashboard(?:\.html)?\/?$)/.test(window.location.pathname)) return;
+  if (window.aftercallMetaStarted) return;
+  window.aftercallMetaStarted = true;
+  (function (f, b, e, v, n, t, s) {
   if (f.fbq) return;
   n = f.fbq = function () {
     n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
@@ -19,8 +32,22 @@
   s.parentNode.insertBefore(t, s);
 })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-fbq('init', '1393918442566153');
-fbq('track', 'PageView');
+  window.fbq('consent', 'grant');
+  window.fbq('init', '1393918442566153');
+  window.fbq('track', 'PageView');
+}
+
+function aftercallMetaEvent() {
+  if (aftercallMarketingAllowed() && window.aftercallMetaStarted && window.fbq) {
+    window.fbq.apply(window, arguments);
+  }
+}
+
+window.addEventListener('aftercall:consent', function () {
+  if (aftercallMarketingAllowed()) aftercallStartMeta();
+  else if (window.fbq) window.fbq('consent', 'revoke');
+});
+aftercallStartMeta();
 
 var AFTERCALL_ATTR_KEYS = [
   'utm_source',
@@ -64,6 +91,11 @@ function aftercallGetAttribution() {
 }
 
 function aftercallTrackGa(eventName, payload) {
+  try {
+    if (navigator.globalPrivacyControl === true || JSON.parse(localStorage.getItem('aftercall_cookie_consent_v1') || '{}').analytics !== true) return;
+  } catch (error) {
+    return;
+  }
   payload = payload || {};
   var attribution = aftercallGetAttribution();
   Object.keys(attribution).forEach(function (key) {
@@ -92,9 +124,11 @@ function aftercallCampaignLabel(attribution) {
 function aftercallDecorateStoreUrl(rawUrl, store, attribution) {
   try {
     var url = new URL(rawUrl);
-    var label = aftercallCampaignLabel(attribution);
     if (store === 'ios') {
-      if (!url.searchParams.get('ct')) url.searchParams.set('ct', label);
+      url.searchParams.set('pt', '128774505');
+      url.searchParams.set('mt', '8');
+      var campaign = (attribution && (attribution.utm_campaign || attribution.utm_source)) || url.searchParams.get('ct') || 'website';
+      url.searchParams.set('ct', campaign.slice(0, 30));
     }
     if (store === 'android') {
       var referrer = new URLSearchParams();
@@ -116,7 +150,7 @@ aftercallGetAttribution();
 // Lightweight intent signals for ads optimization/audiences.
 document.addEventListener('click', function (event) {
   var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
-  if (!link || !window.fbq) return;
+  if (!link) return;
 
   var href = link.href || '';
   var label = (link.getAttribute('aria-label') || link.textContent || '').trim().slice(0, 100);
@@ -138,7 +172,7 @@ document.addEventListener('click', function (event) {
       content_category: store
     });
 
-    fbq('trackCustom', 'AppStoreClick', {
+    aftercallMetaEvent('trackCustom', 'AppStoreClick', {
       content_name: 'app_store_click',
       content_category: store,
       label: label,
@@ -148,7 +182,7 @@ document.addEventListener('click', function (event) {
       utm_content: attribution.utm_content
     });
 
-    fbq('track', 'Lead', {
+    aftercallMetaEvent('track', 'Lead', {
       content_name: 'app_store_click',
       content_category: store
     });
@@ -158,12 +192,12 @@ document.addEventListener('click', function (event) {
       link_url: href,
       link_text: label
     });
-    fbq('trackCustom', 'ContactClick', { label: label });
+    aftercallMetaEvent('trackCustom', 'ContactClick', { label: label });
   } else if (/\/start\b|start\.html/i.test(href)) {
     aftercallTrackGa('start_page_click', {
       link_url: href,
       link_text: label
     });
-    fbq('trackCustom', 'StartPageClick', { label: label });
+    aftercallMetaEvent('trackCustom', 'StartPageClick', { label: label });
   }
 });
