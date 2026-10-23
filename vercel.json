@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/start", "destination": "/start.html" }
+    { "source": "/start", "destination": "/start.html" },
+    { "source": "/campus-ambassadors", "destination": "/campus-ambassadors.html" }
   ]
 }

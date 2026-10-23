@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Unlisted preview page: keep out of search engines until launch. -->
+<meta name="robots" content="noindex, nofollow">
+<title>AfterCall Campus Ambassadors · Spring 2027</title>
+<meta name="description" content="We're picking 8 to 10 EMS students for Spring 2027 to bring AfterCall to their campus. Free premium, 15% commission, and a national resume title.">
+<meta property="og:title" content="Become an AfterCall Campus Ambassador">
+<meta property="og:description" content="8 to 10 EMS students. Spring 2027. Free premium, 15% commission, and a seat at the table.">
+<meta property="og:url" content="https://aftercallapp.com/campus-ambassadors">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#05091C">
+<link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="/cookie-consent.js" defer></script>
+<script src="/meta-pixel.js" defer></script>
+<script defer src="/aftercall-analytics.js"></script>
+<style>
+:root{
+  --ink:#05091C; --navy:#0A1738; --navy-lift:#142A61;
+  --signal:#3B82F6; --violet:#8B5CF6; --peri:#7C8FF5;
+  --grad:linear-gradient(96deg,#6E8BFF 0%,#8B5CF6 100%);
+  --text:rgba(255,255,255,.72); --dim:rgba(255,255,255,.46); --line:rgba(255,255,255,.09);
+  --paper:#FFFFFF; --mist:#F5F6FA; --graphite:#1D1D1F; --slate:#6E6E73; --hair:rgba(0,0,0,.08);
+  --indigo:#4F46E5; --green:#10B981;
+  --shell:1200px; --ease:cubic-bezier(.2,.7,.1,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--ink)}
+body{background:var(--ink);color:var(--text);font-family:Inter,-apple-system,system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.shell{max-width:var(--shell);margin:0 auto;padding:0 24px}
+h1,h2,h3{color:#fff;font-weight:800;letter-spacing:-.035em;line-height:1.04}
+h2{font-size:clamp(36px,5vw,60px);margin:16px 0 18px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--peri)}
+.lede{font-size:clamp(18px,2vw,21px);color:var(--text);max-width:46ch;line-height:1.5}
+.center{text-align:center}.center .lede{margin-left:auto;margin-right:auto}
+section{position:relative}
+.pad{padding:130px 0}
+@media(max-width:700px){.pad{padding:88px 0}}
+
+/* light sections */
+.light{background:var(--paper);color:var(--slate)}
+.mist{background:var(--mist);color:var(--slate)}
+.light h2,.light h3,.mist h2,.mist h3{color:var(--graphite)}
+.light .eyebrow,.mist .eyebrow{color:#5B5BD6}
+.light .lede,.mist .lede{color:var(--slate)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 26px;border-radius:999px;font-weight:600;font-size:16px;letter-spacing:-.01em;border:0;cursor:pointer;font-family:inherit;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 10px 30px -10px rgba(139,92,246,.7),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-grad:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(139,92,246,.8),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-glass{color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)}
+.btn-glass:hover{background:rgba(255,255,255,.14)}
+.btn:disabled{opacity:.6;cursor:default;transform:none}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:100;height:56px;background:rgba(5,9,28,.62);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--line);transition:background .4s,border-color .4s}
+.nav.on-light{background:rgba(255,255,255,.78);border-color:var(--hair)}
+.nav .shell{display:flex;align-items:center;justify-content:space-between;height:100%;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#fff;letter-spacing:-.02em;font-size:17px;transition:color .4s}
+.brand img{width:28px;height:28px;border-radius:7px}
+.brand small{font-weight:600;font-size:12px;color:var(--dim);letter-spacing:0;padding-left:10px;border-left:1px solid var(--line);transition:color .4s}
+.nav.on-light .brand{color:var(--graphite)}
+.nav.on-light .brand small{color:var(--slate);border-color:var(--hair)}
+.navlinks{display:flex;gap:28px;font-size:13px;color:var(--text);transition:color .4s}
+.navlinks a:hover{color:#fff}
+.nav.on-light .navlinks{color:var(--slate)}
+.nav.on-light .navlinks a:hover{color:var(--graphite)}
+.nav .btn{height:34px;padding:0 16px;font-size:13px}
+@media(max-width:900px){.navlinks{display:none}}
+@media(max-width:480px){.brand small{display:none}}
+
+/* ambient */
+.aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;animation:drift 22s ease-in-out infinite alternate}
+.aurora i:nth-child(1){width:620px;height:620px;background:#3B4BFF;top:-180px;left:-120px}
+.aurora i:nth-child(2){width:540px;height:540px;background:#8B5CF6;top:40px;right:-160px;animation-delay:-8s}
+.aurora i:nth-child(3){width:420px;height:420px;background:#1E3A8A;bottom:-200px;left:30%;animation-delay:-14s}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.12)}}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* glass */
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);box-shadow:0 30px 80px -30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);border-radius:28px}
+
+/* iPhone */
+.iphone{--w:300px;position:relative;width:min(var(--w),100%);flex-shrink:0;aspect-ratio:9/19.5;border-radius:calc(var(--w)*.17);padding:calc(var(--w)*.035);background:linear-gradient(145deg,#4a4d58,#1a1b20 40%,#2c2e36);box-shadow:0 0 0 1.5px #5b5e6a inset,0 60px 100px -30px rgba(0,0,0,.65),0 30px 60px -30px rgba(76,90,255,.35)}
+.iphone .screen{position:relative;width:100%;height:100%;border-radius:calc(var(--w)*.14);overflow:hidden;background:#05091C}
+.iphone .screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center}
+.iphone .screen::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 32%);pointer-events:none}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(36px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}.rv.d4{transition-delay:.4s}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.aurora i{animation:none}}
+
+/* ===== HERO ===== */
+.hero{padding:150px 0 110px;overflow:hidden;min-height:100svh;display:flex;align-items:center}
+.hero .shell{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;width:100%}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 10px;border-radius:999px;font-size:13px;font-weight:600;color:#fff}
+.pill .dot{width:22px;height:22px;border-radius:50%;background:var(--grad);display:grid;place-items:center;box-shadow:0 0 0 4px rgba(139,92,246,.18)}
+.pill .dot::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.hero h1{font-size:clamp(46px,6.6vw,88px);margin:26px 0 22px;letter-spacing:-.045em;line-height:.98}
+.hero .lede{max-width:34em}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.facts{display:flex;gap:30px;flex-wrap:wrap;margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
+.facts div{font-size:13px;color:var(--dim)}
+.facts b{display:block;color:#fff;font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px}
+.hero-stage{position:relative;display:flex;justify-content:center;align-items:flex-start;min-height:600px}
+.hero-stage .back{--w:270px;transform:rotate(6deg) translate(60px,0);opacity:.92}
+.hero-stage .front{--w:280px;position:absolute;left:50%;top:60px;transform:translateX(-82%) rotate(-5deg);z-index:2}
+.chip{position:absolute;z-index:3;display:flex;align-items:center;gap:12px;padding:12px 16px 12px 12px;border-radius:18px;color:#fff;font-size:13px;line-height:1.3;white-space:nowrap;animation:bob 6s ease-in-out infinite alternate}
+.chip .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--grad);font-weight:900;font-size:13px;flex-shrink:0}
+.chip small{display:block;color:var(--dim);font-size:11.5px}
+.chip.c1{top:40px;right:-6px}
+.chip.c2{bottom:70px;left:-10px;animation-delay:-3s}
+.chip.c2 .ic{background:linear-gradient(135deg,#10B981,#3B82F6)}
+@keyframes bob{to{transform:translateY(-12px)}}
+@media(max-width:1000px){
+  .hero .shell{grid-template-columns:1fr;gap:40px}
+  .hero-stage{min-height:520px}
+}
+@media(max-width:600px){
+  .hero{padding:118px 0 70px}
+  .hero-stage{min-height:440px}
+  .hero-stage .back{--w:210px;transform:rotate(6deg) translate(46px,0)}
+  .hero-stage .front{--w:216px;top:40px}
+  .chip.c1{right:0;top:10px}.chip.c2{left:0;bottom:30px}
+  .ctas .btn{flex:1 1 100%}
+  .facts{gap:22px}
+}
+
+/* ===== STORY ===== */
+.story .shell{display:grid;grid-template-columns:.85fr 1.15fr;gap:72px;align-items:center}
+.story-photo{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 40px 90px -40px rgba(30,40,90,.45)}
+.story-photo img{width:100%;height:100%;object-fit:cover}
+.story-photo figcaption{position:absolute;left:16px;right:16px;bottom:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:var(--graphite);font-size:13px;line-height:1.4}
+.story-photo figcaption b{display:block;font-size:14px}
+.story blockquote{font-size:clamp(26px,3.2vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.12;color:var(--graphite);margin:18px 0 24px}
+.story p{font-size:18px;line-height:1.65;max-width:52ch}
+.story p + p{margin-top:16px}
+.seats{display:inline-flex;align-items:center;gap:14px;margin-top:30px;padding:14px 18px;border-radius:18px;background:var(--mist);border:1px solid var(--hair)}
+.seat-dots{display:flex;gap:5px}
+.seat-dots i{width:12px;height:12px;border-radius:4px;background:var(--grad)}
+.seat-dots i.opt{background:transparent;border:1.5px dashed #a5b4fc}
+.seats span{font-size:14px;color:var(--graphite);font-weight:600}
+@media(max-width:900px){.story .shell{grid-template-columns:1fr;gap:44px}.story-photo{max-width:440px}}
+
+/* ===== BENEFITS ===== */
+.benefits{overflow:hidden}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:56px}
+.tile{position:relative;padding:34px;border-radius:28px;overflow:hidden;min-height:250px;display:flex;flex-direction:column}
+.tile h3{font-size:24px;margin:auto 0 10px;letter-spacing:-.025em}
+.tile p{font-size:15.5px;color:var(--text);line-height:1.55}
+.tile .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:rgba(124,143,245,.14);border:1px solid rgba(124,143,245,.3);margin-bottom:22px}
+.tile .ic svg{width:22px;height:22px;stroke:#A5B4FC;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.t-comm{grid-column:span 3;grid-row:span 2;min-height:520px;background:radial-gradient(120% 90% at 100% 0%,rgba(139,92,246,.45),transparent 60%),radial-gradient(90% 80% at 0% 100%,rgba(59,75,255,.4),transparent 60%),linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03))}
+.t-comm .num{font-size:clamp(110px,15vw,200px);font-weight:900;letter-spacing:-.07em;line-height:.85;margin:auto 0 8px}
+.t-comm .num sup{font-size:.42em;vertical-align:.95em;letter-spacing:-.03em;margin-left:4px}
+.t-comm h3{margin:0 0 10px;font-size:28px}
+.t-comm p{max-width:34ch;font-size:17px}
+.t-free{grid-column:span 3}
+.t-agency{grid-column:span 3}
+.t-title{grid-column:span 3}
+.t-council{grid-column:span 3;background:radial-gradient(100% 120% at 100% 100%,rgba(16,185,129,.22),transparent 60%),linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03))}
+.t-council .ic{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.35)}
+.t-council .ic svg{stroke:#6EE7B7}
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge-row span{font-size:12px;font-weight:600;color:#fff;padding:6px 11px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+@media(max-width:900px){.bento{grid-template-columns:1fr}.tile,.t-comm,.t-free,.t-agency,.t-title,.t-council{grid-column:auto;grid-row:auto;min-height:0}.t-comm{min-height:380px}.tile h3{margin-top:4px}}
+@media(max-width:600px){.tile{padding:26px}}
+
+/* ===== ASK ===== */
+.ask .shell{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+.ask-head{position:sticky;top:110px}
+.hours{margin-top:30px;display:flex;align-items:baseline;gap:10px}
+.hours b{font-size:72px;font-weight:900;letter-spacing:-.06em;color:var(--graphite);line-height:1}
+.hours span{font-size:15px;line-height:1.35}
+.meter{margin-top:18px;height:10px;border-radius:99px;background:#e6e8f2;overflow:hidden;max-width:340px}
+.meter i{display:block;height:100%;width:2.5%;min-width:14px;border-radius:99px;background:var(--grad)}
+.meter-cap{font-size:13px;margin-top:8px;max-width:340px}
+.asks{display:flex;flex-direction:column;gap:12px}
+.ask-row{display:grid;grid-template-columns:48px 1fr auto;gap:18px;align-items:center;padding:20px 22px;background:#fff;border:1px solid var(--hair);border-radius:20px;box-shadow:0 12px 30px -24px rgba(30,40,90,.35);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.ask-row:hover{transform:translateY(-2px);box-shadow:0 20px 40px -24px rgba(30,40,90,.45)}
+.ask-row .n{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--mist);color:var(--indigo);font-weight:800;font-size:15px}
+.ask-row h4{font-size:16.5px;color:var(--graphite);font-weight:700;letter-spacing:-.01em;line-height:1.35}
+.ask-row p{font-size:14px;margin-top:3px;line-height:1.45}
+.freq{font-size:12.5px;font-weight:700;color:var(--indigo);background:rgba(79,70,229,.07);border:1px solid rgba(79,70,229,.18);padding:7px 12px;border-radius:99px;white-space:nowrap}
+@media(max-width:900px){.ask .shell{grid-template-columns:1fr;gap:40px}.ask-head{position:static}}
+@media(max-width:560px){.ask-row{grid-template-columns:40px 1fr;gap:14px;padding:18px}.ask-row .n{width:40px;height:40px}.freq{grid-column:2;justify-self:start;margin-top:-4px}}
+
+/* ===== LEVELS ===== */
+.levels{overflow:hidden}
+.ladder{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:60px}
+.ladder::before{content:"";position:absolute;top:58px;left:8%;right:8%;height:2px;background:linear-gradient(90deg,rgba(124,143,245,.1),rgba(139,92,246,.7),rgba(16,185,129,.7));z-index:0}
+.lvl{position:relative;z-index:1;padding:32px;border-radius:28px;display:flex;flex-direction:column}
+.lvl .rank{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:18px;color:#fff;background:var(--navy-lift);border:1px solid rgba(124,143,245,.45);box-shadow:0 0 0 8px var(--ink);margin-bottom:26px}
+.lvl:nth-child(2) .rank{background:var(--grad);border:0}
+.lvl:nth-child(3) .rank{background:linear-gradient(135deg,#10B981,#3B82F6);border:0}
+.lvl .tag{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--peri);margin-bottom:8px}
+.lvl:nth-child(3) .tag{color:#6EE7B7}
+.lvl h3{font-size:28px;margin-bottom:12px}
+.lvl p{font-size:15.5px;line-height:1.6}
+.lvl .how{margin-top:auto;padding-top:22px;font-size:13.5px;color:#fff;font-weight:600;display:flex;align-items:center;gap:8px}
+.lvl .how::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--peri)}
+.lvl:nth-child(3){border-color:rgba(110,231,183,.3)}
+@media(max-width:900px){.ladder{grid-template-columns:1fr}.ladder::before{top:8%;bottom:8%;left:57px;right:auto;width:2px;height:auto;background:linear-gradient(180deg,rgba(124,143,245,.1),rgba(139,92,246,.7),rgba(16,185,129,.7))}}
+
+/* ===== WHO ===== */
+.who .shell{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.who-list{display:flex;flex-direction:column;gap:14px;margin-top:30px}
+.who-list li{list-style:none;display:flex;gap:14px;align-items:flex-start;font-size:17px;color:var(--graphite);line-height:1.5}
+.who-list li::before{content:"";flex-shrink:0;width:24px;height:24px;margin-top:1px;border-radius:8px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/14px no-repeat,var(--grad)}
+.who-list li span{color:var(--slate)}
+.settings{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.settings span{font-size:13.5px;font-weight:600;color:var(--graphite);padding:9px 14px;border-radius:99px;background:#fff;border:1px solid var(--hair)}
+.settings span.plus{background:rgba(79,70,229,.06);border-color:rgba(79,70,229,.2);color:var(--indigo)}
+.who-visual{position:relative;display:flex;justify-content:center;gap:18px}
+.who-visual .iphone{--w:250px}
+.who-visual .iphone:nth-child(2){margin-top:60px}
+@media(max-width:900px){.who .shell{grid-template-columns:1fr;gap:48px}.who-visual .iphone{--w:min(42vw,220px)}}
+
+/* ===== APPLY STEPS ===== */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px}
+.step{padding:32px;border-radius:28px}
+.step .k{font-size:13px;font-weight:700;color:var(--peri);letter-spacing:.12em;text-transform:uppercase}
+.step h3{font-size:24px;margin:14px 0 10px}
+.step p{font-size:15.5px;line-height:1.6}
+.step q{display:block;margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font-weight:600;font-size:15px;quotes:"\201C" "\201D"}
+.deadline{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:22px;padding:26px 32px;border-radius:28px}
+.deadline .when{display:flex;align-items:center;gap:18px}
+.cal{width:60px;height:64px;border-radius:14px;background:#fff;overflow:hidden;text-align:center;flex-shrink:0;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+.cal i{display:block;font-style:normal;background:var(--grad);color:#fff;font-size:11px;font-weight:800;letter-spacing:.1em;padding:4px 0}
+.cal b{display:block;color:var(--graphite);font-size:26px;font-weight:900;line-height:1.5;letter-spacing:-.03em}
+.deadline h3{font-size:22px}
+.deadline p{font-size:14.5px;margin-top:2px}
+@media(max-width:900px){.steps{grid-template-columns:1fr}}
+@media(max-width:600px){.deadline{padding:24px}.deadline .btn{flex:1 1 100%}}
+
+/* ===== FORM ===== */
+.apply .shell{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:start}
+.apply-aside{position:sticky;top:110px}
+.apply-aside .lede{margin-bottom:28px}
+.next-list{display:flex;flex-direction:column;gap:12px}
+.next-list div{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:18px;background:#fff;border:1px solid var(--hair);font-size:14.5px;line-height:1.5}
+.next-list b{color:var(--graphite);display:block;font-size:15px}
+.next-list .n{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--grad);color:#fff;font-weight:800;font-size:13px;flex-shrink:0}
+.form-card{background:#fff;border:1px solid var(--hair);border-radius:28px;padding:40px;box-shadow:0 40px 90px -50px rgba(30,40,90,.45)}
+.form-card h3{font-size:28px;margin-bottom:6px}
+.form-card .sub{font-size:14.5px;margin-bottom:28px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fgrid .full{grid-column:1/-1}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--graphite);margin-bottom:7px}
+.field label .req{color:#5B5BD6}
+.field label .opt{color:#9ca3af;font-weight:500}
+.field input{width:100%;height:50px;padding:0 15px;border-radius:14px;border:1px solid #e3e5ee;background:var(--mist);font:inherit;font-size:15.5px;color:var(--graphite);transition:border-color .2s,box-shadow .2s,background .2s}
+.field input::placeholder{color:#a3a7b5}
+.field input:focus{outline:0;background:#fff;border-color:#8B5CF6;box-shadow:0 0 0 4px rgba(139,92,246,.14)}
+.field input.bad{border-color:#ef4444;box-shadow:0 0 0 4px rgba(239,68,68,.1)}
+.field .hint{font-size:12px;color:#9ca3af;margin-top:6px;line-height:1.45}
+.consent{display:flex;gap:12px;align-items:flex-start;margin-top:22px;padding:16px;border-radius:16px;background:var(--mist);font-size:13.5px;line-height:1.5;color:var(--slate);cursor:pointer}
+.consent input{width:20px;height:20px;flex-shrink:0;margin-top:1px;accent-color:#6E5BF6}
+.submit-row{display:flex;align-items:center;gap:16px;margin-top:24px;flex-wrap:wrap}
+.submit-row .btn{min-width:220px}
+.submit-row small{font-size:12.5px;color:#9ca3af;max-width:30ch;line-height:1.45}
+.msg{display:none;margin-top:18px;padding:14px 16px;border-radius:14px;font-size:14.5px;line-height:1.5}
+.msg.err{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.msg.err a{text-decoration:underline}
+.done{display:none;text-align:center;padding:24px 8px}
+.done .check{width:72px;height:72px;margin:0 auto 22px;border-radius:24px;background:var(--grad);display:grid;place-items:center;box-shadow:0 20px 40px -14px rgba(139,92,246,.7)}
+.done .check svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.done h3{font-size:30px;margin-bottom:10px}
+.done p{font-size:16px;line-height:1.6;max-width:40ch;margin:0 auto}
+.done .q{margin:22px auto 0;max-width:38ch;padding:16px;border-radius:16px;background:var(--mist);color:var(--graphite);font-weight:700}
+.form-card.sent form{display:none}.form-card.sent .done{display:block}
+@media(max-width:900px){.apply .shell{grid-template-columns:1fr;gap:40px}.apply-aside{position:static}}
+@media(max-width:560px){.form-card{padding:26px 20px;border-radius:24px}.fgrid{grid-template-columns:1fr}.submit-row .btn{width:100%}}
+
+/* ===== FOOTER ===== */
+.closing{padding:110px 0 0;overflow:hidden}
+.closing h2{max-width:16ch;margin-left:auto;margin-right:auto}
+.ethics{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:34px}
+.ethics span{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:#fff;padding:10px 16px;border-radius:99px}
+.ethics svg{width:16px;height:16px;stroke:#6EE7B7;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+footer{margin-top:110px;border-top:1px solid var(--line);padding:30px 0 40px;font-size:13px;color:var(--dim)}
+footer .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer nav{display:flex;gap:20px;flex-wrap:wrap}
+footer nav a:hover{color:#fff}
+.crisis{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;color:#fff;font-size:13px}
+.crisis i{width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 4px rgba(16,185,129,.2)}
+@media(max-width:600px){footer .shell{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="shell">
+    <a class="brand" href="/"><img src="/images/home/logo.png" alt="">AfterCall<small>Campus Ambassadors</small></a>
+    <nav class="navlinks" aria-label="Page">
+      <a href="#benefits">What you get</a><a href="#ask">What we ask</a><a href="#levels">Levels</a><a href="#who">Who</a><a href="#how">How to apply</a>
+    </nav>
+    <a class="btn btn-grad" href="#apply">Apply now</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top" data-theme="dark">
+  <div class="aurora"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell">
+    <div>
+      <div class="pill glass rv"><span class="dot"></span>Spring 2027 cohort · 8 to 10 seats</div>
+      <h1 class="rv d1">Become an AfterCall <span class="grad-text">Campus Ambassador.</span></h1>
+      <p class="lede rv d2">You know the call doesn't end when you clear the hospital. Bring the app built by a medic to your campus, and we'll make it worth your time.</p>
+      <div class="ctas rv d3">
+        <a class="btn btn-grad" href="#apply">Apply in 10 minutes →</a>
+        <a class="btn btn-glass" href="#benefits">See what you get</a>
+      </div>
+      <div class="facts rv d4">
+        <div><b>15%</b>commission on referrals</div>
+        <div><b>2–3 hrs</b>a month</div>
+        <div><b data-days>Dec 11</b><span data-days-label>applications close</span></div>
+      </div>
+    </div>
+    <div class="hero-stage rv d2" aria-hidden="true">
+      <div class="iphone back"><div class="screen"><img src="/images/home/reflection-dark.jpg" alt=""></div></div>
+      <div class="iphone front"><div class="screen"><img src="/images/home/mycalls-light.jpg" alt=""></div></div>
+      <div class="chip glass c1"><span class="ic">15%</span><div>Commission per subscriber<small>First-year revenue, your code</small></div></div>
+      <div class="chip glass c2"><span class="ic">★</span><div>Premium, free all semester<small>Every feature, on us</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="light pad story" data-theme="light">
+  <div class="shell">
+    <figure class="story-photo rv">
+      <img src="/images/home/jordan-story.jpg" alt="Jordan Appelbaum, founder of AfterCall, in front of an ambulance" loading="lazy" decoding="async">
+      <figcaption><b>Jordan Appelbaum</b>Founder of AfterCall · 2026 EMS World Innovation Awards finalist</figcaption>
+    </figure>
+    <div>
+      <span class="eyebrow rv">Why this program exists</span>
+      <blockquote class="rv d1">The call after the call is where burnout starts, and where it can stop.</blockquote>
+      <p class="rv d2">AfterCall was built by a medic to help crews log calls and take care of themselves after the hard ones. It's the tool we wish every new provider had from day one.</p>
+      <p class="rv d2">Nobody reaches EMS students like the student on the squad everyone already listens to. That's who we're looking for.</p>
+      <div class="seats rv d3"><div class="seat-dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="opt"></i><i class="opt"></i></div><span>8 to 10 ambassadors, nationwide</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="pad benefits" id="benefits" data-theme="dark">
+  <div class="aurora" style="opacity:.5"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell" style="position:relative">
+    <div class="center">
+      <span class="eyebrow rv">What you get</span>
+      <h2 class="rv d1">Real perks. <span class="grad-text">Real résumé.</span></h2>
+      <p class="lede rv d2">This isn't a free-t-shirt gig. You earn, you build a national title, and the best ambassadors get a direct line to our founder.</p>
+    </div>
+    <div class="bento">
+      <article class="tile glass t-comm rv">
+        <span class="eyebrow">Referral commission</span>
+        <div class="num grad-text">15<sup>%</sup></div>
+        <h3>Of first-year revenue, every subscriber.</h3>
+        <p>Everyone who signs up with your code earns you 15% of what they pay in their first year. No cap.</p>
+      </article>
+      <article class="tile glass t-free rv d1">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></div>
+        <h3>Free premium, all semester</h3>
+        <p>Every AfterCall feature unlocked while you're in the program.</p>
+      </article>
+      <article class="tile glass t-agency rv d2">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6M9 11h.01M15 11h.01"/></svg></div>
+        <h3>Agency bonus</h3>
+        <p>Introduce an agency or campus squad that signs on, and you earn a bonus on top of commission.</p>
+      </article>
+      <article class="tile glass t-title rv d1">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h6M7 14h4M16 13.5l1.5 1.5 2.5-3"/></svg></div>
+        <h3>A national résumé title</h3>
+        <p>AfterCall Campus Ambassador, with a certificate and a LinkedIn badge to prove it.</p>
+        <div class="badge-row"><span>Certificate</span><span>LinkedIn badge</span></div>
+      </article>
+      <article class="tile glass t-council rv d2">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
+        <h3>A shot at the Ambassador Council</h3>
+        <p>Three seats. Advise our founder directly and earn a signed letter of recommendation.</p>
+        <div class="badge-row"><span>Med school</span><span>PA school</span><span>Medic program</span><span>Fire dept.</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ASK -->
+<section class="mist pad ask" id="ask" data-theme="light">
+  <div class="shell">
+    <div class="ask-head">
+      <span class="eyebrow rv">What we ask</span>
+      <h2 class="rv d1">Small asks. Built around your shifts.</h2>
+      <p class="lede rv d2">Most of it you'd do anyway: use the app, post about it, talk to your squad.</p>
+      <div class="hours rv d3"><b>2–3</b><span>hours<br>a month</span></div>
+      <div class="meter rv d3" aria-hidden="true"><i></i></div>
+      <p class="meter-cap rv d3">That's less than one percent of your month.</p>
+    </div>
+    <div class="asks">
+      <div class="ask-row rv"><span class="n">01</span><div><h4>Use AfterCall after shifts, ride time, or hard calls</h4><p>Log calls, check in, reflect. Your honest use is the whole point.</p></div><span class="freq">Weekly</span></div>
+      <div class="ask-row rv d1"><span class="n">02</span><div><h4>Share AfterCall on social</h4><p>A story, a repost, a quick tip.</p></div><span class="freq">1 post a week</span></div>
+      <div class="ask-row rv d1"><span class="n">03</span><div><h4>Create one original post or short video</h4><p>Pick from our prompt list.</p></div><span class="freq">1 a month</span></div>
+      <div class="ask-row rv d2"><span class="n">04</span><div><h4>Give a 20 minute talk</h4><p>At a squad meeting, in-service, or class. Slides provided.</p></div><span class="freq">1 a semester</span></div>
+      <div class="ask-row rv d2"><span class="n">05</span><div><h4>Make introductions</h4><p>A chief, training officer, peer support lead, or program director.</p></div><span class="freq">4 a semester</span></div>
+      <div class="ask-row rv d3"><span class="n">06</span><div><h4>Tell us what's working and what isn't</h4><p>A 5 minute form. You'll shape the product.</p></div><span class="freq">Monthly</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LEVELS -->
+<section class="pad levels" id="levels" data-theme="dark">
+  <div class="grain"></div>
+  <div class="shell">
+    <div class="center">
+      <span class="eyebrow rv">Three ways to level up</span>
+      <h2 class="rv d1">Start in. <span class="grad-text">Move up.</span></h2>
+      <p class="lede rv d2">Everyone starts as an Ambassador. Results move you up, and the top three get a seat at the table.</p>
+    </div>
+    <div class="ladder">
+      <article class="lvl glass rv">
+        <span class="rank">1</span>
+        <span class="tag">Level one</span>
+        <h3>Ambassador</h3>
+        <p>Complete onboarding and you're in. Free premium, your referral code, and the content kit.</p>
+        <span class="how">Unlock: finish onboarding</span>
+      </article>
+      <article class="lvl glass rv d1">
+        <span class="rank">2</span>
+        <span class="tag">Level two</span>
+        <h3>Senior Ambassador</h3>
+        <p>Reach 10 paid referrals or land an agency demo.</p>
+        <span class="how">Unlock: 10 referrals or 1 agency demo</span>
+      </article>
+      <article class="lvl glass rv d2">
+        <span class="rank">3</span>
+        <span class="tag">Three seats</span>
+        <h3>Ambassador Council</h3>
+        <p>Three Seniors are selected at midterm to advise our founder, test features first, and host a national student peer panel.</p>
+        <span class="how">Selected at midterm</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="light pad who" id="who" data-theme="light">
+  <div class="shell">
+    <div>
+      <span class="eyebrow rv">Who we're looking for</span>
+      <h2 class="rv d1">The one your squad already listens to.</h2>
+      <ul class="who-list">
+        <li class="rv d1"><div>EMT and paramedic students <span>who actually run calls.</span></div></li>
+        <li class="rv d2"><div>Someone others on the squad <span>come to for advice.</span></div></li>
+        <li class="rv d2"><div>Active on Instagram, TikTok, or LinkedIn.</div></li>
+      </ul>
+      <div class="settings rv d3">
+        <span>Campus squad</span><span>Volunteer</span><span>Per diem</span><span>Career</span><span class="plus">+ Officers &amp; class leaders</span>
+      </div>
+    </div>
+    <div class="who-visual rv d2" aria-hidden="true">
+      <div class="iphone"><div class="screen"><img src="/images/home/community-feed.jpg" alt=""></div></div>
+      <div class="iphone"><div class="screen"><img src="/images/home/home-wellness-ai-dark.jpg" alt=""></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO APPLY -->
+<section class="pad" id="how" data-theme="dark">
+  <div class="aurora" style="opacity:.4"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell" style="position:relative">
+    <div class="center">
+      <span class="eyebrow rv">How to apply</span>
+      <h2 class="rv d1">Ten minutes. <span class="grad-text">Three steps.</span></h2>
+    </div>
+    <div class="steps">
+      <article class="step glass rv">
+        <span class="k">Step 01</span>
+        <h3>Fill out a short form</h3>
+        <p>Your school, program, agency, and socials.</p>
+      </article>
+      <article class="step glass rv d1">
+        <span class="k">Step 02</span>
+        <h3>Record a 60 second video</h3>
+        <p>Just your phone. No editing needed. Answer one question:</p>
+        <q>Why the call after the call matters to me.</q>
+      </article>
+      <article class="step glass rv d2">
+        <span class="k">Step 03</span>
+        <h3>Give us one reference</h3>
+        <p>Your squad chief, preceptor, or program director.</p>
+      </article>
+    </div>
+    <div class="deadline glass rv">
+      <div class="when">
+        <div class="cal"><i>DEC</i><b>11</b></div>
+        <div><h3>Applications close December 11, 2026</h3><p data-countdown>Spring 2027 cohort announced after the deadline.</p></div>
+      </div>
+      <a class="btn btn-grad" href="#apply">Start your application →</a>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section class="mist pad apply" id="apply" data-theme="light">
+  <div class="shell">
+    <div class="apply-aside">
+      <span class="eyebrow rv">Step 01 starts here</span>
+      <h2 class="rv d1">Apply to be an AfterCall Ambassador.</h2>
+      <p class="lede rv d2">Takes about two minutes. We'll email you next steps for your video and reference.</p>
+      <div class="next-list rv d3">
+        <div><span class="n">1</span><span><b>Submit this form</b>Your basics, school and agency.</span></div>
+        <div><span class="n">2</span><span><b>Check your inbox</b>We'll send how to share your 60 second video.</span></div>
+        <div><span class="n">3</span><span><b>Send one reference</b>Chief, preceptor, or program director.</span></div>
+      </div>
+    </div>
+
+    <div class="form-card rv d1" id="formCard">
+      <form id="ambForm" action="https://aftercallapp.us11.list-manage.com/subscribe/post?u=a87dcea99573dfdcb95297db7&amp;id=78cd7eadc9&amp;f_id=00eec4e3f0" method="post" target="_blank" novalidate>
+        <h3>Your application</h3>
+        <p class="sub">Fields marked <span style="color:#5B5BD6">*</span> are required.</p>
+        <div class="fgrid">
+          <div class="field"><label for="mce-FNAME">First name <span class="req">*</span></label><input type="text" name="FNAME" id="mce-FNAME" autocomplete="given-name" required></div>
+          <div class="field"><label for="mce-LNAME">Last name <span class="req">*</span></label><input type="text" name="LNAME" id="mce-LNAME" autocomplete="family-name" required></div>
+          <div class="field full"><label for="mce-EMAIL">Email <span class="req">*</span></label><input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" placeholder="you@school.edu" required><p class="hint">Your school email works great.</p></div>
+          <div class="field full"><label for="mce-COMPANY">School &amp; EMS program <span class="req">*</span></label><input type="text" name="COMPANY" id="mce-COMPANY" placeholder="e.g. Rutgers · Paramedic program" required></div>
+          <div class="field full"><label for="mce-ROLE">Agency &amp; role <span class="opt">(optional)</span></label><input type="text" name="ROLE" id="mce-ROLE" placeholder="e.g. Campus EMS, EMT · Lieutenant"><p class="hint">Campus squad, volunteer, per diem, or career. Include any officer or class role.</p></div>
+          <div class="field"><label for="mce-CITY">City <span class="req">*</span></label><input type="text" name="CITY" id="mce-CITY" autocomplete="address-level2" required></div>
+          <div class="field"><label for="mce-STATE">State <span class="req">*</span></label><input type="text" name="STATE" id="mce-STATE" autocomplete="address-level1" placeholder="NY" required></div>
+        </div>
+        <!-- Mailchimp bot honeypot: keep -->
+        <div aria-hidden="true" style="position:absolute;left:-5000px"><input type="text" name="b_a87dcea99573dfdcb95297db7_78cd7eadc9" tabindex="-1" value=""></div>
+        <label class="consent"><input type="checkbox" id="agree" required><span>I understand ambassadors never share patient information and always disclose their partnership with AfterCall in posts.</span></label>
+        <div class="submit-row">
+          <button class="btn btn-grad" type="submit" id="submitBtn">Submit application →</button>
+          <small>We'll only use your info for the ambassador program.</small>
+        </div>
+        <div class="msg" id="formMsg" role="alert"></div>
+      </form>
+      <div class="done" aria-live="polite">
+        <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h3>You're in the running.</h3>
+        <p>Thanks for applying. Check your inbox to confirm your email, then get your video ready. Your prompt:</p>
+        <p class="q">"Why the call after the call matters to me."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING + FOOTER -->
+<section class="closing" data-theme="dark">
+  <div class="aurora" style="opacity:.45"><i></i><i></i><i></i></div><div class="grain"></div>
+  <div class="shell center" style="position:relative">
+    <span class="eyebrow rv">Spring 2027</span>
+    <h2 class="rv d1">Bring AfterCall to <span class="grad-text">your campus.</span></h2>
+    <div class="ctas rv d2" style="justify-content:center"><a class="btn btn-grad" href="#apply">Apply now</a><a class="btn btn-glass" href="mailto:jordan@aftercallapp.com?subject=Campus%20Ambassador%20question">Questions? Email us</a></div>
+    <div class="ethics rv d3">
+      <span class="glass"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/></svg>Ambassadors never share patient information</span>
+      <span class="glass"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Partnerships always disclosed in posts</span>
+    </div>
+  </div>
+  <footer>
+    <div class="shell">
+      <div style="display:flex;align-items:center;gap:10px"><img src="/images/home/logo.png" alt="" style="width:22px;height:22px;border-radius:5px"><span>© 2026 AfterCall LLC · Your calls, captured.</span></div>
+      <a class="crisis glass" href="tel:988"><i></i>In crisis? Call or text 988.</a>
+      <nav aria-label="Footer"><a href="/">Home</a><a href="/teams">For agencies</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
+    </div>
+  </footer>
+</section>
+
+<script>
+// reveal on scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// nav tint follows the section under it
+(function(){
+  const nav=document.getElementById('nav'); const secs=[...document.querySelectorAll('section[data-theme]')];
+  const tick=()=>{const y=40;let t='dark';for(const s of secs){const r=s.getBoundingClientRect();if(r.top<=y&&r.bottom>y){t=s.dataset.theme;break}}nav.classList.toggle('on-light',t==='light')};
+  addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);tick();
+})();
+
+// deadline countdown (Dec 11, 2026, 11:59pm ET)
+(function(){
+  const end=new Date('2026-12-11T23:59:00-05:00'); const days=Math.ceil((end-new Date())/864e5);
+  const b=document.querySelector('[data-days]'), l=document.querySelector('[data-days-label]'), c=document.querySelector('[data-countdown]');
+  if(days>0){ b.textContent=days+(days===1?' day':' days'); l.textContent='left to apply';
+    c.textContent=days+(days===1?' day':' days')+' left. Spring 2027 cohort announced after the deadline.'; }
+  else { b.textContent='Closed'; l.textContent='Spring 2027 applications'; c.textContent='Applications for Spring 2027 are closed. Email us to hear about the next cohort.'; }
+})();
+
+// Mailchimp submit via JSONP so applicants never leave the page
+(function(){
+  const form=document.getElementById('ambForm'), btn=document.getElementById('submitBtn'), msg=document.getElementById('formMsg'), card=document.getElementById('formCard');
+  const showErr=html=>{msg.className='msg err';msg.innerHTML=html};
+  form.addEventListener('submit',e=>{
+    e.preventDefault(); msg.className='msg'; let first=null;
+    form.querySelectorAll('input[required]').forEach(i=>{
+      const ok=i.type==='checkbox'?i.checked:i.type==='email'?/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value.trim()):i.value.trim()!=='';
+      if(i.type!=='checkbox') i.classList.toggle('bad',!ok);
+      if(!ok&&!first) first=i;
+    });
+    if(first){ showErr(first.id==='agree'?'Please confirm the patient privacy and disclosure policy.':'Please fill in the highlighted fields.'); first.focus(); return; }
+    btn.disabled=true; btn.textContent='Submitting…';
+    const cb='mcCb'+Date.now(); const params=new URLSearchParams(new FormData(form)); params.set('c',cb);
+    const url=form.action.replace('/post?','/post-json?')+'&'+params.toString();
+    const s=document.createElement('script'); let settled=false;
+    const finish=()=>{settled=true;delete window[cb];s.remove();btn.disabled=false;btn.textContent='Submit application →'};
+    window[cb]=r=>{
+      finish();
+      const txt=(r&&r.msg)||'';
+      if(r&&r.result==='success'||/already subscribed/i.test(txt)){ card.classList.add('sent'); card.scrollIntoView({behavior:'smooth',block:'center'}); window.fbq&&fbq('track','Lead'); return; }
+      showErr(txt.replace(/^\d+\s-\s/,'')||'Something went wrong. Please try again.');
+    };
+    s.onerror=()=>{ if(settled) return; finish(); showErr('We couldn\'t reach our signup service. Please try again, or <a href="mailto:jordan@aftercallapp.com?subject=Campus%20Ambassador%20application">email us</a> to apply.'); };
+    setTimeout(()=>{ if(!settled){ finish(); showErr('This is taking longer than expected. Please try again, or <a href="mailto:jordan@aftercallapp.com?subject=Campus%20Ambassador%20application">email us</a>.'); } },15000);
+    s.src=url; document.body.appendChild(s);
+  });
+  form.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>i.classList.remove('bad')));
+})();
+</script>
+</body>
+</html>
