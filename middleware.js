@@ -1,14 +1,14 @@
-// Vercel Routing Middleware: password gate for the unlisted Campus Ambassador
+// Vercel Routing Middleware: password gate for the unlisted Ambassador Program
 // preview page. Only the paths in `matcher` are affected; the rest of the site
 // is untouched. Remove this file (or the matcher entries) when the page goes public.
 
 export const config = {
-  matcher: ['/campus-ambassadors', '/campus-ambassadors.html'],
+  matcher: ['/ambassador-program', '/ambassador-program.html'],
 };
 
 // SHA-256 of the preview password (the plaintext is not stored in the repo).
 const PASSWORD_HASH = 'a46e842fb0c2a527c20580ddb9be8a8932b4a599c5c14971c8a145325cf64b5a';
-const COOKIE = 'ac_campus_preview';
+const COOKIE = 'ac_amb_preview';
 
 async function sha256(text) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -17,7 +17,7 @@ async function sha256(text) {
 
 // Cookie token is derived from the hash, so it can't be guessed from the cookie name alone.
 async function token() {
-  return sha256(PASSWORD_HASH + ':campus-ambassadors:v1');
+  return sha256(PASSWORD_HASH + ':ambassador-program:v1');
 }
 
 function readCookie(req, name) {
@@ -81,7 +81,7 @@ button{width:100%;height:52px;margin-top:12px;border:0;border-radius:999px;backg
 <form class="card" method="post">
 <img src="/images/home/logo.png" alt="AfterCall">
 <h1>Private preview</h1>
-<p>Campus Ambassador Program · Enter the password to continue.</p>
+<p>Ambassador Program · Enter the password to continue.</p>
 <input type="password" name="password" placeholder="Password" autocomplete="current-password" autofocus required aria-label="Password">
 <button type="submit">View page</button>
 ${error ? '<p class="e">That password didn’t work. Try again.</p>' : ''}
