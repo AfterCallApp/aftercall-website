@@ -167,7 +167,7 @@
 
   <div id="results" class="hidden">
     <nav class="nav">
-      <a href="#insights">Insights</a><a href="#overview">Overview</a><a href="#daily">Daily</a><a href="#growth">Growth</a><a href="#funnel">Funnel</a><a href="#retention">Retention</a><a href="#engagement">Engagement</a><a href="#conversion">Conversion</a><a href="#notifications">Notifications</a><a href="#sessions">Sessions</a><a href="#features">Features</a><a href="#builds">Builds</a><a href="#screens">Screens</a><a href="#users">Users</a><a href="#health">Health</a>
+      <a href="#insights">Insights</a><a href="#overview">Overview</a><a href="#daily">Daily</a><a href="#growth">Growth</a><a href="#funnel">Funnel</a><a href="#retention">Retention</a><a href="#engagement">Engagement</a><a href="#conversion">Conversion</a><a href="#research">Research</a><a href="#notifications">Notifications</a><a href="#sessions">Sessions</a><a href="#features">Features</a><a href="#builds">Builds</a><a href="#screens">Screens</a><a href="#users">Users</a><a href="#health">Health</a>
     </nav>
 
     <section id="insights" style="margin-top:16px">
@@ -252,6 +252,17 @@
       </div>
     </section>
 
+    <section id="research">
+      <div class="sechead"><h2>Research consent</h2><span class="q">Who has said yes or no to "Help EMS research" — counts only, never who</span></div>
+      <div class="card"><div class="tiles" id="rs_tiles"></div>
+        <h3>Every account</h3>
+        <div id="rs_split"></div>
+        <h3>Answers by day</h3>
+        <div class="scroll"><table><thead><tr><th>Date</th><th class="num">Said yes</th><th class="num">Said no</th></tr></thead><tbody id="rs_rows"></tbody></table></div>
+        <div class="note" id="rs_note"></div>
+      </div>
+    </section>
+
     <section id="notifications">
       <div class="sechead"><h2>Notifications</h2><span class="q">Permission, the primer, what people tap, and the upgrade sequence</span></div>
       <div class="card"><div class="tiles" id="nt_tiles"></div>
@@ -323,6 +334,9 @@
 
 <script>
   const API = 'https://scjjcyurnjlpmkayglfn.functions.supabase.co/admin-analytics';
+  // Research-consent counts come from a staff-only database function (migration 107),
+  // called with the same signed-in token as the edge function.
+  const RESEARCH_API = 'https://scjjcyurnjlpmkayglfn.supabase.co/rest/v1/rpc/admin_research_report';
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const n = (v) => (v == null ? '—' : Number(v).toLocaleString());
@@ -694,6 +708,33 @@
     $('cv_note').textContent = c.note || '';
   }
 
+  // ── Research consent (migration 103; About you = migration 106) ──
+  function renderResearch(d) {
+    const r = d.research;
+    if (!r || !r.available) {
+      $('rs_tiles').innerHTML = empty((r && r.error) || 'Not reported by this API deploy.');
+      $('rs_split').innerHTML = ''; $('rs_rows').innerHTML = ''; $('rs_note').textContent = '';
+      return;
+    }
+    const answered = r.yes + r.no;
+    $('rs_tiles').innerHTML =
+      tile('Said yes', n(r.yes), pc(r.yesPctOfAccounts) + ' of all accounts', 'good') +
+      tile('Said no', n(r.no), pc(pctOf(r.no, r.accounts)) + ' of all accounts') +
+      tile('Not answered yet', n(r.notAnswered), n(r.notAnsweredOnNewBuild) + ' of them opened 1.3.0+ in the window') +
+      tile('Yes rate', answered ? pc(r.yesPctOfAnswered) : '—', 'of the ' + n(answered) + ' who answered') +
+      tile('Last 7 days', n(r.last7Days.yes) + ' / ' + n(r.last7Days.no), 'yes / no — latest answers made this week') +
+      tile('About you answered', n(r.aboutYou.answered), n(r.aboutYou.answeredAmongYes) + ' of them said yes to research');
+    const w = (x) => (r.accounts ? (x / r.accounts) * 100 : 0);
+    $('rs_split').innerHTML =
+      '<div style="display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line)" title="' + esc(n(r.yes) + ' yes · ' + n(r.no) + ' no · ' + n(r.notAnswered) + ' not answered') + '">' +
+      '<div style="width:' + w(r.yes) + '%;background:var(--ok)"></div>' +
+      '<div style="width:' + w(r.no) + '%;background:var(--bad)"></div></div>' +
+      '<div class="tiny" style="margin-top:6px">' + n(r.accounts) + ' accounts · <b>' + n(r.yes) + '</b> yes · <b>' + n(r.no) + '</b> no · ' + n(r.notAnswered) + ' not answered (grey)</div>';
+    const days = (r.daily || []).slice().reverse();
+    $('rs_rows').innerHTML = days.map((x) => '<tr><td>' + esc(dowOf(x.day) + ' ' + x.day) + '</td><td class="num">' + n(x.yes) + '</td><td class="num">' + n(x.no) + '</td></tr>').join('') || emptyRow(3, 'No answers in this window.');
+    $('rs_note').textContent = r.note || '';
+  }
+
   // ── Notifications ──
   function renderNotifications(d) {
     const s = d.notifications;
@@ -985,6 +1026,10 @@
       const data = await OpsAuth.call(API, { sinceDays, tz: TZ });
       try { localStorage.setItem('ac_analytics_days', String(sinceDays)); } catch (e) {}
       render(data);
+      $('rs_tiles').innerHTML = empty('Loading…'); $('rs_split').innerHTML = ''; $('rs_rows').innerHTML = ''; $('rs_note').textContent = '';
+      OpsAuth.call(RESEARCH_API, { p_days: sinceDays, p_tz: TZ })
+        .then((r) => renderResearch({ research: r }))
+        .catch((e) => renderResearch({ research: { available: false, error: (e && e.message) || String(e) } }));
     } catch (e) {
       // Sign-in problems are shown by the sign-in card itself.
       if (!['sign_in_required', 'mfa_required', 'not_staff'].includes(e.code)) {
