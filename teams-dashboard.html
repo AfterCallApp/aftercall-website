@@ -649,6 +649,22 @@
     .inv-status.sent { background: var(--blue-soft); color: var(--s1); }
     .inv-status.failed { background: var(--st-critical-soft); color: var(--st-critical-ink); }
     .inv-status.not_sent { background: rgba(148,163,184,0.12); color: var(--muted); }
+    /* ── Peer support: waiting + notify supporters ── */
+    .wait-row { display: flex; align-items: center; gap: 16px; justify-content: space-between; flex-wrap: wrap; }
+    .wait-stats { display: flex; gap: 22px; flex-wrap: wrap; }
+    .wait-stat b { display: block; font-size: 30px; font-weight: 900; letter-spacing: -0.8px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .wait-stat span { font-size: 12px; color: var(--muted); }
+    .wait-stat.hot b { color: var(--st-serious-ink); }
+    .wait-clear { display: flex; gap: 10px; align-items: center; font-size: 13.5px; color: var(--ink2); }
+    .wait-clear .ico-svg { width: 20px; height: 20px; color: var(--good); }
+    .nudge-panel { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .nudge-panel .sub-h { margin-top: 12px; }
+    .nudge-panel .sub-h:first-child { margin-top: 0; }
+    .nudge-how { display: flex; gap: 18px; flex-wrap: wrap; }
+    .nudge-how label { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: 13px; font-weight: 600; color: var(--ink2); cursor: pointer; }
+    .nudge-how input { width: auto; accent-color: var(--blue); }
+    .nudge-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+    .last-nudge { font-size: 12px; color: var(--muted); }
     .remember { display: flex !important; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink2); margin-top: 14px !important; cursor: pointer; }
   </style>
 <script src="/cookie-consent.js" defer></script>
@@ -1054,6 +1070,35 @@
 
     <!-- ── Peer support ── -->
     <div class="page" id="page-peer">
+      <div class="card" id="waitCard" style="margin-bottom:14px;">
+        <div class="card-head"><h3>Waiting for a peer supporter</h3><span class="head-note" id="waitHead"></span></div>
+        <div class="wait-row">
+          <div id="waitStats"></div>
+          <div class="admin-only"><button class="btn" id="nudgeOpen"><span class="ico" data-ico="bell"></span>Notify peer supporters</button></div>
+        </div>
+        <div class="nudge-panel admin-only" id="nudgePanel" style="display:none;">
+          <div class="sub-h">Who to notify</div>
+          <div class="seg" id="nudgeWho"><button data-who="all" class="on">All peer supporters</button><button data-who="pick">Choose supporters</button></div>
+          <div class="picklist tall" id="nudgePick" style="display:none;"></div>
+          <div class="sub-h">How</div>
+          <div class="nudge-how">
+            <label for="nudgePush"><input type="checkbox" id="nudgePush" checked /> App notification</label>
+            <label for="nudgeEmail"><input type="checkbox" id="nudgeEmail" /> Email</label>
+          </div>
+          <div class="sub-h">What they get</div>
+          <div class="mail-prev" id="nudgePreview"></div>
+          <div class="nudge-actions">
+            <button class="btn" id="nudgeSend">Send</button>
+            <button class="btn ghost" id="nudgeCancel">Cancel</button>
+            <span class="last-nudge" id="nudgeLast"></span>
+          </div>
+          <div class="msg" id="nudgeMsg"></div>
+        </div>
+        <div class="subnote">Peer alerts nobody has picked up, and conversations members opened that no supporter has
+          taken yet. Counts only — the message says how many are waiting, never who or why. One notification every
+          30 minutes.</div>
+      </div>
+
       <div id="noSupportersWarn" class="attn-item sev-critical" style="display:none; margin-bottom:14px;">
         <div class="attn-icon"><span class="ico" data-ico="alert"></span></div>
         <div class="attn-body">
@@ -1110,7 +1155,7 @@
         <p id="upBody"></p>
         <ul class="upsell-list" id="upList"></ul>
         <div class="upsell-cta">
-          <a class="btn" id="upCta" href="mailto:jordan@aftercallapp.com">Talk to us about Teams Pro</a>
+          <a class="btn" id="upCta" href="mailto:support@aftercallapp.com">Talk to us about Teams Pro</a>
           <span class="price">Teams Pro is $7.99 per seat per month, billed annually — and every seat includes AfterCall Pro
             for the member (AfterCall AI narratives, guided reflections and more). Same privacy floor: nothing under 5 people,
             never anyone's content.</span>
@@ -1402,7 +1447,7 @@
           Wellness reporting is aggregate-only on every plan · groups under five are suppressed · alerts carry the
           signal, never the content · a member who leaves keeps their own history · members can leave the workspace at
           any time · nothing in AfterCall may be used in discipline, promotion, assignment, or fitness-for-duty.
-          Questions, more seats, plan changes: <a href="mailto:jordan@aftercallapp.com">jordan@aftercallapp.com</a>
+          Questions, more seats, plan changes: <a href="mailto:support@aftercallapp.com">support@aftercallapp.com</a>
         </div>
       </div>
     </div>
@@ -1592,6 +1637,7 @@
       refresh: '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
       mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
       arrow: '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+      bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
       pin: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
     };
     function ico(name, cls) {
@@ -2223,6 +2269,13 @@
             : 'When a member asks for a check-in, nobody will get it. Mark trained peer supporters on the Roster.',
           action: admin ? { label: 'Open roster', goto: 'roster' } : null });
       }
+      const pw = d.peerWaiting;
+      if (pw && pw.total && !hi.noPeerSupporters && pw.oldestHours != null && pw.oldestHours >= 24
+          && !(pw.lastNudgeAt && Date.now() - new Date(pw.lastNudgeAt).getTime() < 12 * 3600000)) {
+        items.push({ sev: 'serious', icon: 'bell', title: plural(pw.total, 'teammate is', 'teammates are') + ' waiting for a peer supporter',
+          text: 'The oldest has waited ' + waitAge(pw.oldestHours) + '. Let your peer supporters know — the notification says how many are waiting, never who.',
+          action: admin ? { label: 'Notify supporters', goto: 'peer' } : { label: 'Peer support', goto: 'peer' } });
+      }
       const stale = (hi.response && hi.response.openOver7d) || 0;
       if (stale > 0) {
         items.push({ sev: 'serious', icon: 'clock', title: plural(stale, 'peer alert') + ' waiting more than a week',
@@ -2527,6 +2580,7 @@
       if (d.peerAlerts) $('ruleSentence').textContent = ruleSentence(d.peerAlerts);
 
       renderSetup(d);
+      renderWaiting(d);
       if (PRO) {
         if (AI_DATA && AGENCY && AI_DATA.agencyId === AGENCY.id) renderAi(AI_DATA);
         else loadAiInsights(false);
@@ -3036,6 +3090,102 @@
         if (!confirm('Remove this invite? The email already sent can’t be unsent — rotate the join code on Settings if it shouldn’t work any more.')) return;
         post('leader_revoke_team_invite', { id: tr.dataset.id }).then(loadInvites).catch((e) => flash('invMsg', 'err', e.message));
       }
+    });
+
+
+    // ── Peer support: waiting requests + notify supporters ──
+    let PEER_SUPPORTERS = null;
+    function waitAge(hours) {
+      if (hours == null) return '';
+      return hours < 1 ? 'under an hour' : hours < 48 ? Math.round(hours) + 'h' : Math.round(hours / 24) + ' days';
+    }
+    function renderWaiting(d) {
+      const w = d.peerWaiting;
+      const card = $('waitCard');
+      if (!w) { card.style.display = 'none'; return; }
+      card.style.display = '';
+      $('waitHead').textContent = w.lastNudgeAt ? 'Supporters last notified ' + timeAgo(w.lastNudgeAt) : '';
+      if (!w.total) {
+        $('waitStats').innerHTML = '<div class="wait-clear">' + ico('check') + '<div><b>Nobody is waiting.</b> Every peer alert and conversation has been picked up.</div></div>';
+        $('nudgeOpen').disabled = true;
+        $('nudgePanel').style.display = 'none';
+        return;
+      }
+      const hot = w.oldestHours != null && w.oldestHours >= 24;
+      $('waitStats').innerHTML = '<div class="wait-stats">'
+        + `<div class="wait-stat${w.flags ? ' hot' : ''}"><b>${w.flags}</b><span>peer alert${w.flags === 1 ? '' : 's'} not picked up</span></div>`
+        + `<div class="wait-stat${w.conversations ? ' hot' : ''}"><b>${w.conversations}</b><span>conversation${w.conversations === 1 ? '' : 's'} waiting for a supporter</span></div>`
+        + `<div class="wait-stat${hot ? ' hot' : ''}"><b>${esc(waitAge(w.oldestHours))}</b><span>oldest has waited</span></div>`
+        + '</div>';
+      $('nudgeOpen').disabled = d.seats.peerSupporters === 0;
+      $('nudgeOpen').title = d.seats.peerSupporters === 0 ? 'Mark peer supporters on the Roster tab first' : '';
+    }
+    function nudgePreview() {
+      const w = (DATA && DATA.peerWaiting) || { total: 0 };
+      const headline = w.total === 1 ? '1 teammate is waiting for a peer supporter' : w.total + ' teammates are waiting for a peer supporter';
+      const bits = [];
+      if ($('nudgePush').checked) bits.push('<div class="mp-subj">Peer support needed</div><div>' + esc(headline) + '. Open AfterCall to pick one up.</div>');
+      if ($('nudgeEmail').checked) bits.push('<div class="mp-subj" style="margin-top:' + (bits.length ? '10px' : '0') + '">Email: ' + esc(((DATA && DATA.agency.name) || 'Your agency') + ': ' + headline) + '</div>'
+        + '<div>How many alerts and conversations are waiting, how long the oldest has waited, and where to find the queue in the app. Replies come to you.</div>');
+      $('nudgePreview').innerHTML = bits.length ? bits.join('') : '<div>Pick at least one way to reach them.</div>';
+      const picking = document.querySelector('#nudgeWho button.on').dataset.who === 'pick';
+      const n = picking ? $('nudgePick').querySelectorAll('input:checked').length : (PEER_SUPPORTERS ? PEER_SUPPORTERS.supporters.length : (DATA ? DATA.seats.peerSupporters : 0));
+      $('nudgeSend').textContent = 'Send to ' + plural(n, 'supporter');
+      $('nudgeSend').disabled = !n || (!$('nudgePush').checked && !$('nudgeEmail').checked);
+    }
+    function openNudge() {
+      $('nudgePanel').style.display = '';
+      clearMsg('nudgeMsg');
+      nudgePreview();
+      post('leader_peer_supporters').then((r) => {
+        PEER_SUPPORTERS = r;
+        $('nudgePick').innerHTML = r.supporters.map((x) => pickHtml(x.userId, x.name || 'Peer supporter',
+          [x.station, x.availability, x.hasEmail ? '' : 'no email'].filter(Boolean).join(' · '), true)).join('')
+          || '<div class="empty">No peer supporters on the roster yet.</div>';
+        $('nudgeEmail').disabled = !r.emailEnabled;
+        if (!r.emailEnabled) $('nudgeEmail').checked = false;
+        $('nudgeLast').textContent = r.waiting.lastNudge
+          ? 'Last sent ' + timeAgo(r.waiting.lastNudge.sentAt) + ' to ' + plural(r.waiting.lastNudge.recipients, 'supporter')
+            + (r.waiting.lastNudge.by ? ' by ' + r.waiting.lastNudge.by : '') : '';
+        if (r.waiting.cooldownUntil) {
+          flash('nudgeMsg', 'err', 'Supporters were notified a few minutes ago. You can send again ' + new Date(r.waiting.cooldownUntil).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.');
+        }
+        nudgePreview();
+      }).catch((e) => { if (!AUTH_CODES.includes(e.code)) flash('nudgeMsg', 'err', e.message); });
+    }
+    $('nudgeOpen').addEventListener('click', () => { if ($('nudgePanel').style.display === 'none') openNudge(); else $('nudgePanel').style.display = 'none'; });
+    $('nudgeCancel').addEventListener('click', () => { $('nudgePanel').style.display = 'none'; });
+    document.querySelectorAll('#nudgeWho button').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll('#nudgeWho button').forEach((x) => x.classList.toggle('on', x === b));
+      $('nudgePick').style.display = b.dataset.who === 'pick' ? '' : 'none';
+      nudgePreview();
+    }));
+    ['nudgePush', 'nudgeEmail'].forEach((id) => $(id).addEventListener('change', nudgePreview));
+    $('nudgePick').addEventListener('change', nudgePreview);
+    const NUDGE_ERR = {
+      nothing_waiting: 'Nothing is waiting any more — every request has been picked up.',
+      no_peer_supporters: 'There are no peer supporters on the roster. Mark trained supporters on the Roster tab.',
+      no_recipients: 'Pick at least one peer supporter.',
+      pick_a_channel: 'Pick app notification, email, or both.',
+      email_not_configured: 'Email isn’t set up for Teams yet — send the app notification instead.',
+      delivery_failed: 'We couldn’t deliver that. Try again in a moment.',
+    };
+    $('nudgeSend').addEventListener('click', () => {
+      const picking = document.querySelector('#nudgeWho button.on').dataset.who === 'pick';
+      const userIds = picking ? [...$('nudgePick').querySelectorAll('input:checked')].map((i) => i.value) : null;
+      busy($('nudgeSend'), true, 'Sending…');
+      post('leader_peer_nudge', { userIds, push: $('nudgePush').checked, email: $('nudgeEmail').checked })
+        .then((r) => {
+          const how = [r.pushed ? 'an app notification' : null, r.emailsSent ? plural(r.emailsSent, 'email') : null].filter(Boolean).join(' and ');
+          flash('nudgeMsg', 'ok', 'Sent ' + how + ' to ' + plural(r.recipients, 'peer supporter') + '.'
+            + (r.noEmail ? ' ' + plural(r.noEmail, 'supporter') + ' had no email on file.' : ''));
+          if (DATA && DATA.peerWaiting) { DATA.peerWaiting.lastNudgeAt = new Date().toISOString(); renderWaiting(DATA); }
+          $('nudgeLast').textContent = 'Last sent just now to ' + plural(r.recipients, 'supporter');
+        })
+        .catch((e) => flash('nudgeMsg', 'err', e.code === 'nudge_cooldown'
+          ? 'Supporters were notified less than 30 minutes ago. You can send again ' + new Date(e.data.retryAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.'
+          : NUDGE_ERR[e.code] || e.message))
+        .finally(() => { busy($('nudgeSend'), false); nudgePreview(); });
     });
 
     // Stacked weekly columns (acuity), one axis, 2px gaps between segments.
@@ -3705,7 +3855,7 @@
       $('upBody').textContent = u.body;
       $('upList').innerHTML = u.items.map((i) => `<li>${ico(i[0])}<div><b>${esc(i[1])}</b>${esc(i[2])}</div></li>`).join('');
       const name = (DATA && DATA.agency && DATA.agency.name) || (AGENCY && AGENCY.name) || 'our agency';
-      $('upCta').href = 'mailto:jordan@aftercallapp.com?subject=' + encodeURIComponent('Teams Pro for ' + name);
+      $('upCta').href = 'mailto:support@aftercallapp.com?subject=' + encodeURIComponent('Teams Pro for ' + name);
     }
     function showPage(page) {
       document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('active', x.dataset.page === page));
@@ -3890,7 +4040,7 @@
         if (!AGENCIES.length) {
           $('pickNote').innerHTML = 'You’re signed in as <b>' + esc(d.email) + '</b>, but this account doesn’t have access to an '
             + 'agency’s dashboard yet. Ask your agency’s AfterCall admin to invite this email, or write to '
-            + '<a href="mailto:jordan@aftercallapp.com">jordan@aftercallapp.com</a>.';
+            + '<a href="mailto:support@aftercallapp.com">support@aftercallapp.com</a>.';
           $('pickList').innerHTML = '';
         } else {
           $('pickNote').innerHTML = 'Signed in as <b>' + esc(d.email) + '</b>.';
@@ -3945,7 +4095,7 @@
       const s = (b && b.billing) || {};
       const plan = (b && b.plan) || LOCKED.plan;
       const admin = AGENCY && AGENCY.role === 'admin';
-      const mail = 'mailto:jordan@aftercallapp.com?subject=' + encodeURIComponent('AfterCall Teams — ' + (AGENCY.name || 'our agency'));
+      const mail = 'mailto:support@aftercallapp.com?subject=' + encodeURIComponent('AfterCall Teams — ' + (AGENCY.name || 'our agency'));
       const perSeat = s.listYearlyCentsPerSeat;
       const seats = s.billedSeats || s.seatLimit || LOCKED.seatLimit;
       const yearly = perSeat && seats ? Math.round(perSeat * seats * (1 - (Number(s.discountPct) || 0) / 100)) : null;
