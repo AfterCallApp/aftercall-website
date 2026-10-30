@@ -519,6 +519,137 @@
       .page { padding: 16px; }
       .agency-chip .name { max-width: 210px; }
     }
+
+    /* ── Plans: Teams Essentials vs Teams Pro ── */
+    .tab .tab-lock { display: none; width: 12px; height: 12px; margin-left: 5px; vertical-align: -1px; opacity: 0.75; }
+    body.essentials .tab.pro-tab .tab-lock { display: inline-block; }
+    body.essentials .pro-only { display: none !important; }
+    body:not(.essentials) .ess-only { display: none !important; }
+    .pro-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.6px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 999px; color: #fff;
+      background: linear-gradient(90deg, #3379CF, #6366F1 55%, #8B5CF6); }
+    .pro-badge .ico-svg { width: 11px; height: 11px; }
+    .upsell { position: relative; overflow: hidden; padding: 28px; }
+    .upsell::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, #3379CF, #6366F1 55%, #8B5CF6); }
+    .upsell h2 { font-size: 24px; font-weight: 900; letter-spacing: -0.6px; margin: 12px 0 6px; line-height: 1.2; }
+    .upsell p { color: var(--ink2); font-size: 14.5px; max-width: 760px; }
+    .upsell-list { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; margin: 20px 0 22px; }
+    .upsell-list li { display: flex; gap: 10px; font-size: 13.5px; color: var(--ink2); line-height: 1.45; }
+    .upsell-list li .ico-svg { flex: none; width: 18px; height: 18px; color: var(--s1); margin-top: 1px; }
+    .upsell-list b { display: block; color: var(--ink); }
+    .upsell-cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .upsell-cta .price { font-size: 12.5px; color: var(--muted); max-width: 520px; }
+    .upsell-have { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted); }
+    .upsell.compact { padding: 18px; display: flex; flex-direction: column; }
+    .upsell.compact h2 { font-size: 17px; letter-spacing: -0.3px; margin-top: 10px; }
+    .upsell.compact p { font-size: 13px; }
+    .upsell.compact .upsell-list { grid-template-columns: 1fr; gap: 8px; margin: 12px 0 14px; }
+    .upsell.compact .upsell-list li { font-size: 12.5px; }
+    .upsell.compact .upsell-list li .ico-svg { width: 15px; height: 15px; }
+    .upsell.compact .upsell-cta { margin-top: auto; }
+    .pillars.ess { grid-template-columns: repeat(3, 1fr); }
+    .upsell .pro-badge { align-self: flex-start; }
+    a.btn { text-decoration: none; }
+    @media (max-width: 720px) { .upsell-list { grid-template-columns: 1fr; } }
+
+    /* ── AfterCall AI ── */
+    .ai-card { border-color: rgba(99, 102, 241, 0.35);
+      background: linear-gradient(135deg, rgba(51,121,207,0.10), rgba(99,102,241,0.07) 50%, rgba(139,92,246,0.10)), var(--card); }
+    .ai-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; margin-bottom: 14px; }
+    .ai-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 800; }
+    .ai-title small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); }
+    .ai-mark { flex: none; width: 30px; height: 30px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #3379CF, #6366F1 55%, #8B5CF6); color: #fff; }
+    .ai-mark .ico-svg { width: 16px; height: 16px; }
+    .ai-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .ai-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .ai-tone { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+    .ai-tone .ico-svg { width: 13px; height: 13px; }
+    .ai-tone.watch { color: var(--st-warning-ink); } .ai-tone.good { color: var(--st-good-ink); } .ai-tone.info { color: var(--s1); }
+    .ai-item h4 { font-size: 15px; font-weight: 800; line-height: 1.3; }
+    .ai-item p { font-size: 13.5px; color: var(--ink2); line-height: 1.5; }
+    .ai-ev { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .ai-act { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; font-weight: 600; color: var(--ink); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
+    .ai-act .ico-svg { width: 15px; height: 15px; color: #8B8CF6; flex: none; margin-top: 2px; }
+    .ai-act .head-link { margin-left: auto; white-space: nowrap; }
+    .ai-foot { font-size: 11.5px; color: var(--muted); margin-top: 12px; }
+    .ai-skel { height: 132px; border-radius: 12px; background: linear-gradient(90deg, var(--card2), var(--hover-col), var(--card2));
+      background-size: 200% 100%; animation: shimmer 1.4s infinite linear; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    @media (prefers-reduced-motion: reduce) { .ai-skel { animation: none; } }
+    @media (max-width: 860px) { .ai-grid { grid-template-columns: 1fr; } }
+
+    /* ── Getting started checklist ── */
+    .setup-top { display: flex; align-items: center; gap: 12px; justify-content: space-between; flex-wrap: wrap; }
+    .setup-progress { height: 6px; border-radius: 999px; background: var(--card2); overflow: hidden; margin: 10px 0 14px; }
+    .setup-progress i { display: block; height: 100%; background: var(--st-good); border-radius: 999px; }
+    .setup-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .setup-step { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card2); }
+    .setup-step .ss-dot { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--muted); display: inline-flex;
+      align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--muted); }
+    .setup-step.done .ss-dot { border-color: var(--st-good); background: var(--st-good); color: #fff; }
+    .setup-step.done .ss-dot .ico-svg { width: 13px; height: 13px; }
+    .setup-step b { display: block; font-size: 13.5px; }
+    .setup-step span { display: block; font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .setup-step .head-link { display: inline-block; margin-top: 5px; }
+    .setup-step.done b { color: var(--ink2); text-decoration: line-through; text-decoration-color: var(--muted); }
+    @media (max-width: 980px) { .setup-steps { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 620px) { .setup-steps { grid-template-columns: 1fr; } }
+
+    /* ── Workload scope (all stations / one station) ── */
+    .scope-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips button { background: var(--card2); border: 1px solid var(--border); color: var(--ink2); border-radius: 999px;
+      padding: 6px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+    .chips button:hover { color: var(--ink); }
+    .chips button.on { background: var(--blue-soft); border-color: var(--s1); color: var(--s1); }
+    .scope-note { font-size: 12.5px; color: var(--muted); }
+    .scope-note b { color: var(--ink); }
+    tr.clickable { cursor: pointer; }
+    tr.clickable:hover td { background: var(--hover-col); }
+
+    /* ── Bar tables: one measure per column, every row on the same fixed scale ── */
+    .sub-h { font-size: 12px; font-weight: 800; color: var(--ink2); margin-bottom: 8px; }
+    .btable { width: 100%; border-collapse: collapse; }
+    .btable th { font-size: 10.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 6px 6px; }
+    .btable td { padding: 7px 6px; border-top: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+    .btable td.lab { font-weight: 700; color: var(--ink); white-space: nowrap; width: 1%; }
+    .btable td.lab span { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+    .btable .adot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+    .bcell { display: grid; grid-template-columns: 1fr 52px; gap: 8px; align-items: center; min-width: 110px; }
+    .bcell .bt { position: relative; height: 14px; background: var(--card2); border-radius: 4px; }
+    .bcell .bt i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; }
+    .bcell .bt .ref { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink2); opacity: 0.6; border-radius: 1px; }
+    .bcell .bv { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+    .bcell.supp .bt { background: repeating-linear-gradient(135deg, var(--hatch) 0 4px, transparent 4px 8px); }
+    .bcell.supp .bv { color: var(--muted); font-weight: 500; font-size: 11.5px; }
+    @media (max-width: 620px) {
+      .bcell { min-width: 84px; grid-template-columns: 1fr 34px; gap: 6px; }
+      .bcell.supp .bv { font-size: 0; } .bcell.supp .bv::after { content: '—'; font-size: 12px; }
+      .btable td.lab { white-space: normal; width: auto; }
+    }
+    .cmp-lead { font-size: 14px; color: var(--ink2); margin-bottom: 14px; line-height: 1.6; }
+    .cmp-lead b { color: var(--ink); }
+    .cmp-lead li { margin-left: 18px; }
+
+    /* ── Team invites ── */
+    .invite-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 18px; }
+    @media (max-width: 980px) { .invite-grid { grid-template-columns: 1fr; } }
+    .invite-grid textarea { resize: vertical; }
+    .inv-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .inv-actions label { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-weight: 600; cursor: pointer; }
+    .inv-actions input[type=checkbox], .remember input { width: auto; accent-color: var(--blue); }
+    .code-big { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 22px; font-weight: 800; letter-spacing: 3px;
+      background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; display: inline-block; }
+    .mail-prev { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 12.5px; color: var(--ink2); line-height: 1.55; margin-bottom: 14px; }
+    .mail-prev .mp-subj { font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+    .mail-prev ol { margin: 6px 0 0 18px; }
+    .inv-status { font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+    .inv-status.joined { background: var(--st-good-soft); color: var(--st-good-ink); }
+    .inv-status.sent { background: var(--blue-soft); color: var(--s1); }
+    .inv-status.failed { background: var(--st-critical-soft); color: var(--st-critical-ink); }
+    .inv-status.not_sent { background: rgba(148,163,184,0.12); color: var(--muted); }
+    .remember { display: flex !important; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink2); margin-top: 14px !important; cursor: pointer; }
   </style>
 <script src="/cookie-consent.js" defer></script>
 
@@ -539,6 +670,8 @@
         <input type="email" id="siEmail" autocomplete="username" placeholder="you@agency.org" />
         <label for="siPass">Password</label>
         <input type="password" id="siPass" autocomplete="current-password" />
+        <label class="remember" for="siRemember"><input type="checkbox" id="siRemember" /> Keep me signed in on this device for 30 days</label>
+        <div class="gate-hint">Only on a computer you don't share. You'll still enter a code on any new device.</div>
         <button class="btn wide" id="siBtn" type="submit">Sign in</button>
         <div class="gate-links"><a id="toSignUp">Create an account</a><a id="toForgot">Forgot password?</a></div>
       </form>
@@ -631,9 +764,9 @@
 
     <div class="tabs" id="tabs">
       <button class="tab active" data-page="overview">Overview</button>
-      <button class="tab" data-page="wellbeing">Wellbeing</button>
-      <button class="tab" data-page="operations">Workload</button>
-      <button class="tab" data-page="stations">Stations</button>
+      <button class="tab pro-tab" data-page="wellbeing">Wellbeing<svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+      <button class="tab pro-tab" data-page="operations">Workload<svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+      <button class="tab pro-tab" data-page="stations">Stations<svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
       <button class="tab" data-page="peer">Peer support</button>
       <button class="tab admin-only" data-page="roster">Roster</button>
       <button class="tab" data-page="resources">Resources</button>
@@ -655,6 +788,25 @@
         </div>
       </div>
 
+      <div class="card mt setup-card admin-only" id="setupCard" style="display:none;">
+        <div class="setup-top">
+          <div class="card-head" style="margin:0;"><h3>Getting started</h3><span class="head-note" id="setupCount"></span></div>
+          <a class="head-link noprint" id="setupHide">Hide this</a>
+        </div>
+        <div class="setup-progress"><i id="setupBar" style="width:0%"></i></div>
+        <div class="setup-steps" id="setupSteps"></div>
+      </div>
+
+      <div class="card mt ai-card pro-only" id="aiCard">
+        <div class="ai-head">
+          <div class="ai-title"><span class="ai-mark" data-ico="sparkle"></span><div>AfterCall AI noticed<small id="aiMeta">Reading this window's numbers…</small></div></div>
+          <button class="btn ghost sm noprint" id="aiRefresh" title="Ask AfterCall AI for a fresh read"><span class="ico" data-ico="refresh"></span>Refresh</button>
+        </div>
+        <div id="aiList"></div>
+        <div class="ai-foot">Written by AfterCall AI from the de-identified aggregates on this dashboard — never from anyone's
+          entries, messages or individual scores. It can be wrong: check the numbers before you act.</div>
+      </div>
+
       <div class="card mt">
         <div class="card-head"><h3>Needs your attention</h3><span class="head-note" id="attnCount"></span></div>
         <div id="attnList"></div>
@@ -665,12 +817,14 @@
 
       <div class="card mt">
         <div class="card-head">
-          <h3>Workload and wellbeing, week by week</h3>
+          <h3 id="smTitle">Workload and wellbeing, week by week</h3>
           <span class="head-note">Hover a week to compare everything at once</span>
         </div>
         <div class="legend" id="smLegend"></div>
         <div class="chart-wrap" id="chMultiples"></div>
-        <div class="subnote">Read top to bottom: when the share of Serious / Critical calls climbs, watch the stress and
+        <div class="subnote ess-only">Calls logged and active members show whether the habit is taking hold; peer alerts and
+          conversations show your peer team at work. Counts only — never who.</div>
+        <div class="subnote pro-only">Read top to bottom: when the share of Serious / Critical calls climbs, watch the stress and
           fatigue rows in the same weeks. Gaps are the privacy floor working — a week with fewer than
           <span class="kmin">5</span> people checking in reports nothing.</div>
       </div>
@@ -681,9 +835,20 @@
           <div id="funnel"></div>
           <div class="subnote" id="funnelNote"></div>
         </div>
-        <div class="card">
+        <div class="card pro-only">
           <div class="card-head"><h3>Stations at a glance</h3><a class="head-link" data-goto="stations">All stations →</a></div>
           <div id="stationGlance"></div>
+        </div>
+        <div class="card upsell compact ess-only">
+          <span class="pro-badge"><span data-ico="sparkle"></span>Teams Pro</span>
+          <h2>Workload, wellbeing and stations — side by side</h2>
+          <p>Teams Pro adds the analytics behind the brief, still aggregate-only and never under 5 people.</p>
+          <ul class="upsell-list">
+            <li><span data-ico="activity"></span><div><b>Workload by station</b>calls, acuity and busy hours for every station</div></li>
+            <li><span data-ico="heart"></span><div><b>Call load vs wellbeing</b>stress and fatigue after Critical calls and heavy days</div></li>
+            <li><span data-ico="sparkle"></span><div><b>AfterCall AI brief</b>what changed and what to do about it</div></li>
+          </ul>
+          <div class="upsell-cta"><button class="btn sm" data-goto="wellbeing">See what's included</button></div>
         </div>
       </div>
 
@@ -745,6 +910,22 @@
         </div>
       </div>
 
+      <div class="card mt" id="lvwCard">
+        <div class="card-head"><h3>How the work lands</h3><span class="head-note">post-call check-ins, by the kind of call and the kind of day</span></div>
+        <div class="cmp-lead" id="lvwLead"></div>
+        <div class="grid cols-2e">
+          <div><div class="sub-h">By acuity of the call</div><div id="lvwAcuity"></div></div>
+          <div><div class="sub-h">By how many calls that person ran that day</div><div id="lvwLoad"></div></div>
+        </div>
+        <div class="grid cols-2e mt">
+          <div><div class="sub-h">By time of day</div><div id="lvwTime"></div></div>
+          <div><div class="sub-h">Heavier weeks vs stress <span class="head-note" style="font-weight:500;">· each dot is a week</span></div><div id="lvwScatter"></div></div>
+        </div>
+        <div class="subnote">Bars share one scale per column; the thin mark is your agency average. A row is withheld (hatched)
+          until at least <span class="kmin">5</span> people contributed to it. These are associations, not causes — read them
+          next to the acuity mix and the calendar before acting on them.</div>
+      </div>
+
       <div class="card mt">
         <h3>How suppression protects your people</h3>
         <div class="kfloor">
@@ -758,6 +939,12 @@
 
     <!-- ── Workload ── -->
     <div class="page" id="page-operations">
+      <div class="card scope-card" id="wlScopeCard" style="margin-bottom:14px;">
+        <div class="scope-bar">
+          <div class="chips" id="wlScope"></div>
+          <div class="scope-note" id="wlScopeNote"></div>
+        </div>
+      </div>
       <div class="grid kpis4">
         <div class="card kpi" id="okCalls"></div>
         <div class="card kpi" id="okHeavy"></div>
@@ -790,8 +977,35 @@
       </div>
 
       <div class="card mt">
-        <div class="card-head"><h3>Top call types</h3><span class="head-note">calls in the window</span></div>
+        <div class="card-head"><h3>Top call types</h3><span class="head-note" id="typesNote">calls in the window</span></div>
         <div class="chart-wrap" id="chTypes"></div>
+      </div>
+
+      <div class="card mt" id="wlStationsCard">
+        <div class="card-head"><h3>Workload by station</h3><span class="head-note">click a station to see its workload above</span></div>
+        <div class="heat-legend">
+          <span>Lighter than your agency's normal</span>
+          <i class="hl-bar"></i>
+          <span>Heavier than normal</span>
+          <span class="hl-supp"><i class="hatch"></i><span>Withheld (under <span class="kmin">5</span>)</span></span>
+        </div>
+        <div class="tablewrap">
+          <table class="heat">
+            <thead><tr>
+              <th>Station</th><th class="num">Members</th><th class="num">Calls</th><th class="num">Per member<br/><span class="th-sub">per week</span></th>
+              <th class="num">Serious /<br/>Critical</th><th class="num">Critical</th><th>Busiest time</th><th class="num">Overnight</th>
+              <th class="num">Check-in<br/>rate</th><th class="num">Avg<br/>stress</th><th class="num">Avg<br/>fatigue</th><th class="num">Peer<br/>alerts</th></tr></thead>
+            <tbody id="wlStationBody"></tbody>
+          </table>
+        </div>
+        <div class="subnote">Only stations with at least <span class="kmin">5</span> members are broken out. Counts are the
+          station's own; stress and fatigue are withheld until <span class="kmin">5</span> people at that station checked in.</div>
+      </div>
+
+      <div class="card mt" id="wlWeeksCard">
+        <div class="card-head"><h3>Calls per week, station by station</h3><span class="head-note">same scale on every row</span></div>
+        <div class="legend" id="wlWeeksLegend"></div>
+        <div class="chart-wrap" id="chStationWeeks"></div>
       </div>
     </div>
 
@@ -888,8 +1102,69 @@
       </div>
     </div>
 
+    <!-- ── Teams Pro (shown on Essentials in place of a Pro tab) ── -->
+    <div class="page" id="page-upgrade">
+      <div class="card upsell">
+        <span class="pro-badge"><span data-ico="sparkle"></span>Teams Pro</span>
+        <h2 id="upTitle">—</h2>
+        <p id="upBody"></p>
+        <ul class="upsell-list" id="upList"></ul>
+        <div class="upsell-cta">
+          <a class="btn" id="upCta" href="mailto:jordan@aftercallapp.com">Talk to us about Teams Pro</a>
+          <span class="price">Teams Pro is $7.99 per seat per month, billed annually — and every seat includes AfterCall Pro
+            for the member (AfterCall AI narratives, guided reflections and more). Same privacy floor: nothing under 5 people,
+            never anyone's content.</span>
+        </div>
+        <div class="upsell-have">Your Teams Essentials plan includes the Overview, Peer support, Roster, Resources and Channels.</div>
+      </div>
+    </div>
+
     <!-- ── Roster ── -->
     <div class="page" id="page-roster">
+      <div class="card admin-only" id="inviteCard" style="margin-bottom:14px;">
+        <div class="card-head"><h3>Invite your team</h3><span class="head-note" id="invCounts"></span></div>
+        <div class="invite-grid">
+          <div>
+            <label for="invPaste">Paste your roster — one person per line</label>
+            <textarea id="invPaste" rows="7" spellcheck="false" placeholder="jane.doe@agency.org&#10;Sam Rivera, sam.rivera@agency.org, Station 4&#10;Alex Kim	alex.kim@agency.org	Station 2"></textarea>
+            <div class="gate-hint">An email alone works. Add a name and a station (commas or tabs — paste straight from a
+              spreadsheet) and their station is set for them when they join. Or <a class="head-link" id="invFileLink">upload a CSV</a>.
+              <input type="file" id="invFile" accept=".csv,.txt,text/csv,text/plain" hidden /></div>
+            <label for="invNote" style="margin-top:12px;">A note from you (optional)</label>
+            <textarea id="invNote" rows="3" maxlength="600" placeholder="e.g. We're rolling AfterCall out for the whole department. It's private and it's yours — we only ever see team trends."></textarea>
+            <div class="inv-actions">
+              <button class="btn" id="invSend"><span class="ico" data-ico="mail"></span>Send invites</button>
+              <label for="invResend"><input type="checkbox" id="invResend" /> Re-send to people already invited</label>
+              <span class="head-note" id="invPreview"></span>
+            </div>
+            <div id="invMsg" class="msg"></div>
+          </div>
+          <div>
+            <div class="sub-h">What each person gets</div>
+            <div class="mail-prev">
+              <div class="mp-subj" id="invSubj">Join your agency on AfterCall — your team code is inside</div>
+              <div>An email from AfterCall Teams (replies come to you) with your note and:</div>
+              <ol>
+                <li>Links to AfterCall for iPhone and Android</li>
+                <li>Create an account with the email you invited — or sign in</li>
+                <li>Profile → Join your agency → your team code</li>
+              </ol>
+              <div style="margin-top:8px;">Plus what stays private: your agency only ever sees team trends from groups of 5+.</div>
+            </div>
+            <div class="sub-h">Your team code</div>
+            <span class="code-big" id="invCode">—</span>
+            <div class="subnote">Prefer to announce it yourself? Share this code at roll call or in a shift email — anyone with it
+              can claim a seat until your seats run out. Rotate it on Settings.</div>
+          </div>
+        </div>
+        <div class="tablewrap mt" id="invTableWrap">
+          <table>
+            <thead><tr><th>Invited</th><th>Station</th><th>Status</th><th>Last emailed</th><th></th></tr></thead>
+            <tbody id="invBody"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="card">
         <h3>Roster <span id="rosterCount" style="color:var(--muted); font-weight:600; text-transform:none; letter-spacing:0;"></span></h3>
         <div style="margin-bottom: 12px;"><input id="rosterSearch" placeholder="Filter by name, email, station…" /></div>
@@ -903,7 +1178,7 @@
         <div class="subnote">
           Admins and supervisors are governance roles — they never gain access to anyone's content.
           Peer supporters receive high-impact flags so someone can check in. The owner seat is managed by AfterCall.
-          Onboard new members with the join code on the Settings tab.
+          Invite people above, or share the join code from the Settings tab.
         </div>
       </div>
     </div>
@@ -1178,15 +1453,43 @@
     const fmt = (v, suf) => (v == null ? '—' : v + (suf || ''));
 
     // ── Session ──
-    // The session lives in sessionStorage only (this tab, until closed), so the
-    // Stripe checkout round-trip and reloads don't force a new sign-in. A
-    // refresh keeps the same session id, so a verified session stays verified.
-    function readStore(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (e) { return null; } }
-    function writeStore(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+    // By default the session lives in sessionStorage (this tab, until closed),
+    // so the Stripe checkout round-trip and reloads don't force a new sign-in.
+    // "Keep me signed in" moves it to localStorage for 30 days on this device.
+    // A refresh keeps the same session id, so a verified session stays
+    // verified — the server still checks the two-step state on every call.
+    const REMEMBER_KEY = 'ac_teams_remember';
+    const REMEMBER_DAYS = 30;
+    const SESSION_KEYS = ['ac_teams_auth', 'ac_teams_agency'];
+    function rememberOn() {
+      try { const r = JSON.parse(localStorage.getItem(REMEMBER_KEY) || 'null'); return !!(r && r.until > Date.now()); } catch (e) { return false; }
+    }
+    function setRemember(on) {
+      try {
+        if (on) {
+          localStorage.setItem(REMEMBER_KEY, JSON.stringify({ until: Date.now() + REMEMBER_DAYS * 86400000 }));
+        } else {
+          localStorage.removeItem(REMEMBER_KEY);
+          SESSION_KEYS.forEach((k) => localStorage.removeItem(k));
+        }
+      } catch (e) { /* private mode */ }
+    }
+    // An expired "remember" leaves nothing behind.
+    try { if (localStorage.getItem(REMEMBER_KEY) && !rememberOn()) setRemember(false); } catch (e) { /* private mode */ }
+    function store() { return rememberOn() ? localStorage : sessionStorage; }
+    function readStore(k) { try { return JSON.parse(store().getItem(k) || 'null'); } catch (e) { return null; } }
+    function writeStore(k, v) {
+      try {
+        const st = store();
+        if (v == null) st.removeItem(k); else st.setItem(k, JSON.stringify(v));
+        if (st !== sessionStorage) sessionStorage.removeItem(k);
+      } catch (e) { /* private mode */ }
+    }
     let AUTH = readStore('ac_teams_auth');      // { access_token, refresh_token, expires_at, email }
     let AGENCY = readStore('ac_teams_agency');  // { id, name, role }
     let AGENCIES = [];
     let DATA = null;
+    let AI_DATA = null;  // { agencyId, ...leader_ai_insights result }
 
     function sessionFrom(d) {
       return {
@@ -1285,6 +1588,11 @@
       moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
       key: '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
       trend: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+      sparkle: '<path d="M12 3l1.8 5.4L19 10.2l-5.2 1.8L12 17.4l-1.8-5.4L5 10.2l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/>',
+      refresh: '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+      mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+      arrow: '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+      pin: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
     };
     function ico(name, cls) {
       return '<svg class="ico-svg' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
@@ -1643,12 +1951,11 @@
 
     // ── Weekday × hour heat map (sequential, one hue) ──
     let TIMING_MODE = 'calls';
-    function renderTiming(d) {
+    function renderTiming(t, kMin, callsLogged) {
       const el = $('chTiming');
-      const t = d.callTiming;
       if (!t) {
-        el.innerHTML = d.callTiming === null && d.activity.callsLogged
-          ? suppressedBlock(d.kMin, '')
+        el.innerHTML = t === null && callsLogged
+          ? suppressedBlock(kMin, '')
           : '<div class="empty">Call timing appears here once the dashboard API is updated and calls are logged.</div>';
         $('timingNote').textContent = '';
         return;
@@ -1707,7 +2014,7 @@
     document.querySelectorAll('#timingSeg button').forEach((b) => b.addEventListener('click', () => {
       document.querySelectorAll('#timingSeg button').forEach((x) => x.classList.toggle('on', x === b));
       TIMING_MODE = b.dataset.mode;
-      if (DATA) renderTiming(DATA);
+      if (DATA) { const v = workloadView(DATA); renderTiming(v.timing, DATA.kMin, v.calls); }
     }));
 
     // ── Station check-in signals ──
@@ -1997,9 +2304,15 @@
 
     function renderDashboard(d) {
       DATA = d;
+      // Teams Essentials vs Teams Pro: the server decides what the payload
+      // carries; the page only lays out what it was given.
+      const PRO = d.tier !== 'essentials';
+      document.body.classList.toggle('essentials', !PRO);
       $('agencyName').textContent = d.agency.name;
       $('annAuthor').textContent = d.agency.name;
-      $('planPill').textContent = d.agency.plan.replace('_', ' ') + (d.agency.pilotEndsAt ? ' · pilot' : '');
+      $('planPill').textContent = PLAN_LABEL[d.agency.plan] || d.agency.plan.replace('_', ' ');
+      const activeTab = document.querySelector('.tab.active');
+      if (activeTab && PRO_PAGES.includes(activeTab.dataset.page)) showPage(activeTab.dataset.page);
       document.querySelectorAll('.kmin').forEach((e) => { e.textContent = d.kMin; });
       $('kminNote').textContent = d.kMin;
 
@@ -2032,19 +2345,22 @@
       const stressWord = !ctx.stressCmp ? null : ctx.stressCmp.now - ctx.stressCmp.before >= 0.3 ? 'rising'
         : ctx.stressCmp.before - ctx.stressCmp.now >= 0.3 ? 'easing' : 'steady';
       $('heroSub').textContent = [
-        plural(totalCalls, 'call') + ' logged' + (heavyPct != null ? ', ' + heavyPct + '% Serious or Critical' : ''),
+        plural(totalCalls, 'call') + ' logged' + (PRO && heavyPct != null ? ', ' + heavyPct + '% Serious or Critical' : ''),
+        !PRO && d.activity.weeklyActivePct != null ? Math.round(d.activity.weeklyActivePct) + '% of members active this week' : null,
         stressWord ? 'post-call stress ' + stressWord : null,
         d.highImpact.total ? plural(d.highImpact.total, 'peer alert') + ', ' + (d.highImpact.lifecycle.open ? d.highImpact.lifecycle.open + ' still open' : 'all picked up') : 'no peer alerts',
       ].filter(Boolean).join(' · ') + '.';
       $('heroGlance').innerHTML = [
         [ico('users'), d.seats.activeMembers + ' members', d.seats.peerSupporters + ' peer supporters'],
-        [ico('home'), (d.stationBreakdown || []).filter((s) => s.station !== 'Unassigned').length + ' stations', (d.stationBreakdown || []).filter((s) => s.checkInDue).length + ' due a check-in'],
+        PRO ? [ico('home'), (d.stationBreakdown || []).filter((s) => s.station !== 'Unassigned').length + ' stations', (d.stationBreakdown || []).filter((s) => s.checkInDue).length + ' due a check-in']
+          : [ico('buoy'), plural(d.highImpact.lifecycle.open, 'peer alert') + ' open', d.highImpact.total + ' in the window'],
         [ico('activity'), d.activity.activeInWindow + ' active', 'in the window'],
       ].map((g) => `<div class="glance">${g[0]}<div><b>${g[1]}</b><span>${g[2]}</span></div></div>`).join('');
 
       // ── Pillars ──
       const lastWeeks = wk.slice(-13);
-      $('pillars').innerHTML = [
+      $('pillars').classList.toggle('ess', !PRO);
+      const pillarList = [
         pillar({ name: 'Engagement', icon: 'users', color: C.s1,
           value: d.activity.weeklyActivePct == null ? '—' : Math.round(d.activity.weeklyActivePct), unit: d.activity.weeklyActivePct == null ? '' : '%',
           label: 'active this week · ' + d.activity.weeklyActiveMembers + ' of ' + d.seats.activeMembers + ' members',
@@ -2067,11 +2383,32 @@
           delta: deltaChip(ctx.flagsCmp, { goodWhen: null, relative: true, threshold: 0.15 }),
           spark: spark(lastWeeks.map((x) => x.highImpactFlags), C.s4),
           stats: [[fmtDur(d.highImpact.response && d.highImpact.response.medianAckHours), 'median time to pick up'], [fmt(d.peerSupport.conversationsOpened), 'peer conversations']] }),
-      ].join('');
+      ];
+      if (PRO) {
+        $('pillars').innerHTML = pillarList.join('');
+      } else {
+        const st = d.setup || {};
+        const deployed = d.seats.seatLimit ? Math.min(100, Math.round((100 * d.seats.activeMembers) / d.seats.seatLimit)) : 0;
+        $('pillars').innerHTML = [pillarList[0], pillarList[3], pillar({ name: 'Seats', icon: 'key', color: C.s3,
+          value: d.seats.activeMembers, unit: ' / ' + d.seats.seatLimit, label: 'seats claimed · ' + deployed + '% of your plan',
+          extra: '<div class="setup-progress" style="margin:12px 0 4px;"><i style="width:' + deployed + '%; background:' + C.s3 + ';"></i></div>',
+          stats: [[d.seats.joinedInWindow, 'joined in this window'], [Math.max(0, (st.invitesSent || 0) - (st.invitesJoined || 0)), 'invited, not joined yet']] })].join('');
+      }
 
       // ── Small multiples ──
       const smPanels = [];
-      if (hasAcuityWeeks) {
+      $('smTitle').textContent = PRO ? 'Workload and wellbeing, week by week' : 'Engagement and peer support, week by week';
+      if (!PRO) {
+        smPanels.push({ title: 'Calls logged', subtitle: 'per week', kind: 'stack', height: 80, series: [{ key: 'Calls', color: C.s1, data: wk.map((x) => x.callsLogged) }] });
+        smPanels.push({ title: 'Active members', subtitle: 'per week', kind: 'line', height: 70, series: [{ key: 'Active', color: C.s3, area: true, data: wk.map((x) => x.activeMembers) }] });
+        smPanels.push({ title: 'Peer alerts', subtitle: 'per week', kind: 'stack', height: 64, series: [{ key: 'Peer alerts', color: C.s4, data: wk.map((x) => x.highImpactFlags) }] });
+        smPanels.push({ title: 'Peer conversations', subtitle: 'per week', kind: 'stack', height: 64, series: [{ key: 'Conversations', color: C.s2, data: wk.map((x) => x.peerConversations) }] });
+        $('smLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Calls logged</span><span><i style="background:${C.s3}"></i>Active members</span>`
+          + `<span><i style="background:${C.s4}"></i>Peer alerts</span><span><i style="background:${C.s2}"></i>Peer conversations</span>`;
+        smallMultiples($('chMultiples'), wk, smPanels, (x) => '<b>Week of ' + esc(weekLabel(x.weekStart)) + '</b><br/>'
+          + [['Calls logged', x.callsLogged], ['Active members', x.activeMembers], ['Peer alerts', x.highImpactFlags], ['Peer conversations', x.peerConversations]]
+            .map((r) => esc(r[0]) + ': <b>' + esc(String(r[1])) + '</b>').join('<br/>'));
+      } else if (hasAcuityWeeks) {
         smPanels.push({ title: 'Calls', subtitle: 'per week', kind: 'stack', height: 96, series: [
           { key: 'Other calls', color: C.s1, data: wk.map((x) => x.callsLogged - (x.highAcuityCalls || 0)) },
           { key: 'Serious / Critical', color: C.acuity.Serious, data: wk.map((x) => x.highAcuityCalls || 0) },
@@ -2079,30 +2416,32 @@
       } else {
         smPanels.push({ title: 'Calls', subtitle: 'per week', kind: 'stack', height: 96, series: [{ key: 'Calls', color: C.s1, data: wk.map((x) => x.callsLogged) }] });
       }
-      smPanels.push({ title: 'Post-call stress', subtitle: 'avg, 1–10', kind: 'line', min: 1, max: 10, height: 80, zone: [7, 10], zoneLabel: 'high (7–10)', ref: w.avgPostCallStress, gapMark: true,
-        series: [{ key: 'Stress', color: C.s2, data: wk.map((x) => x.avgPostCallStress) }] });
-      if (wk.some((x) => nn(x.avgFatigue))) {
-        smPanels.push({ title: 'Fatigue', subtitle: 'avg, 1–7', kind: 'line', min: 1, max: 7, height: 80, zone: [5, 7], zoneLabel: 'moderately tired+ (5–7)', ref: w.avgFatigue, gapMark: true,
-          series: [{ key: 'Fatigue', color: C.s4, data: wk.map((x) => x.avgFatigue ?? null) }] });
+      if (PRO) {
+        smPanels.push({ title: 'Post-call stress', subtitle: 'avg, 1–10', kind: 'line', min: 1, max: 10, height: 80, zone: [7, 10], zoneLabel: 'high (7–10)', ref: w.avgPostCallStress, gapMark: true,
+          series: [{ key: 'Stress', color: C.s2, data: wk.map((x) => x.avgPostCallStress) }] });
+        if (wk.some((x) => nn(x.avgFatigue))) {
+          smPanels.push({ title: 'Fatigue', subtitle: 'avg, 1–7', kind: 'line', min: 1, max: 7, height: 80, zone: [5, 7], zoneLabel: 'moderately tired+ (5–7)', ref: w.avgFatigue, gapMark: true,
+            series: [{ key: 'Fatigue', color: C.s4, data: wk.map((x) => x.avgFatigue ?? null) }] });
+        }
+        smPanels.push({ title: 'Active members', subtitle: 'per week', kind: 'line', height: 70, series: [{ key: 'Active', color: C.s3, area: true, data: wk.map((x) => x.activeMembers) }] });
+        $('smLegend').innerHTML = (hasAcuityWeeks
+          ? `<span><i style="background:${C.s1}"></i>Other calls</span><span><i style="background:${C.acuity.Serious}"></i>Serious / Critical calls</span>`
+          : `<span><i style="background:${C.s1}"></i>Calls</span>`)
+          + `<span><i style="background:${C.s2}"></i>Stress</span>` + (wk.some((x) => nn(x.avgFatigue)) ? `<span><i style="background:${C.s4}"></i>Fatigue</span>` : '')
+          + `<span><i style="background:${C.s3}"></i>Active members</span><span><i class="zone-key"></i>Risk zone</span>`;
+        const withheld = 'withheld (under ' + d.kMin + ')';
+        smallMultiples($('chMultiples'), wk, smPanels, (x) => {
+          const rows = [
+            ['Calls', x.callsLogged + (hasAcuityWeeks ? ' · ' + (x.highAcuityCalls || 0) + ' Serious / Critical' : '')],
+            ['Stress', nn(x.avgPostCallStress) ? x.avgPostCallStress + ' / 10' : withheld],
+            ['Fatigue', nn(x.avgFatigue) ? x.avgFatigue + ' / 7' : withheld],
+            ['Check-in rate', x.checkInRate == null ? '—' : x.checkInRate + '%'],
+            ['Active members', x.activeMembers],
+            ['Peer alerts', x.highImpactFlags],
+          ];
+          return '<b>Week of ' + esc(weekLabel(x.weekStart)) + '</b><br/>' + rows.map((r) => esc(r[0]) + ': <b>' + esc(String(r[1])) + '</b>').join('<br/>');
+        });
       }
-      smPanels.push({ title: 'Active members', subtitle: 'per week', kind: 'line', height: 70, series: [{ key: 'Active', color: C.s3, area: true, data: wk.map((x) => x.activeMembers) }] });
-      $('smLegend').innerHTML = (hasAcuityWeeks
-        ? `<span><i style="background:${C.s1}"></i>Other calls</span><span><i style="background:${C.acuity.Serious}"></i>Serious / Critical calls</span>`
-        : `<span><i style="background:${C.s1}"></i>Calls</span>`)
-        + `<span><i style="background:${C.s2}"></i>Stress</span>` + (wk.some((x) => nn(x.avgFatigue)) ? `<span><i style="background:${C.s4}"></i>Fatigue</span>` : '')
-        + `<span><i style="background:${C.s3}"></i>Active members</span><span><i class="zone-key"></i>Risk zone</span>`;
-      const withheld = 'withheld (under ' + d.kMin + ')';
-      smallMultiples($('chMultiples'), wk, smPanels, (x) => {
-        const rows = [
-          ['Calls', x.callsLogged + (hasAcuityWeeks ? ' · ' + (x.highAcuityCalls || 0) + ' Serious / Critical' : '')],
-          ['Stress', nn(x.avgPostCallStress) ? x.avgPostCallStress + ' / 10' : withheld],
-          ['Fatigue', nn(x.avgFatigue) ? x.avgFatigue + ' / 7' : withheld],
-          ['Check-in rate', x.checkInRate == null ? '—' : x.checkInRate + '%'],
-          ['Active members', x.activeMembers],
-          ['Peer alerts', x.highImpactFlags],
-        ];
-        return '<b>Week of ' + esc(weekLabel(x.weekStart)) + '</b><br/>' + rows.map((r) => esc(r[0]) + ': <b>' + esc(String(r[1])) + '</b>').join('<br/>');
-      });
 
       // ── Adoption funnel ──
       const fsteps = [
@@ -2125,106 +2464,11 @@
         : 'Weekly active is the number to grow — it is what makes every wellbeing number meaningful.';
 
       // ── Stations at a glance ──
-      const stations = (d.stationBreakdown || []).slice().sort((a, b) =>
-        Number(b.checkInDue) - Number(a.checkInDue) || Number(b.needsCheckIn) - Number(a.needsCheckIn) || b.callsLogged - a.callsLogged);
-      const smax = Math.max(1, ...stations.map((s) => s.callsLogged));
-      $('stationGlance').innerHTML = stations.length ? stations.slice(0, 8).map((s) => {
-        const r = s.recent;
-        const heavy = r ? r.highAcuity : null;
-        const share = r && r.calls ? r.highAcuity / r.calls : 0;
-        return `<div class="sg-row" data-tip="${esc('<b>' + esc(s.station) + '</b><br/>' + s.members + ' members · ' + s.callsLogged + ' calls in window' + (heavy != null ? '<br/>Last 14 days: ' + r.calls + ' calls, ' + heavy + ' Serious / Critical' : ''))}">
-          <div class="sg-name">${esc(s.station)}<span>${s.members} members</span></div>
-          <div class="sg-bar"><i style="width:${(100 * s.callsLogged) / smax}%; background:${C.s1};"></i>${r ? `<i class="sg-heavy" style="width:${(100 * s.callsLogged * share) / smax}%; background:${C.acuity.Serious};"></i>` : ''}</div>
-          <div class="sg-st">${stationStatusPill(s)}</div>
-        </div>`;
-      }).join('') + (stations.length > 8 ? '<div class="subnote">+ ' + (stations.length - 8) + ' more on the Stations tab.</div>' : '')
-        : '<div class="empty">No stations yet — assign stations on the Roster tab.</div>';
-      bindTips($('stationGlance'));
+      if (PRO) renderStationGlance(d);
 
-      // ── Wellbeing tab ──
-      const kpi = (el, label, value, sub, delta, extra) => {
-        $(el).innerHTML = `<div class="lab">${label}</div><div class="val">${value}</div><div class="sub">${sub}</div>${delta ? '<div class="kdelta">' + delta + '</div>' : ''}${extra || ''}`;
-      };
-      kpi('wkStress', 'Post-call stress', w.avgPostCallStress == null ? supp() : w.avgPostCallStress + '<span class="unit"> / 10</span>',
-        w.stressBands ? pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '% of check-ins at 7+' : 'average, 1–10',
-        w.avgPostCallStress == null ? '' : deltaChip(ctx.stressCmp, { goodWhen: 'down', threshold: 0.3 }));
-      kpi('wkFatigue', 'Fatigue', w.avgFatigue == null ? supp() : w.avgFatigue + '<span class="unit"> / 7</span>',
-        w.highFatiguePct == null ? 'Samn-Perelli, 1–7' : w.highFatiguePct + '% of check-ins at 5+',
-        w.avgFatigue == null ? '' : deltaChip(ctx.fatigueCmp, { goodWhen: 'down', threshold: 0.3 }));
-      kpi('wkMood', 'Journal mood', w.avgJournalMood == null ? supp() : w.avgJournalMood + '<span class="unit"> / 5</span>',
-        w.moodDist ? pct(w.moodDist[0] + w.moodDist[1], w.moodDist.reduce((a, b) => a + b, 0)) + '% of check-ins rough or low' : 'average, 1–5', '');
-      kpi('wkAttach', 'Check-in rate', fmt(d.activity.checkInAttachPct, '%'), 'of calls carry a check-in',
-        deltaChip(ctx.attachCmp, { goodWhen: 'up', threshold: 3, fmt: (v) => Math.round(v) + ' pts' }));
-
-      const suppLabel = 'withheld (under ' + d.kMin + ')';
-      if (wk.some((x) => nn(x.avgPostCallStress))) {
-        trendChart($('chStress'), wk, { key: 'Avg post-call stress', color: C.s2, data: wk.map((x) => x.avgPostCallStress), suppressedLabel: suppLabel },
-          { min: 1, max: 10, ticks: [1, 4, 7, 10], zone: [7, 10], zoneLabel: 'high stress', ref: w.avgPostCallStress });
-      } else $('chStress').innerHTML = suppressedBlock(d.kMin, ' in any week');
-      if (wk.some((x) => nn(x.avgFatigue))) {
-        trendChart($('chFatigue'), wk, { key: 'Avg fatigue', color: C.s4, data: wk.map((x) => x.avgFatigue ?? null), suppressedLabel: suppLabel },
-          { min: 1, max: 7, ticks: [1, 3, 5, 7], zone: [5, 7], zoneLabel: 'moderately tired or worse', ref: w.avgFatigue });
-      } else $('chFatigue').innerHTML = suppressedBlock(d.kMin, ' fatigue answers in any week');
-
-      const strips = [];
-      if (w.stressBands) strips.push(['Post-call stress', strip([
-        { label: 'Low 1–3', value: w.stressBands.low, color: C.zLowS },
-        { label: 'Moderate 4–6', value: w.stressBands.moderate, color: C.zMidS, ink: '#1a1a19' },
-        { label: 'High 7–10', value: w.stressBands.high, color: C.zHighS },
-      ], { unit: 'check-ins' })]);
-      if (w.fatigueBands) strips.push(['Fatigue', strip([
-        { label: 'Alert 1–2', value: w.fatigueBands.alert, color: C.zLowS },
-        { label: 'A little tired 3–4', value: w.fatigueBands.tired, color: C.zMidS, ink: '#1a1a19' },
-        { label: 'Moderately tired or worse 5–7', value: w.fatigueBands.high, color: C.zHighS },
-      ], { unit: 'check-ins' })]);
-      if (w.moodDist) strips.push(['Journal mood', strip(MOOD_LABELS.map((l, i) => ({
-        label: (i + 1) + ' · ' + l, value: w.moodDist[i], color: C.mood[i], ink: i === 2 ? C.ink : '#fff',
-      })), { unit: 'check-ins' })]);
-      $('distStrips').innerHTML = strips.length ? strips.map((s) => `<div class="dist"><div class="dist-l">${s[0]}</div><div class="dist-r">${s[1]}</div></div>`).join('')
-        : suppressedBlock(d.kMin, '');
-      bindTips($('distStrips'));
-      const notes = [];
-      if (w.stressBands) notes.push('<b>' + pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '%</b> of post-call check-ins were high-stress');
-      if (w.fatigueBands) notes.push('<b>' + fmt(w.highFatiguePct, '%') + '</b> reported moderate fatigue or worse');
-      if (w.moodDist) notes.push('<b>' + pct(w.moodDist[0] + w.moodDist[1], w.moodDist.reduce((a, b) => a + b, 0)) + '%</b> of journal moods were rough or low');
-      $('distNote').innerHTML = notes.length ? notes.join(' · ') + '. The left and right tails grow before an average moves — watch the red segment, and read it next to the acuity mix before reading it as a people problem.' : '';
-
-      if (wk.some((x) => nn(x.checkInRate))) {
-        trendChart($('chAttach'), wk, { key: 'Check-in rate', color: C.s1, data: wk.map((x) => x.checkInRate) },
-          { min: 0, max: 100, ticks: [0, 50, 100], fmtY: (v) => v + '%', suf: '%', area: true, ref: d.activity.checkInAttachPct });
-      } else $('chAttach').innerHTML = '<div class="empty">No calls logged in this window yet.</div>';
-      ring($('chParticipation'), w.journalParticipationPct, C.s2, 'of members journaled');
-
-      // ── Workload tab ──
-      const tf = timingFacts(d.callTiming);
-      kpi('okCalls', 'Calls logged', totalCalls.toLocaleString(), 'in the last ' + d.range.sinceDays + ' days',
-        deltaChip(ctx.callsCmp, { goodWhen: null, relative: true, threshold: 0.1 }));
-      kpi('okHeavy', 'Serious or Critical', heavyPct == null ? '—' : heavyPct + '<span class="unit">%</span>',
-        ((am.Serious || 0) + (am.Critical || 0)).toLocaleString() + ' calls · ' + (am.Critical || 0) + ' Critical', '');
-      kpi('okPeak', 'Busiest day', tf ? tf.busiestDay : '—', tf ? tf.busiestDayPct + '% of calls' : 'needs call timing', '');
-      kpi('okNight', 'Overnight calls', tf ? tf.nightPct + '<span class="unit">%</span>' : '—', '10 pm – 6 am, when fatigue bites hardest', '');
-
-      if (hasAcuityWeeks) {
-        $('acuityWeekLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Minor / Moderate</span><span><i style="background:${C.acuity.Serious}"></i>Serious</span><span><i style="background:${C.acuity.Critical}"></i>Critical</span>`;
-        stackedWeeks($('chAcuityWeekly'), wk, [
-          { key: 'Minor / Moderate', color: C.s1, data: wk.map((x) => x.callsLogged - (x.highAcuityCalls || 0)) },
-          { key: 'Serious', color: C.acuity.Serious, data: wk.map((x) => (x.highAcuityCalls || 0) - (x.criticalCalls || 0)) },
-          { key: 'Critical', color: C.acuity.Critical, data: wk.map((x) => x.criticalCalls || 0) },
-        ]);
-      } else {
-        $('acuityWeekLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Calls</span>`;
-        stackedWeeks($('chAcuityWeekly'), wk, [{ key: 'Calls', color: C.s1, data: wk.map((x) => x.callsLogged) }]);
+      if (PRO) {
+        renderProTabs(d, { ctx, w, wk, am, totalCalls, heavyPct, supp });
       }
-      $('chAcuity').innerHTML = strip(ACUITY_KEYS.map((k) => ({ label: k, value: am[k] || 0, color: C.acuity[k], ink: k === 'Moderate' ? '#1a1a19' : '#fff' })), { unit: 'calls' })
-        + '<div class="acuity-big">' + ACUITY_KEYS.map((k) => `<div><span class="adot" style="background:${C.acuity[k]}"></span><b>${(am[k] || 0).toLocaleString()}</b><em>${k}</em></div>`).join('') + '</div>';
-      bindTips($('chAcuity'));
-      renderTiming(d);
-      hBars($('chTypes'), (d.topCallTypes || []).map((t) => ({ label: t.type, value: t.count, color: C.s1,
-        valueLabel: t.count + ' · ' + pct(t.count, totalCalls) + '%', tip: t.count + ' calls (' + pct(t.count, totalCalls) + '% of the window)' })));
-
-      // ── Stations tab ──
-      renderStationAlerts(d);
-      renderStationTable(d);
 
       // ── Peer support tab ──
       const hiD = d.highImpact;
@@ -2282,10 +2526,517 @@
       ].map((s) => `<div class="stat row-stat"><div class="sv">${s[0]}</div><div class="sl">${s[1]}</div></div>`).join('');
       if (d.peerAlerts) $('ruleSentence').textContent = ruleSentence(d.peerAlerts);
 
+      renderSetup(d);
+      if (PRO) {
+        if (AI_DATA && AGENCY && AI_DATA.agencyId === AGENCY.id) renderAi(AI_DATA);
+        else loadAiInsights(false);
+      }
+
       hydrateIcons();
       $('genMeta').textContent = 'Generated ' + new Date(d.generatedAt).toLocaleString() + ' · window since ' + d.range.since.slice(0, 10)
         + ' · wellbeing suppression floor: ' + d.kMin + ' members · AfterCall Teams';
     }
+
+    // Teams Pro tabs (Wellbeing / Workload / Stations) — Essentials payloads don't carry their data.
+    function kpi(el, label, value, sub, delta, extra) {
+      $(el).innerHTML = `<div class="lab">${label}</div><div class="val">${value}</div><div class="sub">${sub}</div>${delta ? '<div class="kdelta">' + delta + '</div>' : ''}${extra || ''}`;
+    }
+    function renderStationGlance(d) {
+      const stations = (d.stationBreakdown || []).slice().sort((a, b) =>
+        Number(b.checkInDue) - Number(a.checkInDue) || Number(b.needsCheckIn) - Number(a.needsCheckIn) || b.callsLogged - a.callsLogged);
+      const smax = Math.max(1, ...stations.map((s) => s.callsLogged));
+      $('stationGlance').innerHTML = stations.length ? stations.slice(0, 8).map((s) => {
+        const r = s.recent;
+        const heavy = r ? r.highAcuity : null;
+        const share = r && r.calls ? r.highAcuity / r.calls : 0;
+        return `<div class="sg-row" data-tip="${esc('<b>' + esc(s.station) + '</b><br/>' + s.members + ' members · ' + s.callsLogged + ' calls in window' + (heavy != null ? '<br/>Last 14 days: ' + r.calls + ' calls, ' + heavy + ' Serious / Critical' : ''))}">
+          <div class="sg-name">${esc(s.station)}<span>${s.members} members</span></div>
+          <div class="sg-bar"><i style="width:${(100 * s.callsLogged) / smax}%; background:${C.s1};"></i>${r ? `<i class="sg-heavy" style="width:${(100 * s.callsLogged * share) / smax}%; background:${C.acuity.Serious};"></i>` : ''}</div>
+          <div class="sg-st">${stationStatusPill(s)}</div>
+        </div>`;
+      }).join('') + (stations.length > 8 ? '<div class="subnote">+ ' + (stations.length - 8) + ' more on the Stations tab.</div>' : '')
+        : '<div class="empty">No stations yet — assign stations on the Roster tab.</div>';
+      bindTips($('stationGlance'));
+    }
+    function renderProTabs(d, v) {
+      const { ctx, w, wk, totalCalls } = v;
+      const supp = v.supp;
+      // ── Wellbeing tab ──
+      kpi('wkStress', 'Post-call stress', w.avgPostCallStress == null ? supp() : w.avgPostCallStress + '<span class="unit"> / 10</span>',
+        w.stressBands ? pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '% of check-ins at 7+' : 'average, 1–10',
+        w.avgPostCallStress == null ? '' : deltaChip(ctx.stressCmp, { goodWhen: 'down', threshold: 0.3 }));
+      kpi('wkFatigue', 'Fatigue', w.avgFatigue == null ? supp() : w.avgFatigue + '<span class="unit"> / 7</span>',
+        w.highFatiguePct == null ? 'Samn-Perelli, 1–7' : w.highFatiguePct + '% of check-ins at 5+',
+        w.avgFatigue == null ? '' : deltaChip(ctx.fatigueCmp, { goodWhen: 'down', threshold: 0.3 }));
+      kpi('wkMood', 'Journal mood', w.avgJournalMood == null ? supp() : w.avgJournalMood + '<span class="unit"> / 5</span>',
+        w.moodDist ? pct(w.moodDist[0] + w.moodDist[1], w.moodDist.reduce((a, b) => a + b, 0)) + '% of check-ins rough or low' : 'average, 1–5', '');
+      kpi('wkAttach', 'Check-in rate', fmt(d.activity.checkInAttachPct, '%'), 'of calls carry a check-in',
+        deltaChip(ctx.attachCmp, { goodWhen: 'up', threshold: 3, fmt: (v) => Math.round(v) + ' pts' }));
+
+      const suppLabel = 'withheld (under ' + d.kMin + ')';
+      if (wk.some((x) => nn(x.avgPostCallStress))) {
+        trendChart($('chStress'), wk, { key: 'Avg post-call stress', color: C.s2, data: wk.map((x) => x.avgPostCallStress), suppressedLabel: suppLabel },
+          { min: 1, max: 10, ticks: [1, 4, 7, 10], zone: [7, 10], zoneLabel: 'high stress', ref: w.avgPostCallStress });
+      } else $('chStress').innerHTML = suppressedBlock(d.kMin, ' in any week');
+      if (wk.some((x) => nn(x.avgFatigue))) {
+        trendChart($('chFatigue'), wk, { key: 'Avg fatigue', color: C.s4, data: wk.map((x) => x.avgFatigue ?? null), suppressedLabel: suppLabel },
+          { min: 1, max: 7, ticks: [1, 3, 5, 7], zone: [5, 7], zoneLabel: 'moderately tired or worse', ref: w.avgFatigue });
+      } else $('chFatigue').innerHTML = suppressedBlock(d.kMin, ' fatigue answers in any week');
+
+      const strips = [];
+      if (w.stressBands) strips.push(['Post-call stress', strip([
+        { label: 'Low 1–3', value: w.stressBands.low, color: C.zLowS },
+        { label: 'Moderate 4–6', value: w.stressBands.moderate, color: C.zMidS, ink: '#1a1a19' },
+        { label: 'High 7–10', value: w.stressBands.high, color: C.zHighS },
+      ], { unit: 'check-ins' })]);
+      if (w.fatigueBands) strips.push(['Fatigue', strip([
+        { label: 'Alert 1–2', value: w.fatigueBands.alert, color: C.zLowS },
+        { label: 'A little tired 3–4', value: w.fatigueBands.tired, color: C.zMidS, ink: '#1a1a19' },
+        { label: 'Moderately tired or worse 5–7', value: w.fatigueBands.high, color: C.zHighS },
+      ], { unit: 'check-ins' })]);
+      if (w.moodDist) strips.push(['Journal mood', strip(MOOD_LABELS.map((l, i) => ({
+        label: (i + 1) + ' · ' + l, value: w.moodDist[i], color: C.mood[i], ink: i === 2 ? C.ink : '#fff',
+      })), { unit: 'check-ins' })]);
+      $('distStrips').innerHTML = strips.length ? strips.map((s) => `<div class="dist"><div class="dist-l">${s[0]}</div><div class="dist-r">${s[1]}</div></div>`).join('')
+        : suppressedBlock(d.kMin, '');
+      bindTips($('distStrips'));
+      const notes = [];
+      if (w.stressBands) notes.push('<b>' + pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '%</b> of post-call check-ins were high-stress');
+      if (w.fatigueBands) notes.push('<b>' + fmt(w.highFatiguePct, '%') + '</b> reported moderate fatigue or worse');
+      if (w.moodDist) notes.push('<b>' + pct(w.moodDist[0] + w.moodDist[1], w.moodDist.reduce((a, b) => a + b, 0)) + '%</b> of journal moods were rough or low');
+      $('distNote').innerHTML = notes.length ? notes.join(' · ') + '. The left and right tails grow before an average moves — watch the red segment, and read it next to the acuity mix before reading it as a people problem.' : '';
+
+      if (wk.some((x) => nn(x.checkInRate))) {
+        trendChart($('chAttach'), wk, { key: 'Check-in rate', color: C.s1, data: wk.map((x) => x.checkInRate) },
+          { min: 0, max: 100, ticks: [0, 50, 100], fmtY: (v) => v + '%', suf: '%', area: true, ref: d.activity.checkInAttachPct });
+      } else $('chAttach').innerHTML = '<div class="empty">No calls logged in this window yet.</div>';
+      ring($('chParticipation'), w.journalParticipationPct, C.s2, 'of members journaled');
+
+      renderWorkload(d);
+      renderStationWorkload(d);
+      renderLoadVsWellbeing(d);
+
+      // ── Stations tab ──
+      renderStationAlerts(d);
+      renderStationTable(d);
+
+    }
+
+    const PLAN_LABEL = { teams_pro: 'Teams Pro', essentials: 'Teams Essentials', pilot: 'Pilot · Teams Pro', command: 'Enterprise', crew: 'Crew' };
+    const BLOCK_LABEL = { overnight: 'Overnight', morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening' };
+    const BLOCK_HOURS = { overnight: '12–6 am', morning: '6 am–12 pm', afternoon: '12–6 pm', evening: '6 pm–12 am' };
+    const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    // ── Workload: all stations, or one station (Teams Pro) ──
+    let WL_STATION = null;
+    function workloadView(d) {
+      const st = WL_STATION && (d.stationWorkload || []).find((x) => x.station === WL_STATION);
+      if (!st) {
+        WL_STATION = null;
+        const wk = d.weekly || [];
+        return { station: null, calls: d.activity.callsLogged, weekly: wk, mix: d.acuityMix || {}, timing: d.callTiming,
+          types: d.topCallTypes || [], hasAcuityWeeks: wk.some((w) => 'highAcuityCalls' in w) };
+      }
+      return {
+        station: st, calls: st.calls,
+        weekly: st.weekly.map((w) => ({ weekStart: w.weekStart, callsLogged: w.calls, highAcuityCalls: w.highAcuity, criticalCalls: w.critical || 0 })),
+        mix: st.acuityMix,
+        timing: { tz: d.callTiming ? d.callTiming.tz : 'UTC', days: WEEKDAYS, calls: st.grid, highAcuity: st.highAcuityGrid },
+        types: st.topCallTypes || [], hasAcuityWeeks: true,
+      };
+    }
+    function agencyPerMemberWeek(d) {
+      return d.seats.activeMembers ? r1(d.activity.callsLogged / d.seats.activeMembers / Math.max(1, d.range.sinceDays / 7)) : null;
+    }
+    function renderWorkload(d) {
+      const v = workloadView(d);
+      const sw = d.stationWorkload || [];
+      $('wlScopeCard').style.display = sw.length ? '' : 'none';
+      $('wlScope').innerHTML = ['<button data-st="" class="' + (v.station ? '' : 'on') + '">All stations</button>']
+        .concat(sw.map((x) => `<button data-st="${esc(x.station)}" class="${v.station && v.station.station === x.station ? 'on' : ''}">${esc(x.station)}</button>`)).join('');
+      const agencyRate = agencyPerMemberWeek(d);
+      $('wlScopeNote').innerHTML = v.station
+        ? '<b>' + esc(v.station.station) + '</b> · ' + plural(v.station.members, 'member') + ' · <b>' + v.station.callsPerMemberWeek + '</b> calls per member per week'
+          + (agencyRate != null ? ' (agency ' + agencyRate + ')' : '')
+        : 'Showing <b>every station</b>' + (agencyRate != null ? ' · ' + agencyRate + ' calls per member per week' : '');
+      const wk = v.weekly;
+      const am = v.mix;
+      const heavyPct = pct((am.Serious || 0) + (am.Critical || 0), v.calls);
+      const tf = timingFacts(v.timing);
+      kpi('okCalls', 'Calls logged', v.calls.toLocaleString(), (v.station ? v.station.station + ' · ' : '') + 'last ' + d.range.sinceDays + ' days',
+        deltaChip(compareWeeks(wk, (x) => x.callsLogged), { goodWhen: null, relative: true, threshold: 0.1 }));
+      kpi('okHeavy', 'Serious or Critical', heavyPct == null ? '—' : heavyPct + '<span class="unit">%</span>',
+        ((am.Serious || 0) + (am.Critical || 0)).toLocaleString() + ' calls · ' + (am.Critical || 0) + ' Critical', '');
+      kpi('okPeak', 'Busiest day', tf ? tf.busiestDay : '—', tf ? tf.busiestDayPct + '% of calls' : 'needs call timing', '');
+      kpi('okNight', 'Overnight calls', tf ? tf.nightPct + '<span class="unit">%</span>' : '—', '10 pm – 6 am, when fatigue bites hardest', '');
+
+      if (v.hasAcuityWeeks) {
+        $('acuityWeekLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Minor / Moderate</span><span><i style="background:${C.acuity.Serious}"></i>Serious</span><span><i style="background:${C.acuity.Critical}"></i>Critical</span>`;
+        stackedWeeks($('chAcuityWeekly'), wk, [
+          { key: 'Minor / Moderate', color: C.s1, data: wk.map((x) => x.callsLogged - (x.highAcuityCalls || 0)) },
+          { key: 'Serious', color: C.acuity.Serious, data: wk.map((x) => (x.highAcuityCalls || 0) - (x.criticalCalls || 0)) },
+          { key: 'Critical', color: C.acuity.Critical, data: wk.map((x) => x.criticalCalls || 0) },
+        ]);
+      } else {
+        $('acuityWeekLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Calls</span>`;
+        stackedWeeks($('chAcuityWeekly'), wk, [{ key: 'Calls', color: C.s1, data: wk.map((x) => x.callsLogged) }]);
+      }
+      $('chAcuity').innerHTML = (v.calls ? strip(ACUITY_KEYS.map((k) => ({ label: k, value: am[k] || 0, color: C.acuity[k], ink: k === 'Moderate' ? '#1a1a19' : '#fff' })), { unit: 'calls' })
+        : '<div class="empty">No calls logged in this window yet.</div>')
+        + '<div class="acuity-big">' + ACUITY_KEYS.map((k) => `<div><span class="adot" style="background:${C.acuity[k]}"></span><b>${(am[k] || 0).toLocaleString()}</b><em>${k}</em></div>`).join('') + '</div>';
+      bindTips($('chAcuity'));
+      renderTiming(v.timing, d.kMin, v.calls);
+      $('typesNote').textContent = v.station ? v.station.station + ' · top 5' : 'calls in the window';
+      hBars($('chTypes'), v.types.map((t) => ({ label: t.type, value: t.count, color: C.s1,
+        valueLabel: t.count + ' · ' + pct(t.count, v.calls) + '%', tip: t.count + ' calls (' + pct(t.count, v.calls) + '% of ' + (v.station ? v.station.station : 'the window') + ')' })));
+    }
+    $('wlScope').addEventListener('click', (ev) => {
+      const b = ev.target.closest('button[data-st]'); if (!b || !DATA) return;
+      WL_STATION = b.dataset.st || null;
+      renderWorkload(DATA);
+    });
+
+    // Workload by station: the comparison table + calls per week, one row per station.
+    function stationBlockFacts(s) {
+      const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const BL = ['overnight', 'morning', 'afternoon', 'evening'];
+      let best = { n: -1, d: 0, b: 0 }, night = 0, all = 0;
+      s.grid.forEach((row, di) => {
+        const blocks = [0, 0, 0, 0];
+        row.forEach((v, h) => { blocks[h < 6 ? 0 : h < 12 ? 1 : h < 18 ? 2 : 3] += v; all += v; if (h >= 22 || h < 6) night += v; });
+        blocks.forEach((n, bi) => { if (n > best.n) best = { n, d: di, b: bi }; });
+      });
+      return { busiest: all ? DAYS[best.d] + ' ' + BLOCK_LABEL[BL[best.b]].toLowerCase() : '—', busiestTip: all ? DAYS[best.d] + ' ' + BLOCK_HOURS[BL[best.b]] + ': ' + plural(best.n, 'call') : '', nightPct: pct(night, all) };
+    }
+    function renderStationWorkload(d) {
+      const sw = d.stationWorkload || [];
+      $('wlStationsCard').style.display = sw.length ? '' : 'none';
+      $('wlWeeksCard').style.display = sw.length ? '' : 'none';
+      if (!sw.length) return;
+      const base = agencyPerMemberWeek(d);
+      const am = d.acuityMix || {};
+      const agencyHeavy = pct((am.Serious || 0) + (am.Critical || 0), d.activity.callsLogged);
+      const w = d.wellness || {};
+      const maxCalls = Math.max(1, ...sw.map((s) => s.calls));
+      $('wlStationBody').innerHTML = sw.map((s) => {
+        const f = stationBlockFacts(s);
+        return `<tr class="clickable" data-st="${esc(s.station)}">
+          <td><b>${esc(s.station)}</b></td>
+          <td class="num">${s.members}</td>
+          <td class="num nowrap"><div class="minibar"><i style="width:${(100 * s.calls) / maxCalls}%"></i></div>${s.calls.toLocaleString()}</td>
+          ${heatCell(s.callsPerMemberWeek, s.callsPerMemberWeek, base, base ? Math.max(1, base * 0.6) : 1, 'up', s.station + ' · calls per member per week')}
+          ${heatCell(s.highAcuityPct, s.highAcuityPct == null ? '—' : s.highAcuityPct + '%', agencyHeavy, 25, 'up', s.station + ' · Serious / Critical share')}
+          <td class="num">${s.critical}</td>
+          <td class="nowrap" data-tip="${esc(f.busiestTip)}">${esc(f.busiest)}</td>
+          <td class="num">${f.nightPct == null ? '—' : f.nightPct + '%'}</td>
+          ${heatCell(s.checkInPct, s.checkInPct == null ? '—' : s.checkInPct + '%', d.activity.checkInAttachPct, 30, 'down', s.station + ' · check-in rate')}
+          ${heatCell(s.avgPostCallStress, s.avgPostCallStress, w.avgPostCallStress, 2, 'up', s.station + ' · avg stress (1–10)')}
+          ${heatCell(s.avgFatigue, s.avgFatigue, w.avgFatigue, 1.5, 'up', s.station + ' · avg fatigue (1–7)')}
+          <td class="num">${s.peerAlerts}</td>
+        </tr>`;
+      }).join('');
+      bindTips($('wlStationBody'));
+
+      const weeks = sw[0].weekly.map((x) => ({ weekStart: x.weekStart }));
+      const shared = niceMax(Math.max(1, ...sw.flatMap((s) => s.weekly.map((x) => x.calls))));
+      $('wlWeeksLegend').innerHTML = `<span><i style="background:${C.s1}"></i>Minor / Moderate</span><span><i style="background:${C.acuity.Serious}"></i>Serious / Critical</span>`;
+      smallMultiples($('chStationWeeks'), weeks, sw.map((s) => ({
+        title: s.station.length > 18 ? s.station.slice(0, 17) + '…' : s.station, subtitle: s.members + ' members', kind: 'stack', height: 54, max: shared,
+        series: [
+          { key: 'Minor / Moderate', color: C.s1, data: s.weekly.map((x) => x.calls - x.highAcuity) },
+          { key: 'Serious / Critical', color: C.acuity.Serious, data: s.weekly.map((x) => x.highAcuity) },
+        ],
+      })), (x, i) => '<b>Week of ' + esc(weekLabel(x.weekStart)) + '</b><br/>' + sw.map((s) =>
+        esc(s.station) + ': <b>' + s.weekly[i].calls + '</b>' + (s.weekly[i].highAcuity ? ' · ' + s.weekly[i].highAcuity + ' Serious / Critical' : '')).join('<br/>'));
+    }
+    $('wlStationBody').addEventListener('click', (ev) => {
+      const tr = ev.target.closest('tr[data-st]'); if (!tr || !DATA) return;
+      WL_STATION = tr.dataset.st;
+      renderWorkload(DATA);
+      $('wlScopeCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // ── How the work lands (Teams Pro): call load vs wellbeing ──
+    // Each column is one measure on its own fixed scale (stress 1–10, fatigue
+    // 1–7) — never two scales on one axis. Withheld rows are hatched.
+    function bcell(value, lo, hi, color, ref, tipLabel) {
+      if (value == null) return `<td><div class="bcell supp" data-tip="${esc('<b>' + tipLabel + '</b><br/>Withheld — fewer than ' + (DATA ? DATA.kMin : 5) + ' people')}"><div class="bt"></div><div class="bv">withheld</div></div></td>`;
+      const pos = (v) => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
+      const diff = ref != null ? r1(value - ref) : null;
+      const tipHtml = '<b>' + tipLabel + '</b>: ' + value + (ref != null ? '<br/>Agency average: ' + ref + ' (' + (diff > 0 ? '+' : '') + diff + ')' : '');
+      return `<td><div class="bcell" data-tip="${esc(tipHtml)}"><div class="bt"><i style="width:${Math.max(2, pos(value))}%; background:${color};"></i>${ref != null ? `<b class="ref" style="left:calc(${pos(ref)}% - 1px)"></b>` : ''}</div><div class="bv">${value}</div></div></td>`;
+    }
+    function lvwTable(rows, w) {
+      if (!rows.length) return '<div class="empty">Not enough check-ins yet.</div>';
+      return `<div class="tablewrap"><table class="btable"><thead><tr><th></th><th>Stress after the call · 1–10</th><th>Fatigue · 1–7</th></tr></thead><tbody>`
+        + rows.map((r) => `<tr><td class="lab">${r.dot ? `<i class="adot" style="background:${r.dot}"></i>` : ''}${esc(r.label)}<span>${esc(r.sub)}</span></td>`
+          + bcell(r.avgStress, 1, 10, C.s2, w.avgPostCallStress, r.label + ' · stress')
+          + bcell(r.avgFatigue, 1, 7, C.s4, w.avgFatigue, r.label + ' · fatigue') + '</tr>').join('')
+        + '</tbody></table></div>';
+    }
+    function scatter(el, pts, opts) {
+      if (pts.length < 3) { el.innerHTML = '<div class="empty">Needs at least a few weeks with enough check-ins to compare.</div>'; return; }
+      const h = 230, x0 = 44, x1 = W - 16, y0 = 12, y1 = h - 34;
+      const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
+      const xlo = Math.floor(Math.min(...xs) * 2) / 2, xhi = Math.max(xlo + 0.5, Math.ceil(Math.max(...xs) * 2) / 2);
+      const ylo = Math.max(1, Math.floor(Math.min(...ys)) - 1), yhi = Math.min(10, Math.ceil(Math.max(...ys)) + 1);
+      const X = (v) => x0 + ((v - xlo) / (xhi - xlo)) * (x1 - x0);
+      const Y = (v) => y1 - ((v - ylo) / (yhi - ylo)) * (y1 - y0);
+      let svg = '';
+      for (let t = ylo; t <= yhi; t++) {
+        svg += `<line x1="${x0}" y1="${Y(t)}" x2="${x1}" y2="${Y(t)}" stroke="${C.grid}"/>`;
+        svg += `<text x="${x0 - 6}" y="${Y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${t}</text>`;
+      }
+      [xlo, (xlo + xhi) / 2, xhi].forEach((t) => {
+        svg += `<text x="${X(t)}" y="${y1 + 15}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${r1(t)}</text>`;
+      });
+      svg += `<text x="${(x0 + x1) / 2}" y="${h - 4}" text-anchor="middle" font-size="10" fill="${C.muted}">calls per active member that week →</text>`;
+      svg += `<text x="10" y="${(y0 + y1) / 2}" text-anchor="middle" font-size="10" fill="${C.muted}" transform="rotate(-90 10 ${(y0 + y1) / 2})">avg stress</text>`;
+      // Least-squares line, only when the relationship is worth drawing.
+      if (opts.r != null && Math.abs(opts.r) >= 0.3) {
+        const mx = xs.reduce((a, b) => a + b, 0) / xs.length, my = ys.reduce((a, b) => a + b, 0) / ys.length;
+        const sxy = pts.reduce((a, p) => a + (p.x - mx) * (p.y - my), 0), sxx = pts.reduce((a, p) => a + (p.x - mx) ** 2, 0);
+        if (sxx) {
+          const m = sxy / sxx, b = my - m * mx;
+          svg += `<line x1="${X(xlo)}" y1="${Y(m * xlo + b)}" x2="${X(xhi)}" y2="${Y(m * xhi + b)}" stroke="${C.muted}" stroke-dasharray="5 4"/>`;
+        }
+      }
+      pts.forEach((p) => {
+        svg += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="6" fill="${C.s2}" fill-opacity="0.85" stroke="${C.ptStroke}" stroke-width="2"
+          data-tip="${esc('<b>Week of ' + esc(weekLabel(p.week)) + '</b><br/>' + r1(p.x) + ' calls per active member<br/>Avg stress ' + p.y)}"/>`;
+      });
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${h}" role="img" aria-label="Weekly calls per member vs average stress">${svg}</svg>`;
+      bindTips(el);
+    }
+    function renderLoadVsWellbeing(d) {
+      const L = d.loadVsWellbeing;
+      if (!L) { $('lvwCard').style.display = 'none'; return; }
+      $('lvwCard').style.display = '';
+      const w = d.wellness || {};
+      const acu = L.byAcuity.map((r) => ({ label: r.acuity, sub: plural(r.calls, 'call'), dot: C.acuity[r.acuity], avgStress: r.avgStress, avgFatigue: r.avgFatigue }));
+      $('lvwAcuity').innerHTML = lvwTable(acu, w);
+      const LOAD = { '1': '1 call that day', '2-3': '2–3 calls', '4+': '4 or more calls' };
+      $('lvwLoad').innerHTML = lvwTable(L.byDayLoad.map((r) => ({ label: LOAD[r.load] || r.load, sub: plural(r.days, 'person-day'), avgStress: r.avgStress, avgFatigue: r.avgFatigue })), w);
+      $('lvwTime').innerHTML = lvwTable(L.byTimeOfDay.map((r) => ({ label: BLOCK_LABEL[r.block] || r.block, sub: BLOCK_HOURS[r.block] + ' · ' + plural(r.calls, 'call'), avgStress: r.avgStress, avgFatigue: r.avgFatigue })), w);
+      bindTips($('lvwCard'));
+      const pts = (d.weekly || []).filter((x) => nn(x.avgPostCallStress) && x.activeMembers > 0 && x.callsLogged > 0)
+        .map((x) => ({ x: x.callsLogged / x.activeMembers, y: x.avgPostCallStress, week: x.weekStart }));
+      const r = L.weeks ? L.weeks.callsPerMemberVsStress : null;
+      scatter($('lvwScatter'), pts, { r });
+
+      const find = (arr, k, v) => arr.find((x) => x[k] === v) || {};
+      const lead = [];
+      const crit = find(L.byAcuity, 'acuity', 'Critical'), minor = find(L.byAcuity, 'acuity', 'Minor');
+      if (crit.avgStress != null && minor.avgStress != null) {
+        lead.push('Stress after <b>Critical</b> calls averages <b>' + crit.avgStress + '</b>, against <b>' + minor.avgStress + '</b> after Minor calls'
+          + (crit.avgStress - minor.avgStress >= 1.5 ? ' — a protected minute after a Critical call is where a debrief or peer check-in pays off.' : '.'));
+      }
+      const heavyDay = find(L.byDayLoad, 'load', '4+'), oneDay = find(L.byDayLoad, 'load', '1');
+      if (heavyDay.avgFatigue != null && oneDay.avgFatigue != null) {
+        lead.push('On days someone ran <b>4 or more calls</b>, fatigue averaged <b>' + heavyDay.avgFatigue + '</b> vs <b>' + oneDay.avgFatigue + '</b> on one-call days.');
+      }
+      const hi = L.highImpact || {};
+      if (hi.marked && hi.unmarked && hi.marked.avgStress != null && hi.unmarked.avgStress != null) {
+        lead.push('Calls members marked <b>high-impact</b> carry stress of <b>' + hi.marked.avgStress + '</b> vs <b>' + hi.unmarked.avgStress + '</b> on the rest.');
+      }
+      if (r != null) {
+        lead.push(Math.abs(r) >= 0.5 ? (r > 0 ? 'Busier weeks clearly line up with higher stress' : 'Busier weeks have lined up with lower stress') + ' (r = ' + r + ' over ' + plural(L.weeks.n, 'week') + ').'
+          : Math.abs(r) >= 0.3 ? 'Busier weeks somewhat line up with higher stress (r = ' + r + ').'
+            : 'Weekly stress doesn’t track how busy the week was (r = ' + r + ') — the kind of call matters more than the count.');
+      }
+      $('lvwLead').innerHTML = lead.length ? lead.join(' ') : 'Comparisons fill in as more members check in after calls — each row needs at least ' + d.kMin + ' people.';
+    }
+
+    // ── AfterCall AI brief (Teams Pro) ──
+    const AI_TONE = { watch: ['alert', 'Watch'], good: ['check', 'Going well'], info: ['info', 'Worth knowing'] };
+    const AI_GOTO = { workload: ['operations', 'Workload'], wellbeing: ['wellbeing', 'Wellbeing'], stations: ['stations', 'Stations'], peer: ['peer', 'Peer support'] };
+    const AI_EMPTY = {
+      not_configured: 'AfterCall AI isn’t switched on for this dashboard yet.',
+      too_few_members: 'AfterCall AI writes its brief once at least 5 members are on your roster — the same privacy floor as every number here.',
+      generation_failed: 'AfterCall AI couldn’t write a brief right now. Try Refresh in a few minutes.',
+    };
+    function timeAgo(iso) {
+      const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+      return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : new Date(iso).toLocaleDateString();
+    }
+    function renderAi(r) {
+      const list = $('aiList');
+      if (!r || !r.insights || !r.insights.length) {
+        list.innerHTML = '<div class="empty">' + esc(AI_EMPTY[r && r.unavailable] || AI_EMPTY.generation_failed) + '</div>';
+        $('aiMeta').textContent = 'Last 90 days';
+        return;
+      }
+      $('aiMeta').textContent = 'Last 90 days · written ' + timeAgo(r.generatedAt) + (r.stale ? ' · numbers changed since — refresh for a new read' : '');
+      list.innerHTML = '<div class="ai-grid">' + r.insights.map((it) => {
+        const t = AI_TONE[it.tone] || AI_TONE.info;
+        const g = AI_GOTO[it.area];
+        return `<div class="ai-item">
+          <span class="ai-tone ${esc(it.tone)}">${ico(t[0])}${t[1]}</span>
+          <h4>${esc(it.title)}</h4>
+          <p>${esc(it.body)}</p>
+          ${it.evidence ? `<div class="ai-ev">${esc(it.evidence)}</div>` : ''}
+          <div class="ai-act">${ico('arrow')}<span>${esc(it.action)}</span>${g ? `<a class="head-link noprint" data-goto="${g[0]}">${g[1]} →</a>` : ''}</div>
+        </div>`;
+      }).join('') + '</div>';
+    }
+    function loadAiInsights(force) {
+      if (!DATA || DATA.tier === 'essentials' || !AGENCY) return;
+      const agencyId = AGENCY.id;
+      $('aiList').innerHTML = '<div class="ai-grid"><div class="ai-skel"></div><div class="ai-skel"></div></div>';
+      $('aiMeta').textContent = force ? 'Asking AfterCall AI for a fresh read…' : 'Reading this window’s numbers…';
+      $('aiRefresh').disabled = true;
+      let tz = 'UTC';
+      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { /* old browser */ }
+      return post('leader_ai_insights', { tz, force: !!force })
+        .then((r) => { if (!AGENCY || AGENCY.id !== agencyId) return; AI_DATA = Object.assign({ agencyId }, r); renderAi(AI_DATA); })
+        .catch((e) => {
+          if (AUTH_CODES.includes(e.code)) return;
+          $('aiList').innerHTML = '<div class="empty">' + esc(e.code === 'pro_required' ? 'AfterCall AI is part of Teams Pro.' : AI_EMPTY.generation_failed) + '</div>';
+          $('aiMeta').textContent = 'Last 90 days';
+        })
+        .finally(() => { $('aiRefresh').disabled = false; });
+    }
+    $('aiRefresh').addEventListener('click', () => loadAiInsights(true));
+
+    // ── Getting started (admins, until the agency is set up) ──
+    function setupHiddenKey() { return 'ac_teams_setup_hidden_' + (AGENCY ? AGENCY.id : ''); }
+    function renderSetup(d) {
+      const card = $('setupCard');
+      const s = d.setup;
+      let hidden = false;
+      try { hidden = localStorage.getItem(setupHiddenKey()) === '1'; } catch (e) { /* private mode */ }
+      if (!s || hidden || !AGENCY || AGENCY.role !== 'admin') { card.style.display = 'none'; return; }
+      const seatsPct = d.seats.seatLimit ? d.seats.activeMembers / d.seats.seatLimit : 0;
+      const steps = [
+        { done: s.crisisResources > 0, title: 'Add your crisis line', text: 'Your EAP or peer team number, in every member’s app right above 988.', goto: 'resources', cta: 'Add a resource' },
+        { done: d.seats.peerSupporters > 0, title: 'Mark your peer supporters', text: 'Peer alerts and check-in requests go to them — and only them.', goto: 'roster', cta: 'Open roster' },
+        { done: s.invitesSent > 0, title: 'Email your team their code', text: 'Paste your roster; everyone gets the app links and your team code.', goto: 'roster', cta: 'Invite your team', focus: 'invPaste' },
+        { done: seatsPct >= 0.5, title: 'Half your seats claimed', text: d.seats.activeMembers + ' of ' + d.seats.seatLimit + ' seats claimed so far.', goto: 'roster', cta: 'See who joined' },
+        { done: s.dashboardUsers > 0, title: 'Add a co-leader', text: 'A deputy chief or EMS coordinator gets their own dashboard sign-in.', goto: 'settings', cta: 'Dashboard access' },
+        { done: s.channels > 0, title: 'Open a channel', text: 'A station or shift channel for announcements and peer support.', goto: 'channels', cta: 'Create a channel' },
+      ];
+      const done = steps.filter((x) => x.done).length;
+      if (done === steps.length) { card.style.display = 'none'; return; }
+      card.style.display = '';
+      $('setupCount').textContent = done + ' of ' + steps.length + ' done';
+      $('setupBar').style.width = Math.round((100 * done) / steps.length) + '%';
+      $('setupSteps').innerHTML = steps.map((x, i) => `<div class="setup-step ${x.done ? 'done' : ''}">
+          <span class="ss-dot">${x.done ? ico('check') : i + 1}</span>
+          <div><b>${esc(x.title)}</b><span>${esc(x.text)}</span>${x.done ? '' : `<a class="head-link noprint" data-goto="${x.goto}"${x.focus ? ' data-focus="' + x.focus + '"' : ''}>${esc(x.cta)} →</a>`}</div>
+        </div>`).join('');
+    }
+    $('setupHide').addEventListener('click', () => {
+      try { localStorage.setItem(setupHiddenKey(), '1'); } catch (e) { /* private mode */ }
+      $('setupCard').style.display = 'none';
+    });
+
+    // ── Invite your team (roster emails with the join code) ──
+    const EMAIL_RX = /[^\s<>,;"'()]+@[^\s<>,;"'()]+\.[^\s<>,;"'()]+/;
+    const STATION_RX = /\b(station|stn|st\.|house|base|post|company|co\.|medic|unit|district|battalion|shift)\b|^\d{1,3}$/i;
+    function parseRoster(text) {
+      const out = new Map();
+      let invalid = 0;
+      String(text || '').split(/\r?\n/).forEach((line) => {
+        const raw = line.trim();
+        if (!raw) return;
+        const m = raw.match(EMAIL_RX);
+        if (!m) { if (/@/.test(raw)) invalid++; return; } // a header row ("name,email,station") is skipped quietly
+        const email = m[0].toLowerCase().replace(/[.]+$/, '');
+        const rest = raw.replace(m[0], ' ').replace(/[<>"]/g, ' ').split(/[,\t;|]+/).map((x) => x.trim()).filter(Boolean);
+        let name = null, station = null;
+        if (rest.length >= 2) { name = rest[0]; station = rest[1]; if (STATION_RX.test(name) && !STATION_RX.test(station)) { name = rest[1]; station = rest[0]; } }
+        else if (rest.length === 1) { if (STATION_RX.test(rest[0])) station = rest[0]; else name = rest[0]; }
+        out.set(email, { email, name: name ? name.slice(0, 120) : null, station: station ? station.slice(0, 80) : null });
+      });
+      return { people: [...out.values()], invalid };
+    }
+    let INVITES = null;
+    function updateInvitePreview() {
+      const { people, invalid } = parseRoster($('invPaste').value);
+      const known = new Set(((INVITES && INVITES.invites) || []).map((i) => i.email));
+      const again = people.filter((p) => known.has(p.email)).length;
+      $('invPreview').textContent = people.length
+        ? plural(people.length, 'person', 'people') + (again ? ' · ' + again + ' already invited' : '') + (invalid ? ' · ' + plural(invalid, 'line') + ' without a valid email' : '')
+        : invalid ? plural(invalid, 'line') + ' without a valid email' : '';
+      $('invSend').disabled = !people.length;
+    }
+    $('invPaste').addEventListener('input', updateInvitePreview);
+    $('invFileLink').addEventListener('click', () => $('invFile').click());
+    $('invFile').addEventListener('change', () => {
+      const f = $('invFile').files && $('invFile').files[0];
+      if (!f) return;
+      if (f.size > 512 * 1024) { flash('invMsg', 'err', 'That file is too big — paste the rows instead.'); return; }
+      f.text().then((t) => { $('invPaste').value = ($('invPaste').value.trim() ? $('invPaste').value.trim() + '\n' : '') + t.trim(); updateInvitePreview(); });
+      $('invFile').value = '';
+    });
+    const INVITE_ERR = {
+      no_join_code: 'Your agency has no active join code. Create one on the Settings tab, then send the invites.',
+      email_not_configured: 'Email sending isn’t set up for Teams invites yet. Share the join code instead, or contact AfterCall.',
+      daily_limit: 'That’s more invites than we can send today. Send the rest tomorrow.',
+      too_many: 'Send up to 300 people at a time.',
+      no_valid_emails: 'None of those lines has a valid email address.',
+    };
+    function sendInvites(people, resend) {
+      return post('leader_send_team_invites', { people, message: $('invNote').value.trim(), resend: !!resend })
+        .then((r) => {
+          const bits = [];
+          if (r.sent) bits.push('Sent ' + plural(r.sent, 'invite'));
+          if (r.failed) bits.push(plural(r.failed, 'email') + ' failed — try again');
+          const k = r.skipped || {};
+          if (k.member) bits.push(k.member + ' already on your roster');
+          if (k.alreadyInvited) bits.push(k.alreadyInvited + ' already invited (tick “Re-send” to email them again)');
+          if (k.recent) bits.push(k.recent + ' emailed in the last hour');
+          if (k.invalid) bits.push(plural(k.invalid, 'invalid address', 'invalid addresses'));
+          flash('invMsg', r.failed && !r.sent ? 'err' : 'ok', (bits.join(' · ') || 'Nothing to send.') + '.'
+            + (r.sent && r.seatsLeft != null && r.seatsLeft < r.sent ? ' Heads up: only ' + plural(r.seatsLeft, 'seat') + ' left — add seats so everyone can join.' : ''));
+          return loadInvites();
+        });
+    }
+    $('invSend').addEventListener('click', () => {
+      const { people } = parseRoster($('invPaste').value);
+      if (!people.length) return;
+      const code = INVITES && INVITES.joinCode;
+      if (!confirm('Email ' + plural(people.length, 'person', 'people') + ' how to set up AfterCall and join with your team code' + (code ? ' (' + code + ')' : '') + '?')) return;
+      busy($('invSend'), true, 'Sending…');
+      sendInvites(people, $('invResend').checked)
+        .then(() => { $('invPaste').value = ''; updateInvitePreview(); })
+        .catch((e) => flash('invMsg', 'err', INVITE_ERR[e.code] || e.message))
+        .finally(() => busy($('invSend'), false));
+    });
+    const INV_STATUS = { joined: 'Joined', sent: 'Invited', failed: 'Email failed', not_sent: 'Not sent' };
+    function renderInvites() {
+      const r = INVITES || { invites: [], counts: {} };
+      $('invCode').textContent = r.joinCode || 'none';
+      $('invSubj').textContent = 'Join ' + ((DATA && DATA.agency.name) || (AGENCY && AGENCY.name) || 'your agency') + ' on AfterCall — your team code is ' + (r.joinCode || '…');
+      const c = r.counts || {};
+      $('invCounts').textContent = c.total ? c.joined + ' of ' + c.total + ' invited have joined' + (c.failed ? ' · ' + c.failed + ' failed' : '') : '';
+      $('invTableWrap').style.display = r.invites.length ? '' : 'none';
+      $('invBody').innerHTML = r.invites.map((i) => `<tr data-id="${esc(i.id)}" data-email="${esc(i.email)}">
+          <td><b>${esc(i.name || i.email)}</b>${i.name ? `<br/><span style="color:var(--muted); font-size:12px;">${esc(i.email)}</span>` : ''}</td>
+          <td>${esc(i.station || '—')}</td>
+          <td><span class="inv-status ${esc(i.status)}">${INV_STATUS[i.status] || esc(i.status)}</span></td>
+          <td class="nowrap">${i.lastSentAt ? new Date(i.lastSentAt).toLocaleDateString() + (i.sendCount > 1 ? ' · ' + i.sendCount + '×' : '') : '—'}</td>
+          <td class="nowrap" style="text-align:right;">${i.status === 'joined' ? '' : '<button class="btn ghost sm" data-act="resend">Re-send</button> <button class="btn ghost sm" data-act="revoke">Remove</button>'}</td>
+        </tr>`).join('');
+      updateInvitePreview();
+    }
+    function loadInvites() {
+      if (!AGENCY || AGENCY.role !== 'admin') return Promise.resolve();
+      return post('leader_team_invites').then((r) => { INVITES = r; renderInvites(); }).catch((e) => {
+        if (!AUTH_CODES.includes(e.code) && e.code !== 'billing_required') flash('invMsg', 'err', e.message);
+      });
+    }
+    $('invBody').addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button[data-act]'); if (!btn) return;
+      const tr = btn.closest('tr');
+      if (btn.dataset.act === 'resend') {
+        busy(btn, true, 'Sending…');
+        sendInvites([{ email: tr.dataset.email }], true).catch((e) => flash('invMsg', 'err', INVITE_ERR[e.code] || e.message)).finally(() => busy(btn, false));
+      } else if (btn.dataset.act === 'revoke') {
+        if (!confirm('Remove this invite? The email already sent can’t be unsent — rotate the join code on Settings if it shouldn’t work any more.')) return;
+        post('leader_revoke_team_invite', { id: tr.dataset.id }).then(loadInvites).catch((e) => flash('invMsg', 'err', e.message));
+      }
+    });
 
     // Stacked weekly columns (acuity), one axis, 2px gaps between segments.
     function stackedWeeks(el, weeks, series) {
@@ -2329,7 +3080,9 @@
       const page = g.dataset.goto;
       if (!$('page-' + page)) return;
       showPage(page);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const focus = g.dataset.focus && $(g.dataset.focus);
+      if (focus) setTimeout(() => { focus.scrollIntoView({ behavior: 'smooth', block: 'center' }); focus.focus(); }, 60);
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Print / save as PDF: the overview, always in the light palette.
@@ -2923,9 +3676,46 @@
     })();
 
     // ── Shell ──
+    // Teams Essentials: the Pro tabs stay visible (with a lock) and open a
+    // page that explains what Teams Pro adds. The server never sends their data.
+    const PRO_PAGES = ['wellbeing', 'operations', 'stations'];
+    const UPSELL = {
+      wellbeing: { title: 'See how your team is really doing',
+        body: 'Teams Pro turns your members’ voluntary check-ins into team wellbeing trends — de-identified, and never for a group under 5 people.',
+        items: [['heart', 'Stress, fatigue and mood trends', 'week by week, with the risk zones marked and how check-ins landed'],
+          ['activity', 'How the work lands', 'stress and fatigue after Minor vs Critical calls, by time of day, and on days someone ran 4+ calls'],
+          ['trend', 'Early warnings', 'check-in rates and fatigue moving before morale does, on your Overview'],
+          ['sparkle', 'AfterCall AI brief', 'a plain-English read of what changed and one next step for each']] },
+      operations: { title: 'Know your workload, station by station',
+        body: 'Teams Pro shows when the calls come, how heavy they are, and which stations carry the most — the numbers you staff and schedule with.',
+        items: [['activity', 'Calls per week by acuity', 'Serious and Critical stacked on the rest, 13 weeks at a glance'],
+          ['clock', 'When calls happen', 'a weekday × hour heat map in your time zone, for every station'],
+          ['pin', 'Workload by station', 'calls per member per week, Serious / Critical share, busiest times and overnight load'],
+          ['trend', 'Top call types', 'agency-wide or for one station']] },
+      stations: { title: 'Compare stations and know where to stop by',
+        body: 'Teams Pro compares every station against your agency’s own normal and tells you which crew could use a visit — never who, never which call.',
+        items: [['home', 'Station check-in signals', 'a run of high-acuity calls, stress above normal, or repeated peer alerts in the last 14 days'],
+          ['check', 'Mark checked in', 'log the visit and quiet the signal for a week'],
+          ['activity', 'Station comparison table', 'calls, check-in rates, stress and fatigue tinted against your agency'],
+          ['download', 'CSV export', 'for your staff meeting or board packet']] },
+    };
+    function renderUpsell(page) {
+      const u = UPSELL[page] || UPSELL.wellbeing;
+      $('upTitle').textContent = u.title;
+      $('upBody').textContent = u.body;
+      $('upList').innerHTML = u.items.map((i) => `<li>${ico(i[0])}<div><b>${esc(i[1])}</b>${esc(i[2])}</div></li>`).join('');
+      const name = (DATA && DATA.agency && DATA.agency.name) || (AGENCY && AGENCY.name) || 'our agency';
+      $('upCta').href = 'mailto:jordan@aftercallapp.com?subject=' + encodeURIComponent('Teams Pro for ' + name);
+    }
     function showPage(page) {
       document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('active', x.dataset.page === page));
       document.querySelectorAll('.page').forEach((x) => x.classList.remove('active'));
+      if (document.body.classList.contains('essentials') && PRO_PAGES.includes(page)) {
+        renderUpsell(page);
+        $('page-upgrade').classList.add('active');
+        hydrateIcons($('page-upgrade'));
+        return;
+      }
       $('page-' + page).classList.add('active');
     }
     document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => showPage(t.dataset.page)));
@@ -2943,7 +3733,7 @@
         if (!AUTH_CODES.includes(e.code)) alert(e.message);
       });
       const admin = AGENCY && AGENCY.role === 'admin';
-      if (admin) loadRoster();
+      if (admin) { loadRoster(); loadInvites(); }
       loadResources(); loadChannels(); loadSettings(); loadPeerRules();
       if (admin) loadDashboardUsers();
       if (admin && MANAGED) loadChannelMembers();
@@ -2980,7 +3770,8 @@
       showGate('vSignIn', FRIENDLY.sign_in_required);
     }
     function forgetSession() {
-      setAuth(null); setAgency(null); AGENCIES = []; DATA = null;
+      setAuth(null); setAgency(null); AGENCIES = []; DATA = null; AI_DATA = null;
+      setRemember(false);
     }
 
     // 1 — password
@@ -2997,7 +3788,7 @@
       if (!email || !password) { flash('gateMsg', 'err', 'Enter your email and password.'); return; }
       busy($('siBtn'), true, 'Signing in…');
       gotrue('token?grant_type=password', { email, password })
-        .then((d) => { setAuth(sessionFrom(d)); $('siPass').value = ''; return afterPassword(); })
+        .then((d) => { setRemember($('siRemember').checked); setAuth(sessionFrom(d)); $('siPass').value = ''; return afterPassword(); })
         .catch((e) => flash('gateMsg', 'err', signInErr(e)))
         .finally(() => busy($('siBtn'), false));
     });
@@ -3318,6 +4109,7 @@
       })();
     }
     (function init() {
+      $('siRemember').checked = rememberOn();
       const params = new URLSearchParams(window.location.search);
       const billing = params.get('billing');
       let returning = null;
