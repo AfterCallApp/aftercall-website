@@ -61,12 +61,12 @@ h1,h2,h3{color:#fff;font-weight:800;letter-spacing:-.035em;line-height:1.02}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#fff;letter-spacing:-.02em;font-size:17px;transition:color .4s}
 .brand img{width:28px;height:28px;border-radius:7px}
 .nav.on-light .brand{color:var(--graphite)}
-.navlinks{display:flex;gap:30px;font-size:13px;color:var(--text);transition:color .4s}
+.navlinks{display:flex;gap:20px;font-size:13px;color:var(--text);transition:color .4s}
 .navlinks a:hover{color:#fff}
 .nav.on-light .navlinks{color:var(--slate)}
 .nav.on-light .navlinks a:hover{color:var(--graphite)}
 .nav .btn{height:34px;padding:0 16px;font-size:13px}
-@media(max-width:900px){.navlinks{display:none}}
+@media(max-width:1100px){.navlinks{display:none}}
 
 /* ambient */
 .aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
@@ -375,7 +375,7 @@ section.off-theme>.aurora,section.off-theme>.grain{opacity:0}
 
 /* GRANTS */
 .grants{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:56px}
-@media(max-width:1100px){.grants{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.grants{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.grants{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.grants{grid-template-columns:1fr}}
 .grant{border-radius:26px;padding:28px;background:#fff;border:1px solid var(--hair);display:flex;flex-direction:column;gap:8px;transition:transform .5s var(--ease)}
@@ -433,7 +433,7 @@ footer nav a:hover{color:#fff}
 .bframe img{display:block;width:100%;height:auto}
 .bframe{max-width:100%;min-width:0}.bbar span{min-width:0}.bbar{overflow:hidden}.dash-pair>*,.peer-dash,.dash-main{min-width:0}.t-stage{min-width:0}.t-hero .shell>*{min-width:0}
 .peer-dash{margin-top:72px}
-.dash-main{max-width:1100px;margin:48px auto 0}
+.dash-main{max-width:900px;margin:48px auto 0}
 .dash-pair{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px}
 @media(max-width:900px){.dash-pair{grid-template-columns:1fr}}
 /* ===== TEAMS PAGE ===== */
@@ -533,14 +533,14 @@ footer nav a:hover{color:#fff}
 .mnav.light a::after{color:rgba(10,15,40,.3)}
 .mnav.light a[aria-current]{color:#4F46E5}
 .mnav.light a.nav-teams{color:#4F46E5;border-color:rgba(79,70,229,.35);background:rgba(79,70,229,.06)}
-@media(max-width:900px){
+@media(max-width:1100px){
   .nav-burger{display:block}
   .nav .shell{display:grid;grid-template-columns:1fr auto 1fr;gap:12px}
   .nav .shell>.btn{justify-self:center}
   .nav-burger{justify-self:end}
 }
-@media(min-width:901px){.mnav{display:none}}
-@media(max-width:900px){.nav .shell{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.nav .brand{font-size:16px;gap:8px;white-space:nowrap;min-width:0}.nav .brand img{width:26px;height:26px}}
+@media(min-width:1101px){.mnav{display:none}}
+@media(max-width:1100px){.nav .shell{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.nav .brand{font-size:16px;gap:8px;white-space:nowrap;min-width:0}.nav .brand img{width:26px;height:26px}}
 @media(max-width:480px){.brand-word-teams{display:none}}
 @media(max-width:350px){.nav .brand .bw{display:none}}
 </style>
@@ -555,7 +555,7 @@ footer nav a:hover{color:#fff}
     <a class="brand" href="/"><img src="images/home/logo.png" alt=""><span class="bw"><span class="brand-word-teams">AfterCall </span><span class="brand-teams">Teams</span></span></a>
     <nav class="navlinks" aria-label="Primary">
       <a href="/">For providers</a><a href="#habit">How it works</a><a href="#peer">Peer support</a><a href="#dashboard">Dashboard</a><a href="#privacy">Privacy</a><a href="#plans">Pricing</a><a href="/news">News</a>
-    </nav>
+    <a href="/ambassador-program">Ambassadors</a></nav>
     <a class="btn btn-grad" href="mailto:jordan@aftercallapp.com?subject=AfterCall%20Teams%20walkthrough"><span class="lg">Book a walkthrough</span><span class="sm">Walkthrough</span></a>
     <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
   </div>
@@ -796,7 +796,7 @@ footer nav a:hover{color:#fff}
     <div class="shell">
       <div style="display:flex;align-items:center;gap:10px"><img src="images/home/logo.png" alt="" style="width:22px;height:22px;border-radius:5px"><span>© 2026 AfterCall LLC · Your calls, captured.</span></div>
       <a class="crisis glass" href="tel:988"><i></i>In crisis? Call or text 988.</a>
-      <nav aria-label="Footer"><a href="/">AfterCall for providers</a><a href="/news">News</a><a href="/teams-dashboard">Leadership dashboard</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
+      <nav aria-label="Footer"><a href="/">AfterCall for providers</a><a href="/news">News</a><a href="/teams-dashboard">Leadership dashboard</a><a href="/ambassador-program">Ambassadors</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
     </div>
   </footer>
 </section>
@@ -868,7 +868,7 @@ new IntersectionObserver(es=>es.forEach(e=>st.querySelector('span').style.color=
   panel.addEventListener('click',e=>{if(e.target.closest('a'))set(false)});
   addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
   addEventListener('scroll',()=>{if(panel.classList.contains('open'))set(false)},{passive:true});
-  addEventListener('resize',()=>{if(innerWidth>900)set(false)});
+  addEventListener('resize',()=>{if(innerWidth>1100)set(false)});
 })();
 </script>
 </body>

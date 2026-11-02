@@ -64,14 +64,14 @@ h1,h2,h3{color:#fff;font-weight:800;letter-spacing:-.035em;line-height:1.02}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#fff;letter-spacing:-.02em;font-size:17px;transition:color .4s}
 .brand img{width:28px;height:28px;border-radius:7px}
 .nav.on-light .brand{color:var(--graphite)}
-.navlinks{display:flex;gap:30px;font-size:13px;color:var(--text);transition:color .4s}
+.navlinks{display:flex;gap:20px;font-size:13px;color:var(--text);transition:color .4s}
 .navlinks a:hover{color:#fff}
 .navlinks .nav-teams{color:#fff;font-weight:600;padding:6px 12px;margin:-6px 0;border-radius:99px;border:1px solid rgba(124,143,245,.45);background:rgba(124,143,245,.12)}
 .nav.on-light .navlinks .nav-teams{color:#4F46E5;border-color:rgba(79,70,229,.35);background:rgba(79,70,229,.06)}
 .nav.on-light .navlinks{color:var(--slate)}
 .nav.on-light .navlinks a:hover{color:var(--graphite)}
 .nav .btn{height:34px;padding:0 16px;font-size:13px}
-@media(max-width:900px){.navlinks{display:none}}
+@media(max-width:1100px){.navlinks{display:none}}
 
 /* ambient */
 .aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
@@ -410,7 +410,7 @@ section.off-theme>.aurora,section.off-theme>.grain{opacity:0}
 
 /* GRANTS */
 .grants{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:56px}
-@media(max-width:1100px){.grants{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.grants{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.grants{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.grants{grid-template-columns:1fr}}
 .grant{border-radius:26px;padding:28px;background:#fff;border:1px solid var(--hair);display:flex;flex-direction:column;gap:8px;transition:transform .5s var(--ease)}
@@ -505,14 +505,14 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
 .mnav.light a::after{color:rgba(10,15,40,.3)}
 .mnav.light a[aria-current]{color:#4F46E5}
 .mnav.light a.nav-teams{color:#4F46E5;border-color:rgba(79,70,229,.35);background:rgba(79,70,229,.06)}
-@media(max-width:900px){
+@media(max-width:1100px){
   .nav-burger{display:block}
   .nav .shell{display:grid;grid-template-columns:1fr auto 1fr;gap:12px}
   .nav .shell>.btn{justify-self:center}
   .nav-burger{justify-self:end}
 }
-@media(min-width:901px){.mnav{display:none}}
-@media(max-width:900px){.nav .shell{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.nav .brand{font-size:16px;gap:8px;white-space:nowrap;min-width:0}.nav .brand img{width:26px;height:26px}}
+@media(min-width:1101px){.mnav{display:none}}
+@media(max-width:1100px){.nav .shell{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}.nav .brand{font-size:16px;gap:8px;white-space:nowrap;min-width:0}.nav .brand img{width:26px;height:26px}}
 @media(max-width:480px){.brand-word-teams{display:none}}
 @media(max-width:350px){.nav .brand .bw{display:none}}
 </style>
@@ -527,7 +527,7 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
   <div class="shell">
     <a class="brand" href="/"><img src="/images/home/logo.png" alt=""><span class="bw">AfterCall</span></a>
     <nav class="navlinks" aria-label="Primary">
-      <a href="/#features">Features</a><a href="/#ai">AfterCall AI</a><a href="/#wellness">Wellness</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/news" aria-current="page">News</a><a class="nav-teams" href="/teams">AfterCall Teams →</a>
+      <a href="/#features">Features</a><a href="/#ai">AfterCall AI</a><a href="/#wellness">Wellness</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/news" aria-current="page">News</a><a href="/ambassador-program">Ambassadors</a><a class="nav-teams" href="/teams">AfterCall Teams →</a>
     </nav>
     <a class="btn btn-grad" href="/#get" data-dl>Get the app</a>
     <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
@@ -582,7 +582,7 @@ body > section.light{background:#fff}body > section.mist{background:#F5F6FA}
     <div class="shell">
       <div style="display:flex;align-items:center;gap:10px"><img src="/images/home/logo.png" alt="" style="width:22px;height:22px;border-radius:5px"><span>© 2026 AfterCall LLC · Your calls, captured.</span></div>
       <a class="crisis glass" href="tel:988"><i></i>In crisis? Call or text 988.</a>
-      <nav aria-label="Footer"><a href="/news">News</a><a href="/teams">For agencies</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
+      <nav aria-label="Footer"><a href="/news">News</a><a href="/teams">For agencies</a><a href="/ambassador-program">Ambassadors</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="mailto:jordan@aftercallapp.com">Contact</a></nav>
     </div>
   </footer>
 </section>
@@ -631,7 +631,7 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
   panel.addEventListener('click',e=>{if(e.target.closest('a'))set(false)});
   addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
   addEventListener('scroll',()=>{if(panel.classList.contains('open'))set(false)},{passive:true});
-  addEventListener('resize',()=>{if(innerWidth>900)set(false)});
+  addEventListener('resize',()=>{if(innerWidth>1100)set(false)});
 })();
 </script>
 </body>
