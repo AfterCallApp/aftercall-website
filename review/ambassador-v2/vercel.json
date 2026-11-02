@@ -1,0 +1,5 @@
+{
+  "version": 2,
+  "builds": [{ "src": "api/preview.js", "use": "@vercel/node", "config": { "includeFiles": ["content/**"] } }],
+  "routes": [{ "src": "/(.*)", "dest": "/api/preview.js" }]
+}
