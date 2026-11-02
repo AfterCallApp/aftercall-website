@@ -21,7 +21,15 @@ This folder preserves the actual v2 preview source, including its existing passw
 
 - Chrome desktop 1440px and mobile 390px: no horizontal overflow.
 - Mocked browser submissions: required fields, provider/student rules, consent/status mapping, success handling and API rejection handling pass.
-- One explicitly marked INTERNAL QA application submitted 2026-11-02; API returned HTTP 200. It is not a real applicant and should not be counted in program reporting.
+- One explicitly marked INTERNAL QA identity used for verification on 2026-11-02. Two initial attempts were quarantined for an unregistered preview domain. Added and saved the exact preview domain in AfterCall tracking settings (spam protection unchanged), then retested from the deployed page. The page received HTTP success. This QA identity is not a real applicant and should not be counted in program reporting.
 - Native notification recipient settings verified; inbox delivery is separate and must not be claimed solely from configuration or an accepted submission.
 
 API documentation: https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/v3-legacy/submit-data-unauthenticated
+
+## Final live verification
+
+- Exact preview domain persisted after settings reload. HubSpot subsequently showed all three QA attempts as ordinary form submissions, with no spam submissions remaining in the form view.
+- Deployed page submission verified in HubSpot: all supplied application data, both Yes confirmations, and Applied status stored. QA contact `259860398857` appeared in active segment 23 without manual list enrollment.
+- There is one clearly labeled INTERNAL QA contact (three test attempts), not three applicants. It is a non-marketing contact. Inbox delivery to the five team recipients remains unverified.
+- Live preview has broadened copy, an enabled submit button, exact AfterCall portal/form destination, and no remaining Mailchimp destination.
+- GitHub PR: https://github.com/AfterCallApp/aftercall-website/pull/35 (targets campus-ambassadors-preview, not main).
