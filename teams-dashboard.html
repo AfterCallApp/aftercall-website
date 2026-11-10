@@ -145,8 +145,10 @@
     body.viewer .viewonly-pill { display: inline-block; }
     /* Paid before use: an agency waiting on payment sees only activation,
        billing and dashboard access. */
-    body.locked .tabs, body.locked #days, body.locked #billingBanner, body.locked #joinCard,
-    body.locked #page-settings > .card.mt:not(#accessCard) { display: none !important; }
+    body.locked .tabs .tab:not([data-page="billing"]):not([data-page="settings"]), body.locked .nav-group:not([data-g="account"]),
+    body.locked #days, body.locked #refreshBtn, body.locked #billingBanner, body.locked #joinCard,
+    body.locked #page-settings > .card.mt:not(#accessCard), body.locked #page-billing > :not(#activateCard):not(.grid),
+    body.locked #page-billing .grid:last-child, body.locked #page-billing .head-link { display: none !important; }
     body.locked #page-settings .cols-2e { grid-template-columns: 1fr; }
     #activateCard { display: none; border-color: var(--accent, #3379CF); }
     body.locked #activateCard { display: block; }
@@ -154,29 +156,9 @@
     #activateCard ul { margin: 10px 0 0 18px; line-height: 1.7; font-size: 13.5px; color: var(--ink2); }
     body.viewer #page-settings .cols-2e { grid-template-columns: 1fr; }
 
-    /* ── App shell ── */
+    /* ── App shell: see "Sidebar shell" at the end of this block ── */
     .app { display: none; min-height: 100vh; }
-    .topbar {
-      position: sticky; top: 0; z-index: 40; background: var(--topbar-bg); backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border); padding: 0 22px;
-      display: flex; align-items: center; gap: 16px; height: 62px;
-    }
-    .topbar .brandline { margin: 0; }
-    .agency-chip { display: flex; align-items: center; gap: 10px; min-width: 0; }
-    .agency-chip .name { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .plan-pill { font-size: 10.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
-      color: var(--s1); background: var(--blue-soft); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
-    .topbar .spacer { flex: 1; }
-    .topbar select { width: auto; padding: 8px 10px; font-size: 13px; }
-
-    .tabs { display: flex; gap: 2px; padding: 0 22px; border-bottom: 1px solid var(--border);
-      background: var(--bg); position: sticky; top: 62px; z-index: 39; overflow-x: auto; }
-    .tab { background: none; border: none; color: var(--muted); font-size: 13.5px; font-weight: 700;
-      padding: 13px 14px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
-    .tab:hover { color: var(--ink2); }
-    .tab.active { color: var(--ink); border-bottom-color: var(--blue); }
-
-    .page { max-width: 1240px; margin: 0 auto; padding: 22px; display: none; }
+    .page { max-width: 1320px; margin: 0 auto; padding: 24px 28px; display: none; }
     .page.active { display: block; }
 
     .grid { display: grid; gap: 14px; }
@@ -496,7 +478,8 @@
     @media print {
       @page { margin: 12mm; }
       body { background: #fff !important; }
-      .topbar, .tabs, .noprint, #billingBanner, .attn-act, .gate, #tooltip, .head-link { display: none !important; }
+      .topbar, .sidebar, .scrim, .tabs, .noprint, #billingBanner, .attn-act, .gate, #tooltip, .head-link { display: none !important; }
+      .main { margin: 0 !important; }
       .app { display: block !important; }
       .page { display: none !important; padding: 0; max-width: none; animation: none; }
       #page-overview { display: block !important; }
@@ -504,21 +487,10 @@
       .footer-meta { padding: 8px 0; }
     }
 
-    .footer-meta { max-width: 1240px; margin: 0 auto; padding: 8px 22px 40px; font-size: 12px; color: var(--muted); }
+    .footer-meta { max-width: 1320px; margin: 0 auto; padding: 8px 28px 40px; font-size: 12.5px; color: var(--muted); }
 
     @media (max-width: 1080px) { .kpis { grid-template-columns: repeat(3, 1fr); } .cols-2, .cols-2e, .cols-3 { grid-template-columns: 1fr; } }
-    @media (max-width: 620px) { .kpis { grid-template-columns: repeat(2, 1fr); } .topbar { gap: 8px; } .agency-chip .name { max-width: 120px; } .statgrid { grid-template-columns: 1fr; } }
-    /* Phones: the five topbar controls are ~530px wide — wrap them onto a
-       second row (the spacer becomes a line break) and let the bar scroll
-       away so only the tab row stays pinned. Without this the whole page
-       scrolled sideways at 390px. */
-    @media (max-width: 620px) {
-      .topbar { position: static; flex-wrap: wrap; height: auto; padding: 10px 14px; row-gap: 8px; }
-      .topbar .spacer { flex: 0 0 100%; height: 0; }
-      .tabs { top: 0; padding: 0 14px; }
-      .page { padding: 16px; }
-      .agency-chip .name { max-width: 210px; }
-    }
+    @media (max-width: 620px) { .kpis { grid-template-columns: repeat(2, 1fr); } .statgrid { grid-template-columns: 1fr; } }
 
     /* ── Plans: Teams Essentials vs Teams Pro ── */
     .tab .tab-lock { display: none; width: 12px; height: 12px; margin-left: 5px; vertical-align: -1px; opacity: 0.75; }
@@ -666,6 +638,297 @@
     .nudge-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
     .last-nudge { font-size: 12px; color: var(--muted); }
     .remember { display: flex !important; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink2); margin-top: 14px !important; cursor: pointer; }
+
+    /* ══ Sidebar shell (Nov 2026) ══ */
+    :root { --sb-w: 252px; --side-bg: #0E1823; --menu-shadow: 0 18px 48px rgba(0,0,0,0.55); }
+    :root[data-theme="light"] { --side-bg: #FFFFFF; --menu-shadow: 0 18px 48px rgba(15,23,42,0.18); }
+    body { font-size: 15px; }
+    .sidebar { position: fixed; z-index: 60; top: 0; bottom: 0; left: 0; width: var(--sb-w); display: flex; flex-direction: column;
+      background: var(--side-bg); border-right: 1px solid var(--border); overflow-y: auto; }
+    .sb-top { padding: 18px 16px 10px; }
+    .sb-brand { display: flex; align-items: center; gap: 10px; padding: 2px 4px 16px; }
+    .sb-brand img { width: 30px; height: 30px; flex: none; }
+    .sb-brand .brandline { margin: 0; flex: 1; }
+    .sb-brand .brandline .w, .sb-brand .brandline .t { font-size: 18px; }
+    .icon-btn.sb-close { display: none; }
+    .sb-agency { display: flex; gap: 11px; align-items: center; padding: 11px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+    .sb-agency-mark { flex: none; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 15px; color: #fff; background: linear-gradient(135deg, #3379CF, #6366F1); }
+    .sb-agency-text { min-width: 0; }
+    .sb-agency .name { font-size: 14px; font-weight: 800; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sb-agency-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .plan-pill { font-size: 10.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;
+      color: var(--s1); background: var(--blue-soft); border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+    .tabs { display: flex; flex-direction: column; gap: 2px; padding: 4px 12px 16px; flex: 1; }
+    .nav-group { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); padding: 16px 12px 6px; }
+    .tab { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: none; border: none;
+      color: var(--ink2); font-size: 14.5px; font-weight: 650; padding: 10px 12px; border-radius: 10px; cursor: pointer; }
+    .tab .ico-svg { width: 18px; height: 18px; color: var(--muted); }
+    .tab .nav-l { flex: 1; }
+    .tab:hover { background: var(--hover-col); color: var(--ink); }
+    .tab.active { background: var(--blue-soft); color: var(--ink); font-weight: 800; }
+    .tab.active .ico-svg { color: var(--s1); }
+    .tab.active::before { content: ''; position: absolute; left: -12px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--blue); }
+    .tab .tab-lock { width: 13px; height: 13px; margin: 0; }
+    .tab:focus-visible, .icon-btn:focus-visible, .profile-btn:focus-visible, .pm-item:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+    .sb-foot { padding: 14px 16px 18px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+    .sb-promise { display: flex; gap: 9px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+    .sb-promise .ico-svg { color: var(--good); width: 16px; height: 16px; margin-top: 1px; }
+    .sb-help { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--ink2); text-decoration: none; }
+    .sb-help:hover { color: var(--s1); }
+    .sb-help .ico-svg { width: 15px; height: 15px; }
+    .scrim { display: none; }
+
+    .main { margin-left: var(--sb-w); min-width: 0; }
+    .topbar { position: sticky; top: 0; z-index: 40; background: var(--topbar-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; align-items: center; gap: 12px; height: 68px; }
+    .topbar .spacer { flex: 1; }
+    .topbar select { width: auto; padding: 9px 12px; font-size: 14px; font-weight: 600; }
+    .page-head { min-width: 0; }
+    .page-title { font-size: 20px; font-weight: 900; letter-spacing: -0.4px; line-height: 1.2; white-space: nowrap; }
+    .page-sub { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .icon-btn { flex: none; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px;
+      background: transparent; border: 1px solid var(--border); color: var(--ink2); cursor: pointer; }
+    .icon-btn:hover { color: var(--ink); border-color: var(--muted); }
+    .icon-btn .ico-svg { width: 18px; height: 18px; }
+    .icon-btn.spin .ico-svg { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .menu-btn { display: none; }
+
+    .avatar { flex: none; width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff; background: var(--av, #3379CF); background-size: cover; background-position: center; overflow: hidden; }
+    .avatar.lg { width: 46px; height: 46px; font-size: 16px; }
+    .avatar.photo { color: transparent; }
+    .profile { position: relative; }
+    .profile-btn { display: flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--border); border-radius: 999px;
+      padding: 3px 12px 3px 3px; cursor: pointer; color: var(--ink); max-width: 260px; }
+    .profile-btn:hover { border-color: var(--muted); }
+    .profile-text { display: flex; flex-direction: column; text-align: left; min-width: 0; line-height: 1.2; }
+    .profile-text b { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .profile-text span { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+    .profile-btn .chev .ico-svg { width: 15px; height: 15px; color: var(--muted); }
+    .profile-menu { position: absolute; right: 0; top: calc(100% + 8px); width: 310px; z-index: 70; background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; box-shadow: var(--menu-shadow); padding: 8px; }
+    .profile-menu[hidden] { display: none; }
+    .pm-head { display: flex; gap: 12px; align-items: center; padding: 10px 10px 12px; }
+    .pm-who { min-width: 0; }
+    .pm-who b { display: block; font-size: 15px; }
+    .pm-who span { display: block; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pm-meta { display: grid; gap: 6px; margin: 0 4px 6px; padding: 10px 12px; border-radius: 10px; background: var(--card2); border: 1px solid var(--border); }
+    .pm-meta div { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; }
+    .pm-meta span { color: var(--muted); }
+    .pm-meta b { font-weight: 700; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pm-list { padding: 4px 0; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+    .pm-item { display: flex; align-items: center; gap: 11px; width: 100%; padding: 10px 12px; border-radius: 9px; background: none; border: none;
+      color: var(--ink2); font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; text-decoration: none; font-family: inherit; }
+    .pm-item:hover { background: var(--hover-col); color: var(--ink); }
+    .pm-item .ico-svg { width: 17px; height: 17px; color: var(--muted); }
+    .pm-signout { color: var(--bad); }
+    .pm-signout .ico-svg { color: var(--bad); }
+    .banner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; max-width: 1264px; margin: 16px auto 0 !important; padding: 12px 16px; font-size: 14px; }
+    .banner .ico-svg { flex: none; }
+    .banner .btn { margin-left: auto; }
+
+    @media (max-width: 1080px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.2s ease; box-shadow: none; }
+      body.nav-open .sidebar { transform: none; box-shadow: var(--menu-shadow); }
+      body.nav-open .scrim { display: block; position: fixed; inset: 0; z-index: 55; background: rgba(2, 8, 16, 0.5); }
+      .main { margin-left: 0; }
+      .menu-btn, .icon-btn.sb-close { display: inline-flex; }
+      .sb-close { width: 34px; height: 34px; }
+    }
+    @media (max-width: 720px) {
+      .topbar { padding: 0 14px; gap: 8px; height: 60px; }
+      .page { padding: 16px; }
+      .page-sub { display: none; }
+      .page-title { font-size: 17px; overflow: hidden; text-overflow: ellipsis; }
+      .page-head { flex: 1; }
+      .topbar .spacer { display: none; }
+      .profile-text, .profile-btn .chev { display: none; }
+      .profile-btn { padding: 2px; }
+      .topbar select { padding: 8px 6px; font-size: 13px; max-width: 128px; }
+      #themeBtn { display: none; }
+      .profile-menu { position: fixed; left: 12px; right: 12px; top: 66px; width: auto; }
+      .banner { margin: 12px 16px 0 !important; }
+      .footer-meta { padding: 8px 16px 32px; }
+    }
+    @media (max-width: 400px) { #refreshBtn { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .sidebar { transition: none; } .icon-btn.spin .ico-svg { animation: none; } }
+
+    /* ══ Readability: larger type everywhere (live-demo pass) ══ */
+    .card { padding: 20px 22px; }
+    .card h3 { font-size: 13px; letter-spacing: 0.9px; margin-bottom: 14px; }
+    .card .card-head h3 { margin: 0; }
+    .card .subnote { font-size: 13px; line-height: 1.55; }
+    .head-note, .scope-note { font-size: 13px; }
+    .head-link { font-size: 13.5px; }
+    .kpi { padding: 16px 18px; }
+    .kpi .lab { font-size: 12px; }
+    .kpi .val { font-size: 32px; }
+    .kpi .sub { font-size: 13px; margin-top: 2px; }
+    .legend span, .strip-legend span { font-size: 13px; }
+    .strip { height: 34px; }
+    .strip-seg { font-size: 12.5px; }
+    #tooltip { font-size: 13.5px; padding: 9px 12px; max-width: 300px; }
+    table { font-size: 14px; }
+    th { font-size: 11.5px; }
+    .stat .sv { font-size: 24px; }
+    .stat .sl { font-size: 12.5px; }
+    .hero-title { font-size: 30px; }
+    .hero-sub { font-size: 15.5px; }
+    .hero-eyebrow { font-size: 12.5px; }
+    .glance b { font-size: 15.5px; }
+    .glance span { font-size: 12.5px; }
+    .attn-title { font-size: 15.5px; }
+    .attn-text { font-size: 14px; }
+    .pillar-head { font-size: 12.5px; }
+    .pillar-val { font-size: 40px; }
+    .pillar-lab { font-size: 14px; }
+    .pillar-stats b { font-size: 17px; }
+    .pillar-stats span { font-size: 12.5px; }
+    .delta { font-size: 12.5px; }
+    .sb-ends, .bullet-ends { font-size: 12px; }
+    .hbar-l, .hbar-v { font-size: 13.5px; }
+    .dist-l { font-size: 14px; }
+    .fstep-l b { font-size: 14px; } .fstep-l span { font-size: 12px; } .fstep-v { font-size: 16px; } .fstep-v em { font-size: 12px; }
+    .sg-name { font-size: 14.5px; } .sg-name span { font-size: 12px; }
+    .loop-l { font-size: 14.5px; } .loop-s { font-size: 12.5px; }
+    .acuity-big em { font-size: 12.5px; }
+    .btable th { font-size: 11.5px; } .btable td { font-size: 14px; } .btable td.lab span { font-size: 12px; } .bcell .bv { font-size: 13.5px; }
+    .ai-item h4 { font-size: 16px; } .ai-item p { font-size: 14.5px; } .ai-ev { font-size: 12.5px; } .ai-act { font-size: 13.5px; } .ai-title { font-size: 16px; }
+    .setup-step b { font-size: 14px; } .setup-step span { font-size: 12.5px; }
+    .rescard .t { font-size: 15px; } .rescard .d { font-size: 13.5px; } .rescard .meta { font-size: 13px; }
+    .strow .t { font-size: 15px; } .strow .m { font-size: 13px; } .sigchip { font-size: 12.5px; }
+    .chips button { font-size: 13.5px; padding: 7px 14px; }
+    .seg button { font-size: 13.5px; }
+    .pick { font-size: 13.5px; }
+    .promise-body { font-size: 14px; }
+    input, select, textarea { font-size: 15px; }
+    label { font-size: 13px; }
+    .btn { font-size: 14px; }
+    .btn.sm { font-size: 13.5px; padding: 8px 13px; }
+    .mail-prev { font-size: 13.5px; }
+    .gate-hint { font-size: 12.5px; }
+    .wait-stat span { font-size: 13px; }
+    .upsell p { font-size: 15px; } .upsell-list li { font-size: 14px; }
+
+    /* Station scope (Wellbeing + Workload) */
+    .scope-pick { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .scope-lab { font-size: 13px; font-weight: 800; color: var(--ink2); }
+    .chips button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .chips button .cnt { font-weight: 600; color: var(--muted); margin-left: 4px; }
+    .chips button.on .cnt { color: inherit; opacity: 0.8; }
+    #wbBody.loading { opacity: 0.45; pointer-events: none; transition: opacity 0.15s; }
+    .scope-empty { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--ink2); line-height: 1.55; }
+    .scope-empty .ico-svg { width: 22px; height: 22px; color: var(--s1); flex: none; margin-top: 2px; }
+
+    /* ══ Billing & payments ══ */
+    .bill-hero { display: flex; gap: 24px; justify-content: space-between; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 18px;
+      padding: 26px 28px; background: radial-gradient(800px 240px at 0% 0%, var(--hero-glow), transparent 70%), var(--card); }
+    .bh-main { flex: 1 1 360px; min-width: 0; }
+    .bh-eyebrow { font-size: 12.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--s1); }
+    .bh-plan { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 30px; font-weight: 900; letter-spacing: -0.7px; margin-top: 6px; }
+    .bh-status { font-size: 12.5px; font-weight: 800; letter-spacing: 0.3px; border-radius: 999px; padding: 4px 11px; display: inline-flex; align-items: center; gap: 6px; }
+    .bh-status .ico-svg { width: 13px; height: 13px; }
+    .bh-status.ok { background: var(--st-good-soft); color: var(--st-good-ink); }
+    .bh-status.warn { background: var(--st-warning-soft); color: var(--st-warning-ink); }
+    .bh-status.bad { background: var(--st-critical-soft); color: var(--st-critical-ink); }
+    .bh-status.muted { background: rgba(148,163,184,0.14); color: var(--muted); }
+    .bh-price { font-size: 16px; color: var(--ink2); margin-top: 10px; }
+    .bh-price b { font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .bh-note { font-size: 13.5px; color: var(--muted); margin-top: 6px; max-width: 620px; line-height: 1.55; }
+    .bh-facts { flex: 0 1 420px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-content: start; }
+    .bh-kv { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .bh-kv span { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+    .bh-kv b { display: block; font-size: 16px; margin-top: 3px; overflow-wrap: anywhere; }
+    .seat-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .seat-top b { font-size: 36px; font-weight: 900; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+    .seat-top span { font-size: 14px; color: var(--muted); }
+    .seat-bar { height: 12px; border-radius: 999px; background: var(--card2); overflow: hidden; margin: 14px 0 10px; display: flex; gap: 2px; }
+    .seat-bar i { display: block; height: 100%; }
+    .seat-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--ink2); }
+    .seat-legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .seat-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .pay-summary { font-size: 14px; color: var(--ink2); line-height: 1.65; }
+    .pay-summary .pay-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+    .pay-summary .pay-row:last-of-type { border-bottom: none; }
+    .pay-summary .pay-row span { color: var(--muted); }
+    .pay-summary .pay-row b { text-align: right; }
+    .pay-alert { margin-top: 10px; padding: 11px 13px; border-radius: 10px; font-size: 13.5px; line-height: 1.55; }
+    .pay-alert.bad { background: var(--st-critical-soft); color: var(--st-critical-ink); }
+    .pay-alert.info { background: var(--blue-soft); color: var(--ink2); }
+    .pay-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .incl { list-style: none; display: grid; gap: 10px; }
+    .incl li { display: flex; gap: 10px; font-size: 14px; color: var(--ink2); line-height: 1.45; }
+    .incl li .ico-svg { flex: none; width: 18px; height: 18px; color: var(--good); margin-top: 1px; }
+    .incl b { color: var(--ink); }
+    .help-list { display: grid; gap: 14px; }
+    .help-list > div { display: flex; gap: 12px; }
+    .help-list .ico-svg { flex: none; width: 18px; height: 18px; color: var(--s1); margin-top: 2px; }
+    .help-list b { display: block; font-size: 14px; }
+    .help-list span { display: block; font-size: 13.5px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+    #activateCard { margin-bottom: 16px; }
+    @media (max-width: 620px) { .bill-hero { padding: 20px; } .bh-plan { font-size: 24px; } .bh-facts { grid-template-columns: 1fr 1fr; flex-basis: 100%; } }
+
+    /* ══ Roster ══ */
+    .roster-stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+    .rs { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; min-width: 0; }
+    .rs-lab { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
+    .rs-lab .ico-svg { width: 15px; height: 15px; color: var(--s1); }
+    .rs-val { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+    .rs-sub { font-size: 12.5px; color: var(--muted); }
+    .roster-stats-note { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin: 10px 2px 16px; }
+    .roster-stats-note .ico-svg { color: var(--good); width: 15px; height: 15px; flex: none; }
+    @media (max-width: 1280px) { .roster-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 620px) { .roster-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rs-val { font-size: 24px; } }
+    .roster-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+    .roster-head h3 { margin-bottom: 4px; }
+    .roster-count { font-size: 13.5px; color: var(--ink2); }
+    .roster-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .roster-tools input { width: 260px; padding: 9px 12px; font-size: 14px; }
+    .roster-tools select { width: auto; padding: 9px 10px; font-size: 14px; }
+    .roster-chips { margin-bottom: 14px; }
+    .roster-list { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .mhead, .mrow { display: grid; grid-template-columns: minmax(240px, 2.4fr) minmax(130px, 1fr) minmax(140px, 1.1fr) minmax(130px, 1fr) 120px 44px;
+      gap: 14px; align-items: center; padding: 12px 16px; }
+    .mhead { background: var(--card2); font-size: 11.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); padding-top: 10px; padding-bottom: 10px; }
+    .mrow { border-top: 1px solid var(--border); }
+    .mrow:hover { background: var(--hover-col); }
+    .mgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 11px 16px; border-top: 1px solid var(--border); background: var(--card2); font-size: 13.5px; font-weight: 800; }
+    .mgroup .ico-svg { width: 16px; height: 16px; color: var(--s1); }
+    .mgroup span { font-weight: 600; color: var(--muted); font-size: 12.5px; }
+    .mhead + .mgroup { border-top: none; }
+    .m-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .m-id .avatar { width: 42px; height: 42px; font-size: 15px; }
+    .m-name { min-width: 0; }
+    .m-name b { display: flex; align-items: center; gap: 7px; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .m-name .m-sub { display: block; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .you-pill { font-size: 10.5px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; background: var(--blue-soft); color: var(--s1); border-radius: 999px; padding: 2px 7px; }
+    .cert { font-size: 13px; color: var(--ink2); }
+    .cert.none { color: var(--muted); }
+    .mrow select, .mrow input[type=text] { width: 100%; padding: 8px 10px; font-size: 13.5px; }
+    .mrow .rolechip { font-size: 12px; }
+    .m-cell-lab { display: none; }
+    .toggle { position: relative; display: inline-flex; align-items: center; gap: 9px; margin: 0; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--ink2); }
+    .toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .toggle i { width: 38px; height: 22px; border-radius: 999px; background: rgba(148,163,184,0.35); position: relative; transition: background 0.15s; flex: none; }
+    .toggle i::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    .toggle input:checked + i { background: var(--good); }
+    .toggle input:checked + i::after { transform: translateX(16px); }
+    .toggle input:focus-visible + i { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .icon-btn.danger { color: var(--muted); border-color: transparent; width: 36px; height: 36px; }
+    .icon-btn.danger:hover { color: var(--bad); border-color: rgba(239,102,102,0.4); background: rgba(239,102,102,0.08); }
+    /* The site-wide cookie button would sit on the sidebar; it lives in the account menu here. */
+    #aftercall-cookie-prefs { display: none !important; }
+    @media (max-width: 1180px) {
+      .mhead { display: none; }
+      .mrow { grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 14px 16px; }
+      .m-id { grid-column: 1 / -1; }
+      .m-act { position: absolute; right: 12px; top: 14px; }
+      .mrow { position: relative; }
+      .m-cell-lab { display: block; font-size: 11px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    }
+    @media (max-width: 620px) { .roster-tools input { width: 100%; } .roster-tools { width: 100%; } .roster-tools select { flex: 1; } }
   </style>
 <script src="/cookie-consent.js" defer></script>
 
@@ -757,37 +1020,91 @@
 
   <!-- ══ App ══ -->
   <div class="app" id="app">
-    <div class="topbar">
-      <div class="brandline"><span class="w">AfterCall</span><span class="t">Teams</span></div>
-      <div class="agency-chip"><span class="name" id="agencyName">—</span><span class="plan-pill" id="planPill">—</span><span class="viewonly-pill" title="Your access is read-only. An admin of your agency can change it.">View only</span></div>
+    <aside class="sidebar" id="sidebar" aria-label="Dashboard navigation">
+      <div class="sb-top">
+        <div class="sb-brand">
+          <img src="/images/logo-transparent.png" alt="" width="30" height="30" />
+          <div class="brandline"><span class="w">AfterCall</span><span class="t">Teams</span></div>
+          <button class="icon-btn sb-close" id="sbClose" aria-label="Close menu"><span class="ico" data-ico="x"></span></button>
+        </div>
+        <div class="sb-agency">
+          <div class="sb-agency-mark" id="agencyMark" aria-hidden="true">A</div>
+          <div class="sb-agency-text">
+            <div class="name" id="agencyName">—</div>
+            <div class="sb-agency-pills"><span class="plan-pill" id="planPill">—</span><span class="viewonly-pill" title="Your access is read-only. An admin of your agency can change it.">View only</span></div>
+          </div>
+        </div>
+      </div>
+      <nav class="tabs" id="tabs">
+        <div class="nav-group" data-g="insights">Insights</div>
+          <button class="tab active" data-page="overview"><span class="ico" data-ico="grid"></span><span class="nav-l">Overview</span></button>
+          <button class="tab pro-tab" data-page="wellbeing"><span class="ico" data-ico="heart"></span><span class="nav-l">Wellbeing</span><svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+          <button class="tab pro-tab" data-page="operations"><span class="ico" data-ico="bars"></span><span class="nav-l">Workload</span><svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+          <button class="tab pro-tab" data-page="stations"><span class="ico" data-ico="station"></span><span class="nav-l">Stations</span><svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+          <button class="tab" data-page="peer"><span class="ico" data-ico="buoy"></span><span class="nav-l">Peer support</span></button>
+        <div class="nav-group" data-g="team">Team</div>
+          <button class="tab admin-only" data-page="roster"><span class="ico" data-ico="users"></span><span class="nav-l">Roster</span></button>
+          <button class="tab" data-page="resources"><span class="ico" data-ico="phone"></span><span class="nav-l">Crisis resources</span></button>
+          <button class="tab" data-page="channels"><span class="ico" data-ico="hash"></span><span class="nav-l">Channels</span></button>
+        <div class="nav-group" data-g="account">Account</div>
+          <button class="tab" data-page="billing"><span class="ico" data-ico="card"></span><span class="nav-l">Billing &amp; payments</span></button>
+          <button class="tab" data-page="settings"><span class="ico" data-ico="gear"></span><span class="nav-l">Settings</span></button>
+      </nav>
+      <div class="sb-foot">
+        <div class="sb-promise"><span class="ico" data-ico="shield"></span><span>Team trends only. Nothing from a group under <span class="kmin">5</span> people is ever shown.</span></div>
+        <a class="sb-help" href="mailto:support@aftercallapp.com"><span class="ico" data-ico="mail"></span>support@aftercallapp.com</a>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar"><span class="ico" data-ico="menu"></span></button>
+      <div class="page-head">
+        <div class="page-title" id="pageTitle">Overview</div>
+        <div class="page-sub" id="pageSub">&nbsp;</div>
+      </div>
       <div class="spacer"></div>
-      <select id="days">
+      <select id="days" aria-label="Date range">
         <option value="30">Last 30 days</option>
         <option value="60">Last 60 days</option>
         <option value="90" selected>Last 90 days</option>
         <option value="180">Last 180 days</option>
       </select>
-      <button class="btn ghost sm" id="themeBtn" title="Switch light / dark">☀</button>
-      <button class="btn ghost sm" id="switchBtn" style="display:none;">Switch agency</button>
-      <button class="btn ghost sm" id="refreshBtn">Refresh</button>
-      <button class="btn ghost sm" id="lockBtn">Sign out</button>
-    </div>
+      <button class="icon-btn" id="refreshBtn" title="Refresh" aria-label="Refresh"><span class="ico" data-ico="refresh"></span></button>
+      <button class="icon-btn" id="themeBtn" title="Switch light / dark" aria-label="Switch light / dark"></button>
+      <div class="profile" id="profile">
+        <button class="profile-btn" id="profileBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="profileMenu">
+          <span class="avatar" id="meAvatar" aria-hidden="true"></span>
+          <span class="profile-text"><b id="meName">—</b><span id="meRole">—</span></span>
+          <span class="ico chev" data-ico="chevron"></span>
+        </button>
+        <div class="profile-menu" id="profileMenu" role="menu" hidden>
+          <div class="pm-head">
+            <span class="avatar lg" id="meAvatar2" aria-hidden="true"></span>
+            <div class="pm-who"><b id="meName2">—</b><span id="meEmail">—</span></div>
+          </div>
+          <div class="pm-meta">
+            <div><span>Agency</span><b id="meAgency">—</b></div>
+            <div><span>Your access</span><b id="meAccess">—</b></div>
+            <div><span>Plan</span><b id="mePlan">—</b></div>
+          </div>
+          <div class="pm-list">
+            <button class="pm-item" role="menuitem" data-goto="billing"><span class="ico" data-ico="card"></span>Billing &amp; payments</button>
+            <button class="pm-item admin-only" role="menuitem" data-goto="settings" data-focus="accessCard"><span class="ico" data-ico="key"></span>Dashboard access</button>
+            <button class="pm-item" role="menuitem" id="switchBtn" style="display:none;"><span class="ico" data-ico="swap"></span>Switch agency</button>
+            <button class="pm-item" role="menuitem" id="themeItem"><span class="ico" data-ico="moon"></span><span id="themeItemLabel">Light mode</span></button>
+            <a class="pm-item" role="menuitem" href="mailto:support@aftercallapp.com"><span class="ico" data-ico="mail"></span>Help &amp; support</a>
+            <button class="pm-item" role="menuitem" id="cookieItem"><span class="ico" data-ico="info"></span>Cookie preferences</button>
+          </div>
+          <button class="pm-item pm-signout" role="menuitem" id="lockBtn"><span class="ico" data-ico="logout"></span>Sign out</button>
+        </div>
+      </div>
+    </header>
 
-    <div class="msg err" id="billingBanner" style="margin:0 0 14px; display:none;">
-      <span id="billingBannerText"></span>
-      <button class="btn sm" id="billingBannerBtn" style="margin-left:10px;">Go to billing</button>
-    </div>
-
-    <div class="tabs" id="tabs">
-      <button class="tab active" data-page="overview">Overview</button>
-      <button class="tab pro-tab" data-page="wellbeing">Wellbeing<svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
-      <button class="tab pro-tab" data-page="operations">Workload<svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
-      <button class="tab pro-tab" data-page="stations">Stations<svg class="tab-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Teams Pro"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
-      <button class="tab" data-page="peer">Peer support</button>
-      <button class="tab admin-only" data-page="roster">Roster</button>
-      <button class="tab" data-page="resources">Resources</button>
-      <button class="tab" data-page="channels">Channels</button>
-      <button class="tab" data-page="settings">Settings</button>
+    <div class="msg err banner" id="billingBanner" style="display:none;">
+      <span class="ico" data-ico="alert"></span><span id="billingBannerText"></span>
+      <button class="btn sm" id="billingBannerBtn">Go to billing</button>
     </div>
 
     <!-- ── Overview: the chief's brief ── -->
@@ -882,6 +1199,13 @@
 
     <!-- ── Wellbeing ── -->
     <div class="page" id="page-wellbeing">
+      <div class="card scope-card" id="wbScopeCard" style="margin-bottom:14px;">
+        <div class="scope-bar">
+          <div class="scope-pick"><span class="scope-lab">Show wellbeing for</span><div class="chips" id="wbScope"></div></div>
+          <div class="scope-note" id="wbScopeNote"></div>
+        </div>
+      </div>
+      <div id="wbBody">
       <div class="grid kpis4">
         <div class="card kpi" id="wkStress"></div>
         <div class="card kpi" id="wkFatigue"></div>
@@ -950,6 +1274,7 @@
           station. Below that floor the number is withheld entirely, so a small group can never be
           reverse-read. Adoption runs on trust; this is what keeps it.
         </div>
+      </div>
       </div>
     </div>
 
@@ -1166,7 +1491,39 @@
 
     <!-- ── Roster ── -->
     <div class="page" id="page-roster">
-      <div class="card admin-only" id="inviteCard" style="margin-bottom:14px;">
+      <div class="roster-stats" id="rosterStats"></div>
+      <div class="roster-stats-note" id="rosterStatsNote"></div>
+      <div class="card" id="rosterCard">
+        <div class="roster-head">
+          <div>
+            <h3>Team roster</h3>
+            <div class="roster-count" id="rosterCount"></div>
+          </div>
+          <div class="roster-tools">
+            <input id="rosterSearch" type="search" placeholder="Search name, email or station" aria-label="Search the roster" />
+            <select id="rosterRole" aria-label="Filter by role">
+              <option value="">Everyone</option>
+              <option value="peer">Peer supporters</option>
+              <option value="admin">Admins</option>
+              <option value="supervisor">Supervisors</option>
+              <option value="member">Members</option>
+            </select>
+            <div class="seg" id="rosterView" role="group" aria-label="Group the roster">
+              <button data-v="station" class="on">By station</button><button data-v="all">A–Z</button>
+            </div>
+            <button class="btn sm" id="rosterInviteBtn"><span class="ico" data-ico="mail"></span>Invite people</button>
+          </div>
+        </div>
+        <div class="chips roster-chips" id="rosterStations"></div>
+        <div id="rosterMsg" class="msg"></div>
+        <div class="roster-list" id="rosterBody"><div class="empty">Loading the roster…</div></div>
+        <div class="subnote">
+          The roster shows who has a seat and their role — never anyone’s calls, check-ins or journals. Admins and
+          supervisors are governance roles and never gain access to anyone’s content. Peer supporters receive check-in
+          requests so someone can reach out. The owner seat is managed by AfterCall.
+        </div>
+      </div>
+      <div class="card admin-only mt" id="inviteCard">
         <div class="card-head"><h3>Invite your team</h3><span class="head-note" id="invCounts"></span></div>
         <div class="invite-grid">
           <div>
@@ -1207,23 +1564,6 @@
             <thead><tr><th>Invited</th><th>Station</th><th>Status</th><th>Last emailed</th><th></th></tr></thead>
             <tbody id="invBody"></tbody>
           </table>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Roster <span id="rosterCount" style="color:var(--muted); font-weight:600; text-transform:none; letter-spacing:0;"></span></h3>
-        <div style="margin-bottom: 12px;"><input id="rosterSearch" placeholder="Filter by name, email, station…" /></div>
-        <div id="rosterMsg" class="msg"></div>
-        <div class="tablewrap">
-          <table>
-            <thead><tr><th>Member</th><th>Role</th><th>Peer supporter</th><th>Station</th><th>Joined</th><th></th></tr></thead>
-            <tbody id="rosterBody"></tbody>
-          </table>
-        </div>
-        <div class="subnote">
-          Admins and supervisors are governance roles — they never gain access to anyone's content.
-          Peer supporters receive high-impact flags so someone can check in. The owner seat is managed by AfterCall.
-          Invite people above, or share the join code from the Settings tab.
         </div>
       </div>
     </div>
@@ -1358,14 +1698,66 @@
       </div>
     </div>
 
-    <!-- ── Settings ── -->
-    <div class="page" id="page-settings">
-      <div class="card" id="activateCard" style="margin-bottom:16px;">
+    <!-- ── Billing & payments ── -->
+    <div class="page" id="page-billing">
+      <div class="card" id="activateCard" >
         <h3 id="actTitle">Activate AfterCall Teams</h3>
         <div id="actBody" style="font-size:14px; color:var(--ink2); line-height:1.65;"></div>
         <div class="row mt" id="actButtons"></div>
         <div id="actMsg" class="msg"></div>
       </div>
+
+      <div class="bill-hero">
+        <div class="bh-main">
+          <div class="bh-eyebrow">Your plan</div>
+          <div class="bh-plan"><span id="bhPlan">—</span><span class="bh-status" id="bhStatus"></span></div>
+          <div class="bh-price" id="bhPrice">&nbsp;</div>
+          <div class="bh-note" id="bhNote"></div>
+        </div>
+        <div class="bh-facts">
+          <div class="bh-kv"><span>Billing method</span><b id="bhMethod">—</b></div>
+          <div class="bh-kv"><span id="bhRenewLab">Renews</span><b id="bhRenew">—</b></div>
+          <div class="bh-kv"><span>Seats on plan</span><b id="bhSeats">—</b></div>
+          <div class="bh-kv"><span>Contract discount</span><b id="bhDiscount">—</b></div>
+        </div>
+      </div>
+
+      <div class="grid cols-2e mt">
+        <div class="card">
+          <div class="card-head"><h3>Seats</h3><a class="head-link admin-only" data-goto="roster">Manage roster</a></div>
+          <div id="seatMeter"><div class="empty">Loading…</div></div>
+        </div>
+        <div class="card" id="payCard">
+          <h3>Payment</h3>
+          <div class="pay-summary" id="billingSummary">Loading…</div>
+          <div class="pay-actions">
+            <div class="fix"><button class="btn" id="payInvoiceBtn" style="display:none;">Pay invoice</button></div>
+            <div class="fix"><button class="btn" id="checkoutBtn" style="display:none;">Set up billing with Stripe</button></div>
+            <div class="fix"><button class="btn ghost" id="portalBtn" style="display:none;">Manage billing</button></div>
+          </div>
+          <div id="billingMsg" class="msg"></div>
+        </div>
+      </div>
+
+      <div class="grid cols-2e mt">
+        <div class="card">
+          <h3>What your plan includes</h3>
+          <ul class="incl" id="bhIncluded"></ul>
+        </div>
+        <div class="card">
+          <h3>Invoices, receipts &amp; changes</h3>
+          <div class="help-list">
+            <div><span class="ico" data-ico="receipt"></span><div><b>Invoices and receipts</b><span id="bhReceipts">Card payments: every invoice and receipt is under Manage billing. Invoiced agencies receive each invoice by email.</span></div></div>
+            <div><span class="ico" data-ico="users"></span><div><b>Adding seats or changing plans</b><span>Email us with the change and we’ll update your plan and send the details.</span></div></div>
+            <div><span class="ico" data-ico="info"></span><div><b>Purchase orders and vendor setup</b><span>Purchase orders and checks are accepted. Email us for anything your finance team needs to set us up as a vendor.</span></div></div>
+          </div>
+          <a class="btn ghost mt" id="billingEmailBtn" href="mailto:support@aftercallapp.com?subject=AfterCall%20Teams%20billing"><span class="ico" data-ico="mail"></span>Email billing support</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Settings ── -->
+    <div class="page" id="page-settings">
       <div class="grid cols-2e">
         <div class="card admin-only" id="joinCard">
           <h3>Roster join code</h3>
@@ -1378,15 +1770,14 @@
             and their seat activates instantly. Rotating kills the old code immediately.</div>
           <div id="codeMsg" class="msg"></div>
         </div>
-        <div class="card">
-          <h3>Billing</h3>
-          <div style="font-size: 13.5px; color: var(--ink2); line-height: 1.7;" id="billingSummary">Loading…</div>
-          <div class="row mt">
-            <div class="fix"><button class="btn sm" id="payInvoiceBtn" style="display:none;">Pay invoice</button></div>
-            <div class="fix"><button class="btn sm" id="checkoutBtn" style="display:none;">Set up billing with Stripe</button></div>
-            <div class="fix"><button class="btn ghost sm" id="portalBtn" style="display:none;">Manage billing</button></div>
+        <div class="card" id="agreementCard">
+          <h3>The agreement, in one card</h3>
+          <div style="font-size: 13.5px; color: var(--ink2); line-height: 1.8;">
+            Wellness reporting is aggregate-only on every plan · groups under five are suppressed · alerts carry the
+            signal, never the content · a member who leaves keeps their own history · members can leave the workspace at
+            any time · nothing in AfterCall may be used in discipline, promotion, assignment, or fitness-for-duty.
+            Questions, more seats, plan changes: <a href="mailto:support@aftercallapp.com">support@aftercallapp.com</a>
           </div>
-          <div id="billingMsg" class="msg"></div>
         </div>
       </div>
       <div class="card mt admin-only" id="accessCard">
@@ -1441,18 +1832,10 @@
         <div id="prMsg" class="msg"></div>
       </div>
 
-      <div class="card mt">
-        <h3>The agreement, in one card</h3>
-        <div style="font-size: 13.5px; color: var(--ink2); line-height: 1.8;">
-          Wellness reporting is aggregate-only on every plan · groups under five are suppressed · alerts carry the
-          signal, never the content · a member who leaves keeps their own history · members can leave the workspace at
-          any time · nothing in AfterCall may be used in discipline, promotion, assignment, or fitness-for-duty.
-          Questions, more seats, plan changes: <a href="mailto:support@aftercallapp.com">support@aftercallapp.com</a>
-        </div>
-      </div>
     </div>
 
     <div class="footer-meta" id="genMeta"></div>
+    </div>
   </div>
 
   <div id="tooltip"></div>
@@ -1639,6 +2022,22 @@
       arrow: '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
       bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
       pin: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+      grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+      bars: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+      station: '<path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/>',
+      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+      hash: '<line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>',
+      gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+      card: '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/>',
+      menu: '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
+      sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
+      chevron: '<polyline points="6 9 12 15 18 9"/>',
+      logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+      swap: '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+      lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+      x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+      receipt: '<path d="M4 2v20l3-2 3 2 3-2 3 2 3-2 3 2V2l-3 2-3-2-3 2-3-2-3 2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/>',
+      user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
     };
     function ico(name, cls) {
       return '<svg class="ico-svg' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
@@ -1675,7 +2074,7 @@
     window.addEventListener('scroll', hideTip, { passive: true });
 
     // ── Shared helpers ──
-    const W = 560, PAD = { l: 34, r: 20, t: 10, b: 22 };
+    const W = 560, PAD = { l: 46, r: 20, t: 12, b: 30 };
     function niceMax(v) { if (v <= 5) return 5; const p = Math.pow(10, Math.floor(Math.log10(v))); const u = v / p; const m = u <= 2 ? 2 : u <= 5 ? 5 : 10; return m * p; }
     const nn = (v) => v != null && Number.isFinite(Number(v));
     const mean = (arr) => { const v = arr.filter(nn).map(Number); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
@@ -1786,16 +2185,16 @@
         const hi = p.max != null ? p.max : niceMax(Math.max(1, stackedMax, ...vals));
         const y = (v) => y0 + ph - ((v - lo) / (hi - lo)) * ph;
         // panel title + scale ends (left gutter), recessive baseline
-        svg += `<text x="0" y="${y0 + 13}" font-size="13" font-weight="700" fill="${C.ink}">${esc(p.title)}</text>`;
-        if (p.subtitle) svg += `<text x="0" y="${y0 + 30}" font-size="11" fill="${C.muted}">${esc(p.subtitle)}</text>`;
-        svg += `<text x="${L - 8}" y="${y0 + 9}" text-anchor="end" font-size="10" fill="${C.muted}">${p.fmt ? p.fmt(hi) : hi}</text>`;
-        svg += `<text x="${L - 8}" y="${y0 + ph}" text-anchor="end" font-size="10" fill="${C.muted}">${p.fmt ? p.fmt(lo) : lo}</text>`;
+        svg += `<text x="0" y="${y0 + 13}" font-size="15" font-weight="700" fill="${C.ink}">${esc(p.title)}</text>`;
+        if (p.subtitle) svg += `<text x="0" y="${y0 + 30}" font-size="13" fill="${C.muted}">${esc(p.subtitle)}</text>`;
+        svg += `<text x="${L - 8}" y="${y0 + 9}" text-anchor="end" font-size="12.5" fill="${C.muted}">${p.fmt ? p.fmt(hi) : hi}</text>`;
+        svg += `<text x="${L - 8}" y="${y0 + ph}" text-anchor="end" font-size="12.5" fill="${C.muted}">${p.fmt ? p.fmt(lo) : lo}</text>`;
         svg += `<line x1="${L}" y1="${y0 + ph}" x2="${WW - R}" y2="${y0 + ph}" stroke="${C.grid}"/>`;
         svg += `<line x1="${L}" y1="${y0}" x2="${WW - R}" y2="${y0}" stroke="${C.grid}" stroke-dasharray="2 4"/>`;
         if (p.zone) {
           const zt = y(Math.min(hi, p.zone[1])), zb = y(Math.max(lo, p.zone[0]));
           svg += `<rect x="${L}" y="${zt}" width="${WW - L - R}" height="${Math.max(0, zb - zt)}" fill="${hexA(C.zone, 0.09)}"/>`;
-          svg += `<text x="${WW - R - 4}" y="${zt + 11}" text-anchor="end" font-size="9.5" fill="${C.muted}">${esc(p.zoneLabel || '')}</text>`;
+          svg += `<text x="${WW - R - 4}" y="${zt + 11}" text-anchor="end" font-size="12.5" fill="${C.muted}">${esc(p.zoneLabel || '')}</text>`;
         }
         if (p.kind === 'stack') {
           const bw = Math.max(4, Math.min(34, slot * 0.62));
@@ -1816,7 +2215,7 @@
         } else {
           if (p.ref != null) {
             svg += `<line x1="${L}" y1="${y(p.ref)}" x2="${WW - R}" y2="${y(p.ref)}" stroke="${C.muted}" stroke-dasharray="5 4" stroke-width="1"/>`;
-            svg += `<text x="${L + 4}" y="${y(p.ref) - 4}" font-size="9.5" fill="${C.muted}">window avg ${p.ref}</text>`;
+            svg += `<text x="${L + 4}" y="${y(p.ref) - 4}" font-size="12.5" fill="${C.muted}">window avg ${p.ref}</text>`;
           }
           p.series.forEach((s) => {
             let path = '', pen = false;
@@ -1848,7 +2247,7 @@
       const every = Math.ceil(n / 9);
       weeks.forEach((w, i) => {
         if (i % every !== 0 && i !== n - 1) return;
-        svg += `<text x="${xc(i)}" y="${H - 4}" text-anchor="middle" font-size="10.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+        svg += `<text x="${xc(i)}" y="${H - 4}" text-anchor="middle" font-size="13" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
       });
       weeks.forEach((w, i) => {
         svg += `<rect class="hitcol" x="${(L + slot * i).toFixed(1)}" y="0" width="${slot.toFixed(1)}" height="${H - AX}" data-tip="${esc(tipFor(w, i))}"/>`;
@@ -1875,16 +2274,16 @@
       if (opts.zone) {
         const zt = y(Math.min(hi, opts.zone[1])), zb = y(Math.max(lo, opts.zone[0]));
         svg += `<rect x="${PAD.l}" y="${zt}" width="${W - PAD.l - PAD.r}" height="${zb - zt}" fill="${hexA(C.zone, 0.1)}"/>`;
-        svg += `<text x="${W - PAD.r - 4}" y="${zt + 12}" text-anchor="end" font-size="9.5" fill="${C.muted}">${esc(opts.zoneLabel || '')}</text>`;
+        svg += `<text x="${W - PAD.r - 4}" y="${zt + 12}" text-anchor="end" font-size="12.5" fill="${C.muted}">${esc(opts.zoneLabel || '')}</text>`;
       }
       const ticks = opts.ticks || [lo, lo + (hi - lo) / 2, hi];
       ticks.forEach((t) => {
         svg += `<line x1="${PAD.l}" y1="${y(t)}" x2="${W - PAD.r}" y2="${y(t)}" stroke="${C.grid}"/>`;
-        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${opts.fmtY ? opts.fmtY(t) : r1(t)}</text>`;
+        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="12.5" fill="${C.muted}">${opts.fmtY ? opts.fmtY(t) : r1(t)}</text>`;
       });
       if (opts.ref != null) {
         svg += `<line x1="${PAD.l}" y1="${y(opts.ref)}" x2="${W - PAD.r}" y2="${y(opts.ref)}" stroke="${C.muted}" stroke-dasharray="5 4"/>`;
-        svg += `<text x="${PAD.l + 4}" y="${y(opts.ref) - 4}" font-size="9.5" fill="${C.muted}">avg ${opts.ref}${opts.suf || ''}</text>`;
+        svg += `<text x="${PAD.l + 4}" y="${y(opts.ref) - 4}" font-size="12.5" fill="${C.muted}">avg ${opts.ref}${opts.suf || ''}</text>`;
       }
       let path = '', pen = false, ap = '', run = [];
       const flush = () => { if (run.length > 1) ap += 'M' + run.join(' L ') + ` L ${run[run.length - 1].split(' ')[0]} ${y(lo)} L ${run[0].split(' ')[0]} ${y(lo)} Z `; run = []; };
@@ -1900,7 +2299,7 @@
       s.data.forEach((v, i) => { if (nn(v)) svg += `<circle cx="${x(i)}" cy="${y(Number(v))}" r="3" fill="${s.color}" stroke="${C.ptStroke}" stroke-width="1.5"/>`; });
       const every = Math.ceil(n / 7);
       weeks.forEach((w, i) => {
-        if (i % every === 0 || i === n - 1) svg += `<text x="${x(i)}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+        if (i % every === 0 || i === n - 1) svg += `<text x="${x(i)}" y="${h - 6}" text-anchor="middle" font-size="12.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
         const cw = (W - PAD.l - PAD.r) / Math.max(1, n - 1);
         const v = s.data[i];
         const t = `<b>Week of ${esc(weekLabel(w.weekStart))}</b><br/><span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${nn(v) ? v + (opts.suf || '') : (s.suppressedLabel || '—')}</b>`;
@@ -1922,7 +2321,7 @@
       let svg = '';
       [0, ymax / 2, ymax].forEach((t) => {
         svg += `<line x1="${PAD.l}" y1="${y(t)}" x2="${W - PAD.r}" y2="${y(t)}" stroke="${C.grid}"/>`;
-        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${Math.round(t)}</text>`;
+        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="12.5" fill="${C.muted}">${Math.round(t)}</text>`;
       });
       weeks.forEach((w, i) => {
         const gx = PAD.l + slot * i + slot / 2 - (bw * k + 2 * (k - 1)) / 2;
@@ -1936,7 +2335,7 @@
       });
       const every = Math.ceil(n / 7);
       weeks.forEach((w, i) => {
-        if (i % every === 0 || i === n - 1) svg += `<text x="${PAD.l + slot * i + slot / 2}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+        if (i % every === 0 || i === n - 1) svg += `<text x="${PAD.l + slot * i + slot / 2}" y="${h - 6}" text-anchor="middle" font-size="12.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
       });
       el.innerHTML = `<svg viewBox="0 0 ${W} ${h}" role="img">${svg}</svg>`;
       bindTips(el);
@@ -1981,7 +2380,7 @@
           stroke-dasharray="${dash.toFixed(1)} ${(circ - dash).toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"
           data-tip="${esc(`<b>${clamped}%</b> ${esc(subLabel)}`)}"/>
         <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="32" font-weight="800" fill="${C.ink}">${Math.round(clamped)}%</text>
-        <text x="${cx}" y="${cy + 24}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(subLabel)}</text>
+        <text x="${cx}" y="${cy + 24}" text-anchor="middle" font-size="11" fill="${C.muted}">${esc(subLabel)}</text>
       </svg></div>`;
       bindTips(el);
     }
@@ -2364,6 +2763,9 @@
       $('agencyName').textContent = d.agency.name;
       $('annAuthor').textContent = d.agency.name;
       $('planPill').textContent = PLAN_LABEL[d.agency.plan] || d.agency.plan.replace('_', ' ');
+      renderMe();
+      if (ROSTER.length) renderRosterStats();
+      if (CURRENT_PAGE === 'billing') renderSeatMeter();
       const activeTab = document.querySelector('.tab.active');
       if (activeTab && PRO_PAGES.includes(activeTab.dataset.page)) showPage(activeTab.dataset.page);
       document.querySelectorAll('.kmin').forEach((e) => { e.textContent = d.kMin; });
@@ -2398,7 +2800,7 @@
       const stressWord = !ctx.stressCmp ? null : ctx.stressCmp.now - ctx.stressCmp.before >= 0.3 ? 'rising'
         : ctx.stressCmp.before - ctx.stressCmp.now >= 0.3 ? 'easing' : 'steady';
       $('heroSub').textContent = [
-        plural(totalCalls, 'call') + ' logged' + (PRO && heavyPct != null ? ', ' + heavyPct + '% Serious or Critical' : ''),
+        totalCalls.toLocaleString() + (totalCalls === 1 ? ' call' : ' calls') + ' logged' + (PRO && heavyPct != null ? ', ' + heavyPct + '% Serious or Critical' : ''),
         !PRO && d.activity.weeklyActivePct != null ? Math.round(d.activity.weeklyActivePct) + '% of members active this week' : null,
         stressWord ? 'post-call stress ' + stressWord : null,
         d.highImpact.total ? plural(d.highImpact.total, 'peer alert') + ', ' + (d.highImpact.lifecycle.open ? d.highImpact.lifecycle.open + ' still open' : 'all picked up') : 'no peer alerts',
@@ -2612,10 +3014,18 @@
         : '<div class="empty">No stations yet — assign stations on the Roster tab.</div>';
       bindTips($('stationGlance'));
     }
-    function renderProTabs(d, v) {
-      const { ctx, w, wk, totalCalls } = v;
-      const supp = v.supp;
-      // ── Wellbeing tab ──
+    // ── Wellbeing: whole agency, or one station (server-scoped, same k-floors) ──
+    let WB_STATION = null;
+    let WB_SEQ = 0;
+    function renderWellbeing(d) {
+      const w = d.wellness || {};
+      const wk = d.weekly || [];
+      const supp = () => '<span class="suppressed-val">' + ico('shield') + 'withheld</span>';
+      const ctx = {
+        stressCmp: compareWeeks(wk, (x) => x.avgPostCallStress),
+        fatigueCmp: compareWeeks(wk, (x) => x.avgFatigue ?? null),
+        attachCmp: compareWeeks(wk, (x) => x.checkInRate),
+      };
       kpi('wkStress', 'Post-call stress', w.avgPostCallStress == null ? supp() : w.avgPostCallStress + '<span class="unit"> / 10</span>',
         w.stressBands ? pct(w.stressBands.high, w.stressBands.low + w.stressBands.moderate + w.stressBands.high) + '% of check-ins at 7+' : 'average, 1–10',
         w.avgPostCallStress == null ? '' : deltaChip(ctx.stressCmp, { goodWhen: 'down', threshold: 0.3 }));
@@ -2665,10 +3075,73 @@
           { min: 0, max: 100, ticks: [0, 50, 100], fmtY: (v) => v + '%', suf: '%', area: true, ref: d.activity.checkInAttachPct });
       } else $('chAttach').innerHTML = '<div class="empty">No calls logged in this window yet.</div>';
       ring($('chParticipation'), w.journalParticipationPct, C.s2, 'of members journaled');
+      renderLoadVsWellbeing(d);
+    }
+    function wellbeingStations(d) {
+      return (d.stationBreakdown || []).filter((s) => s.station !== 'Unassigned' || s.members >= d.kMin)
+        .slice().sort((x, y) => x.station.localeCompare(y.station, undefined, { numeric: true }));
+    }
+    function renderWellbeingScope(d) {
+      const list = wellbeingStations(d);
+      const card = $('wbScopeCard');
+      if (!list.length) { card.style.display = 'none'; WB_STATION = null; return; }
+      card.style.display = '';
+      if (WB_STATION && !list.some((s) => s.station === WB_STATION && s.members >= d.kMin)) WB_STATION = null;
+      $('wbScope').innerHTML = '<button data-st=""' + (WB_STATION ? '' : ' class="on"') + '>All stations<span class="cnt">' + d.seats.activeMembers + '</span></button>'
+        + list.map((s) => {
+          const small = s.members < d.kMin;
+          return '<button data-st="' + esc(s.station) + '"' + (WB_STATION === s.station ? ' class="on"' : '') + (small ? ' disabled title="Fewer than ' + d.kMin + ' members — never shown on its own"' : '') + '>'
+            + esc(s.station) + '<span class="cnt">' + s.members + '</span></button>';
+        }).join('');
+      wbNote(WB_STATION ? null : d);
+    }
+    function wbNote(d, station, members) {
+      $('wbScopeNote').innerHTML = station
+        ? '<b>' + esc(station) + '</b> · ' + plural(members, 'member') + '. Every number still needs ' + (DATA ? DATA.kMin : 5) + '+ people.'
+        : 'Whole agency · ' + plural(d ? d.seats.activeMembers : 0, 'member') + '. Stations under ' + (DATA ? DATA.kMin : 5) + ' members can’t be shown on their own.';
+    }
+    function loadWellbeingStation() {
+      const station = WB_STATION;
+      const seq = ++WB_SEQ;
+      $('wbBody').classList.add('loading');
+      let tz = 'UTC';
+      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { /* old browser */ }
+      return post('dashboard', { sinceDays: parseInt($('days').value, 10), tz, station })
+        .then((r) => {
+          if (seq !== WB_SEQ) return;
+          if (!r.stationScope || r.stationScope.tooSmall) {
+            WB_STATION = null;
+            renderWellbeingScope(DATA);
+            renderWellbeing(DATA);
+            wbNote(DATA);
+            $('wbScopeNote').innerHTML += ' <b>' + esc(station) + '</b> has fewer than ' + DATA.kMin + ' members, so it isn’t shown on its own.';
+            return;
+          }
+          renderWellbeing(r);
+          wbNote(null, r.stationScope.station, r.stationScope.members);
+        })
+        .catch((e) => { if (seq === WB_SEQ && !AUTH_CODES.includes(e.code)) $('wbScopeNote').textContent = 'Couldn’t load ' + station + ' right now — showing the whole agency.'; })
+        .finally(() => { if (seq === WB_SEQ) $('wbBody').classList.remove('loading'); });
+    }
+    $('wbScope').addEventListener('click', (ev) => {
+      const b = ev.target.closest('button[data-st]'); if (!b || b.disabled || !DATA) return;
+      const st = b.dataset.st || null;
+      if (st === WB_STATION) return;
+      WB_STATION = st;
+      $('wbScope').querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+      if (st) loadWellbeingStation();
+      else { WB_SEQ++; $('wbBody').classList.remove('loading'); renderWellbeing(DATA); wbNote(DATA); }
+    });
 
+    function renderProTabs(d, v) {
+      const { ctx, w, wk, totalCalls } = v;
+      const supp = v.supp;
+
+      renderWellbeingScope(d);
+      if (WB_STATION) loadWellbeingStation();
+      else renderWellbeing(d);
       renderWorkload(d);
       renderStationWorkload(d);
-      renderLoadVsWellbeing(d);
 
       // ── Stations tab ──
       renderStationAlerts(d);
@@ -2830,7 +3303,7 @@
     }
     function scatter(el, pts, opts) {
       if (pts.length < 3) { el.innerHTML = '<div class="empty">Needs at least a few weeks with enough check-ins to compare.</div>'; return; }
-      const h = 230, x0 = 44, x1 = W - 16, y0 = 12, y1 = h - 34;
+      const h = 240, x0 = 54, x1 = W - 16, y0 = 12, y1 = h - 40;
       const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
       const xlo = Math.floor(Math.min(...xs) * 2) / 2, xhi = Math.max(xlo + 0.5, Math.ceil(Math.max(...xs) * 2) / 2);
       const ylo = Math.max(1, Math.floor(Math.min(...ys)) - 1), yhi = Math.min(10, Math.ceil(Math.max(...ys)) + 1);
@@ -2839,13 +3312,13 @@
       let svg = '';
       for (let t = ylo; t <= yhi; t++) {
         svg += `<line x1="${x0}" y1="${Y(t)}" x2="${x1}" y2="${Y(t)}" stroke="${C.grid}"/>`;
-        svg += `<text x="${x0 - 6}" y="${Y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${t}</text>`;
+        svg += `<text x="${x0 - 6}" y="${Y(t) + 3.5}" text-anchor="end" font-size="12.5" fill="${C.muted}">${t}</text>`;
       }
       [xlo, (xlo + xhi) / 2, xhi].forEach((t) => {
-        svg += `<text x="${X(t)}" y="${y1 + 15}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${r1(t)}</text>`;
+        svg += `<text x="${X(t)}" y="${y1 + 18}" text-anchor="middle" font-size="12.5" fill="${C.muted}">${r1(t)}</text>`;
       });
-      svg += `<text x="${(x0 + x1) / 2}" y="${h - 4}" text-anchor="middle" font-size="10" fill="${C.muted}">calls per active member that week →</text>`;
-      svg += `<text x="10" y="${(y0 + y1) / 2}" text-anchor="middle" font-size="10" fill="${C.muted}" transform="rotate(-90 10 ${(y0 + y1) / 2})">avg stress</text>`;
+      svg += `<text x="${(x0 + x1) / 2}" y="${h - 4}" text-anchor="middle" font-size="12.5" fill="${C.muted}">calls per active member that week →</text>`;
+      svg += `<text x="14" y="${(y0 + y1) / 2}" text-anchor="middle" font-size="12.5" fill="${C.muted}" transform="rotate(-90 14 ${(y0 + y1) / 2})">avg stress</text>`;
       // Least-squares line, only when the relationship is worth drawing.
       if (opts.r != null && Math.abs(opts.r) >= 0.3) {
         const mx = xs.reduce((a, b) => a + b, 0) / xs.length, my = ys.reduce((a, b) => a + b, 0) / ys.length;
@@ -3200,7 +3673,7 @@
       let svg = '';
       [0, ymax / 2, ymax].forEach((t) => {
         svg += `<line x1="${PAD.l}" y1="${y(t)}" x2="${W - PAD.r}" y2="${y(t)}" stroke="${C.grid}"/>`;
-        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="9.5" fill="${C.muted}">${Math.round(t)}</text>`;
+        svg += `<text x="${PAD.l - 6}" y="${y(t) + 3.5}" text-anchor="end" font-size="12.5" fill="${C.muted}">${Math.round(t)}</text>`;
       });
       weeks.forEach((w, i) => {
         const cx = PAD.l + slot * i + slot / 2;
@@ -3216,7 +3689,7 @@
         });
         const t = `<b>Week of ${esc(weekLabel(w.weekStart))}</b><br/>` + series.map((s) => `<span style="color:${s.color}">●</span> ${esc(s.key)}: <b>${Math.max(0, Number(s.data[i]) || 0)}</b>`).join('<br/>') + `<br/>Total: <b>${totals[i]}</b>`;
         svg += `<rect class="hitcol" x="${PAD.l + slot * i}" y="${PAD.t}" width="${slot}" height="${h - PAD.t - PAD.b}" data-tip="${esc(t)}"/>`;
-        if (i % Math.ceil(n / 7) === 0 || i === n - 1) svg += `<text x="${cx}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
+        if (i % Math.ceil(n / 7) === 0 || i === n - 1) svg += `<text x="${cx}" y="${h - 6}" text-anchor="middle" font-size="12.5" fill="${C.muted}">${esc(weekLabel(w.weekStart))}</text>`;
       });
       el.innerHTML = `<svg viewBox="0 0 ${W} ${h}" role="img" aria-label="Calls per week by acuity">${svg}</svg>`;
       bindTips(el);
@@ -3247,42 +3720,114 @@
       PRINT_THEME = null;
     });
     // ── Roster ──
+    // Who has a seat, their role and station — and nothing about what anyone
+    // logged. Activity appears only as team totals (from the dashboard).
     let ROSTER = [];
+    let ROSTER_VIEW = 'station';
+    let ROSTER_STATION = '';
+    const ROLE_ORDER = { owner: 0, admin: 1, supervisor: 2, member: 3 };
+    function rosterActive() { return ROSTER.filter((m) => m.status === 'active'); }
+    function renderRosterStats() {
+      const act = rosterActive();
+      const stations = new Set(act.map((m) => m.station).filter(Boolean));
+      const d = DATA;
+      const days = d && d.range ? d.range.sinceDays : parseInt($('days').value, 10);
+      const tiles = [
+        ['users', 'Members', act.length, d && d.seats ? 'of ' + d.seats.seatLimit + ' seats' : 'with a seat'],
+        ['activity', 'Active this week', d && d.activity ? d.activity.weeklyActiveMembers : '—', d && d.activity && d.activity.weeklyActivePct != null ? Math.round(d.activity.weeklyActivePct) + '% of the team' : 'opened AfterCall'],
+        ['buoy', 'Peer supporters', act.filter((m) => m.is_peer_supporter).length, 'take check-in requests'],
+        ['station', 'Stations', stations.size, act.filter((m) => !m.station).length ? act.filter((m) => !m.station).length + ' unassigned' : 'everyone assigned'],
+        ['bars', 'Calls logged', d && d.activity ? d.activity.callsLogged.toLocaleString() : '—', 'team total · ' + days + ' days'],
+        ['heart', 'Check-ins', d && d.activity ? d.activity.journalsLogged.toLocaleString() : '—', 'team total · ' + days + ' days'],
+      ];
+      $('rosterStats').innerHTML = tiles.map((t) => '<div class="rs"><div class="rs-lab">' + ico(t[0]) + esc(t[1]) + '</div><div class="rs-val">' + esc(t[2]) + '</div><div class="rs-sub">' + esc(t[3]) + '</div></div>').join('');
+      $('rosterStatsNote').innerHTML = ico('shield') + '<span>Activity is shown as team totals only. AfterCall never shows one person’s calls, check-ins or journals — to leadership or to admins.</span>';
+    }
+    function roleCell(m) {
+      if (m.role === 'owner') return '<span class="rolechip owner">Owner</span>';
+      return '<select data-act="role" aria-label="Role for ' + esc(m.name || 'member') + '">'
+        + ['member', 'supervisor', 'admin'].map((r) => '<option value="' + r + '"' + (m.role === r ? ' selected' : '') + '>' + r[0].toUpperCase() + r.slice(1) + '</option>').join('')
+        + '</select>';
+    }
+    function memberRow(m, me) {
+      const isOwner = m.role === 'owner';
+      const isMe = me && (m.email || '').toLowerCase() === me;
+      const sub = [m.username ? '@' + m.username : null, m.email].filter(Boolean).join(' · ');
+      const joined = m.joined_at ? new Date(m.joined_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : '';
+      return '<div class="mrow" data-uid="' + esc(m.user_id) + '">'
+        + '<div class="m-id">' + avatarHtml(m.name || m.email, m.avatar_url, m.user_id)
+        + '<div class="m-name"><b>' + esc(m.name || m.email || 'Member') + (isMe ? ' <span class="you-pill">You</span>' : '') + '</b><span class="m-sub"' + (joined ? ' title="Joined ' + esc(joined) + '"' : '') + '>' + esc(sub) + '</span></div></div>'
+        + '<div class="m-cert"><span class="m-cell-lab">Certification</span><span class="cert' + (m.certification ? '' : ' none') + '">' + esc(m.certification || 'Not listed') + '</span></div>'
+        + '<div class="m-role"><span class="m-cell-lab">Role</span>' + roleCell(m) + '</div>'
+        + '<div class="m-station"><span class="m-cell-lab">Station</span>' + (isOwner ? '<span class="cert">' + esc(m.station || '—') + '</span>'
+          : '<input type="text" data-act="station" value="' + esc(m.station || '') + '" placeholder="Unassigned" aria-label="Station for ' + esc(m.name || 'member') + '" />') + '</div>'
+        + '<div class="m-peer"><span class="m-cell-lab">Peer supporter</span>' + (isOwner
+          ? (m.is_peer_supporter ? '<span class="peerdot">Yes</span>' : '<span class="cert none">No</span>')
+          : '<label class="toggle"><input type="checkbox" data-act="peer"' + (m.is_peer_supporter ? ' checked' : '') + ' aria-label="Peer supporter" /><i></i>' + (m.is_peer_supporter ? 'Yes' : 'No') + '</label>') + '</div>'
+        + '<div class="m-act">' + (isOwner ? '' : '<button class="icon-btn danger" data-act="remove" title="Remove ' + esc(m.name || 'member') + '" aria-label="Remove ' + esc(m.name || 'member') + '">' + ico('x') + '</button>') + '</div>'
+        + '</div>';
+    }
     function renderRoster() {
       const q = $('rosterSearch').value.trim().toLowerCase();
-      const rows = ROSTER.filter((m) => m.status === 'active')
-        .filter((m) => !q || [m.name, m.email, m.station, m.role].some((v) => (v || '').toLowerCase().includes(q)));
-      $('rosterCount').textContent = '· ' + rows.length + ' active';
-      $('rosterBody').innerHTML = rows.map((m) => {
-        const isOwner = m.role === 'owner';
-        return `<tr data-uid="${esc(m.user_id)}">
-          <td><b>${esc(m.name || '—')}</b><br /><span style="color:var(--muted);font-size:11.5px;">${esc(m.email || '')}</span></td>
-          <td>${isOwner ? '<span class="rolechip owner">owner</span>' : `
-            <select data-act="role" style="width:auto;padding:6px 8px;font-size:12.5px;">
-              ${['member', 'supervisor', 'admin'].map((r) => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${r}</option>`).join('')}
-            </select>`}
-          </td>
-          <td>${isOwner
-            ? (m.is_peer_supporter ? '<span class="peerdot">yes</span>' : '<span style="color:var(--muted)">—</span>')
-            : `<label style="display:inline-flex;align-items:center;gap:7px;margin:0;font-size:12.5px;color:var(--ink2);">
-                 <input type="checkbox" data-act="peer" ${m.is_peer_supporter ? 'checked' : ''} style="width:auto;" />
-                 ${m.is_peer_supporter ? '<span class="peerdot">active</span>' : 'no'}
-               </label>`}
-          </td>
-          <td>${isOwner ? esc(m.station || '—') : `<input data-act="station" value="${esc(m.station || '')}" placeholder="—" style="width:110px;padding:6px 8px;font-size:12.5px;" />`}</td>
-          <td style="color:var(--muted);font-size:12px;">${esc((m.joined_at || '').slice(0, 10))}</td>
-          <td>${isOwner ? '' : '<button class="btn danger sm" data-act="remove">Remove</button>'}</td>
-        </tr>`;
-      }).join('') || '<tr><td colspan="6" style="color:var(--muted);">No members match.</td></tr>';
+      const roleF = $('rosterRole').value;
+      const me = ((AUTH && AUTH.email) || '').toLowerCase();
+      const all = rosterActive();
+      // Station chips
+      const counts = new Map();
+      all.forEach((m) => { const k = m.station || 'Unassigned'; counts.set(k, (counts.get(k) || 0) + 1); });
+      const keys = [...counts.keys()].sort((x, y) => (x === 'Unassigned') - (y === 'Unassigned') || x.localeCompare(y, undefined, { numeric: true }));
+      if (ROSTER_STATION && !counts.has(ROSTER_STATION)) ROSTER_STATION = '';
+      $('rosterStations').innerHTML = '<button data-st=""' + (ROSTER_STATION ? '' : ' class="on"') + '>All stations<span class="cnt">' + all.length + '</span></button>'
+        + keys.map((k) => '<button data-st="' + esc(k) + '"' + (ROSTER_STATION === k ? ' class="on"' : '') + '>' + esc(k) + '<span class="cnt">' + counts.get(k) + '</span></button>').join('');
+      const rows = all
+        .filter((m) => !ROSTER_STATION || (m.station || 'Unassigned') === ROSTER_STATION)
+        .filter((m) => !roleF || (roleF === 'peer' ? m.is_peer_supporter : roleF === 'admin' ? (m.role === 'admin' || m.role === 'owner') : m.role === roleF))
+        .filter((m) => !q || [m.name, m.email, m.username, m.station, m.role, m.certification].some((v) => (v || '').toLowerCase().includes(q)))
+        .sort((x, y) => (ROLE_ORDER[x.role] ?? 9) - (ROLE_ORDER[y.role] ?? 9) || (x.name || x.email || '').localeCompare(y.name || y.email || ''));
+      const peers = all.filter((m) => m.is_peer_supporter).length;
+      $('rosterCount').textContent = all.length + ' members · ' + peers + ' peer supporters · ' + keys.filter((k) => k !== 'Unassigned').length + ' stations'
+        + (rows.length !== all.length ? ' — showing ' + rows.length : '');
+      const head = '<div class="mhead"><div>Member</div><div>Certification</div><div>Role</div><div>Station</div><div>Peer supporter</div><div></div></div>';
+      if (!rows.length) { $('rosterBody').innerHTML = head + '<div class="mrow"><div class="empty">No members match.</div></div>'; return; }
+      let html = head;
+      if (ROSTER_VIEW === 'station') {
+        const groups = new Map();
+        rows.forEach((m) => { const k = m.station || 'Unassigned'; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(m); });
+        [...groups.keys()].sort((x, y) => (x === 'Unassigned') - (y === 'Unassigned') || x.localeCompare(y, undefined, { numeric: true })).forEach((k) => {
+          const g = groups.get(k);
+          const gp = g.filter((m) => m.is_peer_supporter).length;
+          html += '<div class="mgroup">' + ico(k === 'Unassigned' ? 'info' : 'station') + esc(k) + ' <span>' + plural(g.length, 'member') + (gp ? ' · ' + plural(gp, 'peer supporter') : '') + '</span></div>';
+          html += g.map((m) => memberRow(m, me)).join('');
+        });
+      } else {
+        html += rows.slice().sort((x, y) => (x.name || x.email || '').localeCompare(y.name || y.email || '')).map((m) => memberRow(m, me)).join('');
+      }
+      $('rosterBody').innerHTML = html;
     }
+    $('rosterSearch').addEventListener('input', renderRoster);
+    $('rosterRole').addEventListener('change', renderRoster);
+    $('rosterStations').addEventListener('click', (ev) => {
+      const b = ev.target.closest('button[data-st]'); if (!b) return;
+      ROSTER_STATION = b.dataset.st; renderRoster();
+    });
+    $('rosterView').addEventListener('click', (ev) => {
+      const b = ev.target.closest('button[data-v]'); if (!b) return;
+      ROSTER_VIEW = b.dataset.v;
+      $('rosterView').querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+      renderRoster();
+    });
+    $('rosterInviteBtn').addEventListener('click', () => {
+      $('inviteCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => $('invPaste').focus({ preventScroll: true }), 400);
+    });
     function loadRoster() {
       clearMsg('rosterMsg');
-      post('leader_roster').then((d) => { ROSTER = d.members || []; renderRoster(); renderChannelPickers(); })
+      post('leader_roster').then((d) => { ROSTER = d.members || []; renderRoster(); renderRosterStats(); renderChannelPickers(); })
         .catch((e) => flash('rosterMsg', 'err', e.message));
     }
     $('rosterBody').addEventListener('change', (ev) => {
-      const el = ev.target.closest('[data-act]'); if (!el) return;
-      const uid = ev.target.closest('tr').dataset.uid;
+      const el = ev.target.closest('[data-act]'); if (!el || !el.closest('#rosterBody')) return;
+      const uid = ev.target.closest('[data-uid]').dataset.uid;
       const body = { userId: uid };
       if (el.dataset.act === 'role') body.role = el.value;
       else if (el.dataset.act === 'peer') body.isPeerSupporter = el.checked;
@@ -3294,13 +3839,12 @@
     });
     $('rosterBody').addEventListener('click', (ev) => {
       const btn = ev.target.closest('button[data-act="remove"]'); if (!btn) return;
-      const tr = ev.target.closest('tr');
+      const tr = ev.target.closest('[data-uid]');
       if (!confirm('Remove this member? Their seat ends (and Pro with it). Their account and everything they logged stays theirs.')) return;
       post('leader_remove_member', { userId: tr.dataset.uid })
         .then(() => { flash('rosterMsg', 'ok', 'Member removed. Their personal data is untouched.'); loadRoster(); refreshDashboard(); })
         .catch((e) => flash('rosterMsg', 'err', e.message));
     });
-    $('rosterSearch').addEventListener('input', renderRoster);
 
     // ── Resources ──
     function loadResources() {
@@ -3655,18 +4199,8 @@
             + 'everything stays active until then. You can use a different card on the invoice page or update the card on file.';
         }
         renderBillingBanner(held, s.suspended && !first, pastDue, s.graceUntil, owed);
-        $('billingSummary').innerHTML =
-          'Status: <b>' + esc(statusLabel) + '</b>'
-          + ' · Method: <b>' + esc(s.method === 'stripe' ? 'Stripe' : s.method === 'invoice' ? 'Invoice / PO' : '—') + '</b>'
-          + ' · Seats on plan: <b>' + esc(s.seatLimit) + '</b>'
-          // Ten-seat billing minimum and the agency's contract discount.
-          + (s.billedSeats && s.billedSeats > s.seatLimit ? ' <span style="color:var(--muted);">(billed as ' + esc(s.billedSeats) + ', the 10-seat minimum)</span>' : '')
-          + (s.discountPct ? ' · Contract discount: <b>' + esc(s.discountPct) + '%</b>' : '')
-          + (canceling ? ' · Cancels: <b>' + day(s.cancelAt) + '</b>'
-            : s.currentPeriodEnd && s.status !== 'canceled' ? ' · Renews: <b>' + day(s.currentPeriodEnd) + '</b>' : '')
-          + (note ? '<br/><span style="color:var(--bad);">' + note + '</span>' : '')
-          + (canceling && !pastDue ? '<br/><span style="color:var(--muted);">The plan is set to end on ' + day(s.cancelAt) + '. To keep it, open Manage billing and renew the plan.</span>' : '')
-          + (!b.stripeEnabled ? '<br/><span style="color:var(--muted);">This agency is invoiced directly — purchase orders and checks accepted.</span>' : '');
+        BILLING = b;
+        renderBillingPage(b, { statusLabel, note, held, first, pastDue, canceling, owed });
         // One subscription per agency: while it is live (paid or past due) the
         // portal is the only way in; Checkout is for starting or restarting.
         // Toggle the .fix wrappers, not just the buttons, so a hidden button
@@ -3688,6 +4222,78 @@
         return b;
       }).catch(() => { $('billingSummary').textContent = 'Billing status unavailable right now.'; return null; });
     }
+    // ── Billing & payments page ──
+    let BILLING = null;
+    const PLAN_FULL = { essentials: 'Teams Essentials', teams_pro: 'Teams Pro', command: 'Teams Enterprise', pilot: 'Teams Pro pilot', crew: 'Crew' };
+    const fmtDay = (v) => { if (!v) return '—'; const d = new Date(String(v).length <= 10 ? v + 'T12:00:00' : v); return isNaN(d) ? String(v).slice(0, 10) : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }); };
+    function renderBillingPage(b, st) {
+      const s = b.billing || {};
+      const plan = b.plan || (DATA && DATA.agency && DATA.agency.plan) || '';
+      $('bhPlan').textContent = PLAN_FULL[plan] || plan.replace('_', ' ') || 'AfterCall Teams';
+      const tone = st.held || s.suspended ? 'bad' : st.pastDue || st.first || st.canceling ? 'warn' : s.status === 'active' ? 'ok' : 'muted';
+      $('bhStatus').className = 'bh-status ' + tone;
+      $('bhStatus').innerHTML = ico(tone === 'ok' ? 'check' : tone === 'muted' ? 'info' : 'alert') + esc(st.canceling && !st.pastDue ? 'Active · ends ' + fmtDay(s.cancelAt) : st.statusLabel);
+      const perSeat = s.listYearlyCentsPerSeat;
+      const seats = s.billedSeats || s.seatLimit;
+      const disc = Number(s.discountPct) || 0;
+      if (perSeat && seats) {
+        const yearly = Math.round(perSeat * seats * (1 - disc / 100));
+        $('bhPrice').innerHTML = '<b>' + esc(money(yearly, 'usd')) + '</b> per year · ' + esc(seats) + ' seats × ' + esc(money(perSeat, 'usd'))
+          + ' per seat' + (disc ? ' · ' + esc(disc) + '% contract discount' : '');
+      } else if (plan === 'pilot') {
+        $('bhPrice').textContent = 'Pilot — no charge during the pilot.';
+      } else $('bhPrice').innerHTML = '&nbsp;';
+      $('bhNote').textContent = s.billedSeats && s.billedSeats > s.seatLimit
+        ? 'Plans bill at least 10 seats; you have ' + s.seatLimit + ' on the plan.' : '';
+      $('bhMethod').textContent = s.method === 'stripe' ? 'Card (Stripe)' : s.method === 'invoice' ? 'Invoice / purchase order' : 'Not set up yet';
+      const ends = st.canceling ? s.cancelAt : s.status !== 'canceled' ? s.currentPeriodEnd : null;
+      $('bhRenewLab').textContent = st.canceling ? 'Plan ends' : 'Renews';
+      $('bhRenew').textContent = ends ? fmtDay(ends) : s.method === 'invoice' ? 'Per your agreement' : '—';
+      $('bhSeats').textContent = s.seatLimit != null ? s.seatLimit : '—';
+      $('bhDiscount').textContent = disc ? disc + '%' : 'None';
+      // Payment card: the facts that matter for paying, then any alert.
+      const rows = [
+        ['Status', st.statusLabel],
+        ['Paid by', s.method === 'stripe' ? 'Card on file (Stripe)' : s.method === 'invoice' ? 'Invoice' : 'Not set up yet'],
+      ];
+      if (st.owed) rows.push(['Amount due', st.owed]);
+      if (s.graceUntil && (st.pastDue || st.held)) rows.push(['Pay by', fmtDay(s.graceUntil)]);
+      $('billingSummary').innerHTML = rows.map((r) => '<div class="pay-row"><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>').join('')
+        + (st.note ? '<div class="pay-alert bad">' + st.note + '</div>' : '')
+        + (st.canceling && !st.pastDue ? '<div class="pay-alert info">The plan is set to end on ' + esc(fmtDay(s.cancelAt)) + '. To keep it, open Manage billing and renew.</div>' : '')
+        + (!b.stripeEnabled && s.method !== 'stripe' ? '<div class="pay-alert info">Your agency is invoiced directly. Each invoice arrives by email; purchase orders and checks are accepted.</div>' : '');
+      $('bhReceipts').textContent = s.method === 'stripe'
+        ? 'Every invoice and receipt is under Manage billing, ready to download.'
+        : 'Each invoice is emailed to your billing contact. Need a copy or a receipt? Email us and we’ll send it.';
+      const pro = plan !== 'essentials';
+      const items = (pro ? [
+        ['AfterCall Pro on every seat', 'AfterCall AI call narratives, guided reflections, voice and CAD logging, PDF export'],
+      ] : []).concat([
+        ['Peer support alerts', 'High-impact calls, heavy runs and check-in requests reach your peer supporters'],
+        ['Your crisis resources in the app', 'Shown above the national lines — 988 is always there'],
+        ['A private agency workspace', 'Station channels and announcements, inside the app crews already use'],
+        [pro ? 'The full leadership dashboard' : 'The leadership dashboard', pro ? 'Wellbeing, workload, stations, peer support and the AfterCall AI brief' : 'Overview and peer support'],
+        ['Privacy built in', 'Team trends only; nothing from a group under 5 people'],
+      ]);
+      $('bhIncluded').innerHTML = items.map((i) => '<li>' + ico('check') + '<div><b>' + esc(i[0]) + '</b><br/>' + esc(i[1]) + '</div></li>').join('');
+      renderSeatMeter();
+    }
+    function renderSeatMeter() {
+      const el = $('seatMeter');
+      const s = (BILLING && BILLING.billing) || {};
+      const limit = (DATA && DATA.seats && DATA.seats.seatLimit) || s.seatLimit;
+      if (!DATA || !DATA.seats || !limit) { el.innerHTML = limit ? '<div class="seat-top"><b>' + esc(limit) + '</b><span>seats on your plan</span></div>' : '<div class="empty">Seat details load with the dashboard.</div>'; return; }
+      const used = Math.min(DATA.seats.activeMembers, limit);
+      const open = Math.max(0, limit - DATA.seats.activeMembers);
+      const over = Math.max(0, DATA.seats.activeMembers - limit);
+      el.innerHTML = '<div class="seat-top"><b>' + esc(DATA.seats.activeMembers) + '</b><span>of ' + esc(limit) + ' seats in use</span></div>'
+        + '<div class="seat-bar" role="img" aria-label="' + esc(DATA.seats.activeMembers + ' of ' + limit + ' seats in use') + '">'
+        + '<i style="flex:' + used + ' 1 0;background:' + C.s1 + '"></i>' + (open ? '<i style="flex:' + open + ' 1 0;background:transparent"></i>' : '') + '</div>'
+        + '<div class="seat-legend"><span><i style="background:' + C.s1 + '"></i>' + esc(DATA.seats.activeMembers) + ' members</span>'
+        + '<span><i style="background:' + C.grid + '"></i>' + (over ? esc(over) + ' over the plan' : esc(open) + ' open') + '</span>'
+        + '<span>' + esc(DATA.seats.peerSupporters) + ' peer supporters</span></div>'
+        + '<div class="subnote">' + (open ? 'Anyone with your team code can claim an open seat. ' : 'Every seat is taken — email us to add more. ') + 'Removing someone frees their seat right away.</div>';
+    }
     function money(cents, currency) {
       try {
         return new Intl.NumberFormat(undefined, { style: 'currency', currency: String(currency || 'usd').toUpperCase() }).format(cents / 100);
@@ -3706,7 +4312,7 @@
       el.style.display = text ? 'block' : 'none';
     }
     $('billingBannerBtn').addEventListener('click', () => {
-      showPage('settings');
+      showPage('billing');
       $('billingMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
     // Pay the open invoice on Stripe's hosted page (new tab), then watch for
@@ -3811,11 +4417,21 @@
       document.documentElement.dataset.theme = light ? 'light' : 'dark';
       Object.assign(C, THEMES[light ? 'light' : 'dark']);
       if (!transient) { try { localStorage.setItem('ac_teams_theme', light ? 'light' : 'dark'); } catch { /* private mode */ } }
-      $('themeBtn').textContent = light ? '☾' : '☀';
+      $('themeBtn').innerHTML = ico(light ? 'moon' : 'sun');
       $('themeBtn').title = light ? 'Switch to dark mode' : 'Switch to light mode';
+      $('themeItemLabel').textContent = light ? 'Dark mode' : 'Light mode';
+      const ti = $('themeItem').querySelector('.ico-svg');
+      if (ti) ti.outerHTML = ico(light ? 'moon' : 'sun');
       if (DATA) renderDashboard(DATA); // charts bake colors into SVG — repaint
     }
     $('themeBtn').addEventListener('click', () => {
+      applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+    });
+    $('cookieItem').addEventListener('click', () => {
+      const b = document.getElementById('aftercall-cookie-prefs');
+      if (b) b.click();
+    });
+    $('themeItem').addEventListener('click', () => {
       applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
     });
     (function initTheme() {
@@ -3857,9 +4473,35 @@
       const name = (DATA && DATA.agency && DATA.agency.name) || (AGENCY && AGENCY.name) || 'our agency';
       $('upCta').href = 'mailto:support@aftercallapp.com?subject=' + encodeURIComponent('Teams Pro for ' + name);
     }
+    const PAGE_TITLES = {
+      overview: ['Overview', 'The agency brief: what needs your attention'],
+      wellbeing: ['Wellbeing', 'Stress, fatigue and mood after calls — team trends only'],
+      operations: ['Workload', 'Call volume, acuity and timing'],
+      stations: ['Stations', 'Station-level signals and comparison'],
+      peer: ['Peer support', 'Check-in requests and how fast they’re picked up'],
+      roster: ['Roster', 'Who has a seat, their role and station'],
+      resources: ['Crisis resources', 'What members see in the app when they need help'],
+      channels: ['Channels', 'Agency channels and announcements'],
+      billing: ['Billing & payments', 'Your plan, seats and payment'],
+      settings: ['Settings', 'Join code, dashboard access and peer alert rules'],
+    };
+    let CURRENT_PAGE = 'overview';
     function showPage(page) {
-      document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('active', x.dataset.page === page));
+      if (!$('page-' + page)) page = 'overview';
+      const changed = page !== CURRENT_PAGE;
+      CURRENT_PAGE = page;
+      const t = PAGE_TITLES[page] || [page, ''];
+      $('pageTitle').textContent = t[0];
+      $('pageSub').textContent = t[1];
+      document.title = t[0] + ' · AfterCall Teams';
+      document.body.classList.remove('nav-open');
+      if (changed) window.scrollTo(0, 0);
+      document.querySelectorAll('.tab').forEach((x) => {
+        x.classList.toggle('active', x.dataset.page === page);
+        if (x.dataset.page === page) x.setAttribute('aria-current', 'page'); else x.removeAttribute('aria-current');
+      });
       document.querySelectorAll('.page').forEach((x) => x.classList.remove('active'));
+      if (page === 'billing' && !LOCKED && DATA) renderSeatMeter();
       if (document.body.classList.contains('essentials') && PRO_PAGES.includes(page)) {
         renderUpsell(page);
         $('page-upgrade').classList.add('active');
@@ -3869,6 +4511,68 @@
       $('page-' + page).classList.add('active');
     }
     document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => showPage(t.dataset.page)));
+
+    // ── Sidebar (off-canvas under 1080px) ──
+    function setNav(open) {
+      document.body.classList.toggle('nav-open', open);
+      $('menuBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    $('menuBtn').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
+    $('sbClose').addEventListener('click', () => setNav(false));
+    $('scrim').addEventListener('click', () => setNav(false));
+
+    // ── Account menu (top right) ──
+    let ME = null;   // { name, username, avatarUrl } from my_agencies
+    function setProfileMenu(open) {
+      $('profileMenu').hidden = !open;
+      $('profileBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    $('profileBtn').addEventListener('click', (ev) => { ev.stopPropagation(); setProfileMenu($('profileMenu').hidden); });
+    $('profileMenu').addEventListener('click', (ev) => { if (ev.target.closest('.pm-item')) setProfileMenu(false); });
+    document.addEventListener('click', (ev) => { if (!ev.target.closest('#profile')) setProfileMenu(false); });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Escape') return;
+      if (!$('profileMenu').hidden) { setProfileMenu(false); $('profileBtn').focus(); }
+      setNav(false);
+    });
+    const AV_COLORS = ['#3379CF', '#0E9E6E', '#8B5CF6', '#C2410C', '#0F766E', '#B45309', '#4F46E5', '#BE185D'];
+    function initials(name) {
+      const parts = String(name || '').replace(/[^\p{L}\p{N}\s'-]/gu, ' ').trim().split(/\s+/).filter(Boolean);
+      if (!parts.length) return '?';
+      return ((parts[0][0] || '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+    }
+    function avColor(key) {
+      let h = 0; for (const ch of String(key || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+      return AV_COLORS[h % AV_COLORS.length];
+    }
+    // Profile photo when there is one (https only), initials on a stable color otherwise.
+    function avatarHtml(name, url, key, cls) {
+      const photo = url && /^https:\/\//.test(url);
+      return '<span class="avatar' + (cls ? ' ' + cls : '') + (photo ? ' photo' : '') + '" style="--av:' + avColor(key || name)
+        + (photo ? ';background-image:url(&quot;' + esc(url) + '&quot;)' : '') + '" aria-hidden="true">' + esc(initials(name)) + '</span>';
+    }
+    function setAvatar(el, name, url, key) {
+      const photo = url && /^https:\/\//.test(url);
+      el.textContent = initials(name);
+      el.classList.toggle('photo', !!photo);
+      el.style.setProperty('--av', avColor(key || name));
+      el.style.backgroundImage = photo ? 'url("' + url.replace(/"/g, '%22') + '")' : '';
+    }
+    function renderMe() {
+      const email = (AUTH && AUTH.email) || '';
+      const name = (ME && ME.name) || (email ? email.split('@')[0] : 'You');
+      const access = !AGENCY ? '—' : AGENCY.role === 'admin' ? 'Admin' : 'View only';
+      [$('meAvatar'), $('meAvatar2')].forEach((el) => setAvatar(el, name, ME && ME.avatarUrl, email || name));
+      $('meName').textContent = name;
+      $('meName2').textContent = name;
+      $('meRole').textContent = access + (AGENCY && AGENCY.name ? ' · ' + AGENCY.name : '');
+      $('meEmail').textContent = email;
+      $('meAgency').textContent = (AGENCY && AGENCY.name) || '—';
+      $('meAccess').textContent = access;
+      $('mePlan').textContent = $('planPill').textContent || '—';
+      $('agencyMark').textContent = initials((AGENCY && AGENCY.name) || 'A');
+      $('profileBtn').title = email ? 'Signed in as ' + email : '';
+    }
 
     function refreshDashboard() {
       let tz = 'UTC';
@@ -3892,7 +4596,7 @@
       $('gate').style.display = 'none';
       $('app').style.display = 'block';
       $('switchBtn').style.display = AGENCIES.length > 1 ? '' : 'none';
-      $('lockBtn').title = AUTH && AUTH.email ? 'Signed in as ' + AUTH.email : '';
+      renderMe();
       // A viewer can't land on a tab that is hidden from them.
       if (AGENCY.role !== 'admin' && $('page-roster').classList.contains('active')) showPage('overview');
       refreshAll();
@@ -4033,6 +4737,7 @@
     function loadAgencies() {
       return callFn(API, { action: 'my_agencies' }).then((d) => {
         AGENCIES = d.agencies || [];
+        ME = d.profile || null;
         if (AUTH) setAuth(Object.assign({}, AUTH, { email: d.email || AUTH.email }));
         const keep = AGENCY && AGENCIES.find((a) => a.id === AGENCY.id);
         if (keep) return openAgency(keep);
@@ -4081,10 +4786,10 @@
       $('gate').style.display = 'none';
       $('app').style.display = 'block';
       $('switchBtn').style.display = AGENCIES.length > 1 ? '' : 'none';
-      $('lockBtn').title = AUTH && AUTH.email ? 'Signed in as ' + AUTH.email : '';
       $('agencyName').textContent = AGENCY.name || '';
       $('planPill').textContent = PLAN_NAMES[info.plan] || info.plan || '';
-      showPage('settings');
+      renderMe();
+      showPage('billing');
       $('actBody').textContent = 'Loading…';
       $('actButtons').innerHTML = '';
       loadSettings().then((b) => { renderActivation(b); showBillingReturn(); });
@@ -4224,11 +4929,16 @@
       forgetSession();
       showGate('vSignIn');
     }
-    $('refreshBtn').addEventListener('click', refreshAll);
+    $('refreshBtn').addEventListener('click', () => {
+      const b = $('refreshBtn');
+      b.classList.add('spin');
+      setTimeout(() => b.classList.remove('spin'), 900);
+      refreshAll();
+    });
     $('days').addEventListener('change', () => { refreshDashboard().catch((e) => { if (!AUTH_CODES.includes(e.code)) alert(e.message); }); });
     $('lockBtn').addEventListener('click', () => signOut());
 
-    // Back from Stripe: land on Settings (the Billing card) with the outcome.
+    // Back from Stripe: land on Billing & payments with the outcome.
     // A successful checkout is confirmed by Stripe's webhook a few seconds
     // later, so poll billing_status until it reads active.
     let PENDING_BILLING = null;
@@ -4236,7 +4946,7 @@
       const outcome = PENDING_BILLING;
       PENDING_BILLING = null;
       if (!outcome) return;
-      showPage('settings');
+      showPage('billing');
       $('billingMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (outcome === 'canceled') { flash('billingMsg', 'err', 'Checkout was canceled — nothing was charged.'); return; }
       if (outcome === 'portal') { flash('billingMsg', 'ok', 'Billing details updated.'); return; }
