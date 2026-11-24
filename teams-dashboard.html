@@ -932,7 +932,6 @@
     }
     @media (max-width: 620px) { .roster-tools input { width: 100%; } .roster-tools { width: 100%; } .roster-tools select { flex: 1; } }
   </style>
-<script src="/cookie-consent.js?v=2" defer></script>
 
 </head>
 <body>
@@ -1097,7 +1096,6 @@
             <button class="pm-item" role="menuitem" id="switchBtn" style="display:none;"><span class="ico" data-ico="swap"></span>Switch agency</button>
             <button class="pm-item" role="menuitem" id="themeItem"><span class="ico" data-ico="moon"></span><span id="themeItemLabel">Light mode</span></button>
             <a class="pm-item" role="menuitem" href="mailto:support@aftercallapp.com"><span class="ico" data-ico="mail"></span>Help &amp; support</a>
-            <button class="pm-item" role="menuitem" id="cookieItem"><span class="ico" data-ico="info"></span>Cookie preferences</button>
           </div>
           <button class="pm-item pm-signout" role="menuitem" id="lockBtn"><span class="ico" data-ico="logout"></span>Sign out</button>
         </div>
@@ -2531,7 +2529,7 @@
     // Each cell keeps its real value; the tint says how far it sits from the
     // agency number, in the direction that is worse (warm) or better (cool).
     function heatCell(value, display, base, spread, worseWhen, tipLabel) {
-      if (value == null) return `<td class="num supp" data-tip="${esc('<b>' + tipLabel + '</b><br/>Withheld — under the privacy floor')}"><span>—</span></td>`;
+      if (value == null) return `<td class="num supp" data-tip="${esc('<b>' + esc(tipLabel) + '</b><br/>Withheld — under the privacy floor')}"><span>—</span></td>`;
       let bg = 'transparent', note = '';
       if (base != null && spread) {
         const dev = Math.max(-1, Math.min(1, (value - base) / spread));
@@ -2541,7 +2539,7 @@
         const diff = r1(value - base);
         note = '<br/>Agency: ' + base + ' (' + (diff > 0 ? '+' : '') + diff + ')';
       }
-      return `<td class="num heatc" style="background:${bg}" data-tip="${esc('<b>' + tipLabel + '</b>: ' + display + note)}">${display}</td>`;
+      return `<td class="num heatc" style="background:${bg}" data-tip="${esc('<b>' + esc(tipLabel) + '</b>: ' + display + note)}">${display}</td>`;
     }
     function renderStationTable(d) {
       const base = (d.stationSignals && d.stationSignals.baseline) || {};
@@ -3289,10 +3287,10 @@
     // Each column is one measure on its own fixed scale (stress 1–10, fatigue
     // 1–7) — never two scales on one axis. Withheld rows are hatched.
     function bcell(value, lo, hi, color, ref, tipLabel) {
-      if (value == null) return `<td><div class="bcell supp" data-tip="${esc('<b>' + tipLabel + '</b><br/>Withheld — fewer than ' + (DATA ? DATA.kMin : 5) + ' people')}"><div class="bt"></div><div class="bv">withheld</div></div></td>`;
+      if (value == null) return `<td><div class="bcell supp" data-tip="${esc('<b>' + esc(tipLabel) + '</b><br/>Withheld — fewer than ' + (DATA ? DATA.kMin : 5) + ' people')}"><div class="bt"></div><div class="bv">withheld</div></div></td>`;
       const pos = (v) => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
       const diff = ref != null ? r1(value - ref) : null;
-      const tipHtml = '<b>' + tipLabel + '</b>: ' + value + (ref != null ? '<br/>Agency average: ' + ref + ' (' + (diff > 0 ? '+' : '') + diff + ')' : '');
+      const tipHtml = '<b>' + esc(tipLabel) + '</b>: ' + value + (ref != null ? '<br/>Agency average: ' + ref + ' (' + (diff > 0 ? '+' : '') + diff + ')' : '');
       return `<td><div class="bcell" data-tip="${esc(tipHtml)}"><div class="bt"><i style="width:${Math.max(2, pos(value))}%; background:${color};"></i>${ref != null ? `<b class="ref" style="left:calc(${pos(ref)}% - 1px)"></b>` : ''}</div><div class="bv">${value}</div></div></td>`;
     }
     function lvwTable(rows, w) {
@@ -4429,10 +4427,6 @@
     $('themeBtn').addEventListener('click', () => {
       applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
     });
-    $('cookieItem').addEventListener('click', () => {
-      const b = document.getElementById('aftercall-cookie-prefs');
-      if (b) b.click();
-    });
     $('themeItem').addEventListener('click', () => {
       applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
     });
@@ -4549,12 +4543,12 @@
     }
     // Profile photo when there is one (https only), initials on a stable color otherwise.
     function avatarHtml(name, url, key, cls) {
-      const photo = url && /^https:\/\//.test(url);
+      const photo = url && /^https:\/\/[^\s\"'()\\<>]+$/.test(url);
       return '<span class="avatar' + (cls ? ' ' + cls : '') + (photo ? ' photo' : '') + '" style="--av:' + avColor(key || name)
         + (photo ? ';background-image:url(&quot;' + esc(url) + '&quot;)' : '') + '" aria-hidden="true">' + esc(initials(name)) + '</span>';
     }
     function setAvatar(el, name, url, key) {
-      const photo = url && /^https:\/\//.test(url);
+      const photo = url && /^https:\/\/[^\s\"'()\\<>]+$/.test(url);
       el.textContent = initials(name);
       el.classList.toggle('photo', !!photo);
       el.style.setProperty('--av', avColor(key || name));
@@ -4983,11 +4977,15 @@
       if (hash.get('access_token') || hash.get('error_description')) {
         window.history.replaceState({}, '', window.location.pathname + window.location.search);
         if (hash.get('error_description')) { showGate('vForgot', 'That link didn’t work (' + hash.get('error_description') + '). Send yourself a new one.'); return; }
-        setAuth(sessionFrom({
-          access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'),
-          expires_at: parseInt(hash.get('expires_at') || '0', 10) || undefined, expires_in: parseInt(hash.get('expires_in') || '3600', 10),
-        }));
-        if (hash.get('type') === 'recovery') { showResetForm(''); return; }
+        // Only a password-reset link may carry a session here. Anything else
+        // would let a crafted link sign someone into another person's account.
+        if (hash.get('type') === 'recovery' && hash.get('access_token')) {
+          setAuth(sessionFrom({
+            access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'),
+            expires_at: parseInt(hash.get('expires_at') || '0', 10) || undefined, expires_in: parseInt(hash.get('expires_in') || '3600', 10),
+          }));
+          showResetForm(''); return;
+        }
       }
       if (AGENCY) document.body.classList.toggle('viewer', AGENCY.role !== 'admin');
       if (AUTH) afterPassword().catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vSignIn', e.message); });
