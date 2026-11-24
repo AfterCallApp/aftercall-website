@@ -718,7 +718,6 @@
       .print-foot { font-size: 10.5px; color: var(--muted); margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--border); line-height: 1.5; }
     }
   </style>
-<script src="/cookie-consent.js?v=2" defer></script>
 
 </head>
 <body>
@@ -871,7 +870,6 @@
             <button class="pm-item" role="menuitem" id="switchBtn" style="display:none;"><span class="ico" data-ico="swap"></span>Switch program</button>
             <button class="pm-item" role="menuitem" id="themeItem"><span class="ico" data-ico="moon"></span><span id="themeItemLabel">Light mode</span></button>
             <a class="pm-item" role="menuitem" href="mailto:support@aftercallapp.com"><span class="ico" data-ico="mail"></span>Help &amp; support</a>
-            <button class="pm-item" role="menuitem" id="cookieItem"><span class="ico" data-ico="info"></span>Cookie preferences</button>
           </div>
           <button class="pm-item pm-signout" role="menuitem" id="lockBtn"><span class="ico" data-ico="logout"></span>Sign out</button>
         </div>
@@ -2540,10 +2538,6 @@
     const flipTheme = () => applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
     $('themeBtn').addEventListener('click', flipTheme);
     $('themeItem').addEventListener('click', flipTheme);
-    $('cookieItem').addEventListener('click', () => {
-      const b = document.getElementById('aftercall-cookie-prefs');
-      if (b) b.click();
-    });
     (function initTheme() {
       let saved = null;
       try { saved = localStorage.getItem('ac_educate_theme'); } catch (e) { /* private mode */ }
@@ -2649,12 +2643,12 @@
     }
     // Profile photo when there is one (https only), initials on a stable color otherwise.
     function avatarHtml(name, url, key, cls) {
-      const photo = url && /^https:\/\//.test(url);
+      const photo = url && /^https:\/\/[^\s\"'()\\<>]+$/.test(url);
       return '<span class="avatar' + (cls ? ' ' + cls : '') + (photo ? ' photo' : '') + '" style="--av:' + avColor(key || name)
         + (photo ? ';background-image:url(&quot;' + esc(url) + '&quot;)' : '') + '" aria-hidden="true">' + esc(initials(name)) + '</span>';
     }
     function setAvatar(el, name, url, key) {
-      const photo = url && /^https:\/\//.test(url);
+      const photo = url && /^https:\/\/[^\s\"'()\\<>]+$/.test(url);
       el.textContent = initials(name);
       el.classList.toggle('photo', !!photo);
       el.style.setProperty('--av', avColor(key || name));
@@ -3355,11 +3349,15 @@
       if (hash.get('access_token') || hash.get('error_description')) {
         window.history.replaceState({}, '', window.location.pathname + window.location.search);
         if (hash.get('error_description')) { showGate('vForgot', 'That link didn’t work (' + hash.get('error_description') + '). Send yourself a new one.'); return; }
-        setAuth(sessionFrom({
-          access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'),
-          expires_at: parseInt(hash.get('expires_at') || '0', 10) || undefined, expires_in: parseInt(hash.get('expires_in') || '3600', 10),
-        }));
-        if (hash.get('type') === 'recovery') { showResetForm(''); return; }
+        // Only a password-reset link may carry a session here. Anything else
+        // would let a crafted link sign someone into another person's account.
+        if (hash.get('type') === 'recovery' && hash.get('access_token')) {
+          setAuth(sessionFrom({
+            access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'),
+            expires_at: parseInt(hash.get('expires_at') || '0', 10) || undefined, expires_in: parseInt(hash.get('expires_in') || '3600', 10),
+          }));
+          showResetForm(''); return;
+        }
       }
       if (PROGRAM) document.body.classList.toggle('instructor', PROGRAM.role !== 'director');
       if (AUTH) afterPassword().catch((e) => { if (!AUTH_CODES.includes(e.code)) showGate('vSignIn', e.message); });

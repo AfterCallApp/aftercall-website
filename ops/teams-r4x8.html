@@ -397,7 +397,7 @@
     var lastQuote = null;
 
     function $(id) { return document.getElementById(id); }
-    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+    function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
     function banner(id, cls, msg) { var e = $(id); e.className = 'out ' + cls; e.textContent = msg; e.style.display = 'block'; }
     function clearBanner(id) { $(id).style.display = 'none'; }
     function post(body) { return OpsAuth.call(API, body); }
